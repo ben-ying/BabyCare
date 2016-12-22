@@ -29,3 +29,7 @@ import django
 django.setup()
 #create admin user
 python manage.py createsuperuser
+#install zh_cn
+brew install gettext 
+export PATH=$PATH:/usr/local/Cellar/gettext/[version]/bin
+django-admin.py makemessages -l zh_CN

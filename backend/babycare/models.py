@@ -5,15 +5,19 @@ from django.db import models
 
 class Baby(models.Model):
     email = models.CharField(max_length=50, unique=True)
-    phone = models.CharField(max_length=30, unique=True)
-    name = models.CharField(max_length=50)
-    baby_name = models.CharField(max_length=50)
-    gender = models.IntegerField(blank=True, null=True) #0 for boy, 1 for girl, 2 for others
+    username = models.CharField(max_length=50, unique=True) 
+    password = models.CharField(max_length=100)
+    phone = models.CharField(max_length=30, blank=True, null=True)
+    baby_name = models.CharField(max_length=50, blank=True, null=True)
+    firstname = models.CharField(max_length=50, blank=True, null=True)
+    lastname = models.CharField(max_length=50, blank=True, null=True)
+    gender = models.IntegerField(default=2) #0 for boy, 1 for girl, 2 for others
     profile = models.ImageField(blank=True, null=True)
     region = models.CharField(max_length=100, blank=True, null=True)
     whats_up = models.CharField(max_length=200, blank=True, null=True)
     birth = models.DateTimeField(blank=True, null=True)
     hobbies = models.CharField(max_length=500, blank=True, null=True)
+    accesstoken = models.CharField(max_length=100, blank=True, null=True)
     created = models.DateTimeField(editable=False, blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
@@ -22,6 +26,7 @@ class Baby(models.Model):
 
 class Event(models.Model):
     baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
     like = models.BooleanField(default=False)
     image = models.ImageField(blank=True, null=True)
     size = models.CharField(max_length=100, blank=True, null=True)
@@ -32,6 +37,6 @@ class Event(models.Model):
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
-        return str(self.created)
+        return str(self.title)
 
 
