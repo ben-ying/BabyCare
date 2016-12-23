@@ -22,7 +22,7 @@ class Baby(models.Model):
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
-        return self.email + '(' + self.phone + ')'
+        return self.email + '(' + self.username + ')'
 
 class Event(models.Model):
     baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
@@ -37,6 +37,19 @@ class Event(models.Model):
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
-        return str(self.title)
+        return self.title
+
+class LoginLog(models.Model):
+    baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
+    system_type = models.CharField(max_length=10) # 1 for android, 2 for ios
+    system_version = models.CharField(max_length=30) # 20(7.0.1)
+    phone_model = models.CharField(max_length=30) # Sony E8230
+    country = models.CharField(max_length=30) #CN
+    state = models.CharField(max_length=30)
+    city = models.CharField(max_length=30)
+    created = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    def __str__(self):
+        return self.baby.username
 
 

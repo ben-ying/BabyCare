@@ -84,8 +84,23 @@ def login(request):
         username = request.GET.get('username')
         password = request.GET.get('password')
         user = authenticate(username = username, password = password)
-        pdb.set_trace()
+#         pdb.set_trace()
         if Baby.objects.filter(username = username, password = password):
+            system_type = request.GET.get('system_type')
+            system_version = request.GET.get('system_version')
+            phone_model = request.GET.get('phone_model')
+            country = request.GET.get('country')
+            state = request.GET.get('state')
+            city = request.GET.get('city')
+            loginlog = LoginLog()
+            loginlog.system_type = system_type
+            loginlog.system_version = system_version
+            loginlog.phone_model = phone_model
+            loginlog.country = country
+            loginlog.state = state
+            loginlog.city = city
+            loginlog.baby = Baby.objects.filter(username = username, password = password)[0]
+            loginlog.save()
             return simple_json_response(CODE_SUCCESS)
 
     
