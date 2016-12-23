@@ -34,7 +34,7 @@ public class LoginActivity extends BaseActivity {
         switch (v.getId()) {
             case R.id.btn_login:
                 break;
-            case R.id.tv_link_login:
+            case R.id.tv_link_signup:
                 intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivityForResult(intent, Constants.SIGN_UP_REQUEST_CODE);
                 break;
