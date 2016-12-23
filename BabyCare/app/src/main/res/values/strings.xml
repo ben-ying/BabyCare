@@ -5,4 +5,14 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+    <string name="username">用户名</string>
+    <string name="email">电子邮箱</string>
+    <string name="password">密码</string>
+    <string name="confirm_password">确认密码</string>
+    <string name="already_a_member_and_login">已经有账号？登入</string>
+    <string name="create_account">创建账号</string>
+    <string name="login">登入</string>
+    <string name="no_account_yet_create_one">还没有账号？创建</string>
 </resources>

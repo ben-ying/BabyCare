@@ -15,10 +15,11 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.ben.yjh.babycare.R;
+import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.util.ScalePageTransformer;
 import com.ben.yjh.babycare.widget.ClipViewPager;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ClipViewPager mViewPager;
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         mViewPager = (ClipViewPager) findViewById(R.id.viewpager);
@@ -86,6 +87,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 
     @Override

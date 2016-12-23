@@ -14,4 +14,36 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="bottom_button" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/button_margin_vertical</item>
+        <item name="android:layout_marginBottom">@dimen/button_margin_vertical</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:background">@drawable/btn_bg</item>
+        <item name="android:textColor">@color/login_text_color</item>
+    </style>
+
+    <style name="login_input_layout" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColorHint">@color/hint_color</item>
+        <item name="android:layout_marginTop">@dimen/register_margin</item>
+        <item name="android:layout_marginBottom">@dimen/register_margin</item>
+    </style>
+
+    <style name="login_edit_text" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/login_text_color</item>
+    </style>
+
+    <style name="login_bottom_text" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/button_margin_vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/register_small_text</item>
+        <item name="android:textColor">@color/hint_color</item>
+    </style>
 </resources>
