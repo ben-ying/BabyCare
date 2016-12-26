@@ -12,7 +12,7 @@ class Baby(models.Model):
     firstname = models.CharField(max_length=50, blank=True, null=True)
     lastname = models.CharField(max_length=50, blank=True, null=True)
     gender = models.IntegerField(default=2) #0 for boy, 1 for girl, 2 for others
-    profile = models.ImageField(blank=True, null=True)
+    profile = ArrayField(ArrayField(models.ImageField()))
     region = models.CharField(max_length=100, blank=True, null=True)
     whats_up = models.CharField(max_length=200, blank=True, null=True)
     birth = models.DateTimeField(blank=True, null=True)
@@ -28,7 +28,7 @@ class Event(models.Model):
     baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     like = models.BooleanField(default=False)
-    image = models.ImageField(blank=True, null=True)
+    image = ArrayField(ArrayField(models.ImageField()))
     size = models.CharField(max_length=100, blank=True, null=True)
     height = models.FloatField(blank=True, null=True)
     weight = models.FloatField(blank=True, null=True)
