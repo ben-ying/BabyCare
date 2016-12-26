@@ -56,7 +56,7 @@
             <EditText
                 style="@style/login_edit_text"
                 android:id="@+id/et_confirm_password"
-                android:hint="@string/password"
+                android:hint="@string/confirm_password"
                 android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
