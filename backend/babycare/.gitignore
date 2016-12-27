@@ -10,3 +10,4 @@
 .externalNativeBuild
 *.swa
 *.pyc
+*.swp
