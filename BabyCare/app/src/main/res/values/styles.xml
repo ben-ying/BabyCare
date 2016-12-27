@@ -14,7 +14,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="bottom_button" >
+    <style name="default_bottom_button" >
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/button_margin_vertical</item>
@@ -24,7 +24,7 @@
         <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="login_input_layout" >
+    <style name="default_input_layout" >
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColorHint">@color/hint_color</item>
@@ -32,14 +32,15 @@
         <item name="android:layout_marginBottom">@dimen/register_margin</item>
     </style>
 
-    <style name="login_edit_text" >
+    <style name="default_edit_text" >
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/login_text_color</item>
+        <item name="android:textColor">@color/default_text_color</item>
+        <item name="android:imeOptions">actionNext</item>
         <item name="android:maxLines">1</item>
     </style>
 
-    <style name="login_bottom_text" >
+    <style name="default_bottom_text" >
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">@dimen/button_margin_vertical</item>

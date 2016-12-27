@@ -6,5 +6,5 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="hint_color">#808080</color>
-    <color name="login_text_color">#323232</color>
+    <color name="default_text_color">#323232</color>
 </resources>
