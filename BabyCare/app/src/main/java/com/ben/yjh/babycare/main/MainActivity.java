@@ -1,5 +1,6 @@
 package com.ben.yjh.babycare.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -14,6 +15,7 @@ import android.view.View;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
+import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ScalePageTransformer;
 import com.ben.yjh.babycare.widget.ClipViewPager;
 
@@ -45,13 +47,7 @@ public class MainActivity extends BaseActivity
         });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -89,7 +85,24 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onClick(View v) {
+        Intent intent;
 
+        switch (v.getId()) {
+            case R.id.fab:
+                intent = new Intent(this, AddEventActivity.class);
+                startActivityForResult(intent, Constants.ADD_EVENT_REQUEST_CODE);
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == Constants.ADD_EVENT_REQUEST_CODE) {
+                // todo
+            }
+        }
     }
 
     @Override

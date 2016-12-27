@@ -103,4 +103,9 @@ def login(request):
             loginlog.save()
             return simple_json_response(CODE_SUCCESS)
 
+def add_event(request):
+    if request.method == 'GET':
+        return simple_json_response(CODE_SUCCESS)
+
+
     

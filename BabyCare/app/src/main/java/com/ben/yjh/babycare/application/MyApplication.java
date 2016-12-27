@@ -21,13 +21,14 @@ public class MyApplication extends SugarApp {
     private static MyApplication sInstance;
     private static Context sContext;
 
+    public MyApplication() {
+    }
+
     private MyApplication(Context context) {
         mRequestQueue = getRequestQueue();
         sContext = context;
-
-        ImageLoader mImageLoader = new ImageLoader(mRequestQueue,
+        mImageLoader = new ImageLoader(mRequestQueue,
                 new LruBitmapCache(LruBitmapCache.getCacheSize(context)));
-
     }
 
     @Override

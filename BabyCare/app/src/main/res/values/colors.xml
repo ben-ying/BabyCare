@@ -5,6 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
-    <color name="hint_color">#CCCCCC</color>
-    <color name="login_text_color">#FCFCFC</color>
+    <color name="hint_color">#808080</color>
+    <color name="login_text_color">#323232</color>
 </resources>
