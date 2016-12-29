@@ -64,5 +64,5 @@
         android:id="@+id/btn_add"
         style="@style/default_bottom_button"
         android:layout_alignParentBottom="true"
-        android:text="@string/create_account" />
+        android:text="@string/add" />
 </RelativeLayout>

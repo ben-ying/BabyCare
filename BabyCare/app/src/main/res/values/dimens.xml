@@ -8,7 +8,9 @@
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="register_margin">8dp</dimen>
+    <dimen name="card_margin">8dp</dimen>
     <dimen name="button_margin_vertical">24dp</dimen>
     <dimen name="register_small_text">16sp</dimen>
+    <dimen name="card_padding">60dp</dimen>
 
 </resources>

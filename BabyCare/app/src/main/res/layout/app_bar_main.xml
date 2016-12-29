@@ -4,43 +4,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    tools:context=".main.MainActivity">
+    android:fitsSystemWindows="true">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
+    <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_gravity="top|center"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:src="@mipmap/ic_launcher" />
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <RelativeLayout
-        android:id="@+id/page_container"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/holo_blue_bright"
-        android:paddingTop="@dimen/card_vertical_padding"
-        android:paddingBottom="@dimen/card_vertical_padding"
-        android:clipChildren="false">
-
-        <com.ben.yjh.babycare.widget.ClipViewPager
-            android:id="@+id/viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/card_horizontal_padding"
-            android:layout_marginRight="@dimen/card_horizontal_padding"
-            android:clipChildren="false"
-            android:overScrollMode="never" />
-    </RelativeLayout>
+        android:layout_height="330dp"
+        android:layout_gravity="bottom"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingBottom="30dp"
+        android:paddingEnd="@dimen/card_padding"
+        android:paddingLeft="@dimen/card_padding"
+        android:paddingRight="@dimen/card_padding"
+        android:paddingStart="@dimen/card_padding" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

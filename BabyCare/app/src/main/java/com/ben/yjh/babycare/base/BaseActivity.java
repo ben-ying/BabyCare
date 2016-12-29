@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View.OnClickListener;
 
+import com.ben.yjh.babycare.R;
+
 public abstract class BaseActivity extends AppCompatActivity implements OnClickListener {
 
     public Toolbar toolbar;

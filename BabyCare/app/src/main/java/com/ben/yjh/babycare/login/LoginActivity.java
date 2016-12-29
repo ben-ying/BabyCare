@@ -34,7 +34,6 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         findViewById(R.id.btn_login).setOnClickListener(this);
         findViewById(R.id.tv_link_signup).setOnClickListener(this);
         mUsernameEditText = (AutoCompleteTextView) findViewById(R.id.et_username);

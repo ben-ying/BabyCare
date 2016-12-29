@@ -10,17 +10,20 @@ import java.util.Map;
 
 public class SharedPreferenceUtils {
 
-//    public static void saveAccessToken(Context context, String accessToken) {
-//        SharedPreferenceUtils.saveSharedPreference(
-//                context, ACCESS_TOKEN_NAME, ACCESS_TOKEN_KEY, accessToken);
-//    }
-//
-//    public static String getAccessToken(Context context) {
-//        return context.getSharedPreferences(
-//                ACCESS_TOKEN_NAME, Context.MODE_PRIVATE).getString(ACCESS_TOKEN_KEY, "");
-//    }
     private static final String USERNAME_HISTORY_NAME = "username_history_name";
     private static final String USERNAME_HISTORY_KEY = "username_history_key";
+    private static final String USERNAME_NAME = "username_name";
+    private static final String USERNAME_KEY = "username_key";
+
+    public static void saveUsername(Context context, String username) {
+        SharedPreferenceUtils.saveSharedPreference(
+                context, USERNAME_NAME, USERNAME_KEY, username);
+    }
+
+    public static String getUsername(Context context) {
+        return context.getSharedPreferences(
+                USERNAME_NAME, Context.MODE_PRIVATE).getString(USERNAME_KEY, "");
+    }
 
     public static void saveUsernameHistory(Context context, String value) {
         SharedPreferences.Editor editor = context.getSharedPreferences(

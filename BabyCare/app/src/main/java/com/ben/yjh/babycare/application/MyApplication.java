@@ -11,6 +11,7 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
+import com.ben.yjh.babycare.util.CrashHandler;
 import com.ben.yjh.babycare.util.LruBitmapCache;
 import com.orm.SugarApp;
 
@@ -34,6 +35,7 @@ public class MyApplication extends SugarApp {
     @Override
     public void onCreate() {
         super.onCreate();
+        CrashHandler.getInstance().init(this);
     }
 
     public ImageLoader getImageLoader(Context context) {

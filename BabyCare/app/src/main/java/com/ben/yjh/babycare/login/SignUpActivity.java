@@ -1,6 +1,7 @@
 package com.ben.yjh.babycare.login;
 
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -25,12 +26,25 @@ public class SignUpActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toolbar.setPadding(0, 0, 0, 0);
+        }
+
         mUsernameEditText = (EditText) findViewById(R.id.et_username);
         mEmailEditText = (EditText) findViewById(R.id.et_email);
         mPasswordEditText = (EditText) findViewById(R.id.et_password);
         mConfirmPasswordEditText = (EditText) findViewById(R.id.et_confirm_password);
         findViewById(R.id.tv_link_login).setOnClickListener(this);
         findViewById(R.id.btn_register).setOnClickListener(this);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 
     private boolean isValid() {

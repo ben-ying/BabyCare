@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -16,14 +17,13 @@ import android.view.View;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.util.Constants;
-import com.ben.yjh.babycare.util.ScalePageTransformer;
-import com.ben.yjh.babycare.widget.ClipViewPager;
+import com.ben.yjh.babycare.util.ShadowTransformer;
+import com.ben.yjh.babycare.util.Utils;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private ClipViewPager mViewPager;
-    private ViewPagerAdapter mViewPagerAdapter;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +32,14 @@ public class MainActivity extends BaseActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mViewPager = (ClipViewPager) findViewById(R.id.viewpager);
-        mViewPager.setSpeedScroller(300);
-        mViewPager.setPageTransformer(true, new ScalePageTransformer());
-        mViewPagerAdapter = new ViewPagerAdapter(this);
-        mViewPager.setAdapter(mViewPagerAdapter);
-        mViewPager.setOffscreenPageLimit(20);
-
-        findViewById(R.id.page_container).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return mViewPager.dispatchTouchEvent(event);
-            }
-        });
+        mViewPager = (ViewPager) findViewById(R.id.viewPager);
+        CardFragmentPagerAdapter pagerAdapter = new CardFragmentPagerAdapter(
+                getSupportFragmentManager(), Utils.dpToPixels(2, this));
+        ShadowTransformer fragmentCardShadowTransformer = new ShadowTransformer(mViewPager, pagerAdapter);
+        fragmentCardShadowTransformer.enableScaling(true);
+        mViewPager.setAdapter(pagerAdapter);
+        mViewPager.setPageTransformer(false, fragmentCardShadowTransformer);
+        mViewPager.setOffscreenPageLimit(3);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
