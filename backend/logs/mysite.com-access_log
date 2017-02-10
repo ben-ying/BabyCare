@@ -1,0 +1,9 @@
+127.0.0.1 - - [30/Dec/2016:15:06:24 +0800] "GET / HTTP/1.1" 404 2026
+127.0.0.1 - - [30/Dec/2016:15:16:26 +0800] "GET /admin/login/?next=/admin/ HTTP/1.1" 200 1654
+127.0.0.1 - - [30/Dec/2016:15:16:26 +0800] "GET /static/admin/css/base.css HTTP/1.1" 304 -
+127.0.0.1 - - [30/Dec/2016:15:16:26 +0800] "GET /static/admin/css/login.css HTTP/1.1" 304 -
+127.0.0.1 - - [30/Dec/2016:15:16:26 +0800] "GET /static/admin/css/fonts.css HTTP/1.1" 304 -
+127.0.0.1 - - [30/Dec/2016:15:16:26 +0800] "GET /static/admin/fonts/Roboto-Regular-webfont.woff HTTP/1.1" 304 -
+127.0.0.1 - - [30/Dec/2016:15:16:26 +0800] "GET /static/admin/fonts/Roboto-Light-webfont.woff HTTP/1.1" 304 -
+127.0.0.1 - - [30/Dec/2016:15:16:42 +0800] "GET / HTTP/1.1" 404 2026
+127.0.0.1 - - [30/Dec/2016:15:32:26 +0800] "GET / HTTP/1.1" 404 2026
