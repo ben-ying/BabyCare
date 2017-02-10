@@ -11,7 +11,7 @@ import os
 import sys
 
 # add your project directory to the sys.path
-project_home = u'/Users/ben/app/BabyCare/backend'
+project_home = u'/webapps/app/BabyCare/backend'
 if project_home not in sys.path:
     sys.path.append(project_home)
 

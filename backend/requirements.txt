@@ -2,3 +2,4 @@ Pillow
 validate_email
 pyDNS
 psycopg2
+gunicorn
