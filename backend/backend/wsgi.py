@@ -8,6 +8,12 @@ https://docs.djangoproject.com/en/1.10/howto/deployment/wsgi/
 """
 
 import os
+import sys
+
+# add your project directory to the sys.path
+project_home = u'/Users/ben/app/BabyCare/backend'
+if project_home not in sys.path:
+    sys.path.append(project_home)
 
 from django.core.wsgi import get_wsgi_application
 
