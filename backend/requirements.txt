@@ -5,8 +5,5 @@ pyDNS
 #psycopg2
 gunicorn
 djangorestframework
-<<<<<<< HEAD
-=======
 markdown
 django-filter
->>>>>>> 72cecd04a1f7e550cc950fd0b018b105eeee48ac
