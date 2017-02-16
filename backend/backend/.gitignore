@@ -8,6 +8,6 @@
 /build
 /captures
 .externalNativeBuild
-.pyc
-.swa
-.swp
+*.swa
+*.swp
+*.pyc
