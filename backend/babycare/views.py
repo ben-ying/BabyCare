@@ -31,6 +31,9 @@ from constants import MSG_DUPLICATE_PHONE
 from constants import MSG_NOT_EXISTS_EMAIL
 from constants import MIN_PASSWORD_LEN
 
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
+
 import pdb
 
 
@@ -39,6 +42,11 @@ def index(request):
 
 
 def create_user(request):
+    users = User.objects.all()
+    for user in users:
+        token, created = Token.objects.get_or_create(user=user)
+        print '@48', user.username, token.key
+
     if request.method == 'GET':
         baby = Baby()
         baby.email = request.GET.get('email')

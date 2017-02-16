@@ -1,6 +1,12 @@
 Pillow
 validate_email
 pyDNS
-psycopg2
+# Postgres, ubuntu use pip install, mac download app(http://postgresapp.com) 
+#psycopg2
 gunicorn
 djangorestframework
+<<<<<<< HEAD
+=======
+markdown
+django-filter
+>>>>>>> 72cecd04a1f7e550cc950fd0b018b105eeee48ac

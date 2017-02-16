@@ -1,1 +1,1 @@
-settings.server.py
+settings.local.py
