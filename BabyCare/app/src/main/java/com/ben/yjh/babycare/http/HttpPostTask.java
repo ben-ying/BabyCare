@@ -31,8 +31,8 @@ import java.util.Map;
 
 public class HttpPostTask {
 
-    public static final String TAG_JSON_OBJ = "tag_json_obj";
-
+    private static final String DOMAIN = "http://116.62.47.105/babycare";
+    private static final String TAG_JSON_OBJ = "tag_json_obj";
     private static final String VERSION = "1.0.0";
 
     private Context mContext;
@@ -90,11 +90,11 @@ public class HttpPostTask {
 
         Log.d("HTTP", "params: " + jsonObject);
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, jsonObject,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, DOMAIN + url, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("HTTP", "url: " + url);
+                        Log.d("HTTP", "url: " + DOMAIN + url);
                         Log.d("HTTP", "response: " + response);
                         hideProgress();
                         if (httpResponseInterface != null) {

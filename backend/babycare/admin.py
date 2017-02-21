@@ -3,8 +3,8 @@ from models import Baby
 from models import Event
 
 class BabyAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'baby_name')
-    search_fields = ('username', 'email', 'baby_name')
+    list_display = ('user', 'phone')
+    search_fields = ('user', 'phone')
     #fields = ('email', 'name', 'baby_name')
 
 admin.site.register(Baby, BabyAdmin)
