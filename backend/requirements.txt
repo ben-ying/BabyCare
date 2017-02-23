@@ -10,4 +10,3 @@ django-filter # https://github.com/carltongibson/django-filter(rest framework)
 httpie # https://github.com/jkbrzt/httpie#installation (rest framework)
 coreapi # https://github.com/core-api/python-client
 coreapi-cli # coreapi get http://127.0.0.1:8000/schema/; coreapi action users list
-#pgadmin4 # for ubuntu
