@@ -11,6 +11,9 @@
 .pyc
 .swa
 .swp
+*.swp
+*.pyc
+*.swa
 /logs
 logs/*
 /logs/*
