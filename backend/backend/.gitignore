@@ -13,3 +13,4 @@
 *.pyc
 settings.py
 .pyc
+settings.server.py

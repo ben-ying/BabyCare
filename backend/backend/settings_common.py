@@ -23,21 +23,21 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '!(poief@tj(fc*o3hifd6a2^$(1qk!m)hv-uug2eh)anp^9u5%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-#DEBUG = True
+#DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '116.62.47.105', 'yjh.babycare.com', 'djangowebservice.hopto.org']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'yjh.babycare.com', 'djangowebservice.hopto.org']
 
 
 # Application definition
 
-REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
-}
+# REST_FRAMEWORK = {
+#     # Use Django's standard `django.contrib.auth` permissions,
+#     # or allow read-only access for unauthenticated users.
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+#     ]
+# }
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -92,7 +92,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'NAME': 'babycare',
-        'HOST': '116.62.47.105',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
         'PORT': '',
     }
 }
@@ -124,8 +125,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 #TIME_ZONE = 'UTC'
 TIME_ZONE = 'Asia/Shanghai'
-LANGUAGE_CODE = 'en'
+# LANGUAGE_CODE = 'zh-cn'
 #LANGUAGE_CODE = 'zh_Hans'
+LANGUAGE_CODE = 'en'
 
 USE_I18N = True
 
@@ -139,4 +141,3 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
-
