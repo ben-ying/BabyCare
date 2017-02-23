@@ -12,3 +12,4 @@
 *.swp
 *.pyc
 settings.py
+.pyc
