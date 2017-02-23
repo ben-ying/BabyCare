@@ -9,3 +9,9 @@ sudo /etc/init.d/postgresql reload
 ALTER ROLE ben WITH SUPERUSER; (\h CREATE ROLE;)
 ALTER ROLE ben WITH CREATEROLE;
 
+dropdb development_db_name
+createdb developmnent_db_name
+pg_dump -U ben babycare > dbexport.pgsql
+psql -U ben babycare < dbexport.pgsql
+
+
