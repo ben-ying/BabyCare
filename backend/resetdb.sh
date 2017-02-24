@@ -1,4 +1,5 @@
-rm -rf babycare/migrations/0001_initial.py
+#!/usr/bin/env bash
+rm -rf babycare/migrations/00*
 rm -rf db.sqlite3
 python manage.py migrate
 python manage.py makemigrations babycare

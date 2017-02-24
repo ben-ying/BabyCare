@@ -10,3 +10,13 @@ django-filter # https://github.com/carltongibson/django-filter(rest framework)
 httpie # https://github.com/jkbrzt/httpie#installation (rest framework)
 coreapi # https://github.com/core-api/python-client
 coreapi-cli # coreapi get http://127.0.0.1:8000/schema/; coreapi action users list
+# /Applications/pgAdmin 4.app/Contents/Resources/web
+#flask # use for pgadmin4
+#flask_security # use for pgadmin
+#flask_babel # use for pgadmin
+#flask_htmlmin # use for pgadmin
+#flask_sqlalchemy # use for pgadmin
+#pycrypto # use for pgadmin
+#simplejson # use for pgadmin
+#flask_gravatar # use for pgadmin
+#sqlparse # use for pgadmin

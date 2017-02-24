@@ -22,6 +22,8 @@ class Baby(models.Model):
     accesstoken = models.CharField(max_length=100, blank=True, null=True)
     created = models.DateTimeField(editable=False, blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+    #is_email_activate = models.BooleanField(default=False)
+    #is_phone_activate = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.email + '(' + self.user.username + ')'
