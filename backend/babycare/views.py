@@ -22,6 +22,7 @@ from datetime import datetime
 
 from babycare.permissions import IsOwnerOrReadOnly
 from babycare.serializers.baby import BabySerializer
+from utils import json_response
 from utils import simple_json_response
 from models import Baby, LoginLog
 from models import Event
@@ -35,6 +36,8 @@ from constants import CODE_DUPLICATE_USER
 from constants import CODE_DUPLICATE_EMAIL
 from constants import CODE_DUPLICATE_PHONE
 from constants import CODE_NOT_EXISTS_EMAIL
+from constants import CODE_INVALID_REQUEST
+from constants import MSG_400
 from constants import MSG_EMPTY_USER
 from constants import MSG_EMPTY_EMAIL
 from constants import MSG_EMPTY_PASSWORD
@@ -44,6 +47,7 @@ from constants import MSG_DUPLICATE_USER
 from constants import MSG_DUPLICATE_EMAIL
 from constants import MSG_DUPLICATE_PHONE
 from constants import MSG_NOT_EXISTS_EMAIL
+from constants import MSG_CREATE_USER_SUCCESS
 from constants import MIN_PASSWORD_LEN
 
 from django.contrib.auth.models import User
@@ -59,17 +63,60 @@ def api_root(request, format=None):
     })
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class CustomModelViewSet(viewsets.ModelViewSet):
+    code = CODE_SUCCESS
+    # permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+
+
+class UserViewSet(CustomModelViewSet):
     queryset = Baby.objects.all()
     serializer_class = BabySerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
 
-    # @detail_route(renderer_class=[renderers.StaticHTMLRenderer])
-    def highlight(self, request, *args, **kwargs):
-        user = self.get_object()
-        return Response(user.highlighted)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        username = request.data.get('username')
+        password = request.data.get('password')
+        email = request.data.get('email')
+        phone = request.data.get('phone')
+        first_name = request.data.get('first_name', '')
+        last_name = request.data.get('last_name', '')
+
+        if not username:
+            return simple_json_response(CODE_EMPTY_USER, MSG_EMPTY_USER)
+        elif not email:
+            return simple_json_response(CODE_EMPTY_EMAIL, MSG_EMPTY_EMAIL)
+        elif not password:
+            return simple_json_response(CODE_EMPTY_PASSWORD, MSG_EMPTY_PASSWORD)
+        elif not validate_email(email):
+            return simple_json_response(CODE_INVALID_EMAIL, MSG_INVALID_EMAIL)
+        elif len(password) < MIN_PASSWORD_LEN:
+            return simple_json_response(CODE_INVALID_PASSWORD, MSG_INVALID_PASSWORD)
+        elif User.objects.filter(username=username):
+            return simple_json_response(CODE_DUPLICATE_USER, MSG_DUPLICATE_USER)
+        elif User.objects.filter(email=email):
+            return simple_json_response(CODE_DUPLICATE_EMAIL, MSG_DUPLICATE_EMAIL)
+        elif serializer.is_valid():
+            user = User()
+            user.email = email
+            user.password = password
+            user.username = username
+            user.first_name = first_name
+            user.last_name = last_name
+            self.request.user = user
+            self.perform_create(serializer)
+            response_data = serializer.data
+            response_data['id'] = user.id
+            response_data['token'] = Token.objects.create(user=user).key
+            response_data['username'] = username
+            response_data['email'] = email
+            response_data['password'] = password
+            response_data['phone'] = phone
+            response_data['first_name'] = first_name
+            response_data['last_name'] = last_name
+            return json_response(response_data, CODE_SUCCESS, MSG_CREATE_USER_SUCCESS)
+        else:
+            return simple_json_response(status.HTTP_400_BAD_REQUEST, MSG_400)
 
     def perform_create(self, serializer):
+        self.request.user.save()
         serializer.save(user=self.request.user)
-
-

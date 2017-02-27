@@ -1,6 +1,8 @@
 from django.contrib import admin
+
 from models import Baby
 from models import Event
+
 
 class BabyAdmin(admin.ModelAdmin):
     list_display = ('user', 'phone')
