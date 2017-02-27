@@ -12,5 +12,6 @@
     <dimen name="button_margin_vertical">24dp</dimen>
     <dimen name="register_small_text">16sp</dimen>
     <dimen name="card_padding">60dp</dimen>
+    <dimen name="tab_height">48dp</dimen> <!--48dp when You have text or image, and 72dp when You have image and text-->
 
 </resources>

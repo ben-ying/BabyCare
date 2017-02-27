@@ -19,9 +19,14 @@ public class CardFragmentPagerAdapter extends FragmentStatePagerAdapter implemen
         fragments = new ArrayList<>();
         this.baseElevation = baseElevation;
 
-        for(int i = 0; i< 8; i++){
+        for(int i = 0; i< 3; i++){
             addCardFragment(new CardFragment());
         }
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return "Title" + position;
     }
 
     @Override

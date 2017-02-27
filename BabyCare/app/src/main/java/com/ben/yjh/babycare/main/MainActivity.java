@@ -19,11 +19,13 @@ import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ShadowTransformer;
 import com.ben.yjh.babycare.util.Utils;
+import com.ben.yjh.babycare.widget.slidingtab.SlidingTabLayout;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ViewPager mViewPager;
+    private SlidingTabLayout mSlidingTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,12 @@ public class MainActivity extends BaseActivity
         mViewPager.setPageTransformer(false, fragmentCardShadowTransformer);
         mViewPager.setOffscreenPageLimit(3);
 
+        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
+        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.colorAccent));
+        mSlidingTabLayout.setDistributeEvenly(true);
+        mSlidingTabLayout.setViewPager(mViewPager);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
@@ -52,6 +60,12 @@ public class MainActivity extends BaseActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.colorAccent));
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
