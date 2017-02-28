@@ -40,7 +40,7 @@
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
-        <activity android:name=".main.AddEventActivity" />
+        <activity android:name=".main.event.AddEventActivity" />
     </application>
 
 </manifest>

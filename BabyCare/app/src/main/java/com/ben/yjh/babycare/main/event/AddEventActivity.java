@@ -1,4 +1,4 @@
-package com.ben.yjh.babycare.main;
+package com.ben.yjh.babycare.main.event;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

@@ -5,20 +5,19 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
+import com.ben.yjh.babycare.main.event.AddEventActivity;
 import com.ben.yjh.babycare.util.Constants;
-import com.ben.yjh.babycare.util.ShadowTransformer;
-import com.ben.yjh.babycare.util.Utils;
 import com.ben.yjh.babycare.widget.slidingtab.SlidingTabLayout;
 
 public class MainActivity extends BaseActivity
@@ -26,6 +25,7 @@ public class MainActivity extends BaseActivity
 
     private ViewPager mViewPager;
     private SlidingTabLayout mSlidingTabLayout;
+    private HomeViewPagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +35,14 @@ public class MainActivity extends BaseActivity
         setSupportActionBar(toolbar);
 
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
-        CardFragmentPagerAdapter pagerAdapter = new CardFragmentPagerAdapter(
-                getSupportFragmentManager(), Utils.dpToPixels(2, this));
-        ShadowTransformer fragmentCardShadowTransformer = new ShadowTransformer(mViewPager, pagerAdapter);
-        fragmentCardShadowTransformer.enableScaling(true);
-        mViewPager.setAdapter(pagerAdapter);
-        mViewPager.setPageTransformer(false, fragmentCardShadowTransformer);
+        mPagerAdapter = new HomeViewPagerAdapter(getSupportFragmentManager());
+//        CardFragmentPagerAdapter pagerAdapter = new CardFragmentPagerAdapter(
+//                getSupportFragmentManager(), Utils.dpToPixels(2, this));
+//        ShadowTransformer fragmentCardShadowTransformer = new ShadowTransformer(mViewPager, mPagerAdapter);
+//        fragmentCardShadowTransformer.enableScaling(true);
+
+        mViewPager.setAdapter(mPagerAdapter);
+//        mViewPager.setPageTransformer(false, fragmentCardShadowTransformer);
         mViewPager.setOffscreenPageLimit(3);
 
         mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
