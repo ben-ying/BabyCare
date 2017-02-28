@@ -27,8 +27,10 @@ class Baby(models.Model):
         super(Baby, self).save(*args, **kwargs)
 
 class Event(models.Model):
+    id = IntegerField(label='ID')
     baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
+    message = models.TextField()
     like = models.BooleanField(default=False)
     #image = ArrayField(ArrayField(models.ImageField()))
     size = models.CharField(max_length=100, blank=True, null=True)

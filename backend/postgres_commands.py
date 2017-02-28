@@ -22,3 +22,14 @@ Add a new line to the top of pg_hba.conf:
     then remove the line you added to pg_hba.conf and restart Pg again. You can now use the password you set above to connect to PostgreSQL as the postgres user.
     To learn more, read the "client authentication" chapter of the user manual and the docs on pg_hba.conf.
 
+12. # kill postgres session
+SELECT 
+    pg_terminate_backend(pid) 
+FROM 
+    pg_stat_activity 
+WHERE 
+    -- don't kill my own connection!
+        pid <> pg_backend_pid()
+    -- don't kill the connections to other databases
+    AND datname = 'babycare'
+                            ;

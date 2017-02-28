@@ -6,7 +6,7 @@ import string
 
 from django.http import HttpResponse
 
-from constants import CODE_SUCCESS
+from constants import CODE_SUCCESS, CODE_INVALID_TOKEN, MSG_401
 from constants import MIN_PASSWORD_LEN
 
 
@@ -24,6 +24,10 @@ def simple_json_response(code=CODE_SUCCESS, message=''):
     response_data['message'] = unicode(message)
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+def invalid_token_response():
+    return simple_json_response(CODE_INVALID_TOKEN, MSG_401)
 
 
 def password_generator(size=MIN_PASSWORD_LEN, chars=string.ascii_lowercase + string.digits):

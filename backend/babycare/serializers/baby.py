@@ -4,6 +4,12 @@ from babycare.models import Baby
 
 
 class BabySerializer(serializers.ModelSerializer):
+    baby_id = serializers.IntegerField(read_only=True, source="id")
+    user_id = serializers.IntegerField(read_only=True, source="user.id")
+    username = serializers.CharField(read_only=True, max_length=100, source="user.username")
+    email = serializers.CharField(read_only=True, max_length=100, source="user.email")
+
     class Meta:
         model = Baby
-        fields = ['phone', 'gender', 'region', 'whats_up', 'birth', 'hobbies', 'highlighted']
+        fields = ['baby_id', 'user_id', 'username', 'email', 'phone', 'gender', 'region',
+                  'whats_up', 'birth', 'hobbies', 'highlighted']

@@ -1,3 +1,5 @@
+from settings_common import *
+
 SECRET_KEY = '!(poief@tj(fc*o3hifd6a2^$(1qk!m)hv-uug2eh)anp^9u5%'
 
 DEBUG = True

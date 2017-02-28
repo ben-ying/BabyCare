@@ -22,11 +22,13 @@ from datetime import datetime
 
 from babycare.permissions import IsOwnerOrReadOnly
 from babycare.serializers.baby import BabySerializer
-from utils import json_response
+from babycare.serializers.event import EventSerializer
+from utils import json_response, invalid_token_response
 from utils import simple_json_response
 from models import Baby, LoginLog
 from models import Event
-from constants import CODE_SUCCESS
+from constants import CODE_SUCCESS, MSG_EMPTY_EVENT_TITLE, CODE_EMPTY_EVENT_TITLE, MSG_EMPTY_EVENT_MESSAGE, CODE_EMPTY_EVENT_MESSAGE, \
+    MSG_401, CODE_INVALID_TOKEN, MSG_CREATE_EVENT_SUCCESS
 from constants import CODE_EMPTY_USER
 from constants import CODE_EMPTY_EMAIL
 from constants import CODE_EMPTY_PASSWORD
@@ -105,18 +107,38 @@ class UserViewSet(CustomModelViewSet):
             self.request.user = user
             self.perform_create(serializer)
             response_data = serializer.data
-            response_data['id'] = user.id
             response_data['token'] = Token.objects.create(user=user).key
-            response_data['username'] = username
-            response_data['email'] = email
-            response_data['password'] = password
-            response_data['phone'] = phone
-            response_data['first_name'] = first_name
-            response_data['last_name'] = last_name
             return json_response(response_data, CODE_SUCCESS, MSG_CREATE_USER_SUCCESS)
         else:
-            return simple_json_response(status.HTTP_400_BAD_REQUEST, MSG_400)
+            return simple_json_response(CODE_INVALID_REQUEST, MSG_400)
 
     def perform_create(self, serializer):
         self.request.user.save()
         serializer.save(user=self.request.user)
+
+
+class EventViewSet(CustomModelViewSet):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        token = request.data.get('token')
+        title = request.data.get('title')
+        message = request.data.get('message')
+
+        if not title:
+            return simple_json_response(CODE_EMPTY_EVENT_TITLE, MSG_EMPTY_EVENT_TITLE)
+        elif not message:
+            return simple_json_response(CODE_EMPTY_EVENT_MESSAGE, MSG_EMPTY_EVENT_MESSAGE)
+        elif serializer.is_valid():
+            if Token.objects.filter(key=token):
+                user = Token.objects.get(key=token).user
+                serializer.validated_data['baby_id'] = Baby.objects.get(user=user).id
+                self.perform_create(serializer)
+                return json_response(serializer.data, CODE_SUCCESS, MSG_CREATE_EVENT_SUCCESS)
+            else:
+                return invalid_token_response()
+        else:
+            return simple_json_response(CODE_INVALID_REQUEST, MSG_400)
+
