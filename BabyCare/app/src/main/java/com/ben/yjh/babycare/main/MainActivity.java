@@ -45,7 +45,7 @@ public class MainActivity extends BaseActivity
 
         mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
-        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.colorAccent));
+        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.white));
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setViewPager(mViewPager);
 
@@ -60,12 +60,6 @@ public class MainActivity extends BaseActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.colorAccent));
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
