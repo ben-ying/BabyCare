@@ -8,9 +8,6 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ben.yjh.babycare.R;
 
@@ -35,7 +32,7 @@ public class CardFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.item_card, container, false);
 
-        cardView = (CardView) view.findViewById(R.id.cardView);
+        cardView = (CardView) view.findViewById(R.id.card_view);
         cardView.setMaxCardElevation(cardView.getCardElevation() * CardAdapter.MAX_ELEVATION_FACTOR);
 
         return view;

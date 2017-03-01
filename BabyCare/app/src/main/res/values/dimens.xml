@@ -8,10 +8,18 @@
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="register_margin">8dp</dimen>
-    <dimen name="card_margin">8dp</dimen>
     <dimen name="button_margin_vertical">24dp</dimen>
     <dimen name="register_small_text">16sp</dimen>
     <dimen name="card_padding">60dp</dimen>
     <dimen name="tab_height">48dp</dimen> <!--48dp when You have text or image, and 72dp when You have image and text-->
+
+    <dimen name="timeline_image_height">200dp</dimen>
+    <dimen name="actions_padding">16dp</dimen>
+    <dimen name="actions_padding_left">8dp</dimen>
+    <dimen name="actions_icon_height">40dp</dimen>
+    <dimen name="actions_icon_width">40dp</dimen>
+    <dimen name="actions_textsize">14sp</dimen>
+    <dimen name="actions_padding_button">10dp</dimen>
+    <dimen name="recycler_view_padding">15dp</dimen>
 
 </resources>

@@ -21,7 +21,6 @@ import com.ben.yjh.babycare.main.event.AddEventActivity;
 import com.ben.yjh.babycare.main.event.EventListFragment;
 import com.ben.yjh.babycare.main.setting.SettingFragment;
 import com.ben.yjh.babycare.util.Constants;
-import com.ben.yjh.babycare.widget.slidingtab.SlidingTabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +45,7 @@ public class MainActivity extends BaseActivity
         fragments.add(SettingFragment.newInstance());
         fragments.add(EventListFragment.newInstance());
 
-        mViewPager = (ViewPager) findViewById(R.id.viewPager);
+        mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mPagerAdapter = new HomeViewPagerAdapter(getSupportFragmentManager(), fragments);
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(mPagerAdapter);
@@ -83,7 +82,7 @@ public class MainActivity extends BaseActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.design_navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 

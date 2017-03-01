@@ -59,4 +59,13 @@
         <item name="android:textSize">@dimen/register_small_text</item>
         <item name="android:textColor">@color/hint_color</item>
     </style>
+
+    <style name="action_button">
+        <item name="android:padding">@dimen/actions_padding_button</item>
+        <item name="android:layout_height">@dimen/actions_icon_height</item>
+        <item name="android:layout_width">@dimen/actions_icon_width</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:background">?android:selectableItemBackground</item>
+    </style>
 </resources>

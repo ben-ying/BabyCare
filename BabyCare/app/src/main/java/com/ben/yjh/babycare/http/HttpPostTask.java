@@ -39,7 +39,7 @@ public class HttpPostTask {
     private ProgressBar mProgressBar;
 
     private void showProgress() {
-        mProgressBar = (ProgressBar) ((Activity) mContext).findViewById(R.id.progressBar);
+        mProgressBar = (ProgressBar) ((Activity) mContext).findViewById(R.id.progress_bar);
         if (mProgressBar != null) {
             mProgressBar.setVisibility(View.VISIBLE);
         }
