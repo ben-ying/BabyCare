@@ -33,8 +33,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".login.SignUpActivity" />
-        <activity android:name=".main.MainActivity"
-            android:theme="@style/TranslucentTheme">
+        <activity android:name=".main.MainActivity">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
 
