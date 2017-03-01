@@ -4,8 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,15 +18,21 @@ import android.view.View;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.main.event.AddEventActivity;
+import com.ben.yjh.babycare.main.event.EventListFragment;
+import com.ben.yjh.babycare.main.setting.SettingFragment;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.widget.slidingtab.SlidingTabLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ViewPager mViewPager;
-    private SlidingTabLayout mSlidingTabLayout;
     private HomeViewPagerAdapter mPagerAdapter;
+    private FloatingActionButton mFab;
+    private TabLayout mTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,25 +41,41 @@ public class MainActivity extends BaseActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        List<Fragment> fragments = new ArrayList<>();
+        fragments.add(EventListFragment.newInstance());
+        fragments.add(SettingFragment.newInstance());
+        fragments.add(EventListFragment.newInstance());
+
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
-        mPagerAdapter = new HomeViewPagerAdapter(getSupportFragmentManager());
-//        CardFragmentPagerAdapter pagerAdapter = new CardFragmentPagerAdapter(
-//                getSupportFragmentManager(), Utils.dpToPixels(2, this));
-//        ShadowTransformer fragmentCardShadowTransformer = new ShadowTransformer(mViewPager, mPagerAdapter);
-//        fragmentCardShadowTransformer.enableScaling(true);
-
+        mPagerAdapter = new HomeViewPagerAdapter(getSupportFragmentManager(), fragments);
+        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(mPagerAdapter);
-//        mViewPager.setPageTransformer(false, fragmentCardShadowTransformer);
-        mViewPager.setOffscreenPageLimit(3);
 
-        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
-        mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
-        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.white));
-        mSlidingTabLayout.setDistributeEvenly(true);
-        mSlidingTabLayout.setViewPager(mViewPager);
+        mTabLayout = (TabLayout) findViewById(R.id.tab_layout_main);
+        mTabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(this);
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(this);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    mFab.show();
+                } else {
+                    mFab.hide();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

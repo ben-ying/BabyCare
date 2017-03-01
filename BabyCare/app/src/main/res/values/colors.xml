@@ -8,4 +8,10 @@
     <color name="white">#FFFFFF</color>
     <color name="hint_color">#808080</color>
     <color name="default_text_color">#323232</color>
+
+    <!-- Google Logo -->
+    <color name="google_blue">#4285F4</color>
+    <color name="google_green">#34A853</color>
+    <color name="google_yellow">#FBBC05</color>
+    <color name="google_red">#EA4335</color>
 </resources>

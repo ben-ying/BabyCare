@@ -1,45 +1,27 @@
 package com.ben.yjh.babycare.main;
 
-
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.ben.yjh.babycare.R;
-import com.ben.yjh.babycare.main.event.EventListFragment;
-import com.ben.yjh.babycare.main.setting.SettingFragment;
+import java.util.List;
 
-import java.util.Stack;
+public class HomeViewPagerAdapter extends FragmentStatePagerAdapter {
+    private List<Fragment> mFragments;
 
-public class HomeViewPagerAdapter extends FragmentPagerAdapter {
-
-    private Context mContext;
-
-    public HomeViewPagerAdapter(FragmentManager fm) {
+    public HomeViewPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
         super(fm);
+        mFragments = fragments;
     }
 
     @Override
     public Fragment getItem(int position) {
-        switch (position) {
-            case 0:
-                return EventListFragment.newInstance();
-            case 1:
-                return SettingFragment.newInstance();
-            default:
-                return null;
-        }
+        return mFragments.get(position);
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return mFragments.size();
     }
 
     @Override
