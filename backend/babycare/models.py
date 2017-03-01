@@ -7,6 +7,7 @@ from django.forms import IntegerField
 class Baby(models.Model):
     id = IntegerField(label='ID')
     user = models.ForeignKey('auth.User', related_name='snippets', on_delete=models.CASCADE)
+    # password = models.CharField(max_length=50, blank=True, null=True)
     phone = models.CharField(max_length=30, blank=True, null=True)
     gender = models.IntegerField(default=2) #0 for boy, 1 for girl, 2 for others
     #profile = ArrayField(ArrayField(models.ImageField()))
@@ -26,6 +27,7 @@ class Baby(models.Model):
     def save(self, *args, **kwargs):
         super(Baby, self).save(*args, **kwargs)
 
+
 class Event(models.Model):
     id = IntegerField(label='ID')
     baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
@@ -42,6 +44,7 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class LoginLog(models.Model):
     baby = models.ForeignKey(Baby, on_delete=models.CASCADE)

@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 
 MIN_PASSWORD_LEN = 6
 
-# register
+# register & user
 CODE_SUCCESS = 200
 CODE_EMPTY_USER = 201
 CODE_EMPTY_EMAIL = 202
@@ -15,6 +15,8 @@ CODE_DUPLICATE_USER = 206
 CODE_DUPLICATE_EMAIL = 207
 CODE_DUPLICATE_PHONE = 208
 CODE_NOT_EXISTS_EMAIL = 209
+CODE_NOT_ACTIVE = 210
+CODE_INCORRECT_USER_NAME_OR_PASSWORD = 211
 
 # event
 CODE_EMPTY_EVENT_TITLE = 300
@@ -36,6 +38,9 @@ MSG_DUPLICATE_EMAIL = _(u'该邮箱已存在')
 MSG_DUPLICATE_PHONE = _(u'该手机号码已存在')
 MSG_NOT_EXISTS_EMAIL = _(u'该邮箱不存在')
 MSG_CREATE_USER_SUCCESS = _(u'用户创建成功')
+MSG_LOGIN_SUCCESS = _(u'登入成功')
+MSG_NOT_ACTIVE_USER = _(u'该用户暂时不可用')
+MSG_INCORRECT_USER_NAME_OR_PASSWORD = _(u'用户名或账号错误')
 
 # event message
 MSG_EMPTY_EVENT_TITLE = _(u'标题不能为空')

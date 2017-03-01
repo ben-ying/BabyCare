@@ -5,7 +5,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth import authenticate
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from rest_framework import generics
 from rest_framework import mixins
 from rest_framework import permissions
@@ -27,8 +28,10 @@ from utils import json_response, invalid_token_response
 from utils import simple_json_response
 from models import Baby, LoginLog
 from models import Event
-from constants import CODE_SUCCESS, MSG_EMPTY_EVENT_TITLE, CODE_EMPTY_EVENT_TITLE, MSG_EMPTY_EVENT_MESSAGE, CODE_EMPTY_EVENT_MESSAGE, \
-    MSG_401, CODE_INVALID_TOKEN, MSG_CREATE_EVENT_SUCCESS
+from constants import CODE_SUCCESS, MSG_EMPTY_EVENT_TITLE, CODE_EMPTY_EVENT_TITLE, MSG_EMPTY_EVENT_MESSAGE, \
+    CODE_EMPTY_EVENT_MESSAGE, \
+    MSG_401, CODE_INVALID_TOKEN, MSG_CREATE_EVENT_SUCCESS, MSG_INCORRECT_USER_NAME_OR_PASSWORD, \
+    CODE_INCORRECT_USER_NAME_OR_PASSWORD, MSG_NOT_ACTIVE_USER, CODE_NOT_ACTIVE, MSG_LOGIN_SUCCESS
 from constants import CODE_EMPTY_USER
 from constants import CODE_EMPTY_EMAIL
 from constants import CODE_EMPTY_PASSWORD
@@ -79,7 +82,6 @@ class UserViewSet(CustomModelViewSet):
         username = request.data.get('username')
         password = request.data.get('password')
         email = request.data.get('email')
-        phone = request.data.get('phone')
         first_name = request.data.get('first_name', '')
         last_name = request.data.get('last_name', '')
 
@@ -95,12 +97,14 @@ class UserViewSet(CustomModelViewSet):
             return simple_json_response(CODE_INVALID_PASSWORD, MSG_INVALID_PASSWORD)
         elif User.objects.filter(username=username):
             return simple_json_response(CODE_DUPLICATE_USER, MSG_DUPLICATE_USER)
-        elif User.objects.filter(email=email):
+        elif User.objects.filter(email=email.lower):
             return simple_json_response(CODE_DUPLICATE_EMAIL, MSG_DUPLICATE_EMAIL)
         elif serializer.is_valid():
             user = User()
-            user.email = email
-            user.password = password
+            user.email = email.lower()
+            user.is_active = True
+            user.is_staff = True
+            user.set_password(password)
             user.username = username
             user.first_name = first_name
             user.last_name = last_name
@@ -115,6 +119,33 @@ class UserViewSet(CustomModelViewSet):
     def perform_create(self, serializer):
         self.request.user.save()
         serializer.save(user=self.request.user)
+
+
+@api_view(['POST'])
+def login_view(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+
+    # def get_user(email):
+    #     try:
+    #         return User.objects.get(email=email.lower())
+    #     except User.DoesNotExist:
+    #         return None
+
+    user = authenticate(username=username, password=password)
+
+    if user:
+        baby = Baby.objects.get(user=user)
+        if baby:
+            if user.is_active:
+                return json_response(BabySerializer(baby).data, CODE_SUCCESS, MSG_LOGIN_SUCCESS)
+            else:
+                return simple_json_response(CODE_NOT_ACTIVE, MSG_NOT_ACTIVE_USER)
+        else:
+            user.delete()
+            return simple_json_response(CODE_INCORRECT_USER_NAME_OR_PASSWORD, MSG_INCORRECT_USER_NAME_OR_PASSWORD)
+    else:
+        return simple_json_response(CODE_INCORRECT_USER_NAME_OR_PASSWORD, MSG_INCORRECT_USER_NAME_OR_PASSWORD)
 
 
 class EventViewSet(CustomModelViewSet):
@@ -141,4 +172,3 @@ class EventViewSet(CustomModelViewSet):
                 return invalid_token_response()
         else:
             return simple_json_response(CODE_INVALID_REQUEST, MSG_400)
-
