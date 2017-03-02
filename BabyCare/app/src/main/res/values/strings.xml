@@ -42,4 +42,8 @@
 
     <string name="delete">删除</string>
     <string name="delete_event_alert">是否确定删除？</string>
+
+    <string name="title_activity_image_pager">ImagePagerActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

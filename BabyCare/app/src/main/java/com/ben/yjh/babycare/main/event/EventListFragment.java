@@ -1,6 +1,8 @@
 package com.ben.yjh.babycare.main.event;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -13,8 +15,11 @@ import android.view.ViewGroup;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseFragment;
+import com.ben.yjh.babycare.main.ImagePagerActivity;
+import com.ben.yjh.babycare.util.Constants;
 
-public class EventListFragment extends BaseFragment {
+public class EventListFragment extends BaseFragment
+        implements EventAdapter.EventRecyclerViewInterface {
 
     private RecyclerView mRecyclerView;
     private EventAdapter mAdapter;
@@ -45,7 +50,7 @@ public class EventListFragment extends BaseFragment {
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setNestedScrollingEnabled(false);
 //        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration());// 添加分割线。
-        mAdapter = new EventAdapter(getActivity());
+        mAdapter = new EventAdapter(getActivity(), this);
         mRecyclerView.setAdapter(mAdapter);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.google_blue,
@@ -102,6 +107,23 @@ public class EventListFragment extends BaseFragment {
     @Override
     public void init() {
 
+    }
+
+    @Override
+    public void showImageDetail() {
+        Intent intent = new Intent(activity, ImagePagerActivity.class);
+        startActivityForResult(intent, Constants.SHOW_EVENT_IMAGE_DETAIL_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case Constants.SHOW_EVENT_IMAGE_DETAIL_CODE:
+                    break;
+            }
+        }
     }
 
     @Override

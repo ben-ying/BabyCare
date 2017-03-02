@@ -25,7 +25,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="default_bottom_button" >
+    <style name="default_bottom_button">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/button_margin_vertical</item>
@@ -35,7 +35,7 @@
         <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="default_input_layout" >
+    <style name="default_input_layout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColorHint">@color/hint_color</item>
@@ -43,7 +43,7 @@
         <item name="android:layout_marginBottom">@dimen/register_margin</item>
     </style>
 
-    <style name="default_edit_text" >
+    <style name="default_edit_text">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/default_text_color</item>
@@ -51,7 +51,7 @@
         <item name="android:maxLines">1</item>
     </style>
 
-    <style name="default_bottom_text" >
+    <style name="default_bottom_text">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">@dimen/button_margin_vertical</item>
@@ -67,5 +67,17 @@
         <item name="android:layout_marginRight">8dp</item>
         <item name="android:scaleType">fitCenter</item>
         <item name="android:background">?android:selectableItemBackground</item>
+    </style>
+
+    <style name="FullscreenTheme" parent="TranslucentTheme">
+        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
+        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+    </style>
+
+    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/black_overlay</item>
     </style>
 </resources>

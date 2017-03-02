@@ -1,7 +1,6 @@
-package com.ben.yjh.babycare.main.event;
+package com.ben.yjh.babycare.main;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
@@ -9,21 +8,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.ben.yjh.babycare.R;
+import com.ben.yjh.babycare.widget.ScaleImageView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class EventViewpagerAdapter extends PagerAdapter {
+public class ImageViewpagerAdapter extends PagerAdapter {
 
     private Context mContext;
-    private EventAdapterInterface mInterface;
+    private List<String> mImages;
 
-    interface EventAdapterInterface {
-        void showImageDetail();
-    }
-
-    public EventViewpagerAdapter(Context context, EventAdapterInterface adapterInterface) {
+    public ImageViewpagerAdapter(Context context, String images) {
         this.mContext = context;
-        this.mInterface = adapterInterface;
+        this.mImages = new ArrayList<>();
+        if (images != null && images.contains(",")) {
+            for (String image : images.split(",")) {
+                mImages.add(image);
+            }
+        }
         BitmapFactory.Options resizeOptions = new BitmapFactory.Options();
     }
 
@@ -34,10 +39,8 @@ public class EventViewpagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_event_image, null);
-        ImageView imageView = (ImageView) view.findViewById(R.id.image_view);
-        TextView textView = (TextView) view.findViewById(R.id.title);
-        textView.setText("Title" + position);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_image, null);
+        ScaleImageView imageView = (ScaleImageView) view.findViewById(R.id.image_view);
         switch (position) {
             case 0:
                 imageView.setImageResource(R.drawable.test);
@@ -49,13 +52,6 @@ public class EventViewpagerAdapter extends PagerAdapter {
                 imageView.setImageResource(R.drawable.test2);
                 break;
         }
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mInterface.showImageDetail();
-            }
-        });
 
         container.addView(view);
 
@@ -69,7 +65,7 @@ public class EventViewpagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return mImages.size();
     }
 
     @Override

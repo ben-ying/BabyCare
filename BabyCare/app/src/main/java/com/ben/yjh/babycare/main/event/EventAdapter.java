@@ -2,6 +2,7 @@ package com.ben.yjh.babycare.main.event;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,19 +12,32 @@ import android.view.ViewGroup;
 import com.ben.yjh.babycare.R;
 import com.viewpagerindicator.CirclePageIndicator;
 
-public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
+public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder>
+        implements EventViewpagerAdapter.EventAdapterInterface {
 
     private Context mContext;
+    private EventRecyclerViewInterface mInterface;
 
-    public EventAdapter(Context context) {
+    @Override
+    public void showImageDetail() {
+        mInterface.showImageDetail();
+    }
+
+    interface EventRecyclerViewInterface {
+        void showImageDetail();
+    }
+
+
+    public EventAdapter(Context context, EventRecyclerViewInterface recyclerViewInterface) {
         this.mContext = context;
+        this.mInterface = recyclerViewInterface;
     }
 
     @Override
     public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_card, parent, false);
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager);
-        viewPager.setAdapter(new EventViewpagerAdapter(mContext));
+        viewPager.setAdapter(new EventViewpagerAdapter(mContext, this));
         CirclePageIndicator pageIndicator = (CirclePageIndicator) view.findViewById(R.id.indicator);
         pageIndicator.setViewPager(viewPager);
         pageIndicator.setSnap(true);
