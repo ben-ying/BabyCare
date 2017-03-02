@@ -20,3 +20,4 @@ coreapi-cli # coreapi get http://127.0.0.1:8000/schema/; coreapi action users li
 #simplejson # use for pgadmin
 #flask_gravatar # use for pgadmin
 #sqlparse # use for pgadmin
+oss2

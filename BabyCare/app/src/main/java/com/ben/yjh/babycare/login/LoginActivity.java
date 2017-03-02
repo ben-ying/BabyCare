@@ -2,6 +2,7 @@ package com.ben.yjh.babycare.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Patterns;
@@ -34,6 +35,9 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         findViewById(R.id.btn_login).setOnClickListener(this);
         findViewById(R.id.tv_link_signup).setOnClickListener(this);
         mUsernameEditText = (AutoCompleteTextView) findViewById(R.id.et_username);

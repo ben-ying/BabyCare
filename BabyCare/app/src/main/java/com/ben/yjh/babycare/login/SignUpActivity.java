@@ -28,10 +28,10 @@ public class SignUpActivity extends BaseActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            toolbar.setPadding(0, 0, 0, 0);
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//            toolbar.setPadding(0, 0, 0, 0);
+//        }
 
         mUsernameEditText = (EditText) findViewById(R.id.et_username);
         mEmailEditText = (EditText) findViewById(R.id.et_email);

@@ -54,7 +54,6 @@
     <style name="default_bottom_text">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">@dimen/button_margin_vertical</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">@dimen/register_small_text</item>
         <item name="android:textColor">@color/hint_color</item>

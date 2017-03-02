@@ -35,18 +35,18 @@
             <ImageButton
                 android:id="@+id/ic1"
                 style="@style/action_button"
-                android:src="@drawable/l_search" />
+                android:src="@mipmap/ic_event_search" />
 
 
             <ImageButton
                 android:id="@+id/ic2"
                 style="@style/action_button"
-                android:src="@drawable/l_mail" />
+                android:src="@mipmap/ic_event_mail" />
 
             <ImageButton
                 android:id="@+id/ic3"
                 style="@style/action_button"
-                android:src="@drawable/l_trash" />
+                android:src="@mipmap/ic_event_trash" />
 
         </LinearLayout>
     </RelativeLayout>
