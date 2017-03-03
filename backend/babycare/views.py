@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import json
+
+import oss2
 from django.http import Http404
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -24,6 +27,10 @@ from datetime import datetime
 from babycare.permissions import IsOwnerOrReadOnly
 from babycare.serializers.baby import BabySerializer
 from babycare.serializers.event import EventSerializer
+from backend.settings import OSS_ACCESS_KEY_ID
+from backend.settings import OSS_ACCESS_KEY_SECRET
+from backend.settings import OSS_BUCKET_NAME
+from backend.settings import OSS_ENDPOINT
 from utils import json_response, invalid_token_response
 from utils import simple_json_response
 from models import Baby, LoginLog
@@ -57,7 +64,6 @@ from constants import MIN_PASSWORD_LEN
 
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
-
 import pdb
 
 
@@ -77,9 +83,22 @@ class UserViewSet(CustomModelViewSet):
     queryset = Baby.objects.all()
     serializer_class = BabySerializer
 
+    def list(self, request, *args, **kwargs):
+        for param in (OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET_NAME, OSS_ENDPOINT):
+            assert '<' not in param, '请设置参数：' + param
+
+        bucket = oss2.Bucket(oss2.Auth(OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET), OSS_ENDPOINT, OSS_BUCKET_NAME)
+        result = bucket.get_object('test.png', process='image/info')
+        json_content = result.read()
+        decoded_json = json.loads(oss2.to_unicode(json_content))
+        pdb.set_trace()
+
+        return super(UserViewSet, self).list(request, *args, **kwargs)
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         username = request.data.get('username')
+        nickname = request.data.get('nickname')
         password = request.data.get('password')
         email = request.data.get('email')
         first_name = request.data.get('first_name', '')

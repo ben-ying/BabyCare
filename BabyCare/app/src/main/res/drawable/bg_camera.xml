@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <stroke
+        android:width="@dimen/stroke_size"
+        android:color="@color/black_overlay" />
+    <size
+        android:width="@dimen/camera_size"
+        android:height="@dimen/camera_size" />
+    <solid android:color="@color/camera_background_color" />
+</shape>
+
+

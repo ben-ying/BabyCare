@@ -16,3 +16,8 @@ DATABASES = {
         'PORT': '',
     }
 }
+
+OSS_ACCESS_KEY_ID = os.getenv('OSS_TEST_ACCESS_KEY_ID', 'LTAIh1547iWiXWoC')
+OSS_ACCESS_KEY_SECRET = os.getenv('OSS_TEST_ACCESS_KEY_SECRET', 'Mh2rPHFOx7K2HkDmRS0efSfzqiFZlB')
+OSS_BUCKET_NAME = os.getenv('OSS_TEST_BUCKET', 'localbabycare')
+OSS_ENDPOINT = os.getenv('OSS_TEST_ENDPOINT', 'oss-cn-hangzhou.aliyuncs.com')

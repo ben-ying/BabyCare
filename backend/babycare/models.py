@@ -7,19 +7,19 @@ from django.forms import IntegerField
 class Baby(models.Model):
     id = IntegerField(label='ID')
     user = models.ForeignKey('auth.User', related_name='snippets', on_delete=models.CASCADE)
-    # password = models.CharField(max_length=50, blank=True, null=True)
+    nickname = models.CharField(max_length=100, blank=True, null=True)
     phone = models.CharField(max_length=30, blank=True, null=True)
     gender = models.IntegerField(default=2) #0 for boy, 1 for girl, 2 for others
-    #profile = ArrayField(ArrayField(models.ImageField()))
+    profile = models.CharField(max_length=200, blank=True, null=True)
     region = models.CharField(max_length=100, blank=True, null=True)
     whats_up = models.CharField(max_length=200, blank=True, null=True)
     birth = models.DateTimeField(blank=True, null=True)
-    hobbies = models.CharField(max_length=500, blank=True, null=True)
+    hobbies = models.TextField(max_length=500, blank=True, null=True)
     highlighted = models.TextField(blank=True, null=True)
     created = models.DateTimeField(editable=False, blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
-    #is_email_activate = models.BooleanField(default=False)
-    #is_phone_activate = models.BooleanField(default=False)
+    is_email_activate = models.BooleanField(default=False)
+    is_phone_activate = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.email + '(' + self.user.username + ')'
