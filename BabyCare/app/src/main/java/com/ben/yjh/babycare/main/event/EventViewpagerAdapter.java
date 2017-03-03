@@ -36,17 +36,17 @@ public class EventViewpagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_event_image, null);
         ImageView imageView = (ImageView) view.findViewById(R.id.image_view);
-        TextView textView = (TextView) view.findViewById(R.id.title);
-        textView.setText("Title" + position);
+//        TextView textView = (TextView) view.findViewById(R.id.title);
+//        textView.setText("Title" + position);
         switch (position) {
             case 0:
                 imageView.setImageResource(R.drawable.test);
                 break;
             case 1:
-                imageView.setImageResource(R.drawable.test1);
+                imageView.setImageResource(R.drawable.test2);
                 break;
             case 2:
-                imageView.setImageResource(R.drawable.test2);
+                imageView.setImageResource(R.drawable.test);
                 break;
         }
 

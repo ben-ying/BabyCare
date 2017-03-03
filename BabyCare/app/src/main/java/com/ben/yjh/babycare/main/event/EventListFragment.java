@@ -112,7 +112,7 @@ public class EventListFragment extends BaseFragment
     @Override
     public void showImageDetail() {
         Intent intent = new Intent(activity, ImagePagerActivity.class);
-        startActivityForResult(intent, Constants.SHOW_EVENT_IMAGE_DETAIL_CODE);
+        startActivityForResult(intent, Constants.SHOW_EVENT_IMAGE_DETAIL_REQUEST_CODE);
     }
 
     @Override
@@ -120,7 +120,7 @@ public class EventListFragment extends BaseFragment
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
-                case Constants.SHOW_EVENT_IMAGE_DETAIL_CODE:
+                case Constants.SHOW_EVENT_IMAGE_DETAIL_REQUEST_CODE:
                     break;
             }
         }

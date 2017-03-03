@@ -35,6 +35,8 @@
     <string name="invalid_password">密码长度至少需要6位</string>
     <string name="invalid_confirm_password">2次密码输入不一致</string>
     <string name="add_photo">添加头像</string>
+    <string name="upload_picture_option">上传图片选项</string>
+    <string name="not_support_crop">This device doesn\'t support the crop action!</string>
 
     <!--add event-->
     <string name="title">标题</string>

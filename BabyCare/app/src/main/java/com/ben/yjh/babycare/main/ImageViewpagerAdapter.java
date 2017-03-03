@@ -46,10 +46,10 @@ public class ImageViewpagerAdapter extends PagerAdapter {
                 imageView.setImageResource(R.drawable.test);
                 break;
             case 1:
-                imageView.setImageResource(R.drawable.test1);
+                imageView.setImageResource(R.drawable.test2);
                 break;
             case 2:
-                imageView.setImageResource(R.drawable.test2);
+                imageView.setImageResource(R.drawable.test);
                 break;
         }
 

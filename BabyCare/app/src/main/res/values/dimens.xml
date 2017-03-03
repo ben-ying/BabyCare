@@ -16,6 +16,7 @@
     <dimen name="tab_height">48dp</dimen> <!--48dp when You have text or image, and 72dp when You have image and text-->
     <dimen name="camera_size">80dp</dimen>
     <dimen name="stroke_size">1dp</dimen>
+    <dimen name="text_padding">10dp</dimen>
 
     <dimen name="timeline_image_height">200dp</dimen>
     <dimen name="actions_padding">16dp</dimen>

@@ -7,6 +7,9 @@ public class Constants {
 
     public static final int SIGN_UP_REQUEST_CODE = 100;
     public static final int ADD_EVENT_REQUEST_CODE = 101;
-    public static final int SHOW_EVENT_IMAGE_DETAIL_CODE = 102;
+    public static final int SHOW_EVENT_IMAGE_DETAIL_REQUEST_CODE = 102;
+    public static final int CAMERA_PICTURE_REQUEST_CODE = 103;
+    public static final int GALLERY_PICTURE_REQUEST_CODE = 104;
+    public static final int CROP_PICTURE_REQUEST_CODE = 105;
 
 }

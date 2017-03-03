@@ -11,13 +11,13 @@
         android:scaleType="centerCrop"
         android:src="@drawable/test" />
 
-    <TextView
-        android:id="@+id/title"
-        style="@style/TextAppearance.AppCompat.Title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/view_pager"
-        android:padding="10dp"
-        android:text="Card title"
-        android:textColor="@color/white" />
+    <!--<TextView-->
+        <!--android:id="@+id/title"-->
+        <!--style="@style/TextAppearance.AppCompat.Title"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignBottom="@+id/view_pager"-->
+        <!--android:padding="10dp"-->
+        <!--android:text="Card title"-->
+        <!--android:textColor="@color/white" />-->
 </RelativeLayout>
