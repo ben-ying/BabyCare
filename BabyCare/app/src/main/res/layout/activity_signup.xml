@@ -20,6 +20,7 @@
             android:layout_centerInParent="true">
 
             <RelativeLayout
+                android:id="@+id/content_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true">
@@ -56,8 +57,8 @@
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/baby_name_layout"
-                    android:layout_toLeftOf="@+id/profile_layout"
                     style="@style/default_input_layout"
+                    android:layout_toLeftOf="@+id/profile_layout"
                     android:layout_below="@+id/username_layout">
 
                     <EditText
@@ -105,6 +106,27 @@
                         android:inputType="textPassword" />
                 </android.support.design.widget.TextInputLayout>
             </RelativeLayout>
+
+            <RadioGroup
+                android:id="@+id/rg_gender"
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal"
+                android:layout_below="@+id/content_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <RadioButton
+                    android:text="@string/male"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <RadioButton
+                    android:text="@string/female"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <RadioButton
+                    android:text="@string/unknown_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RadioGroup>
         </RelativeLayout>
 
         <android.support.v7.widget.AppCompatButton

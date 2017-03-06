@@ -38,6 +38,9 @@
     <string name="add_photo">添加头像</string>
     <string name="upload_picture_option">上传图片选项</string>
     <string name="not_support_crop">This device doesn\'t support the crop action!</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
+    <string name="unknown_gender">保密</string>
 
     <!--add event-->
     <string name="title">标题</string>
