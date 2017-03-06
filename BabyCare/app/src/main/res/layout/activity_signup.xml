@@ -55,22 +55,22 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/full_name_layout"
+                    android:id="@+id/baby_name_layout"
                     android:layout_toLeftOf="@+id/profile_layout"
                     style="@style/default_input_layout"
                     android:layout_below="@+id/username_layout">
 
                     <EditText
-                        android:id="@+id/et_full_name"
+                        android:id="@+id/et_baby_name"
                         style="@style/default_edit_text"
-                        android:hint="@string/full_name"
+                        android:hint="@string/baby_name"
                         android:inputType="textCapWords" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/email_layout"
                     style="@style/default_input_layout"
-                    android:layout_below="@+id/full_name_layout">
+                    android:layout_below="@+id/baby_name_layout">
 
                     <EditText
                         android:id="@+id/et_email"

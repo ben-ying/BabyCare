@@ -20,7 +20,7 @@
 
     <!-- login-->
     <string name="username">用户名</string>
-    <string name="full_name">昵称</string>
+    <string name="baby_name">宝宝名</string>
     <string name="email">电子邮箱</string>
     <string name="password">密码</string>
     <string name="confirm_password">确认密码</string>
@@ -29,6 +29,7 @@
     <string name="login">登入</string>
     <string name="no_account_yet_create_one">还没有账号？创建</string>
     <string name="empty_username">用户名不能为空</string>
+    <string name="empty_baby_name">宝宝名不能为空</string>
     <string name="empty_email">Email不能为空</string>
     <string name="empty_password">密码不能为空</string>
     <string name="invalid_email">邮箱格式不正确</string>

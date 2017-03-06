@@ -1,12 +1,17 @@
 package com.ben.yjh.babycare.login;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Patterns;
@@ -19,13 +24,23 @@ import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
 
+import java.io.FileNotFoundException;
+
 public class SignUpActivity extends BaseActivity {
 
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
     private EditText mUsernameEditText;
+    private EditText mBabyNameEditText;
     private EditText mEmailEditText;
     private EditText mPasswordEditText;
     private EditText mConfirmPasswordEditText;
     private String mUsername;
+    private String mBabyName;
     private String mEmail;
     private String mPassword;
     private String mConfirmPassword;
@@ -40,6 +55,7 @@ public class SignUpActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         mUsernameEditText = (EditText) findViewById(R.id.et_username);
+        mBabyNameEditText = (EditText) findViewById(R.id.et_baby_name);
         mEmailEditText = (EditText) findViewById(R.id.et_email);
         mPasswordEditText = (EditText) findViewById(R.id.et_password);
         mConfirmPasswordEditText = (EditText) findViewById(R.id.et_confirm_password);
@@ -57,12 +73,17 @@ public class SignUpActivity extends BaseActivity {
 
     private boolean isValid() {
         mUsername = mUsernameEditText.getText().toString().trim();
+        mBabyName = mBabyNameEditText.getText().toString().trim();
         mEmail = mEmailEditText.getText().toString().trim();
         mPassword = mPasswordEditText.getText().toString().trim();
         mConfirmPassword = mConfirmPasswordEditText.getText().toString().trim();
 
         if (mUsername.isEmpty()) {
             AlertUtils.showAlertDialog(this, R.string.empty_username);
+            return false;
+        }
+        if (mBabyName.isEmpty()) {
+            AlertUtils.showAlertDialog(this, R.string.empty_baby_name);
             return false;
         }
         if (mEmail.isEmpty()) {
@@ -90,24 +111,63 @@ public class SignUpActivity extends BaseActivity {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_EXTERNAL_STORAGE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                findViewById(R.id.profile_layout).performClick();
+            }
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case Constants.CAMERA_PICTURE_REQUEST_CODE:
-                    Uri picUri = data.getData();
-                    ImageUtils.cropPicture(SignUpActivity.this, picUri);
+                    ImageUtils.cropPicture(SignUpActivity.this, data.getData());
                     break;
                 case Constants.GALLERY_PICTURE_REQUEST_CODE:
+                    ImageUtils.cropPicture(SignUpActivity.this, data.getData());
                     break;
                 case Constants.CROP_PICTURE_REQUEST_CODE:
-                    Bundle extras = data.getExtras();
+                    Uri uri = data.getData();
                     // get the cropped bitmap
-                    Bitmap thePic = extras.getParcelable("data");
-                    findViewById(R.id.profile_layout).setBackground(new BitmapDrawable(getResources(), thePic));
+                    if (uri != null) {
+                        try {
+                            Bitmap bitmap = BitmapFactory.decodeStream(
+                                    getContentResolver().openInputStream(uri));
+                            if (bitmap != null) {
+                                findViewById(R.id.profile_layout).setBackground(
+                                        new BitmapDrawable(getResources(), bitmap));
+                            }
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     break;
             }
         }
+    }
+
+    public boolean verifyStoragePermissions() {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -122,30 +182,32 @@ public class SignUpActivity extends BaseActivity {
                 }
                 break;
             case R.id.profile_layout:
-                String[] array = getResources().getStringArray(R.array.picture_choices);
-                new AlertDialog.Builder(SignUpActivity.this)
-                        .setTitle(R.string.upload_picture_option)
-                        .setItems(array, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = null;
-                                switch (which) {
-                                    case 0:
-                                        intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                        startActivityForResult(intent, Constants.CAMERA_PICTURE_REQUEST_CODE);
-                                        break;
-                                    case 1:
-                                        intent = new Intent(Intent.ACTION_PICK,
-                                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                        startActivityForResult(intent, Constants.GALLERY_PICTURE_REQUEST_CODE);
-                                        break;
-                                    default:
-                                        break;
+                if (verifyStoragePermissions()) {
+                    String[] array = getResources().getStringArray(R.array.picture_choices);
+                    new AlertDialog.Builder(SignUpActivity.this)
+                            .setTitle(R.string.upload_picture_option)
+                            .setItems(array, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = null;
+                                    switch (which) {
+                                        case 0:
+                                            intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                            startActivityForResult(intent, Constants.CAMERA_PICTURE_REQUEST_CODE);
+                                            break;
+                                        case 1:
+                                            intent = new Intent(Intent.ACTION_PICK,
+                                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                            startActivityForResult(intent, Constants.GALLERY_PICTURE_REQUEST_CODE);
+                                            break;
+                                        default:
+                                            break;
+                                    }
                                 }
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, null)
-                        .show();
+                            })
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+                }
                 break;
         }
     }
