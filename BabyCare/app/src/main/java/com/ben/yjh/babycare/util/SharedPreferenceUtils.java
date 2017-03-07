@@ -14,6 +14,18 @@ public class SharedPreferenceUtils {
     private static final String USERNAME_HISTORY_KEY = "username_history_key";
     private static final String USERNAME_NAME = "username_name";
     private static final String USERNAME_KEY = "username_key";
+    private static final String GENDER_NAME = "gender_name";
+    private static final String GENDER_KEY = "gender_key";
+
+    public static void saveGender(Context context, boolean isGirl) {
+        SharedPreferenceUtils.saveSharedPreference(
+                context, GENDER_NAME, GENDER_KEY, isGirl);
+    }
+
+    public static boolean isGirl(Context context) {
+        return context.getSharedPreferences(
+                GENDER_NAME, Context.MODE_PRIVATE).getBoolean(GENDER_KEY, false);
+    }
 
     public static void saveUsername(Context context, String username) {
         SharedPreferenceUtils.saveSharedPreference(

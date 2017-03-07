@@ -31,7 +31,8 @@ import java.util.Map;
 
 public class HttpPostTask {
 
-    private static final String DOMAIN = "http://116.62.47.105/babycare";
+//    private static final String DOMAIN = "http://116.62.47.105/babycare";
+    private static final String DOMAIN = "http://yjh.babycare.com/babycare/";
     private static final String TAG_JSON_OBJ = "tag_json_obj";
     private static final String VERSION = "1.0.0";
 

@@ -17,9 +17,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
+import com.ben.yjh.babycare.http.HttpResponseInterface;
+import com.ben.yjh.babycare.http.HttpResult;
+import com.ben.yjh.babycare.model.BabyResult;
 import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
@@ -133,7 +137,6 @@ public class SignUpActivity extends BaseActivity {
                     break;
                 case Constants.CROP_PICTURE_REQUEST_CODE:
                     Uri uri = data.getData();
-                    // get the cropped bitmap
                     if (uri != null) {
                         try {
                             Bitmap bitmap = BitmapFactory.decodeStream(
@@ -152,12 +155,10 @@ public class SignUpActivity extends BaseActivity {
     }
 
     public boolean verifyStoragePermissions() {
-        // Check if we have write permission
         int permission = ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         if (permission != PackageManager.PERMISSION_GRANTED) {
-            // We don't have permission so prompt the user
             ActivityCompat.requestPermissions(
                     this,
                     PERMISSIONS_STORAGE,
@@ -178,7 +179,28 @@ public class SignUpActivity extends BaseActivity {
                 break;
             case R.id.btn_register:
                 if (isValid()) {
-                    // todo register
+                    new UserTaskHandler(this).register(mUsername, mBabyName, mPassword, mEmail,
+                            new HttpResponseInterface<BabyResult>() {
+                        @Override
+                        public void onStart() {
+
+                        }
+
+                        @Override
+                        public void onSuccess(BabyResult classOfT) {
+                            Toast.makeText(SignUpActivity.this, "Success", Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onFailure(HttpResult result) {
+                            Toast.makeText(SignUpActivity.this, "Failed: " + result.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onHttpError(String error) {
+
+                        }
+                    });
                 }
                 break;
             case R.id.profile_layout:

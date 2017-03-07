@@ -3,15 +3,13 @@ package com.ben.yjh.babycare.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Patterns;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
@@ -21,7 +19,6 @@ import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.SharedPreferenceUtils;
 import com.ben.yjh.babycare.util.SystemUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LoginActivity extends BaseActivity {
@@ -30,6 +27,8 @@ public class LoginActivity extends BaseActivity {
     private EditText mPasswordEditText;
     private String mUsername;
     private String mPassword;
+    private boolean mIsGirl;
+    private ImageView mGenderImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +39,9 @@ public class LoginActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         findViewById(R.id.btn_login).setOnClickListener(this);
         findViewById(R.id.tv_link_signup).setOnClickListener(this);
+        mGenderImageView = (ImageView) findViewById(R.id.iv_gender);
+        mGenderImageView.setOnClickListener(this);
+        mGenderImageView.setImageResource(SharedPreferenceUtils.isGirl(this) ? R.mipmap.girl : R.mipmap.boy);
         mUsernameEditText = (AutoCompleteTextView) findViewById(R.id.et_username);
         mPasswordEditText = (EditText) findViewById(R.id.et_password);
 
@@ -99,6 +101,14 @@ public class LoginActivity extends BaseActivity {
                 intent = new Intent(this, SignUpActivity.class);
                 startActivityForResult(intent, Constants.SIGN_UP_REQUEST_CODE);
                 break;
+            case R.id.iv_gender:
+                if (SharedPreferenceUtils.isGirl(this)) {
+                    mGenderImageView.setImageResource(R.mipmap.boy);
+                    SharedPreferenceUtils.saveGender(this, false);
+                } else {
+                    mGenderImageView.setImageResource(R.mipmap.girl);
+                    SharedPreferenceUtils.saveGender(this, true);
+                }
         }
     }
 

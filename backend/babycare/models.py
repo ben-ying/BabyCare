@@ -7,12 +7,13 @@ from django.forms import IntegerField
 class Baby(models.Model):
     id = IntegerField(label='ID')
     user = models.ForeignKey('auth.User', related_name='snippets', on_delete=models.CASCADE)
-    nickname = models.CharField(max_length=100, blank=True, null=True)
+    baby_name = models.CharField(max_length=100, blank=True, null=True)
     phone = models.CharField(max_length=30, blank=True, null=True)
     gender = models.IntegerField(default=2) #0 for boy, 1 for girl, 2 for others
     profile = models.CharField(max_length=200, blank=True, null=True)
     region = models.CharField(max_length=100, blank=True, null=True)
     whats_up = models.CharField(max_length=200, blank=True, null=True)
+    zone = models.CharField(max_length=10, blank=True, null=True)
     birth = models.DateTimeField(blank=True, null=True)
     hobbies = models.TextField(max_length=500, blank=True, null=True)
     highlighted = models.TextField(blank=True, null=True)

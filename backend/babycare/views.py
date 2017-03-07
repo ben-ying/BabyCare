@@ -38,7 +38,8 @@ from models import Event
 from constants import CODE_SUCCESS, MSG_EMPTY_EVENT_TITLE, CODE_EMPTY_EVENT_TITLE, MSG_EMPTY_EVENT_MESSAGE, \
     CODE_EMPTY_EVENT_MESSAGE, \
     MSG_401, CODE_INVALID_TOKEN, MSG_CREATE_EVENT_SUCCESS, MSG_INCORRECT_USER_NAME_OR_PASSWORD, \
-    CODE_INCORRECT_USER_NAME_OR_PASSWORD, MSG_NOT_ACTIVE_USER, CODE_NOT_ACTIVE, MSG_LOGIN_SUCCESS
+    CODE_INCORRECT_USER_NAME_OR_PASSWORD, MSG_NOT_ACTIVE_USER, CODE_NOT_ACTIVE, MSG_LOGIN_SUCCESS, MSG_GET_USERS_SUCCESS, \
+    MSG_EMPTY_BABY_NAME, CODE_EMPTY_BABY_NAME
 from constants import CODE_EMPTY_USER
 from constants import CODE_EMPTY_EMAIL
 from constants import CODE_EMPTY_PASSWORD
@@ -50,7 +51,7 @@ from constants import CODE_DUPLICATE_PHONE
 from constants import CODE_NOT_EXISTS_EMAIL
 from constants import CODE_INVALID_REQUEST
 from constants import MSG_400
-from constants import MSG_EMPTY_USER
+from constants import MSG_EMPTY_USERNAME
 from constants import MSG_EMPTY_EMAIL
 from constants import MSG_EMPTY_PASSWORD
 from constants import MSG_INVALID_EMAIL
@@ -84,28 +85,32 @@ class UserViewSet(CustomModelViewSet):
     serializer_class = BabySerializer
 
     def list(self, request, *args, **kwargs):
-        for param in (OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET_NAME, OSS_ENDPOINT):
-            assert '<' not in param, '请设置参数：' + param
+        # for param in (OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET_NAME, OSS_ENDPOINT):
+        #     assert '<' not in param, '请设置参数：' + param
+        #
+        # bucket = oss2.Bucket(oss2.Auth(OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET), OSS_ENDPOINT, OSS_BUCKET_NAME)
+        # result = bucket.get_object('test.png', process='image/info')
+        # json_content = result.read()
+        # decoded_json = json.loads(oss2.to_unicode(json_content))
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid()
+        # pdb.set_trace()
 
-        bucket = oss2.Bucket(oss2.Auth(OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET), OSS_ENDPOINT, OSS_BUCKET_NAME)
-        result = bucket.get_object('test.png', process='image/info')
-        json_content = result.read()
-        decoded_json = json.loads(oss2.to_unicode(json_content))
-        pdb.set_trace()
-
-        return super(UserViewSet, self).list(request, *args, **kwargs)
+        return json_response(super(UserViewSet, self).list(request, *args, **kwargs).data, CODE_SUCCESS, MSG_GET_USERS_SUCCESS)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         username = request.data.get('username')
-        nickname = request.data.get('nickname')
+        baby_name = request.data.get('baby_name')
         password = request.data.get('password')
         email = request.data.get('email')
         first_name = request.data.get('first_name', '')
         last_name = request.data.get('last_name', '')
 
         if not username:
-            return simple_json_response(CODE_EMPTY_USER, MSG_EMPTY_USER)
+            return simple_json_response(CODE_EMPTY_USER, MSG_EMPTY_USERNAME)
+        elif not baby_name:
+            return simple_json_response(CODE_EMPTY_BABY_NAME, MSG_EMPTY_BABY_NAME)
         elif not email:
             return simple_json_response(CODE_EMPTY_EMAIL, MSG_EMPTY_EMAIL)
         elif not password:
