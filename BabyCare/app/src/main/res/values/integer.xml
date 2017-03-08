@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="description_length">10</integer>
+    <integer name="profile_size">300</integer>
 </resources>

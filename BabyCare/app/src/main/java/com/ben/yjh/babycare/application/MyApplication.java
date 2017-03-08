@@ -3,24 +3,18 @@ package com.ben.yjh.babycare.application;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.android.volley.Cache;
-import com.android.volley.Network;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.Volley;
-import com.ben.yjh.babycare.util.CrashHandler;
-import com.ben.yjh.babycare.util.LruBitmapCache;
 import com.ben.yjh.babycare.widget.VolleySingleton;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.orm.SugarApp;
 
 
 public class MyApplication extends SugarApp {
+
     private static MyApplication mInstance;
     private static Context mAppContext;
+    private static ImageLoader sImageLoader;
 
     @Override
     public void onCreate() {
@@ -40,6 +34,15 @@ public class MyApplication extends SugarApp {
 
     public void setAppContext(Context mAppContext) {
         this.mAppContext = mAppContext;
+    }
+
+    public static ImageLoader getImageLoader(Context context) {
+        if (sImageLoader == null) {
+            sImageLoader = ImageLoader.getInstance();
+            sImageLoader.init(ImageLoaderConfiguration.createDefault(context.getApplicationContext()));
+        }
+
+        return sImageLoader;
     }
 
     public <T> void addToRequestQueue(Request<T> req) {

@@ -25,23 +25,30 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true">
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/profile_layout"
                     android:layout_marginTop="30dp"
                     android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/bg_camera"
-                    android:gravity="center">
+                    android:layout_alignParentRight="true" >
+
+                    <ImageButton
+                        android:id="@+id/ib_profile"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/bg_camera"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
                     <TextView
-                        android:id="@+id/image_button"
+                        android:id="@+id/tv_add_profile"
+                        android:layout_marginBottom="13dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignBottom="@+id/ib_profile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableTop="@mipmap/btn_camera"
                         android:text="@string/add_photo" />
-                </LinearLayout>
+                </RelativeLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/username_layout"

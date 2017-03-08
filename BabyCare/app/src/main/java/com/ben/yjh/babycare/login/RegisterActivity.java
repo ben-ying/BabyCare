@@ -17,8 +17,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.ben.yjh.babycare.R;
+import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.main.MainActivity;
@@ -28,6 +30,8 @@ import com.ben.yjh.babycare.model.UserHistory;
 import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
+import com.ben.yjh.babycare.widget.VolleySingleton;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -50,6 +54,7 @@ public class RegisterActivity extends BaseActivity {
     private String mEmail;
     private String mPassword;
     private String mConfirmPassword;
+    private ImageButton mProfileButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +70,11 @@ public class RegisterActivity extends BaseActivity {
         mEmailEditText = (EditText) findViewById(R.id.et_email);
         mPasswordEditText = (EditText) findViewById(R.id.et_password);
         mConfirmPasswordEditText = (EditText) findViewById(R.id.et_confirm_password);
+        mProfileButton = (ImageButton) findViewById(R.id.ib_profile);
+        mProfileButton.setOnClickListener(this);
         findViewById(R.id.tv_link_login).setOnClickListener(this);
         findViewById(R.id.btn_register).setOnClickListener(this);
         findViewById(R.id.btn_register).setOnClickListener(this);
-        findViewById(R.id.profile_layout).setOnClickListener(this);
     }
 
     @Override
@@ -121,7 +127,7 @@ public class RegisterActivity extends BaseActivity {
                                            @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_EXTERNAL_STORAGE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                findViewById(R.id.profile_layout).performClick();
+                mProfileButton.performClick();
             }
         }
     }
@@ -144,8 +150,9 @@ public class RegisterActivity extends BaseActivity {
                             Bitmap bitmap = BitmapFactory.decodeStream(
                                     getContentResolver().openInputStream(uri));
                             if (bitmap != null) {
-                                findViewById(R.id.profile_layout).setBackground(
-                                        new BitmapDrawable(getResources(), bitmap));
+                                MyApplication.getImageLoader(this).displayImage(uri.toString(),
+                                        mProfileButton, ImageUtils.getProfileImageOptions(this));
+                                findViewById(R.id.tv_add_profile).setVisibility(View.GONE);
                             }
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
@@ -207,7 +214,7 @@ public class RegisterActivity extends BaseActivity {
                     });
                 }
                 break;
-            case R.id.profile_layout:
+            case R.id.ib_profile:
                 if (verifyStoragePermissions()) {
                     String[] array = getResources().getStringArray(R.array.picture_choices);
                     new AlertDialog.Builder(RegisterActivity.this)

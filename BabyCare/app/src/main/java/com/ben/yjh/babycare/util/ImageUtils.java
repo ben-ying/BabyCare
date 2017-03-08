@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.widget.Toast;
 
 import com.ben.yjh.babycare.R;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 public class ImageUtils {
 
@@ -33,5 +35,18 @@ public class ImageUtils {
             Toast toast = Toast.makeText(activity, R.string.not_support_crop, Toast.LENGTH_SHORT);
             toast.show();
         }
+    }
+
+    public static DisplayImageOptions getProfileImageOptions(Context context) {
+        int defaultIconId = SharedPreferenceUtils.isGirl(context) ? R.mipmap.girl : R.mipmap.boy;
+
+        return new DisplayImageOptions.Builder()
+                .displayer(new RoundedBitmapDisplayer(180))
+                .showImageOnLoading(defaultIconId)
+                .showImageOnFail(defaultIconId)
+                .showImageForEmptyUri(defaultIconId)
+                .cacheInMemory(true)
+                .cacheOnDisc()
+                .build();
     }
 }
