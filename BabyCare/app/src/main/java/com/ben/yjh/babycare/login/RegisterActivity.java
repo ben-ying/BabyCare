@@ -17,14 +17,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.main.MainActivity;
-import com.ben.yjh.babycare.model.Baby;
+import com.ben.yjh.babycare.model.BabyUser;
 import com.ben.yjh.babycare.model.HttpBaseResult;
+import com.ben.yjh.babycare.model.UserHistory;
 import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
@@ -32,7 +32,7 @@ import com.ben.yjh.babycare.util.ImageUtils;
 import java.io.FileNotFoundException;
 import java.util.List;
 
-public class SignUpActivity extends BaseActivity {
+public class RegisterActivity extends BaseActivity {
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -54,7 +54,7 @@ public class SignUpActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        setContentView(R.layout.activity_register);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -132,10 +132,10 @@ public class SignUpActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case Constants.CAMERA_PICTURE_REQUEST_CODE:
-                    ImageUtils.cropPicture(SignUpActivity.this, data.getData());
+                    ImageUtils.cropPicture(RegisterActivity.this, data.getData());
                     break;
                 case Constants.GALLERY_PICTURE_REQUEST_CODE:
-                    ImageUtils.cropPicture(SignUpActivity.this, data.getData());
+                    ImageUtils.cropPicture(RegisterActivity.this, data.getData());
                     break;
                 case Constants.CROP_PICTURE_REQUEST_CODE:
                     Uri uri = data.getData();
@@ -182,22 +182,17 @@ public class SignUpActivity extends BaseActivity {
             case R.id.btn_register:
                 if (isValid()) {
                     new UserTaskHandler(this).register(mUsername, mBabyName, mPassword, mEmail,
-                            new HttpResponseInterface<Baby>() {
+                            new HttpResponseInterface<BabyUser>() {
                         @Override
                         public void onStart() {
 
                         }
 
                         @Override
-                        public void onSuccess(Baby classOfT) {
-                            List<Baby> babies = Baby.listAll(Baby.class);
-                            for (Baby baby : babies) {
-                                baby.setLogin(false);
-                                baby.save();
-                            }
-                            classOfT.setLogin(true);
+                        public void onSuccess(BabyUser classOfT) {
                             classOfT.save();
-                            Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                            UserHistory.saveUserHistory(mUsername);
+                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                         }
@@ -215,7 +210,7 @@ public class SignUpActivity extends BaseActivity {
             case R.id.profile_layout:
                 if (verifyStoragePermissions()) {
                     String[] array = getResources().getStringArray(R.array.picture_choices);
-                    new AlertDialog.Builder(SignUpActivity.this)
+                    new AlertDialog.Builder(RegisterActivity.this)
                             .setTitle(R.string.upload_picture_option)
                             .setItems(array, new DialogInterface.OnClickListener() {
                                 @Override

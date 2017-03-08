@@ -22,6 +22,7 @@
     <string name="username">用户名</string>
     <string name="baby_name">宝宝名</string>
     <string name="email">电子邮箱</string>
+    <string name="username_or_email">用户名/电子邮箱</string>
     <string name="password">密码</string>
     <string name="confirm_password">确认密码</string>
     <string name="already_a_member_and_login">已经有账号？登入</string>
@@ -41,6 +42,8 @@
     <string name="male">男</string>
     <string name="female">女</string>
     <string name="unknown_gender">保密</string>
+    <string name="logout">登出账号</string>
+    <string name="logout_message">您确定要退出当前账号吗？</string>
 
     <!--add event-->
     <string name="title">标题</string>

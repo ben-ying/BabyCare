@@ -6,8 +6,6 @@ import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.widget.ScaleImageView;
@@ -40,7 +38,7 @@ public class ImageViewpagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_image, null);
-        ScaleImageView imageView = (ScaleImageView) view.findViewById(R.id.image_view);
+        ScaleImageView imageView = (ScaleImageView) view.findViewById(R.id.img_event);
         switch (position) {
             case 0:
                 imageView.setImageResource(R.drawable.test);

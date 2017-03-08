@@ -52,7 +52,7 @@
                         android:id="@+id/et_username"
                         style="@style/default_edit_text"
                         android:hint="@string/username"
-                        android:text="2345"
+                        android:text="babycare"
                         android:inputType="textCapWords" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -66,7 +66,7 @@
                         android:id="@+id/et_baby_name"
                         style="@style/default_edit_text"
                         android:hint="@string/baby_name"
-                        android:text="234511"
+                        android:text="嘟嘟"
                         android:inputType="textCapWords" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -79,7 +79,7 @@
                         android:id="@+id/et_email"
                         style="@style/default_edit_text"
                         android:hint="@string/email"
-                        android:text="123456@dfds.com"
+                        android:text="babycare.ben@gmail.com"
                         android:inputType="textEmailAddress" />
                 </android.support.design.widget.TextInputLayout>
 

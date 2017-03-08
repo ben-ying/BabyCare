@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <com.ben.yjh.babycare.widget.ScaleImageView
-        android:id="@+id/image_view"
+        android:id="@+id/img_event"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </RelativeLayout>

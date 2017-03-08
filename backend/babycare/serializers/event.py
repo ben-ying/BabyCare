@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from babycare.models import Baby, Event
+from babycare.models import BabyUser, Event
 
 
 class EventSerializer(serializers.ModelSerializer):

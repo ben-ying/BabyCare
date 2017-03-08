@@ -4,7 +4,7 @@ from django.db import models
 from django.forms import IntegerField
 
 
-class Baby(models.Model):
+class BabyUser(models.Model):
     id = IntegerField(label='ID')
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     baby_name = models.CharField(max_length=100, blank=True, null=True)
@@ -26,12 +26,12 @@ class Baby(models.Model):
         return self.user.email + '(' + self.user.username + ')'
 
     def save(self, *args, **kwargs):
-        super(Baby, self).save(*args, **kwargs)
+        super(BabyUser, self).save(*args, **kwargs)
 
 
 class Event(models.Model):
     id = IntegerField(label='ID')
-    baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
+    baby = models.ForeignKey(BabyUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     message = models.TextField()
     like = models.BooleanField(default=False)
@@ -48,7 +48,7 @@ class Event(models.Model):
 
 
 class LoginLog(models.Model):
-    baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
+    baby = models.ForeignKey(BabyUser, on_delete=models.CASCADE)
     system_type = models.CharField(max_length=10) # 1 for android, 2 for ios
     system_version = models.CharField(max_length=30) # 20(7.0.1)
     phone_model = models.CharField(max_length=30) # Sony E8230

@@ -1,14 +1,13 @@
 package com.ben.yjh.babycare.main.event;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
+
 import com.ben.yjh.babycare.R;
 
 
@@ -35,7 +34,7 @@ public class EventViewpagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_event_image, null);
-        ImageView imageView = (ImageView) view.findViewById(R.id.image_view);
+        ImageView imageView = (ImageView) view.findViewById(R.id.img_event);
 //        TextView textView = (TextView) view.findViewById(R.id.title);
 //        textView.setText("Title" + position);
         switch (position) {

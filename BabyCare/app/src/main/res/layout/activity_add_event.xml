@@ -10,7 +10,7 @@
     tools:context="com.ben.yjh.babycare.main.event.AddEventActivity">
 
     <ImageView
-        android:id="@+id/image_view"
+        android:id="@+id/img_event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -19,7 +19,7 @@
     <android.support.design.widget.TextInputLayout
         android:id="@+id/title_layout"
         style="@style/default_input_layout"
-        android:layout_below="@+id/image_view">
+        android:layout_below="@+id/img_profile">
 
         <EditText
             android:id="@+id/et_title"
@@ -34,7 +34,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="10dp"
-        android:layout_below="@+id/image_view"
+        android:layout_below="@+id/img_profile"
         android:textColor="@color/colorAccent"
         android:layout_alignParentRight="true"/>
 

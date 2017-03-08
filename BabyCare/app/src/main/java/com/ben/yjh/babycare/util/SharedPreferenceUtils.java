@@ -37,49 +37,6 @@ public class SharedPreferenceUtils {
                 USERNAME_NAME, Context.MODE_PRIVATE).getString(USERNAME_KEY, "");
     }
 
-    public static void saveUsernameHistory(Context context, String value) {
-        SharedPreferences.Editor editor = context.getSharedPreferences(
-                USERNAME_HISTORY_NAME, Context.MODE_PRIVATE).edit();
-        List<String> usernameHistory = getUsernameHistory(context);
-
-        if (usernameHistory.size() == 0) {
-            editor.putString(USERNAME_HISTORY_KEY, value);
-        } else {
-            String usernameArrayStr = "";
-            for (String username : usernameHistory) {
-                if (!username.trim().isEmpty() && !value.trim().isEmpty()) {
-                    if (!username.equals(value)) {
-                        if (usernameArrayStr.isEmpty()) {
-                            usernameArrayStr += username;
-                        } else {
-                            usernameArrayStr += "," + username;
-                        }
-                    }
-                }
-            }
-            editor.putString(USERNAME_HISTORY_KEY, usernameArrayStr + "," + value);
-        }
-        editor.apply();
-    }
-
-    public static List<String> getUsernameHistory(Context context) {
-        String usernameHistory = context.getSharedPreferences(
-                USERNAME_HISTORY_NAME, Context.MODE_PRIVATE).getString(USERNAME_HISTORY_KEY, "");
-        List<String> autoStrings = new ArrayList<>();
-        if (usernameHistory.contains(",")) {
-            String[] usernameArray = usernameHistory.split(",");
-            for (String username : usernameArray) {
-                if (!username.trim().isEmpty()) {
-                    autoStrings.add(0, username);
-                }
-            }
-        } else if (!usernameHistory.trim().isEmpty()) {
-            autoStrings.add(usernameHistory);
-        }
-
-        return autoStrings;
-    }
-
     public static boolean saveSharedPreference(Context context, String name, String key, String value) {
         SharedPreferences.Editor editor = context.getSharedPreferences(name, Context.MODE_PRIVATE).edit();
         editor.putString(key, value);

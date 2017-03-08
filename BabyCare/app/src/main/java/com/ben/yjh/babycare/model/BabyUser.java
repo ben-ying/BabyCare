@@ -6,7 +6,7 @@ import com.orm.SugarRecord;
 import java.io.Serializable;
 
 
-public class Baby extends SugarRecord implements Serializable {
+public class BabyUser extends SugarRecord implements Serializable {
     @SerializedName("baby_id") int babyId;
     @SerializedName("user_id") int userId;
     @SerializedName("username") String username;
@@ -24,6 +24,14 @@ public class Baby extends SugarRecord implements Serializable {
     @SerializedName("is_login") boolean isLogin;
     @SerializedName("is_email_activate") boolean isEmailActivate;
     @SerializedName("is_phone_activate") boolean isPhoneActive;
+
+    @Override
+    public long save() {
+        BabyUser.deleteAll(BabyUser.class);
+        isLogin = true;
+
+        return super.save();
+    }
 
     public int getBabyId() {
         return babyId;
@@ -138,7 +146,7 @@ public class Baby extends SugarRecord implements Serializable {
     }
 
     public String getToken() {
-        return token;
+        return token == null ? "" : token;
     }
 
     public void setToken(String token) {

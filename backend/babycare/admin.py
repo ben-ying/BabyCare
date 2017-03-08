@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from models import Baby
+from models import BabyUser
 from models import Event
 
 
@@ -9,7 +9,7 @@ class BabyAdmin(admin.ModelAdmin):
     search_fields = ('user', 'phone', 'baby_name')
     #fields = ('email', 'name', 'baby_name')
 
-admin.site.register(Baby, BabyAdmin)
+admin.site.register(BabyUser, BabyAdmin)
 
 
 class EventAdmin(admin.ModelAdmin):

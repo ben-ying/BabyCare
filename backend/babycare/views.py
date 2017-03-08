@@ -25,7 +25,7 @@ from validate_email import validate_email
 from datetime import datetime
 
 from babycare.permissions import IsOwnerOrReadOnly
-from babycare.serializers.baby import BabySerializer
+from babycare.serializers.baby_user import BabyUserSerializer
 from babycare.serializers.event import EventSerializer
 from backend.settings import OSS_ACCESS_KEY_ID
 from backend.settings import OSS_ACCESS_KEY_SECRET
@@ -33,7 +33,7 @@ from backend.settings import OSS_BUCKET_NAME
 from backend.settings import OSS_ENDPOINT
 from utils import json_response, invalid_token_response
 from utils import simple_json_response
-from models import Baby, LoginLog
+from models import BabyUser, LoginLog
 from models import Event
 from constants import CODE_SUCCESS, MSG_EMPTY_EVENT_TITLE, CODE_EMPTY_EVENT_TITLE, MSG_EMPTY_EVENT_MESSAGE, \
     CODE_EMPTY_EVENT_MESSAGE, \
@@ -81,8 +81,8 @@ class CustomModelViewSet(viewsets.ModelViewSet):
 
 
 class UserViewSet(CustomModelViewSet):
-    queryset = Baby.objects.all()
-    serializer_class = BabySerializer
+    queryset = BabyUser.objects.all()
+    serializer_class = BabyUserSerializer
 
     def list(self, request, *args, **kwargs):
         # for param in (OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET_NAME, OSS_ENDPOINT):
@@ -120,9 +120,9 @@ class UserViewSet(CustomModelViewSet):
             return simple_json_response(CODE_INVALID_EMAIL, MSG_INVALID_EMAIL)
         elif len(password) < MIN_PASSWORD_LEN:
             return simple_json_response(CODE_INVALID_PASSWORD, MSG_INVALID_PASSWORD)
-        elif User.objects.filter(username=username):
+        elif User.objects.filter(username=username) or User.objects.filter(username=email.lower()):
             return simple_json_response(CODE_DUPLICATE_USER, MSG_DUPLICATE_USER)
-        elif User.objects.filter(email=email.lower):
+        elif User.objects.filter(email=email.lower()) or User.objects.filter(email=username):
             return simple_json_response(CODE_DUPLICATE_EMAIL, MSG_DUPLICATE_EMAIL)
         elif serializer.is_valid():
             user = User()
@@ -166,10 +166,16 @@ def login_view(request):
             user = authenticate(username=user.username, password=password)
 
     if user:
-        baby = Baby.objects.get(user=user)
+        baby = BabyUser.objects.get(user=user)
         if baby:
             if user.is_active:
-                return json_response(BabySerializer(baby).data, CODE_SUCCESS, MSG_LOGIN_SUCCESS)
+                response_data = BabyUserSerializer(baby).data
+                # pdb.set_trace()
+                if Token.objects.filter(user=user):
+                    response_data['token'] = Token.objects.get(user=user).key
+                    return json_response(response_data, CODE_SUCCESS, MSG_LOGIN_SUCCESS)
+                else:
+                    return invalid_token_response()
             else:
                 return simple_json_response(CODE_NOT_ACTIVE, MSG_NOT_ACTIVE_USER)
         else:
@@ -196,7 +202,7 @@ class EventViewSet(CustomModelViewSet):
         elif serializer.is_valid():
             if Token.objects.filter(key=token):
                 user = Token.objects.get(key=token).user
-                serializer.validated_data['baby_id'] = Baby.objects.get(user=user).id
+                serializer.validated_data['baby_id'] = BabyUser.objects.get(user=user).id
                 self.perform_create(serializer)
                 return json_response(serializer.data, CODE_SUCCESS, MSG_CREATE_EVENT_SUCCESS)
             else:
