@@ -1,4 +1,4 @@
-package com.ben.yjh.babycare.http;
+package com.ben.yjh.babycare.model;
 
 
 import com.google.gson.annotations.SerializedName;
@@ -7,10 +7,9 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
-public class HttpResult implements Serializable {
-    @SerializedName("code") String code;
-    @SerializedName("message") String message;
-    @SerializedName("body") JSONObject body;
+public class HttpBaseResult {
+    private String code;
+    private String message;
 
     public boolean isSuccess() {
         return code.equals("200");
@@ -30,13 +29,5 @@ public class HttpResult implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public JSONObject getBody() {
-        return body;
-    }
-
-    public void setBody(JSONObject body) {
-        this.body = body;
     }
 }

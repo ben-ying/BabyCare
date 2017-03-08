@@ -57,6 +57,7 @@
         <TextView
             android:id="@+id/tv_link_signup"
             style="@style/default_bottom_text"
+            android:layout_marginBottom="@dimen/button_margin_vertical"
             android:layout_alignParentBottom="true"
             android:text="@string/no_account_yet_create_one" />
 

@@ -107,6 +107,7 @@ class UserViewSet(CustomModelViewSet):
         first_name = request.data.get('first_name', '')
         last_name = request.data.get('last_name', '')
 
+        # pdb.set_trace()
         if not username:
             return simple_json_response(CODE_EMPTY_USER, MSG_EMPTY_USERNAME)
         elif not baby_name:

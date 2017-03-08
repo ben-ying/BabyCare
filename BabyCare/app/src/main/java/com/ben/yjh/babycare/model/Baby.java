@@ -1,11 +1,12 @@
 package com.ben.yjh.babycare.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.orm.SugarRecord;
 
 import java.io.Serializable;
 
 
-public class BabyResult extends BaseResult {
+public class Baby extends SugarRecord implements Serializable {
     @SerializedName("baby_id") int babyId;
     @SerializedName("user_id") int userId;
     @SerializedName("username") String username;
@@ -20,11 +21,20 @@ public class BabyResult extends BaseResult {
     @SerializedName("hobbies") String hobbies;
     @SerializedName("highlighted") String highlighted;
     @SerializedName("token") String token;
+    @SerializedName("is_login") boolean isLogin;
     @SerializedName("is_email_activate") boolean isEmailActivate;
     @SerializedName("is_phone_activate") boolean isPhoneActive;
 
     public int getBabyId() {
         return babyId;
+    }
+
+    public boolean isLogin() {
+        return isLogin;
+    }
+
+    public void setLogin(boolean login) {
+        isLogin = login;
     }
 
     public void setBabyId(int babyId) {

@@ -22,13 +22,15 @@ import android.widget.Toast;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
-import com.ben.yjh.babycare.http.HttpResult;
-import com.ben.yjh.babycare.model.BabyResult;
+import com.ben.yjh.babycare.main.MainActivity;
+import com.ben.yjh.babycare.model.Baby;
+import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 public class SignUpActivity extends BaseActivity {
 
@@ -180,25 +182,32 @@ public class SignUpActivity extends BaseActivity {
             case R.id.btn_register:
                 if (isValid()) {
                     new UserTaskHandler(this).register(mUsername, mBabyName, mPassword, mEmail,
-                            new HttpResponseInterface<BabyResult>() {
+                            new HttpResponseInterface<Baby>() {
                         @Override
                         public void onStart() {
 
                         }
 
                         @Override
-                        public void onSuccess(BabyResult classOfT) {
-                            Toast.makeText(SignUpActivity.this, "Success", Toast.LENGTH_LONG).show();
+                        public void onSuccess(Baby classOfT) {
+                            List<Baby> babies = Baby.listAll(Baby.class);
+                            for (Baby baby : babies) {
+                                baby.setLogin(false);
+                                baby.save();
+                            }
+                            classOfT.setLogin(true);
+                            classOfT.save();
+                            Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
                         }
 
                         @Override
-                        public void onFailure(HttpResult result) {
-                            Toast.makeText(SignUpActivity.this, "Failed: " + result.getMessage(), Toast.LENGTH_LONG).show();
+                        public void onFailure(HttpBaseResult result) {
                         }
 
                         @Override
                         public void onHttpError(String error) {
-
                         }
                     });
                 }

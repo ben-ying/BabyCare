@@ -124,6 +124,9 @@
             android:id="@+id/tv_link_login"
             style="@style/default_bottom_text"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/button_margin_vertical"
             android:text="@string/already_a_member_and_login" />
     </RelativeLayout>
+
+    <include layout="@layout/progress" />
 </RelativeLayout>

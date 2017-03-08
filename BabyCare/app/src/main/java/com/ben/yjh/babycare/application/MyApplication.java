@@ -14,6 +14,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.ben.yjh.babycare.util.CrashHandler;
 import com.ben.yjh.babycare.util.LruBitmapCache;
+import com.ben.yjh.babycare.widget.VolleySingleton;
 import com.orm.SugarApp;
 
 
@@ -40,14 +41,13 @@ public class MyApplication extends SugarApp {
     public void setAppContext(Context mAppContext) {
         this.mAppContext = mAppContext;
     }
-}
 
-//    public <T> void addToRequestQueue(Request<T> req) {
-//        getRequestQueue().add(req);
-//    }
-//
-//    public <T> void addToRequestQueue(Request<T> req, String tag) {
-//        req.setTag(TextUtils.isEmpty(tag) ? "MyApplication" : tag);
-//        getRequestQueue().add(req);
-//    }
-//}
+    public <T> void addToRequestQueue(Request<T> req) {
+        VolleySingleton.getInstance().getRequestQueue().add(req);
+    }
+
+    public <T> void addToRequestQueue(Request<T> req, String tag) {
+        req.setTag(TextUtils.isEmpty(tag) ? "MyApplication" : tag);
+        VolleySingleton.getInstance().getRequestQueue().add(req);
+    }
+}

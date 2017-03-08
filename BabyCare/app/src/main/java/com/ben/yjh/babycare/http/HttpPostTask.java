@@ -1,26 +1,23 @@
 package com.ben.yjh.babycare.http;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.android.volley.Cache;
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Network;
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
+import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.HttpUtils;
 import com.ben.yjh.babycare.util.HttpsTrustManager;
 
@@ -31,7 +28,7 @@ import java.util.Map;
 
 public class HttpPostTask {
 
-//    private static final String DOMAIN = "http://116.62.47.105/babycare";
+    //    private static final String DOMAIN = "http://116.62.47.105/babycare";
     private static final String DOMAIN = "http://192.168.1.131:8000/babycare/";
     private static final String TAG_JSON_OBJ = "tag_json_obj";
     private static final String VERSION = "1.0.0";
@@ -40,7 +37,7 @@ public class HttpPostTask {
     private ProgressBar mProgressBar;
 
     private void showProgress() {
-        mProgressBar = (ProgressBar) ((Activity) mContext).findViewById(R.id.progress_bar);
+        mProgressBar = (ProgressBar) ((Activity) mContext).findViewById(R.id.progressBar);
         if (mProgressBar != null) {
             mProgressBar.setVisibility(View.VISIBLE);
         }
@@ -68,7 +65,7 @@ public class HttpPostTask {
         HttpsTrustManager.allowAllSSL();
     }
 
-    public <T> void startTask(final String url, int method, final Map<String, String> map,
+    public <T> void startTask(final String url, final int method, final JSONObject jsonObject,
                               final Class<T> classOfT, final boolean showErrorDialog,
                               final HttpResponseInterface httpResponseInterface) {
 //        Cache cache = new DiskBasedCache(mContext.getCacheDir(), 1024 * 1024);
@@ -78,10 +75,16 @@ public class HttpPostTask {
         if (httpResponseInterface != null) {
             httpResponseInterface.onStart();
         }
-//
-//        Log.d("HTTP", "params: " + jsonObject);
 
-        JsonObjectRequest request = new JsonObjectRequest(method, DOMAIN + url, null,
+        try {
+            jsonObject.put("app_version", VERSION);
+            jsonObject.put("system_version", "android-" + Build.VERSION.RELEASE);
+            jsonObject.put("phone_model", getDeviceName());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(method, DOMAIN + url, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -89,56 +92,69 @@ public class HttpPostTask {
                         Log.d("HTTP", "response: " + response);
                         hideProgress();
                         if (httpResponseInterface != null) {
-                            HttpResult httpResponse = HttpUtils.getJsonData(response.toString(), HttpResult.class);
+                            HttpBaseResult httpResponse = HttpUtils.getJsonData(
+                                    response.toString(), HttpBaseResult.class);
                             if (httpResponse.isSuccess()) {
-                                httpResponseInterface.onSuccess(httpResponse.getBody());
+                                try {
+                                    httpResponseInterface.onSuccess(
+                                            HttpUtils.getJsonData(response.getJSONObject("result"), classOfT));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG).show();
+                                }
                             } else {
                                 httpResponseInterface.onFailure(httpResponse);
+                                if (showErrorDialog) {
+                                    if (!((Activity) mContext).isFinishing()) {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
+                                                .setMessage(httpResponse.getMessage());
+                                        builder.setNegativeButton(R.string.ok,
+                                                new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        dialogInterface.dismiss();
+                                                    }
+                                                });
+                                        builder.setPositiveButton(R.string.retry,
+                                                new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        startTask(url, method, jsonObject,
+                                                                classOfT, showErrorDialog, httpResponseInterface);
+                                                    }
+                                                });
+                                        builder.create().show();
+                                    }
+                                }
                             }
                         }
                     }
                 },
                 new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    hideProgress();
-                    if (httpResponseInterface != null) {
-                        httpResponseInterface.onHttpError(error.getMessage());
-                        if (error.getMessage() != null && !error.getMessage().trim().isEmpty()) {
-                            Toast.makeText(mContext, error.getMessage(), Toast.LENGTH_LONG).show();
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        hideProgress();
+                        if (httpResponseInterface != null) {
+                            httpResponseInterface.onHttpError(error.getMessage());
+                            if (error.getMessage() != null && !error.getMessage().trim().isEmpty()) {
+                                Toast.makeText(mContext, error.getMessage(), Toast.LENGTH_LONG).show();
+                            }
                         }
                     }
-                }
-        }) {
+                }) {
             @Override
             protected Map<String, String> getParams() {
-                return map;
+                return null;
             }
         };
 
-        int socketTimeout = 30000;//30 seconds - change to what you want
+        int socketTimeout = 20000;// 20 seconds - change to what you want
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         request.setRetryPolicy(policy);
-        MyApplication.getInstance(mContext).addToRequestQueue(request, TAG_JSON_OBJ);
+        MyApplication.getInstance().addToRequestQueue(request, TAG_JSON_OBJ);
     }
 
-    private JSONObject getJsonObject(JSONObject bodyObject) {
-
-        JSONObject jsonObj = new JSONObject();
-        try {
-            JSONObject jsonSystem = new JSONObject();
-            jsonSystem.put("app_version", VERSION);
-            jsonSystem.put("system_version", "android-" + Build.VERSION.RELEASE);
-            jsonSystem.put("phone_model", getDeviceName());
-            jsonObj.put("body", bodyObject);
-            jsonObj.put("system", jsonSystem);
-        } catch (JSONException | NullPointerException e) {
-            e.printStackTrace();
-        }
-
-        return jsonObj;
-    }
 
     public String getDeviceName() {
         String manufacturer = Build.MANUFACTURER;

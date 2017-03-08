@@ -5,8 +5,8 @@ from models import Event
 
 
 class BabyAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone')
-    search_fields = ('user', 'phone')
+    list_display = ('user', 'phone', 'baby_name')
+    search_fields = ('user', 'phone', 'baby_name')
     #fields = ('email', 'name', 'baby_name')
 
 admin.site.register(Baby, BabyAdmin)

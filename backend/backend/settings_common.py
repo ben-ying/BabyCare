@@ -38,6 +38,14 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'yjh.babycare.com', 'djangowebservice
 #         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
 #     ]
 # }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+   'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',
+    ),
+}
 
 INSTALLED_APPS = [
     'django.contrib.admin',
