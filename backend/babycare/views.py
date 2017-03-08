@@ -151,13 +151,19 @@ def login_view(request):
     username = request.data.get('username')
     password = request.data.get('password')
 
-    # def get_user(email):
-    #     try:
-    #         return User.objects.get(email=email.lower())
-    #     except User.DoesNotExist:
-    #         return None
+    def get_user(email):
+        try:
+            return User.objects.get(email=email.lower())
+        except User.DoesNotExist:
+            return None
 
     user = authenticate(username=username, password=password)
+
+    if not user and validate_email(username):
+        user = get_user(email=username)
+        # pdb.set_trace()
+        if not user:
+            user = authenticate(username=user.username, password=password)
 
     if user:
         baby = Baby.objects.get(user=user)

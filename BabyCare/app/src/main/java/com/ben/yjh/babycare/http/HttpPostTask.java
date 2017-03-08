@@ -25,10 +25,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
+import java.util.TimeZone;
 
 public class HttpPostTask {
 
-    //    private static final String DOMAIN = "http://116.62.47.105/babycare";
+    //    private static final String DOMAIN = "http://116.62.47.105/babycare/";
     private static final String DOMAIN = "http://192.168.1.131:8000/babycare/";
     private static final String TAG_JSON_OBJ = "tag_json_obj";
     private static final String VERSION = "1.0.0";
@@ -68,20 +69,17 @@ public class HttpPostTask {
     public <T> void startTask(final String url, final int method, final JSONObject jsonObject,
                               final Class<T> classOfT, final boolean showErrorDialog,
                               final HttpResponseInterface httpResponseInterface) {
-//        Cache cache = new DiskBasedCache(mContext.getCacheDir(), 1024 * 1024);
-//        Network network = new BasicNetwork(new HurlStack());
-//        final JSONObject jsonObject = getJsonObject(bodyObject);
-//
-        if (httpResponseInterface != null) {
-            httpResponseInterface.onStart();
-        }
-
         try {
+            jsonObject.put("zone", TimeZone.getDefault().getID());
             jsonObject.put("app_version", VERSION);
             jsonObject.put("system_version", "android-" + Build.VERSION.RELEASE);
             jsonObject.put("phone_model", getDeviceName());
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+        if (httpResponseInterface != null) {
+            httpResponseInterface.onStart();
         }
 
         JsonObjectRequest request = new JsonObjectRequest(method, DOMAIN + url, jsonObject,
@@ -134,6 +132,7 @@ public class HttpPostTask {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         hideProgress();
+                        // report dialog and send email
                         if (httpResponseInterface != null) {
                             httpResponseInterface.onHttpError(error.getMessage());
                             if (error.getMessage() != null && !error.getMessage().trim().isEmpty()) {
@@ -155,7 +154,6 @@ public class HttpPostTask {
         MyApplication.getInstance().addToRequestQueue(request, TAG_JSON_OBJ);
     }
 
-
     public String getDeviceName() {
         String manufacturer = Build.MANUFACTURER;
         String model = Build.MODEL;
@@ -165,7 +163,6 @@ public class HttpPostTask {
             return capitalize(manufacturer) + " " + model;
         }
     }
-
 
     private String capitalize(String s) {
         if (s == null || s.length() == 0) {

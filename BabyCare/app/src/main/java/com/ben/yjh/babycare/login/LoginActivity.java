@@ -13,7 +13,10 @@ import android.widget.ImageView;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
+import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.main.MainActivity;
+import com.ben.yjh.babycare.model.Baby;
+import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.SharedPreferenceUtils;
@@ -91,11 +94,38 @@ public class LoginActivity extends BaseActivity {
         switch (v.getId()) {
             case R.id.btn_login:
                 if (isValid()) {
-                    // todo login
+                    new UserTaskHandler(this).login(mUsername, mPassword,
+                            new HttpResponseInterface<Baby>() {
+                                @Override
+                                public void onStart() {
+
+                                }
+
+                                @Override
+                                public void onSuccess(Baby classOfT) {
+                                    List<Baby> babies = Baby.listAll(Baby.class);
+                                    for (Baby baby : babies) {
+                                        baby.setLogin(false);
+                                        baby.save();
+                                    }
+
+                                    Baby.deleteAll(Baby.class, "username = ?", classOfT.getUsername());
+                                    classOfT.setLogin(true);
+                                    classOfT.save();
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                }
+
+                                @Override
+                                public void onFailure(HttpBaseResult result) {
+                                }
+
+                                @Override
+                                public void onHttpError(String error) {
+                                }
+                            });
                 }
-                intent = new Intent(this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
                 break;
             case R.id.tv_link_signup:
                 intent = new Intent(this, SignUpActivity.class);

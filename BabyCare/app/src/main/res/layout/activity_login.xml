@@ -69,4 +69,6 @@
             android:text="@string/login" />
 
     </RelativeLayout>
+
+    <include layout="@layout/progress" />
 </RelativeLayout>
