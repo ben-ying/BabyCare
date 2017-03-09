@@ -4,6 +4,7 @@ package com.ben.yjh.babycare.login;
 import android.content.Context;
 
 import com.android.volley.Request;
+import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.http.BaseTaskHandler;
 import com.ben.yjh.babycare.http.HttpPostTask;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
@@ -24,14 +25,16 @@ public class UserTaskHandler extends BaseTaskHandler {
         super(context);
     }
 
-    public void register(String username, String babyName, String password, String email,
+    public void register(String username, String babyName, String password, String email, String base64,
                             HttpResponseInterface<BabyUser> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
             bodyObject.put("username", username);
             bodyObject.put("baby_name", babyName);
-            bodyObject.put("password", MD5Utils.getMD5ofStr(Constants.PASSWORD + password).toLowerCase());
+            bodyObject.put("password", MD5Utils.getMD5ofStr(
+                    context.getString(R.string.md5_code) + password).toLowerCase());
             bodyObject.put("email", email);
+            bodyObject.put("base64", base64);
             bodyObject.put("gender", SharedPreferenceUtils.isGirl(context) ? 1 : 0);
             new HttpPostTask(context).startTask(URL_USERS, Request.Method.POST,
                     bodyObject, BabyUser.class, true, httpResponseInterface);
@@ -45,7 +48,8 @@ public class UserTaskHandler extends BaseTaskHandler {
         try {
             JSONObject bodyObject = new JSONObject();
             bodyObject.put("username", username);
-            bodyObject.put("password", MD5Utils.getMD5ofStr(Constants.PASSWORD + password).toLowerCase());
+            bodyObject.put("password", MD5Utils.getMD5ofStr(
+                    context.getString(R.string.md5_code) + password).toLowerCase());
             new HttpPostTask(context).startTask(URL_USER_LOGIN, Request.Method.POST,
                     bodyObject, BabyUser.class, true, httpResponseInterface);
         } catch (Exception e) {

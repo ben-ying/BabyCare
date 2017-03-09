@@ -74,7 +74,7 @@ public class BabyUser extends SugarRecord implements Serializable {
     }
 
     public String getProfile() {
-        return profile;
+        return profile == null ? "" : profile;
     }
 
     public void setProfile(String profile) {

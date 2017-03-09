@@ -1,71 +1,53 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import json
+
+import os
+import pdb
 
 import oss2
-from django.http import Http404
-from django.shortcuts import render
-from django.http import HttpResponse
+import time
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 from django.urls import reverse
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
-from rest_framework import generics
-from rest_framework import mixins
-from rest_framework import permissions
-from rest_framework import renderers
-from rest_framework import status
 from rest_framework import viewsets
-from rest_framework.decorators import api_view, detail_route
-from rest_framework.parsers import JSONParser
-from rest_framework.renderers import JSONRenderer
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from validate_email import validate_email
-from datetime import datetime
 
-from babycare.permissions import IsOwnerOrReadOnly
 from babycare.serializers.baby_user import BabyUserSerializer
 from babycare.serializers.event import EventSerializer
 from backend.settings import OSS_ACCESS_KEY_ID
 from backend.settings import OSS_ACCESS_KEY_SECRET
 from backend.settings import OSS_BUCKET_NAME
 from backend.settings import OSS_ENDPOINT
-from utils import json_response, invalid_token_response
-from utils import simple_json_response
-from models import BabyUser, LoginLog
-from models import Event
-from constants import CODE_SUCCESS, MSG_EMPTY_EVENT_TITLE, CODE_EMPTY_EVENT_TITLE, MSG_EMPTY_EVENT_MESSAGE, \
-    CODE_EMPTY_EVENT_MESSAGE, \
-    MSG_401, CODE_INVALID_TOKEN, MSG_CREATE_EVENT_SUCCESS, MSG_INCORRECT_USER_NAME_OR_PASSWORD, \
-    CODE_INCORRECT_USER_NAME_OR_PASSWORD, MSG_NOT_ACTIVE_USER, CODE_NOT_ACTIVE, MSG_LOGIN_SUCCESS, MSG_GET_USERS_SUCCESS, \
-    MSG_EMPTY_BABY_NAME, CODE_EMPTY_BABY_NAME
-from constants import CODE_EMPTY_USER
+from constants import CODE_DUPLICATE_EMAIL
+from constants import CODE_DUPLICATE_USER
 from constants import CODE_EMPTY_EMAIL
 from constants import CODE_EMPTY_PASSWORD
+from constants import CODE_EMPTY_USER
 from constants import CODE_INVALID_EMAIL
 from constants import CODE_INVALID_PASSWORD
-from constants import CODE_DUPLICATE_USER
-from constants import CODE_DUPLICATE_EMAIL
-from constants import CODE_DUPLICATE_PHONE
-from constants import CODE_NOT_EXISTS_EMAIL
 from constants import CODE_INVALID_REQUEST
+from constants import CODE_SUCCESS, MSG_EMPTY_EVENT_TITLE, CODE_EMPTY_EVENT_TITLE, MSG_EMPTY_EVENT_MESSAGE, \
+    CODE_EMPTY_EVENT_MESSAGE, \
+    MSG_CREATE_EVENT_SUCCESS, MSG_INCORRECT_USER_NAME_OR_PASSWORD, \
+    CODE_INCORRECT_USER_NAME_OR_PASSWORD, MSG_NOT_ACTIVE_USER, CODE_NOT_ACTIVE, MSG_LOGIN_SUCCESS, MSG_GET_USERS_SUCCESS, \
+    MSG_EMPTY_BABY_NAME, CODE_EMPTY_BABY_NAME, TEMP_IMAGE, PROFILE_FOOTER_IMAGE
+from constants import MIN_PASSWORD_LEN
 from constants import MSG_400
-from constants import MSG_EMPTY_USERNAME
+from constants import MSG_CREATE_USER_SUCCESS
+from constants import MSG_DUPLICATE_EMAIL
+from constants import MSG_DUPLICATE_USER
 from constants import MSG_EMPTY_EMAIL
 from constants import MSG_EMPTY_PASSWORD
+from constants import MSG_EMPTY_USERNAME
 from constants import MSG_INVALID_EMAIL
 from constants import MSG_INVALID_PASSWORD
-from constants import MSG_DUPLICATE_USER
-from constants import MSG_DUPLICATE_EMAIL
-from constants import MSG_DUPLICATE_PHONE
-from constants import MSG_NOT_EXISTS_EMAIL
-from constants import MSG_CREATE_USER_SUCCESS
-from constants import MIN_PASSWORD_LEN
-
-from django.contrib.auth.models import User
-from rest_framework.authtoken.models import Token
-import pdb
+from models import BabyUser
+from models import Event
+from utils import json_response, invalid_token_response, upload_image_to_oss
+from utils import simple_json_response
 
 
 @api_view(['GET'])
@@ -106,8 +88,8 @@ class UserViewSet(CustomModelViewSet):
         email = request.data.get('email')
         first_name = request.data.get('first_name', '')
         last_name = request.data.get('last_name', '')
+        base64 = request.data.get('base64', '')
 
-        # pdb.set_trace()
         if not username:
             return simple_json_response(CODE_EMPTY_USER, MSG_EMPTY_USERNAME)
         elif not baby_name:
@@ -137,6 +119,12 @@ class UserViewSet(CustomModelViewSet):
             self.perform_create(serializer)
             response_data = serializer.data
             response_data['token'] = Token.objects.create(user=user).key
+            if base64:
+                image_name = username + time.strftime('%Y%m%d%H%M%S') + PROFILE_FOOTER_IMAGE
+                response_data['profile'] = upload_image_to_oss(image_name, base64)
+                baby_user = BabyUser.objects.get(user=user)
+                baby_user.profile = response_data['profile']
+                baby_user.save()
             return json_response(response_data, CODE_SUCCESS, MSG_CREATE_USER_SUCCESS)
         else:
             return simple_json_response(CODE_INVALID_REQUEST, MSG_400)

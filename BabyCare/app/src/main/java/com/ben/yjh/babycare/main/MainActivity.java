@@ -16,9 +16,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ben.yjh.babycare.R;
+import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.login.LoginActivity;
 import com.ben.yjh.babycare.login.RegisterActivity;
@@ -28,6 +30,7 @@ import com.ben.yjh.babycare.main.setting.SettingFragment;
 import com.ben.yjh.babycare.model.BabyUser;
 import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
+import com.ben.yjh.babycare.util.ImageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +106,9 @@ public class MainActivity extends BaseActivity
         nameTextView.setText(mBabyUser.getBabyName());
         TextView emailTextView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_email);
         emailTextView.setText(mBabyUser.getEmail());
+        ImageView profileImageView = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.img_profile);
+        MyApplication.getImageLoader(this).displayImage(mBabyUser.getProfile(),
+                profileImageView, ImageUtils.getProfileImageOptions(this));
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

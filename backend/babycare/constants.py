@@ -3,6 +3,8 @@
 from django.utils.translation import ugettext_lazy as _
 
 MIN_PASSWORD_LEN = 6
+TEMP_IMAGE = 'temp.jpg'
+PROFILE_FOOTER_IMAGE = '_profile.jpg'
 
 # register & user
 CODE_SUCCESS = 200

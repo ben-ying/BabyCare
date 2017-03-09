@@ -5,17 +5,22 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Base64;
 import android.widget.Toast;
 
 import com.ben.yjh.babycare.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 public class ImageUtils {
 
     public static void cropPicture(Activity activity, Uri uri) {
-        cropPicture(activity, uri, 200, 200);
+        cropPicture(activity, uri, 300, 300);
     }
 
     public static void cropPicture(Activity activity, Uri uri, int width, int height) {
@@ -48,5 +53,30 @@ public class ImageUtils {
                 .cacheInMemory(true)
                 .cacheOnDisc()
                 .build();
+    }
+
+    public static String getBase64FromBitmap(Bitmap bitmap) {
+        if (bitmap != null) {
+            ByteArrayOutputStream out = null;
+            try {
+                out = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+                out.flush();
+                out.close();
+                byte[] imgBytes = out.toByteArray();
+                return Base64.encodeToString(imgBytes, Base64.DEFAULT);
+            } catch (Exception e) {
+                return null;
+            } finally {
+                try {
+                    out.flush();
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            return "";
+        }
     }
 }

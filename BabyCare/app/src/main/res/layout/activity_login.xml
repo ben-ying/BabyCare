@@ -22,8 +22,8 @@
 
             <ImageView
                 android:id="@+id/img_profile"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="@dimen/profile_large_size"
+                android:layout_height="@dimen/profile_large_size"
                 android:layout_marginBottom="30dp"
                 android:src="@mipmap/boy"/>
 

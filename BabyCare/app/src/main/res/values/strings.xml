@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">BabyCare</string>
+    <string name="md5_code">md51988</string>
+    <!--<string name="app_name">BabyCare</string>-->
+    <string name="app_name">宝贝日记</string>
 
     <string name="action_settings">Settings</string>
 

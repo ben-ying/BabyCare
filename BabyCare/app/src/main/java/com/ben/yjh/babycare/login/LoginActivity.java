@@ -1,6 +1,7 @@
 package com.ben.yjh.babycare.login;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.ben.yjh.babycare.R;
+import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.main.MainActivity;
@@ -19,8 +21,11 @@ import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.model.UserHistory;
 import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
+import com.ben.yjh.babycare.util.ImageUtils;
 import com.ben.yjh.babycare.util.SharedPreferenceUtils;
 import com.ben.yjh.babycare.util.SystemUtils;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +49,47 @@ public class LoginActivity extends BaseActivity {
         findViewById(R.id.tv_link_signup).setOnClickListener(this);
         mGenderImageView = (ImageView) findViewById(R.id.img_profile);
         mGenderImageView.setOnClickListener(this);
-        mGenderImageView.setImageResource(SharedPreferenceUtils.isGirl(this) ? R.mipmap.girl : R.mipmap.boy);
+        List<BabyUser> babyUsers = BabyUser.find(BabyUser.class, "is_login = ?", "1");
+        if (babyUsers.size() > 0) {
+            if (babyUsers.get(0).getToken().isEmpty()) {
+                mGenderImageView.setClickable(false);
+                mGenderImageView.setEnabled(false);
+                MyApplication.getImageLoader(this).displayImage(babyUsers.get(0).getProfile(),
+                        mGenderImageView, ImageUtils.getProfileImageOptions(this), new ImageLoadingListener() {
+                            @Override
+                            public void onLoadingStarted(String s, View view) {
+
+                            }
+
+                            @Override
+                            public void onLoadingFailed(String s, View view, FailReason failReason) {
+                                mGenderImageView.setClickable(true);
+                                mGenderImageView.setEnabled(true);
+                            }
+
+                            @Override
+                            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                                mGenderImageView.setClickable(false);
+                                mGenderImageView.setEnabled(false);
+                            }
+
+                            @Override
+                            public void onLoadingCancelled(String s, View view) {
+                                mGenderImageView.setClickable(true);
+                                mGenderImageView.setEnabled(true);
+                            }
+                        });
+            } else {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } else {
+            mGenderImageView.setClickable(true);
+            mGenderImageView.setEnabled(true);
+            mGenderImageView.setImageResource(
+                    SharedPreferenceUtils.isGirl(this) ? R.mipmap.girl : R.mipmap.boy);
+        }
         mUsernameEditText = (AutoCompleteTextView) findViewById(R.id.et_username);
         mPasswordEditText = (EditText) findViewById(R.id.et_password);
 

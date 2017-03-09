@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -32,6 +33,8 @@ import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
 import com.ben.yjh.babycare.widget.VolleySingleton;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -55,6 +58,7 @@ public class RegisterActivity extends BaseActivity {
     private String mPassword;
     private String mConfirmPassword;
     private ImageButton mProfileButton;
+    private String mProfileBase64;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,13 +153,13 @@ public class RegisterActivity extends BaseActivity {
                         try {
                             Bitmap bitmap = BitmapFactory.decodeStream(
                                     getContentResolver().openInputStream(uri));
-                            if (bitmap != null) {
-                                MyApplication.getImageLoader(this).displayImage(uri.toString(),
-                                        mProfileButton, ImageUtils.getProfileImageOptions(this));
-                                findViewById(R.id.tv_add_profile).setVisibility(View.GONE);
-                            }
+                            mProfileBase64 = ImageUtils.getBase64FromBitmap(bitmap);
+                            MyApplication.getImageLoader(this).displayImage(uri.toString(),
+                                    mProfileButton, ImageUtils.getProfileImageOptions(this));
+                            findViewById(R.id.tv_add_profile).setVisibility(View.GONE);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
+                            mProfileBase64 = "";
                         }
                     }
                     break;
@@ -189,7 +193,7 @@ public class RegisterActivity extends BaseActivity {
             case R.id.btn_register:
                 if (isValid()) {
                     new UserTaskHandler(this).register(mUsername, mBabyName, mPassword, mEmail,
-                            new HttpResponseInterface<BabyUser>() {
+                            mProfileBase64, new HttpResponseInterface<BabyUser>() {
                         @Override
                         public void onStart() {
 
