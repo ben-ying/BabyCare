@@ -1,9 +1,11 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
+import os
+
 from django.utils.translation import ugettext_lazy as _
 
 MIN_PASSWORD_LEN = 6
-TEMP_IMAGE = 'temp.jpg'
+TEMP_IMAGE = os.path.join(os.path.dirname(__file__), 'temp.jpg')
 PROFILE_FOOTER_IMAGE = '_profile.jpg'
 
 # register & user
