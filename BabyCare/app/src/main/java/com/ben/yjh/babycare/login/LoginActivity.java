@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -107,6 +108,16 @@ public class LoginActivity extends BaseActivity {
                 mPasswordEditText.setText("");
                 mPasswordEditText.requestFocus();
                 SystemUtils.showKeyboard(LoginActivity.this, mPasswordEditText);
+
+                List<UserHistory> userHistories = UserHistory.find(UserHistory.class,
+                        "username = ?", mUsernameEditText.getText().toString());
+                if (userHistories.size() > 0) {
+                    mGenderImageView.setClickable(false);
+                    mGenderImageView.setEnabled(false);
+                    MyApplication.getImageLoader(LoginActivity.this).displayImage(userHistories.get(0).getProfile(),
+                            mGenderImageView, ImageUtils.getProfileImageOptions(LoginActivity.this,
+                                    userHistories.get(0).getGender() == 1 ? R.mipmap.girl : R.mipmap.boy));
+                }
             }
         });
     }
@@ -148,7 +159,7 @@ public class LoginActivity extends BaseActivity {
                                 @Override
                                 public void onSuccess(BabyUser classOfT) {
                                     classOfT.save();
-                                    UserHistory.saveUserHistory(mUsername);
+                                    UserHistory.saveUserHistory(mUsername, classOfT);
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(intent);

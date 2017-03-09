@@ -55,6 +55,17 @@ public class ImageUtils {
                 .build();
     }
 
+    public static DisplayImageOptions getProfileImageOptions(Context context, int defaultIconId) {
+        return new DisplayImageOptions.Builder()
+                .displayer(new RoundedBitmapDisplayer(180))
+                .showImageOnLoading(defaultIconId)
+                .showImageOnFail(defaultIconId)
+                .showImageForEmptyUri(defaultIconId)
+                .cacheInMemory(true)
+                .cacheOnDisc()
+                .build();
+    }
+
     public static String getBase64FromBitmap(Bitmap bitmap) {
         if (bitmap != null) {
             ByteArrayOutputStream out = null;

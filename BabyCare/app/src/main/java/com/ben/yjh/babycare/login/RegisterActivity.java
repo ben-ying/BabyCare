@@ -202,7 +202,7 @@ public class RegisterActivity extends BaseActivity {
                         @Override
                         public void onSuccess(BabyUser classOfT) {
                             classOfT.save();
-                            UserHistory.saveUserHistory(mUsername);
+                            UserHistory.saveUserHistory(mUsername, classOfT);
                             Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);

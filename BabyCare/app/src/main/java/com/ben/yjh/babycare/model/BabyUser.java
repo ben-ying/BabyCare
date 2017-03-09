@@ -6,15 +6,11 @@ import com.orm.SugarRecord;
 import java.io.Serializable;
 
 
-public class BabyUser extends SugarRecord implements Serializable {
+public class BabyUser extends UserHistory {
     @SerializedName("baby_id") int babyId;
     @SerializedName("user_id") int userId;
-    @SerializedName("username") String username;
-    @SerializedName("baby_name") String babyName;
-    @SerializedName("profile") String profile;
     @SerializedName("email") String email;
     @SerializedName("phone") String phone;
-    @SerializedName("gender") int gender;
     @SerializedName("region") String region;
     @SerializedName("whats_up") String whatsUp;
     @SerializedName("birth") String birth;
@@ -22,8 +18,6 @@ public class BabyUser extends SugarRecord implements Serializable {
     @SerializedName("highlighted") String highlighted;
     @SerializedName("token") String token;
     @SerializedName("is_login") boolean isLogin;
-    @SerializedName("is_email_activate") boolean isEmailActivate;
-    @SerializedName("is_phone_activate") boolean isPhoneActive;
 
     @Override
     public long save() {
@@ -57,30 +51,6 @@ public class BabyUser extends SugarRecord implements Serializable {
         this.userId = userId;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getBabyName() {
-        return babyName;
-    }
-
-    public void setBabyName(String babyName) {
-        this.babyName = babyName;
-    }
-
-    public String getProfile() {
-        return profile == null ? "" : profile;
-    }
-
-    public void setProfile(String profile) {
-        this.profile = profile;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -95,14 +65,6 @@ public class BabyUser extends SugarRecord implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public int getGender() {
-        return gender;
-    }
-
-    public void setGender(int gender) {
-        this.gender = gender;
     }
 
     public String getRegion() {
@@ -153,19 +115,4 @@ public class BabyUser extends SugarRecord implements Serializable {
         this.token = token;
     }
 
-    public boolean isEmailActivate() {
-        return isEmailActivate;
-    }
-
-    public void setEmailActivate(boolean emailActivate) {
-        isEmailActivate = emailActivate;
-    }
-
-    public boolean isPhoneActive() {
-        return isPhoneActive;
-    }
-
-    public void setPhoneActive(boolean phoneActive) {
-        isPhoneActive = phoneActive;
-    }
 }
