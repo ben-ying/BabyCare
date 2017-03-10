@@ -37,6 +37,7 @@ public class AddEventActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
+//        setTitle(R.string.add_event);
         mCountTextView = (TextView) findViewById(R.id.tv_count);
         mDateTextView = (TextView) findViewById(R.id.tv_date);
         mTitleEditText = (EditText) findViewById(R.id.et_title);

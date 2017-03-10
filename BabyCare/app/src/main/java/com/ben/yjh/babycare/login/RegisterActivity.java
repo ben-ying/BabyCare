@@ -14,11 +14,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
@@ -69,6 +71,7 @@ public class RegisterActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        setTitle(R.string.register);
         mUsernameEditText = (EditText) findViewById(R.id.et_username);
         mBabyNameEditText = (EditText) findViewById(R.id.et_baby_name);
         mEmailEditText = (EditText) findViewById(R.id.et_email);
@@ -76,7 +79,8 @@ public class RegisterActivity extends BaseActivity {
         mConfirmPasswordEditText = (EditText) findViewById(R.id.et_confirm_password);
         mProfileButton = (ImageButton) findViewById(R.id.ib_profile);
         mProfileButton.setOnClickListener(this);
-        findViewById(R.id.tv_link_login).setOnClickListener(this);
+        TextView loginTextView = (TextView) findViewById(R.id.tv_link_login);
+        loginTextView.setOnClickListener(this);
         findViewById(R.id.btn_register).setOnClickListener(this);
         findViewById(R.id.btn_register).setOnClickListener(this);
     }

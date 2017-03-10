@@ -52,6 +52,17 @@
                     android:imeOptions="actionDone"
                     android:inputType="textPassword" />
             </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_forgot_password"
+                android:text="@string/forgot_password"
+                android:paddingLeft="@dimen/text_padding"
+                android:paddingTop="@dimen/text_padding"
+                android:paddingBottom="@dimen/text_padding"
+                android:layout_gravity="end"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <TextView

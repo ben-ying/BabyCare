@@ -9,6 +9,7 @@ import com.ben.yjh.babycare.http.BaseTaskHandler;
 import com.ben.yjh.babycare.http.HttpPostTask;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.model.BabyUser;
+import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.MD5Utils;
 import com.ben.yjh.babycare.util.SharedPreferenceUtils;
@@ -20,6 +21,7 @@ public class UserTaskHandler extends BaseTaskHandler {
 
     private static final String URL_USERS = "users/";
     private static final String URL_USER_LOGIN = "user/login";
+    private static final String URL_SEND_VERIFY_CODE = "user/send_verify_code";
 
     public UserTaskHandler(Context context) {
         super(context);
@@ -51,6 +53,17 @@ public class UserTaskHandler extends BaseTaskHandler {
             bodyObject.put("password", MD5Utils.getMD5ofStr(
                     context.getString(R.string.md5_code) + password).toLowerCase());
             new HttpPostTask(context).startTask(URL_USER_LOGIN, Request.Method.POST,
+                    bodyObject, BabyUser.class, true, httpResponseInterface);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendVerifyCode(String email, HttpResponseInterface<HttpBaseResult> httpResponseInterface) {
+        try {
+            JSONObject bodyObject = new JSONObject();
+            bodyObject.put("email", email);
+            new HttpPostTask(context).startTask(URL_SEND_VERIFY_CODE, Request.Method.POST,
                     bodyObject, BabyUser.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();

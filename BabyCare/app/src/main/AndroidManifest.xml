@@ -29,7 +29,7 @@
             android:value="com.ben.yjh.babycare.model" />
         <!-- sugar config end -->
 
-        <activity android:name=".login.LoginActivity">
+        <activity android:name=".login.LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,6 +37,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".login.RegisterActivity" />
+        <activity
+            android:name=".login.ResetPasswordActivity" />
         <activity android:name=".main.MainActivity">
 
             <!-- <intent-filter> -->

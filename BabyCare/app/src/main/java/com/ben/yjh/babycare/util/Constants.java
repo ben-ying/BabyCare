@@ -11,5 +11,6 @@ public class Constants {
     public static final int CAMERA_PICTURE_REQUEST_CODE = 103;
     public static final int GALLERY_PICTURE_REQUEST_CODE = 104;
     public static final int CROP_PICTURE_REQUEST_CODE = 105;
+    public static final int RESET_PASSWORD_REQUEST_CODE = 106;
 
 }

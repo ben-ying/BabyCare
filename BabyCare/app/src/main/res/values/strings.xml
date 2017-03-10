@@ -30,6 +30,9 @@
     <string name="already_a_member_and_login">已经有账号？登入</string>
     <string name="create_account">创建账号</string>
     <string name="login">登入</string>
+    <string name="register">注册</string>
+    <string name="reset_password">重设密码</string>
+    <string name="forgot_password_title">忘记密码</string>
     <string name="no_account_yet_create_one">还没有账号？创建</string>
     <string name="empty_username">用户名不能为空</string>
     <string name="empty_baby_name">宝宝名不能为空</string>
@@ -46,12 +49,23 @@
     <string name="unknown_gender">保密</string>
     <string name="logout">登出账号</string>
     <string name="logout_message">您确定要退出当前账号吗？</string>
+    <string name="forgot_password">忘记密码？</string>
+    <string name="dialog_forgot_password">请输入你的电子邮箱，我们将发送给你验证码以重设密码</string>
+    <string name="enter_verify_code">请输入验证码</string>
+    <string name="enter_password">请输入密码</string>
+    <string name="enter_confirm_password">请再次输入密码</string>
+    <string name="resend">重新发送</string>
+    <string name="change_password">更改密码</string>
+    <string name="click_resend_verify_code">点击重新发送验证码</string>
+    <string name="sent_verify_code_message">验证码已发送到你的邮箱，请查收</string>
+    <string name="countdown_resend_message">%d秒后重新发送</string>
 
     <!--add event-->
     <string name="title">标题</string>
     <string name="date">日期</string>
     <string name="description">描述</string>
     <string name="add">添加</string>
+    <string name="add_event">新增手记</string>
 
     <string name="delete">删除</string>
     <string name="retry">重试</string>
