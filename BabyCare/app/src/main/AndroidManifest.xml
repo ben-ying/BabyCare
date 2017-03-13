@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ben.yjh.babycare">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".application.MyApplication"
@@ -29,7 +29,7 @@
             android:value="com.ben.yjh.babycare.model" />
         <!-- sugar config end -->
 
-        <activity android:name=".login.LoginActivity" >
+        <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,8 +37,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".login.RegisterActivity" />
-        <activity
-            android:name=".login.ResetPasswordActivity" />
+        <activity android:name=".login.ResetPasswordActivity" />
         <activity android:name=".main.MainActivity">
 
             <!-- <intent-filter> -->
@@ -50,6 +49,7 @@
         </activity>
         <activity android:name=".main.event.AddEventActivity" />
         <activity android:name=".main.ImagePagerActivity" />
+        <activity android:name=".main.PersonalActivity"></activity>
     </application>
 
 </manifest>

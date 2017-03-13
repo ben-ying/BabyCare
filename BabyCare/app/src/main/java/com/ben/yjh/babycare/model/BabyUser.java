@@ -4,9 +4,10 @@ import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
 import java.io.Serializable;
+import java.util.List;
 
 
-public class BabyUser extends UserHistory {
+public class BabyUser extends UserHistory implements Serializable {
     @SerializedName("baby_id") int babyId;
     @SerializedName("user_id") int userId;
     @SerializedName("email") String email;
@@ -14,6 +15,7 @@ public class BabyUser extends UserHistory {
     @SerializedName("region") String region;
     @SerializedName("whats_up") String whatsUp;
     @SerializedName("birth") String birth;
+    @SerializedName("zone") String zone;
     @SerializedName("hobbies") String hobbies;
     @SerializedName("highlighted") String highlighted;
     @SerializedName("token") String token;
@@ -25,6 +27,23 @@ public class BabyUser extends UserHistory {
         isLogin = true;
 
         return super.save();
+    }
+
+    public static BabyUser getBabyUser() {
+        List<BabyUser> babyUsers = BabyUser.find(BabyUser.class, "is_login = ?", "1");
+        if (babyUsers.size() == 1 && !babyUsers.get(0).getToken().isEmpty()) {
+            return babyUsers.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public String getZone() {
+        return zone;
+    }
+
+    public void setZone(String zone) {
+        this.zone = zone;
     }
 
     public int getBabyId() {

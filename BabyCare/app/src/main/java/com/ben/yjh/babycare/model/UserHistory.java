@@ -1,5 +1,8 @@
 package com.ben.yjh.babycare.model;
 
+import android.content.Context;
+
+import com.ben.yjh.babycare.R;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
@@ -35,8 +38,20 @@ public class UserHistory extends SugarRecord {
         return gender;
     }
 
+    public String getGenderValue(Context context) {
+        return gender == 1 ? context.getString(R.string.female) : context.getString(R.string.male);
+    }
+
     public void setGender(int gender) {
         this.gender = gender;
+    }
+
+    public void setGenderStr(Context context, String gender) {
+        if (gender.equals(context.getString(R.string.male))) {
+            this.gender = 0;
+        } else if (gender.equals(context.getString(R.string.female))) {
+            this.gender = 1;
+        }
     }
 
     public String getBabyName() {

@@ -9,4 +9,11 @@
         <attr name="metaButtonBarButtonStyle" format="reference" />
     </declare-styleable>
 
+
+    <declare-styleable name="Item">
+        <attr name="item_type" format="enum">
+            <enum name="text" value="0" />
+            <enum name="switch_view" value="1" />
+        </attr>
+    </declare-styleable>
 </resources>

@@ -106,14 +106,14 @@ public class HttpPostTask {
                                     if (!((Activity) mContext).isFinishing()) {
                                         AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
                                                 .setMessage(httpResponse.getMessage());
-                                        builder.setNegativeButton(R.string.ok,
+                                        builder.setPositiveButton(R.string.ok,
                                                 new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialogInterface, int i) {
                                                         dialogInterface.dismiss();
                                                     }
                                                 });
-                                        builder.setPositiveButton(R.string.retry,
+                                        builder.setNegativeButton(R.string.retry,
                                                 new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialogInterface, int i) {

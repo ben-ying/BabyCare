@@ -85,12 +85,6 @@ public class RegisterActivity extends BaseActivity {
         findViewById(R.id.btn_register).setOnClickListener(this);
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
-    }
-
     private boolean isValid() {
         mUsername = mUsernameEditText.getText().toString().trim();
         mBabyName = mBabyNameEditText.getText().toString().trim();

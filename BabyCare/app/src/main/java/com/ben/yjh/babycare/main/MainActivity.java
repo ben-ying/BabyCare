@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -22,8 +21,6 @@ import android.widget.TextView;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
-import com.ben.yjh.babycare.login.LoginActivity;
-import com.ben.yjh.babycare.login.RegisterActivity;
 import com.ben.yjh.babycare.main.event.AddEventActivity;
 import com.ben.yjh.babycare.main.event.EventListFragment;
 import com.ben.yjh.babycare.main.setting.SettingFragment;
@@ -42,7 +39,6 @@ public class MainActivity extends BaseActivity
     private HomeViewPagerAdapter mPagerAdapter;
     private FloatingActionButton mFab;
     private TabLayout mTabLayout;
-    private BabyUser mBabyUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +47,8 @@ public class MainActivity extends BaseActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        List<BabyUser> babyUsers = BabyUser.find(BabyUser.class, "is_login = ?", "1");
-        if (babyUsers.size() == 1 && !babyUsers.get(0).getToken().isEmpty()) {
-            mBabyUser = babyUsers.get(0);
-        } else {
+        babyUser = BabyUser.getBabyUser();
+        if (babyUser == null) {
             logout();
         }
 
@@ -103,11 +97,11 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.design_navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
         TextView nameTextView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_name);
-        nameTextView.setText(mBabyUser.getBabyName());
+        nameTextView.setText(babyUser.getBabyName());
         TextView emailTextView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_email);
-        emailTextView.setText(mBabyUser.getEmail());
+        emailTextView.setText(babyUser.getEmail());
         ImageView profileImageView = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.img_profile);
-        MyApplication.getImageLoader(this).displayImage(mBabyUser.getProfile(),
+        MyApplication.getImageLoader(this).displayImage(babyUser.getProfile(),
                 profileImageView, ImageUtils.getProfileImageOptions(this));
     }
 
@@ -115,28 +109,31 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+        Intent intent = null;
 
         switch (item.getItemId()) {
-            case R.id.nav_camera:
+            case R.id.nav_personal_info:
+                intent = new Intent(this, PersonalActivity.class);
+                startActivityForResult(intent, Constants.SETTING_REQUEST_CODE);
                 break;
-            case R.id.nav_gallery:
-                break;
-            case R.id.nav_slideshow:
-                break;
-            case R.id.nav_manage:
-                break;
-            case R.id.nav_share:
-                break;
-            case R.id.nav_send:
-                break;
+//            case R.id.nav_gallery:
+//                break;
+//            case R.id.nav_slideshow:
+//                break;
+//            case R.id.nav_manage:
+//                break;
+//            case R.id.nav_share:
+//                break;
+//            case R.id.nav_send:
+//                break;
             case R.id.nav_logout:
                 AlertUtils.showConfirmDialog(this,
                         R.string.logout_message, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        logout();
-                    }
-                });
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                logout();
+                            }
+                        });
                 break;
         }
 
@@ -144,17 +141,6 @@ public class MainActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private void logout() {
-        if (mBabyUser != null) {
-            mBabyUser.setLogin(false);
-            mBabyUser.setToken(null);
-            mBabyUser.save();
-        }
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
     }
 
     @Override

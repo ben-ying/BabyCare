@@ -22,6 +22,7 @@ public class UserTaskHandler extends BaseTaskHandler {
     private static final String URL_USERS = "users/";
     private static final String URL_USER_LOGIN = "user/login";
     private static final String URL_SEND_VERIFY_CODE = "user/send_verify_code";
+    private static final String URL_EDIT_USER_INFO = "user/edit_user_info";
 
     public UserTaskHandler(Context context) {
         super(context);
@@ -64,6 +65,18 @@ public class UserTaskHandler extends BaseTaskHandler {
             JSONObject bodyObject = new JSONObject();
             bodyObject.put("email", email);
             new HttpPostTask(context).startTask(URL_SEND_VERIFY_CODE, Request.Method.POST,
+                    bodyObject, BabyUser.class, true, httpResponseInterface);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void editUserInfo(String key, String value,
+                             HttpResponseInterface<HttpBaseResult> httpResponseInterface) {
+        try {
+            JSONObject bodyObject = new JSONObject();
+            bodyObject.put(key, value);
+            new HttpPostTask(context).startTask(URL_EDIT_USER_INFO, Request.Method.POST,
                     bodyObject, BabyUser.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();

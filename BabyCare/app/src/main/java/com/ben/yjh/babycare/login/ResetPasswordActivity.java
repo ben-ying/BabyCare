@@ -101,12 +101,6 @@ public class ResetPasswordActivity extends BaseActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_resend_verify_code:
