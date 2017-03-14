@@ -10,9 +10,8 @@
         <AutoCompleteTextView
             android:id="@+id/et_value"
             style="@style/default_edit_text"
+            android:maxLines="1"
             android:completionThreshold="1"
-            android:hint="@string/email"
-            android:imeOptions="actionDone"
-            android:inputType="textEmailAddress" />
+            android:imeOptions="actionDone" />
     </android.support.design.widget.TextInputLayout>
 </LinearLayout>

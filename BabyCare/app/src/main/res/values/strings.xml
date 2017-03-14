@@ -23,7 +23,11 @@
     <!-- user-->
     <string name="username">用户名</string>
     <string name="baby_name">宝宝名</string>
+    <string name="edit_baby_name">编辑宝宝名</string>
     <string name="email">电子邮箱</string>
+    <string name="edit_email">编辑电子邮箱</string>
+    <string name="phone">手机号码</string>
+    <string name="edit_phone">编辑手机号码</string>
     <string name="username_or_email">用户名/电子邮箱</string>
     <string name="password">密码</string>
     <string name="confirm_password">确认密码</string>
@@ -48,8 +52,10 @@
     <string name="female">女</string>
     <string name="gender">性别</string>
     <string name="birth">出生日期</string>
+    <string name="edit_birth">编辑出生日期</string>
     <string name="zone">时区</string>
     <string name="hobbies">兴趣爱好</string>
+    <string name="edit_hobbies">编辑兴趣爱好</string>
     <string name="unknown_gender">保密</string>
     <string name="logout">登出账号</string>
     <string name="logout_message">您确定要退出当前账号吗？</string>
@@ -63,11 +69,7 @@
     <string name="click_resend_verify_code">点击重新发送验证码</string>
     <string name="sent_verify_code_message">验证码已发送到你的邮箱，请查收</string>
     <string name="countdown_resend_message">%d秒后重新发送</string>
-    <string name="phone">手机号码</string>
-    <string name="user_info">用户信息</string>
-    <string name="share">分享</string>
-    <string name="home_page">主页</string>
-    <string name="setting">设置</string>
+
 
     <!--add event-->
     <string name="title">标题</string>
@@ -83,4 +85,12 @@
     <string name="title_activity_image_pager">ImagePagerActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <!--left-->
+    <string name="user_info">用户信息</string>
+    <string name="share">分享</string>
+    <string name="home_page">主页</string>
+    <string name="setting">设置</string>
+    <string name="bookmark">收藏</string>
+    <string name="mine">我的</string>
 </resources>

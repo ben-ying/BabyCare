@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -223,6 +224,9 @@ public class LoginActivity extends BaseActivity {
                 break;
             case R.id.tv_forgot_password:
                 final View view = LayoutInflater.from(this).inflate(R.layout.dialog_edit_text, null);
+                final EditText emailEditText = (EditText) view.findViewById(R.id.et_value);
+                emailEditText.setHint(R.string.email);
+                emailEditText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 final AlertDialog dialog = new AlertDialog.Builder(this, R.style.MyDialogTheme)
                         .setMessage(R.string.dialog_forgot_password)
                         .setView(view)
@@ -239,7 +243,6 @@ public class LoginActivity extends BaseActivity {
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EditText emailEditText = (EditText) view.findViewById(R.id.et_value);
                         String sentEmail = emailEditText.getText().toString();
 //                        if (sentEmail.isEmpty()) {
 //                            emailEditText.setError(getString(R.string.empty_email));

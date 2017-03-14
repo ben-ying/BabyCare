@@ -113,7 +113,7 @@ public class MainActivity extends BaseActivity
 
         switch (item.getItemId()) {
             case R.id.nav_personal_info:
-                intent = new Intent(this, PersonalActivity.class);
+                intent = new Intent(this, PersonalInfoActivity.class);
                 startActivityForResult(intent, Constants.SETTING_REQUEST_CODE);
                 break;
 //            case R.id.nav_gallery:

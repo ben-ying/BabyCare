@@ -140,10 +140,10 @@ public class RegisterActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case Constants.CAMERA_PICTURE_REQUEST_CODE:
-                    ImageUtils.cropPicture(RegisterActivity.this, data.getData());
+                    ImageUtils.cropPicture(this, data.getData());
                     break;
                 case Constants.GALLERY_PICTURE_REQUEST_CODE:
-                    ImageUtils.cropPicture(RegisterActivity.this, data.getData());
+                    ImageUtils.cropPicture(this, data.getData());
                     break;
                 case Constants.CROP_PICTURE_REQUEST_CODE:
                     Uri uri = data.getData();

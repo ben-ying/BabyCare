@@ -62,18 +62,16 @@
     </style>
 
     <style name="info_text">
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:textSize">@dimen/setting_text_size</item>
         <item name="android:maxLines">1</item>
-        <item name="android:textColor">@color/default_text_color</item>
     </style>
 
     <style name="info_text.value">
-        <item name="android:textColor">@color/hint_color</item>
-        <item name="android:layout_alignParentRight">true</item>
-        <item name="android:maxLines">2</item>
+        <item name="android:textSize">@dimen/setting_text_size</item>
+        <item name="android:textColor">@color/default_text_color</item>
     </style>
 
     <style name="action_button">

@@ -4,12 +4,17 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_main"
-            android:icon="@mipmap/ic_view_list_black_24dp"
+            android:icon="@mipmap/ic_home_black_24dp"
             android:title="@string/home_page" />
-        <!--<item-->
-        <!--android:id="@+id/nav_gallery"-->
-        <!--android:icon="@drawable/ic_menu_gallery"-->
-        <!--android:title="Gallery" />-->
+        <item
+            android:id="@+id/nav_mine"
+            android:icon="@mipmap/ic_view_list_black_24dp"
+            android:title="@string/mine" />
+        <item
+            android:id="@+id/nav_bookmark"
+            android:icon="@drawable/ic_bookmark_24dp"
+            android:title="@string/bookmark" />
+
         <!--<item-->
         <!--android:id="@+id/nav_slideshow"-->
         <!--android:icon="@drawable/ic_menu_slideshow"-->

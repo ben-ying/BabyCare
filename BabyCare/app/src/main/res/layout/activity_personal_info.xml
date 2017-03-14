@@ -44,31 +44,22 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_scrolling"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/profile_small_size"
+            android:layout_height="@dimen/profile_small_size"
             android:layout_margin="@dimen/fab_margin"
-            android:src="@mipmap/btn_camera"
+            android:src="@mipmap/ic_photo_camera_white_24dp"
             app:layout_anchor="@id/app_bar_scrolling"
             app:layout_anchorGravity="bottom|end" />
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <com.ben.yjh.babycare.widget.ItemInfo
-                    android:id="@+id/item_username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
 
                 <com.ben.yjh.babycare.widget.ItemInfo
                     android:id="@+id/item_baby_name"
@@ -92,11 +83,6 @@
 
                 <com.ben.yjh.babycare.widget.ItemInfo
                     android:id="@+id/item_birth"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <com.ben.yjh.babycare.widget.ItemInfo
-                    android:id="@+id/item_zone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

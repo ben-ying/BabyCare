@@ -66,13 +66,13 @@ public class ItemInfo extends RelativeLayout {
         }
     }
 
-    public void setValue(int titleRes, String value) {
+    public void setValue(int titleRes, String value, int defaultRes) {
         mTitleTextView.setText(titleRes);
 
         switch (mType) {
             case 0:
                 if (value == null || value.trim().isEmpty()) {
-                    mValueTextView.setText("");
+                    mValueTextView.setHint(defaultRes);
                 } else {
                     mValueTextView.setText(value);
                 }

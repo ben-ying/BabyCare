@@ -19,6 +19,7 @@
     <dimen name="profile_small_size">50dp</dimen>
     <dimen name="stroke_size">1dp</dimen>
     <dimen name="text_padding">10dp</dimen>
+    <dimen name="item_height">60dp</dimen>
 
     <dimen name="timeline_image_height">200dp</dimen>
     <dimen name="actions_padding">16dp</dimen>

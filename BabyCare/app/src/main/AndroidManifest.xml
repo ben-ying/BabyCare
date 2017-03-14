@@ -49,7 +49,7 @@
         </activity>
         <activity android:name=".main.event.AddEventActivity" />
         <activity android:name=".main.ImagePagerActivity" />
-        <activity android:name=".main.PersonalActivity"></activity>
+        <activity android:name=".main.PersonalInfoActivity"></activity>
     </application>
 
 </manifest>
