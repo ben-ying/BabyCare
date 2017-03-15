@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -35,7 +36,10 @@ import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
 import com.ben.yjh.babycare.widget.ItemInfo;
+import com.nostra13.universalimageloader.utils.DiskCacheUtils;
+import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -124,6 +128,9 @@ public class PersonalInfoActivity extends BaseActivity {
                 break;
             case R.id.item_hobbies:
                 key = Constants.HOBBIES;
+                break;
+            case R.id.fab_scrolling:
+                key = Constants.BASE64;
                 break;
         }
 
@@ -331,15 +338,17 @@ public class PersonalInfoActivity extends BaseActivity {
                     ImageUtils.cropPicture(this, data.getData());
                     break;
                 case Constants.CROP_PICTURE_REQUEST_CODE:
-                    Uri uri = data.getData();
+                    Uri uri = data.getData() == null ? ImageUtils.getTempUri() : data.getData();
                     if (uri != null) {
                         try {
                             Bitmap bitmap = BitmapFactory.decodeStream(
                                     getContentResolver().openInputStream(uri));
                             mProfileBase64 = ImageUtils.getBase64FromBitmap(bitmap);
+                            DiskCacheUtils.removeFromCache(uri.toString(), MyApplication.getImageLoader(this).getDiskCache());
+                            MemoryCacheUtils.removeFromCache(uri.toString(), MyApplication.getImageLoader(this).getMemoryCache());
                             MyApplication.getImageLoader(this).displayImage(uri.toString(),
                                     mFab, ImageUtils.getProfileImageOptions(this));
-                            findViewById(R.id.tv_add_profile).setVisibility(View.GONE);
+                            editPersonalInfoTask(R.id.fab_scrolling, mProfileBase64);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                             mProfileBase64 = "";

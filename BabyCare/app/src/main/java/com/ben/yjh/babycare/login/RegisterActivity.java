@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -37,7 +38,10 @@ import com.ben.yjh.babycare.widget.VolleySingleton;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.utils.DiskCacheUtils;
+import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 
@@ -146,12 +150,14 @@ public class RegisterActivity extends BaseActivity {
                     ImageUtils.cropPicture(this, data.getData());
                     break;
                 case Constants.CROP_PICTURE_REQUEST_CODE:
-                    Uri uri = data.getData();
+                    Uri uri = data.getData() == null ? ImageUtils.getTempUri() : data.getData();
                     if (uri != null) {
                         try {
                             Bitmap bitmap = BitmapFactory.decodeStream(
                                     getContentResolver().openInputStream(uri));
                             mProfileBase64 = ImageUtils.getBase64FromBitmap(bitmap);
+                            DiskCacheUtils.removeFromCache(uri.toString(), MyApplication.getImageLoader(this).getDiskCache());
+                            MemoryCacheUtils.removeFromCache(uri.toString(), MyApplication.getImageLoader(this).getMemoryCache());
                             MyApplication.getImageLoader(this).displayImage(uri.toString(),
                                     mProfileButton, ImageUtils.getProfileImageOptions(this));
                             findViewById(R.id.tv_add_profile).setVisibility(View.GONE);
