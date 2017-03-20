@@ -87,10 +87,12 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
     <!--left-->
+    <string name="others">其它</string>
     <string name="user_info">用户信息</string>
     <string name="share">分享</string>
     <string name="home_page">主页</string>
     <string name="setting">设置</string>
     <string name="bookmark">收藏</string>
     <string name="mine">我的</string>
+    <string name="share_message">一个记录宝宝生活点滴的应用程序，点击下载%1$s\nhttps://play.google.com/store/apps/details?id=%2$s</string>
 </resources>

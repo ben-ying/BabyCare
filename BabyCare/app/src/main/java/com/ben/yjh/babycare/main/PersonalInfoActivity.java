@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -23,13 +22,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
-import com.ben.yjh.babycare.login.RegisterActivity;
 import com.ben.yjh.babycare.login.UserTaskHandler;
 import com.ben.yjh.babycare.model.BabyUser;
 import com.ben.yjh.babycare.model.HttpBaseResult;
@@ -39,10 +38,8 @@ import com.ben.yjh.babycare.widget.ItemInfo;
 import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 public class PersonalInfoActivity extends BaseActivity {
 
@@ -59,8 +56,8 @@ public class PersonalInfoActivity extends BaseActivity {
     private ItemInfo mBirthItem;
     private ItemInfo mHobbiesItem;
     private boolean mUpdate;
-    private FloatingActionButton mFab;
     private String mProfileBase64;
+    private ImageView mProfileImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +71,11 @@ public class PersonalInfoActivity extends BaseActivity {
         }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(babyUser.getUsername());
+        toolbar.setTitle(R.string.user_info);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        setStatusBarMargin(R.id.content_layout);
 
         mBabyNameItem = (ItemInfo) findViewById(R.id.item_baby_name);
         mEmailItem = (ItemInfo) findViewById(R.id.item_email);
@@ -85,14 +83,14 @@ public class PersonalInfoActivity extends BaseActivity {
         mGenderItem = (ItemInfo) findViewById(R.id.item_gender);
         mBirthItem = (ItemInfo) findViewById(R.id.item_birth);
         mHobbiesItem = (ItemInfo) findViewById(R.id.item_hobbies);
-        mFab = (FloatingActionButton) findViewById(R.id.fab_scrolling);
+        mProfileImageView = (ImageView) findViewById(R.id.img_profile);
+        mProfileImageView.setOnClickListener(this);
         mBabyNameItem.setOnClickListener(this);
         mEmailItem.setOnClickListener(this);
         mPhoneItem.setOnClickListener(this);
         mGenderItem.setOnClickListener(this);
         mBirthItem.setOnClickListener(this);
         mHobbiesItem.setOnClickListener(this);
-        mFab.setOnClickListener(this);
 
         setValues();
     }
@@ -105,7 +103,9 @@ public class PersonalInfoActivity extends BaseActivity {
         mBirthItem.setValue(R.string.birth, babyUser.getBirth(), R.string.edit_birth);
         mHobbiesItem.setValue(R.string.hobbies, babyUser.getHobbies(), R.string.edit_hobbies);
         MyApplication.getImageLoader(this).displayImage(babyUser.getProfile(),
-                mFab, ImageUtils.getProfileImageOptions(this));
+                mProfileImageView, ImageUtils.getProfileImageOptions(this));
+        ((TextView) findViewById(R.id.tv_name)).setText(babyUser.getUsername());
+        ((TextView) findViewById(R.id.tv_name_title)).setText(R.string.username);
     }
 
     private void editPersonalInfoTask(final int id, final String value) {
@@ -129,7 +129,7 @@ public class PersonalInfoActivity extends BaseActivity {
             case R.id.item_hobbies:
                 key = Constants.HOBBIES;
                 break;
-            case R.id.fab_scrolling:
+            case R.id.img_profile:
                 key = Constants.BASE64;
                 break;
         }
@@ -195,7 +195,6 @@ public class PersonalInfoActivity extends BaseActivity {
                 final View view = LayoutInflater.from(this).inflate(R.layout.dialog_edit_text, null);
                 final EditText editText = (EditText) view.findViewById(R.id.et_value);
                 editText.setText(itemInfo.getValue());
-                editText.setSelection(editText.getText().length());
                 if (id == R.id.item_email) {
                     editText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 } else if (id == R.id.item_phone) {
@@ -203,6 +202,7 @@ public class PersonalInfoActivity extends BaseActivity {
                 } else if (id == R.id.item_hobbies) {
                     editText.setLines(5);
                 }
+                editText.setSelection(editText.getText().length());
                 final AlertDialog dialog = new AlertDialog.Builder(this, R.style.MyDialogTheme)
                         .setTitle(itemInfo.getTitle())
                         .setView(view)
@@ -278,7 +278,7 @@ public class PersonalInfoActivity extends BaseActivity {
                 datePickerDialog.getDatePicker().setMaxDate(c.getTimeInMillis());
                 datePickerDialog.show();
                 break;
-            case R.id.fab_scrolling:
+            case R.id.img_profile:
                 if (verifyStoragePermissions()) {
                     String[] profileArray = getResources().getStringArray(R.array.picture_choices);
                     new android.support.v7.app.AlertDialog.Builder(this)
@@ -347,8 +347,8 @@ public class PersonalInfoActivity extends BaseActivity {
                             DiskCacheUtils.removeFromCache(uri.toString(), MyApplication.getImageLoader(this).getDiskCache());
                             MemoryCacheUtils.removeFromCache(uri.toString(), MyApplication.getImageLoader(this).getMemoryCache());
                             MyApplication.getImageLoader(this).displayImage(uri.toString(),
-                                    mFab, ImageUtils.getProfileImageOptions(this));
-                            editPersonalInfoTask(R.id.fab_scrolling, mProfileBase64);
+                                    mProfileImageView, ImageUtils.getProfileImageOptions(this));
+                            editPersonalInfoTask(R.id.img_profile, mProfileBase64);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                             mProfileBase64 = "";
@@ -364,7 +364,7 @@ public class PersonalInfoActivity extends BaseActivity {
                                            @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_EXTERNAL_STORAGE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                mFab.performClick();
+                mProfileImageView.performClick();
             }
         }
     }

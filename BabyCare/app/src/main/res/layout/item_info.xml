@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_height"
     android:layout_gravity="center"
+    android:background="@drawable/ripple"
     android:orientation="vertical">
 
     <LinearLayout

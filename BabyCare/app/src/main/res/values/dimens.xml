@@ -7,6 +7,7 @@
     <dimen name="card_horizontal_padding">60dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="fab_margin_with_navigation">36dp</dimen>
     <dimen name="register_margin">8dp</dimen>
     <dimen name="button_margin_vertical">24dp</dimen>
     <dimen name="bottom_margin_vertical">64dp</dimen>
@@ -30,5 +31,6 @@
     <dimen name="actions_padding_button">10dp</dimen>
     <dimen name="recycler_view_padding">15dp</dimen>
     <dimen name="setting_text_size">18sp</dimen>
+    <dimen name="status_bar_height">24dp</dimen>
 
 </resources>

@@ -11,6 +11,7 @@
             android:id="@+id/et_value"
             style="@style/default_edit_text"
             android:maxLines="1"
+            android:gravity="bottom"
             android:completionThreshold="1"
             android:imeOptions="actionDone" />
     </android.support.design.widget.TextInputLayout>

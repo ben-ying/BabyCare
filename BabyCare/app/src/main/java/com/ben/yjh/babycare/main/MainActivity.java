@@ -2,7 +2,9 @@ package com.ben.yjh.babycare.main;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -15,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,6 +49,7 @@ public class MainActivity extends BaseActivity
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setStatusBarMargin(R.id.content_layout);
 
         babyUser = BabyUser.getBabyUser();
         if (babyUser == null) {
@@ -66,6 +70,21 @@ public class MainActivity extends BaseActivity
         mTabLayout.setupWithViewPager(mViewPager);
 
         mFab = (FloatingActionButton) findViewById(R.id.fab);
+        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mFab.getLayoutParams();
+        if (hasSoftNavBar()) {
+            // has navigation bar in bottom
+            layoutParams.setMargins((int) getResources().getDimension(R.dimen.fab_margin),
+                    (int) getResources().getDimension(R.dimen.fab_margin),
+                    (int) getResources().getDimension(R.dimen.fab_margin),
+                    (int) getResources().getDimension(R.dimen.fab_margin_with_navigation));
+        } else {
+            layoutParams.setMargins((int) getResources().getDimension(R.dimen.fab_margin),
+                    (int) getResources().getDimension(R.dimen.fab_margin),
+                    (int) getResources().getDimension(R.dimen.fab_margin),
+                    (int) getResources().getDimension(R.dimen.fab_margin));
+        }
+//        mFab.setLayoutParams(layoutParams );
+
         mFab.setOnClickListener(this);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -122,8 +141,17 @@ public class MainActivity extends BaseActivity
 //                break;
 //            case R.id.nav_manage:
 //                break;
-//            case R.id.nav_share:
-//                break;
+            case R.id.nav_share:
+                int stringId = getApplicationInfo().labelRes;
+                String appName = stringId == 0 ? getApplicationInfo()
+                        .nonLocalizedLabel.toString() : getString(stringId);
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, String.format(
+                        getString(R.string.share_message), appName, getPackageName()));
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
+                break;
 //            case R.id.nav_send:
 //                break;
             case R.id.nav_logout:
