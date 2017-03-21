@@ -1,22 +1,13 @@
 package com.ben.yjh.babycare.login;
 
-import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -34,24 +25,10 @@ import com.ben.yjh.babycare.model.UserHistory;
 import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
-import com.ben.yjh.babycare.widget.VolleySingleton;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.nostra13.universalimageloader.utils.DiskCacheUtils;
-import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.List;
 
 public class RegisterActivity extends BaseActivity {
-
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
 
     private EditText mUsernameEditText;
     private EditText mBabyNameEditText;
@@ -156,10 +133,8 @@ public class RegisterActivity extends BaseActivity {
                             Bitmap bitmap = BitmapFactory.decodeStream(
                                     getContentResolver().openInputStream(uri));
                             mProfileBase64 = ImageUtils.getBase64FromBitmap(bitmap);
-                            DiskCacheUtils.removeFromCache(uri.toString(), MyApplication.getImageLoader(this).getDiskCache());
-                            MemoryCacheUtils.removeFromCache(uri.toString(), MyApplication.getImageLoader(this).getMemoryCache());
-                            MyApplication.getImageLoader(this).displayImage(uri.toString(),
-                                    mProfileButton, ImageUtils.getProfileImageOptions(this));
+                            MyApplication.displayImage(uri.toString(),
+                                    mProfileButton, ImageUtils.getProfileImageOptions(this), true);
                             findViewById(R.id.tv_add_profile).setVisibility(View.GONE);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
@@ -169,23 +144,6 @@ public class RegisterActivity extends BaseActivity {
                     break;
             }
         }
-    }
-
-    public boolean verifyStoragePermissions() {
-        int permission = ActivityCompat.checkSelfPermission(
-                this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
-            );
-
-            return false;
-        }
-
-        return true;
     }
 
     @Override
@@ -223,32 +181,7 @@ public class RegisterActivity extends BaseActivity {
                 }
                 break;
             case R.id.ib_profile:
-                if (verifyStoragePermissions()) {
-                    String[] array = getResources().getStringArray(R.array.picture_choices);
-                    new AlertDialog.Builder(RegisterActivity.this)
-                            .setTitle(R.string.upload_picture_option)
-                            .setItems(array, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = null;
-                                    switch (which) {
-                                        case 0:
-                                            intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                            startActivityForResult(intent, Constants.CAMERA_PICTURE_REQUEST_CODE);
-                                            break;
-                                        case 1:
-                                            intent = new Intent(Intent.ACTION_PICK,
-                                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                            startActivityForResult(intent, Constants.GALLERY_PICTURE_REQUEST_CODE);
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                }
-                            })
-                            .setNegativeButton(R.string.cancel, null)
-                            .show();
-                }
+                showImageOptions(R.string.upload_picture_option);
                 break;
         }
     }

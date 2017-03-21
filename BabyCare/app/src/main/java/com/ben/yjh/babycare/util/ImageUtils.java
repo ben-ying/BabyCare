@@ -6,7 +6,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -38,8 +37,8 @@ public class ImageUtils {
             Intent cropIntent = new Intent("com.android.camera.action.CROP");
             cropIntent.setDataAndType(uri, "image/*");
             cropIntent.putExtra("crop", "true");
-            cropIntent.putExtra("aspectX", 1);
-            cropIntent.putExtra("aspectY", 1);
+            cropIntent.putExtra("aspectX", width);
+            cropIntent.putExtra("aspectY", height);
             cropIntent.putExtra("outputX", width);
             cropIntent.putExtra("outputY", height);
             cropIntent.putExtra("return-data", false);
@@ -77,6 +76,16 @@ public class ImageUtils {
                 .showImageOnLoading(defaultIconId)
                 .showImageOnFail(defaultIconId)
                 .showImageForEmptyUri(defaultIconId)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
+    }
+
+    public static DisplayImageOptions getEventImageOptions(Context context) {
+        return new DisplayImageOptions.Builder()
+                .showImageOnLoading(0)
+                .showImageOnFail(0)
+                .showImageForEmptyUri(0)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .build();

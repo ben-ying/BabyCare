@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.FloatMath;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;

@@ -2,47 +2,64 @@ package com.ben.yjh.babycare.application;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.widget.ImageView;
 
 import com.android.volley.Request;
 import com.ben.yjh.babycare.widget.VolleySingleton;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.utils.DiskCacheUtils;
+import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.orm.SugarApp;
 
 
 public class MyApplication extends SugarApp {
 
-    private static MyApplication mInstance;
-    private static Context mAppContext;
+    private static MyApplication sInstance;
+    private static Context sAppContext;
     private static ImageLoader sImageLoader;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mInstance = this;
-
-        this.setAppContext(getApplicationContext());
+        sInstance = this;
+        sAppContext = getApplicationContext();
     }
 
     public static MyApplication getInstance() {
-        return mInstance;
+        return sInstance;
     }
 
     public static Context getAppContext() {
-        return mAppContext;
+        return sAppContext;
     }
 
-    public void setAppContext(Context mAppContext) {
-        this.mAppContext = mAppContext;
-    }
 
-    public static ImageLoader getImageLoader(Context context) {
+    private static ImageLoader getImageLoader(Context context) {
         if (sImageLoader == null) {
             sImageLoader = ImageLoader.getInstance();
             sImageLoader.init(ImageLoaderConfiguration.createDefault(context.getApplicationContext()));
         }
 
         return sImageLoader;
+    }
+
+    public static void displayImage(String uri, ImageView imageView,
+                                    DisplayImageOptions options, boolean removeCache) {
+        displayImage(uri, imageView, options, removeCache, null);
+    }
+
+    public static void displayImage(String uri, ImageView imageView,
+                                    DisplayImageOptions options, boolean removeCache,
+                                    ImageLoadingListener listener) {
+        if (removeCache) {
+            DiskCacheUtils.removeFromCache(uri, MyApplication.getImageLoader(sAppContext).getDiskCache());
+            MemoryCacheUtils.removeFromCache(uri, MyApplication.getImageLoader(sAppContext).getMemoryCache());
+        }
+
+        getImageLoader(sAppContext).displayImage(uri, imageView, options, listener);
     }
 
     public <T> void addToRequestQueue(Request<T> req) {

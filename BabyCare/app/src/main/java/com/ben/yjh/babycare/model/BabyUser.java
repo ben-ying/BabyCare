@@ -1,7 +1,6 @@
 package com.ben.yjh.babycare.model;
 
 import com.google.gson.annotations.SerializedName;
-import com.orm.SugarRecord;
 
 import java.io.Serializable;
 import java.util.List;

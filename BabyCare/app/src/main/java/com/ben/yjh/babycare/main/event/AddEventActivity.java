@@ -1,106 +1,70 @@
 package com.ben.yjh.babycare.main.event;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.TextWatcher;
+import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.ben.yjh.babycare.R;
+import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
+import com.ben.yjh.babycare.util.Constants;
+import com.ben.yjh.babycare.util.ImageUtils;
 
 public class AddEventActivity extends BaseActivity {
 
-    private static final int DESCRIPTION_MAX_LENGTH = 10;
-    private static final int COUNT_TEXT_ANIMATION_MILLISECONDS = 300;
-
-    private TextView mCountTextView;
-    private TextView mDateTextView;
     private EditText mTitleEditText;
-    private EditText mDescriptionEditText;
+    private EditText mContentEditText;
+    private ImageView mImageView;
     private String mTitle;
-    private String mDescription;
-    private Calendar mCalendar;
+    private String mContent;
+    private String mImageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
-//        setTitle(R.string.add_event);
-        mCountTextView = (TextView) findViewById(R.id.tv_count);
-        mDateTextView = (TextView) findViewById(R.id.tv_date);
+        setTitle(R.string.add_event);
         mTitleEditText = (EditText) findViewById(R.id.et_title);
-        mDescriptionEditText = (EditText) findViewById(R.id.et_description);
+        mContentEditText = (EditText) findViewById(R.id.et_content);
+        mImageView = (ImageView) findViewById(R.id.img_event);
+        mImageUrl = getIntent().getStringExtra(Constants.IMAGE_URI);
+        MyApplication.displayImage(mImageUrl, mImageView, ImageUtils.getEventImageOptions(this), true);
 
-        mCalendar = Calendar.getInstance();
-        mDateTextView.setOnClickListener(this);
         findViewById(R.id.btn_add).setOnClickListener(this);
-
-        mDescriptionEditText.addTextChangedListener(new CountTextWatcher());
-        mDescriptionEditText.setFilters(
-                new InputFilter[] {new InputFilter.LengthFilter(
-                        getResources().getInteger(R.integer.description_length))});
-
-        setDate();
+        mImageView.setOnClickListener(this);
     }
 
-    private void setDate() {
-        mDateTextView.setText(new SimpleDateFormat(
-                "yyyy-MM-dd", Locale.getDefault()).format(mCalendar.getTime()));
-    }
-
-    class CountTextWatcher implements TextWatcher {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            if (s.length() == 0) {
-                if (mCountTextView.getVisibility() == View.VISIBLE) {
-                    mCountTextView.animate()
-                            .translationY(mCountTextView.getHeight())
-                            .alpha(0.0f)
-                            .setDuration(COUNT_TEXT_ANIMATION_MILLISECONDS)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    mCountTextView.setVisibility(View.GONE);
-                                }
-                            });
-                }
-            } else {
-                if (mCountTextView.getVisibility() == View.GONE) {
-                    mCountTextView.animate()
-                            .translationY(mCountTextView.getHeight())
-                            .alpha(1.0f)
-                            .setDuration(COUNT_TEXT_ANIMATION_MILLISECONDS)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    mCountTextView.setVisibility(View.VISIBLE);
-                                }
-                            });
-                }
-                mCountTextView.setText(DESCRIPTION_MAX_LENGTH -
-                        s.toString().length() + "/" + DESCRIPTION_MAX_LENGTH);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case Constants.CAMERA_PICTURE_REQUEST_CODE:
+                    ImageUtils.cropPicture(this, data.getData(),
+                            getResources().getInteger(R.integer.event_width),
+                            getResources().getInteger(R.integer.event_height));
+                    break;
+                case Constants.GALLERY_PICTURE_REQUEST_CODE:
+                    ImageUtils.cropPicture(this, data.getData(),
+                            getResources().getInteger(R.integer.event_width),
+                            getResources().getInteger(R.integer.event_height));
+                    break;
+                case Constants.CROP_PICTURE_REQUEST_CODE:
+                    Uri uri = data.getData() == null ? ImageUtils.getTempUri() : data.getData();
+                    if (uri != null) {
+                        Intent intent = new Intent(this, AddEventActivity.class);
+                        intent.putExtra(Constants.IMAGE_URI, uri.toString());
+                        startActivityForResult(intent, Constants.ADD_EVENT_REQUEST_CODE);
+                    }
+                    break;
+                case Constants.ADD_EVENT_REQUEST_CODE:
+                    break;
             }
         }
     }
@@ -108,21 +72,30 @@ public class AddEventActivity extends BaseActivity {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_date:
-                new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        mCalendar.set(Calendar.YEAR, year);
-                        mCalendar.set(Calendar.MONTH, month);
-                        mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        setDate();
-                    }
-                }, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH),
-                        mCalendar.get(Calendar.DAY_OF_MONTH)).show();
-                break;
             case R.id.btn_add:
+                mTitle = mTitleEditText.getText().toString();
+                mContent = mContentEditText.getText().toString();
+                if (mTitle.isEmpty()) {
+                    mTitleEditText.setError(getString(R.string.empty_title));
+                }
+                if (mContent.isEmpty()) {
+                    mContentEditText.setError(getString(R.string.empty_content));
+                }
                 // todo
                 break;
+            case R.id.img_event:
+                showImageOptions(R.string.add_event);
+                break;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_EXTERNAL_STORAGE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                mImageView.performClick();
+            }
         }
     }
 }

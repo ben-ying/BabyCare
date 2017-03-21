@@ -2,8 +2,10 @@ package com.ben.yjh.babycare.main;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -17,7 +19,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -49,7 +50,7 @@ public class MainActivity extends BaseActivity
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setStatusBarMargin(R.id.content_layout);
+        setStatusBarMargin(R.id.cl_layout);
 
         babyUser = BabyUser.getBabyUser();
         if (babyUser == null) {
@@ -120,8 +121,8 @@ public class MainActivity extends BaseActivity
         TextView emailTextView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_email);
         emailTextView.setText(babyUser.getEmail());
         ImageView profileImageView = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.img_profile);
-        MyApplication.getImageLoader(this).displayImage(babyUser.getProfile(),
-                profileImageView, ImageUtils.getProfileImageOptions(this));
+        MyApplication.displayImage(babyUser.getProfile(),
+                profileImageView, ImageUtils.getProfileImageOptions(this), false);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -137,10 +138,10 @@ public class MainActivity extends BaseActivity
                 break;
 //            case R.id.nav_gallery:
 //                break;
-//            case R.id.nav_slideshow:
-//                break;
-//            case R.id.nav_manage:
-//                break;
+            case R.id.nav_feedback:
+                break;
+            case R.id.nav_message:
+                break;
             case R.id.nav_share:
                 int stringId = getApplicationInfo().labelRes;
                 String appName = stringId == 0 ? getApplicationInfo()
@@ -173,13 +174,23 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onClick(View v) {
-        Intent intent;
-
+//        Intent intent;
+//        intent = new Intent(this, AddEventActivity.class);
+//        intent.putExtra(Constants.IMAGE_URI, "http://");
+//        startActivityForResult(intent, Constants.ADD_EVENT_REQUEST_CODE);
         switch (v.getId()) {
             case R.id.fab:
-                intent = new Intent(this, AddEventActivity.class);
-                startActivityForResult(intent, Constants.ADD_EVENT_REQUEST_CODE);
-                break;
+                showImageOptions(R.string.add_event);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_EXTERNAL_STORAGE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                mFab.performClick();
+            }
         }
     }
 
@@ -187,8 +198,27 @@ public class MainActivity extends BaseActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == Constants.ADD_EVENT_REQUEST_CODE) {
-                // todo
+            switch (requestCode) {
+                case Constants.CAMERA_PICTURE_REQUEST_CODE:
+                    ImageUtils.cropPicture(this, data.getData(),
+                            getResources().getInteger(R.integer.event_width),
+                            getResources().getInteger(R.integer.event_height));
+                    break;
+                case Constants.GALLERY_PICTURE_REQUEST_CODE:
+                    ImageUtils.cropPicture(this, data.getData(),
+                            getResources().getInteger(R.integer.event_width),
+                            getResources().getInteger(R.integer.event_height));
+                    break;
+                case Constants.CROP_PICTURE_REQUEST_CODE:
+                    Uri uri = data.getData() == null ? ImageUtils.getTempUri() : data.getData();
+                    if (uri != null) {
+                        Intent intent = new Intent(this, AddEventActivity.class);
+                        intent.putExtra(Constants.IMAGE_URI, uri.toString());
+                        startActivityForResult(intent, Constants.ADD_EVENT_REQUEST_CODE);
+                    }
+                    break;
+                case Constants.ADD_EVENT_REQUEST_CODE:
+                    break;
             }
         }
     }

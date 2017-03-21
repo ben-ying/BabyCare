@@ -10,7 +10,6 @@ import com.ben.yjh.babycare.http.HttpPostTask;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.model.BabyUser;
 import com.ben.yjh.babycare.model.HttpBaseResult;
-import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.MD5Utils;
 import com.ben.yjh.babycare.util.SharedPreferenceUtils;
 

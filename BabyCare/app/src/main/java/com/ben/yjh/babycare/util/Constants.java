@@ -15,6 +15,7 @@ public class Constants {
     public static final String LAST_NAME = "last_name";
     public static final String BASE64 = "base64";
     public static final String BABY_USER = "baby_user";
+    public static final String IMAGE_URI = "image_uri";
 
     public static final int SIGN_UP_REQUEST_CODE = 100;
     public static final int ADD_EVENT_REQUEST_CODE = 101;

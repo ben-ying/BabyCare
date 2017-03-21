@@ -1,17 +1,10 @@
 package com.ben.yjh.babycare.util;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Looper;
 import android.util.Log;
-import android.view.WindowManager;
-
-import com.ben.yjh.babycare.R;
 
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
 

@@ -1,29 +1,35 @@
 package com.ben.yjh.babycare.base;
 
-import android.content.Context;
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewConfiguration;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
+import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.login.LoginActivity;
 import com.ben.yjh.babycare.model.BabyUser;
+import com.ben.yjh.babycare.util.Constants;
 
 public abstract class BaseActivity extends AppCompatActivity implements OnClickListener {
 
+    public static final int REQUEST_EXTERNAL_STORAGE = 1;
+    public static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
     public Toolbar toolbar;
     public BabyUser babyUser;
 
@@ -32,26 +38,56 @@ public abstract class BaseActivity extends AppCompatActivity implements OnClickL
         super.onCreate(savedInstanceState);
     }
 
-//    public void initToolbar() {
-//        toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        tvTitle = (GothamTextView) findViewById(R.id.tv_toolbar_title);
-//
-//        if (toolbar != null) {
-//            setSupportActionBar(toolbar);
-//            setTitle("");
-//            toolbar.setNavigationOnClickListener(new OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    finish();
-//                }
-//            });
-//        }
-//    }
-
     public void setStatusBarMargin(int resId) {
         View view = findViewById(resId);
         view.setPadding(view.getPaddingLeft(), getStatusBarHeight(),
                 view.getPaddingRight(), view.getPaddingBottom());
+    }
+
+    public boolean verifyStoragePermissions() {
+        int permission = ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public void showImageOptions(int title) {
+        if (verifyStoragePermissions()) {
+            String[] array = getResources().getStringArray(R.array.picture_choices);
+            new AlertDialog.Builder(this)
+                    .setTitle(title)
+                    .setItems(array, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = null;
+                            switch (which) {
+                                case 0:
+                                    intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                    startActivityForResult(intent, Constants.CAMERA_PICTURE_REQUEST_CODE);
+                                    break;
+                                case 1:
+                                    intent = new Intent(Intent.ACTION_PICK,
+                                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                    startActivityForResult(intent, Constants.GALLERY_PICTURE_REQUEST_CODE);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+        }
     }
 
     public int getStatusBarHeight() {

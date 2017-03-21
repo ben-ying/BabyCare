@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class SharedPreferenceUtils {

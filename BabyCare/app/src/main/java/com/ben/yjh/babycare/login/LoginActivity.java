@@ -60,8 +60,8 @@ public class LoginActivity extends BaseActivity {
             if (babyUsers.get(0).getToken().isEmpty()) {
                 mGenderImageView.setClickable(false);
                 mGenderImageView.setEnabled(false);
-                MyApplication.getImageLoader(this).displayImage(babyUsers.get(0).getProfile(),
-                        mGenderImageView, ImageUtils.getProfileImageOptions(this), new ImageLoadingListener() {
+                MyApplication.displayImage(babyUsers.get(0).getProfile(), mGenderImageView,
+                        ImageUtils.getProfileImageOptions(this), false, new ImageLoadingListener() {
                             @Override
                             public void onLoadingStarted(String s, View view) {
 
@@ -119,9 +119,10 @@ public class LoginActivity extends BaseActivity {
                 if (userHistories.size() > 0) {
                     mGenderImageView.setClickable(false);
                     mGenderImageView.setEnabled(false);
-                    MyApplication.getImageLoader(LoginActivity.this).displayImage(userHistories.get(0).getProfile(),
-                            mGenderImageView, ImageUtils.getProfileImageOptions(LoginActivity.this,
-                                    userHistories.get(0).getGender() == 1 ? R.mipmap.girl : R.mipmap.boy));
+                    MyApplication.displayImage(userHistories.get(0).getProfile(), mGenderImageView,
+                            ImageUtils.getProfileImageOptions(LoginActivity.this,
+                                    userHistories.get(0).getGender() == 1
+                                            ? R.mipmap.girl : R.mipmap.boy), false);
                 }
             }
         });

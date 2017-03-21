@@ -10,9 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -35,8 +33,6 @@ import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
 import com.ben.yjh.babycare.widget.ItemInfo;
-import com.nostra13.universalimageloader.utils.DiskCacheUtils;
-import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 
 import java.io.FileNotFoundException;
 import java.util.Calendar;
@@ -102,8 +98,8 @@ public class PersonalInfoActivity extends BaseActivity {
         mGenderItem.setValue(R.string.gender, babyUser.getGenderValue(this), R.string.male);
         mBirthItem.setValue(R.string.birth, babyUser.getBirth(), R.string.edit_birth);
         mHobbiesItem.setValue(R.string.hobbies, babyUser.getHobbies(), R.string.edit_hobbies);
-        MyApplication.getImageLoader(this).displayImage(babyUser.getProfile(),
-                mProfileImageView, ImageUtils.getProfileImageOptions(this));
+        MyApplication.displayImage(babyUser.getProfile(),
+                mProfileImageView, ImageUtils.getProfileImageOptions(this), false);
         ((TextView) findViewById(R.id.tv_name)).setText(babyUser.getUsername());
         ((TextView) findViewById(R.id.tv_name_title)).setText(R.string.username);
     }
@@ -279,32 +275,7 @@ public class PersonalInfoActivity extends BaseActivity {
                 datePickerDialog.show();
                 break;
             case R.id.img_profile:
-                if (verifyStoragePermissions()) {
-                    String[] profileArray = getResources().getStringArray(R.array.picture_choices);
-                    new android.support.v7.app.AlertDialog.Builder(this)
-                            .setTitle(R.string.upload_picture_option)
-                            .setItems(profileArray, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = null;
-                                    switch (which) {
-                                        case 0:
-                                            intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                            startActivityForResult(intent, Constants.CAMERA_PICTURE_REQUEST_CODE);
-                                            break;
-                                        case 1:
-                                            intent = new Intent(Intent.ACTION_PICK,
-                                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                            startActivityForResult(intent, Constants.GALLERY_PICTURE_REQUEST_CODE);
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                }
-                            })
-                            .setNegativeButton(R.string.cancel, null)
-                            .show();
-                }
+                showImageOptions(R.string.upload_picture_option);
                 break;
         }
     }
@@ -344,10 +315,8 @@ public class PersonalInfoActivity extends BaseActivity {
                             Bitmap bitmap = BitmapFactory.decodeStream(
                                     getContentResolver().openInputStream(uri));
                             mProfileBase64 = ImageUtils.getBase64FromBitmap(bitmap);
-                            DiskCacheUtils.removeFromCache(uri.toString(), MyApplication.getImageLoader(this).getDiskCache());
-                            MemoryCacheUtils.removeFromCache(uri.toString(), MyApplication.getImageLoader(this).getMemoryCache());
-                            MyApplication.getImageLoader(this).displayImage(uri.toString(),
-                                    mProfileImageView, ImageUtils.getProfileImageOptions(this));
+                            MyApplication.displayImage(uri.toString(),
+                                    mProfileImageView, ImageUtils.getProfileImageOptions(this), true);
                             editPersonalInfoTask(R.id.img_profile, mProfileBase64);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();

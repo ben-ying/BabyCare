@@ -6,8 +6,6 @@ import com.ben.yjh.babycare.R;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
-import java.io.Serializable;
-
 
 public class UserHistory extends SugarRecord {
 

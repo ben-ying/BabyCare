@@ -1,14 +1,8 @@
 package com.ben.yjh.babycare.main;
 
-import android.annotation.SuppressLint;
-import android.os.PersistableBundle;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.ben.yjh.babycare.R;

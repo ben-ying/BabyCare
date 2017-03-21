@@ -10,6 +10,7 @@
     <dimen name="fab_margin_with_navigation">36dp</dimen>
     <dimen name="register_margin">8dp</dimen>
     <dimen name="button_margin_vertical">24dp</dimen>
+    <dimen name="button_margin_vertical2">40dp</dimen>
     <dimen name="bottom_margin_vertical">64dp</dimen>
     <dimen name="top_margin_vertical">56dp</dimen>
     <dimen name="register_small_text">16sp</dimen>

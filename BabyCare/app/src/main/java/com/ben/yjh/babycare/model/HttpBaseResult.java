@@ -1,12 +1,6 @@
 package com.ben.yjh.babycare.model;
 
 
-import com.google.gson.annotations.SerializedName;
-
-import org.json.JSONObject;
-
-import java.io.Serializable;
-
 public class HttpBaseResult {
     private String code;
     private String message;
