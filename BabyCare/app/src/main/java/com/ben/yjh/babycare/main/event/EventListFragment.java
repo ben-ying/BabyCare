@@ -116,11 +116,19 @@ public class EventListFragment extends BaseFragment
     }
 
     @Override
+    public void intent2CommentList() {
+        Intent intent = new Intent(activity, CommentActivity.class);
+        startActivityForResult(intent, Constants.COMMENT_REQUEST_CODE);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case Constants.SHOW_EVENT_IMAGE_DETAIL_REQUEST_CODE:
+                    break;
+                case Constants.COMMENT_REQUEST_CODE:
                     break;
             }
         }

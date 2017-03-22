@@ -71,7 +71,7 @@
     <string name="countdown_resend_message">%d秒后重新发送</string>
 
 
-    <!--add event-->
+    <!--event-->
     <string name="title">标题</string>
     <string name="date">日期</string>
     <string name="content">内容</string>
@@ -79,6 +79,7 @@
     <string name="add_event">新增手记</string>
     <string name="empty_title">标题不能为空</string>
     <string name="empty_content">内容不能为空</string>
+    <string name="comment">评论</string>
 
     <string name="delete">删除</string>
     <string name="retry">重试</string>

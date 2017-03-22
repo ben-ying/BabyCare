@@ -15,18 +15,23 @@ import com.ben.yjh.babycare.R;
 import com.viewpagerindicator.CirclePageIndicator;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder>
-        implements EventViewpagerAdapter.EventAdapterInterface, CompoundButton.OnCheckedChangeListener {
+        implements EventViewpagerAdapter.EventAdapterInterface,
+        CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     private Context mContext;
     private EventRecyclerViewInterface mInterface;
 
-    @Override
     public void showImageDetail() {
         mInterface.showImageDetail();
     }
 
+    public void intent2CommentList() {
+        mInterface.intent2CommentList();
+    }
+
     interface EventRecyclerViewInterface {
         void showImageDetail();
+        void intent2CommentList();
     }
 
 
@@ -52,8 +57,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         RadioButton shareCheckBox = (RadioButton) view.findViewById(R.id.rb_share);
 
         likeCheckBox.setOnCheckedChangeListener(this);
-        commentCheckBox.setOnCheckedChangeListener(this);
-        shareCheckBox.setOnCheckedChangeListener(this);
+        commentCheckBox.setOnClickListener(this);
+        shareCheckBox.setOnClickListener(this);
 
         return new EventViewHolder(view);
     }
@@ -61,10 +66,25 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         RadioButton radioButton = (RadioButton) buttonView;
-        int comment = radioButton.getText() == null || radioButton.getText().toString().isEmpty()
-                ? 0 : Integer.valueOf(radioButton.getText().toString());
-        if (isChecked) {
-            radioButton.setText(String.valueOf(++comment));
+        switch (radioButton.getId()) {
+            case R.id.rb_like:
+                int count = radioButton.getText() == null || radioButton.getText().toString().isEmpty()
+                        ? 0 : Integer.valueOf(radioButton.getText().toString());
+                if (isChecked) {
+                    radioButton.setText(String.valueOf(++count));
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.rb_comment:
+                intent2CommentList();
+                break;
+            case R.id.rb_share:
+                break;
         }
     }
 
