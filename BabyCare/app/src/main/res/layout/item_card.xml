@@ -65,10 +65,9 @@
             android:padding="10dp"
             android:text="Card Title"  />
 
-        <TextView
+        <com.ben.yjh.babycare.widget.ExpandableTextView
             android:id="@+id/tv_content"
             style="@style/TextAppearance.AppCompat.Body1"
-            android:maxLines="4"
             android:ellipsize="end"
             android:paddingLeft="@dimen/text_padding"
             android:paddingRight="@dimen/text_padding"

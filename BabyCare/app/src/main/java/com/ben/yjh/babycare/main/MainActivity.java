@@ -174,14 +174,14 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onClick(View v) {
-//        Intent intent;
-//        intent = new Intent(this, AddEventActivity.class);
-//        intent.putExtra(Constants.IMAGE_URI, "http://");
-//        startActivityForResult(intent, Constants.ADD_EVENT_REQUEST_CODE);
-        switch (v.getId()) {
-            case R.id.fab:
-                showImageOptions(R.string.add_event);
-        }
+        Intent intent;
+        intent = new Intent(this, AddEventActivity.class);
+        intent.putExtra(Constants.IMAGE_URI, "http://");
+        startActivityForResult(intent, Constants.ADD_EVENT_REQUEST_CODE);
+//        switch (v.getId()) {
+//            case R.id.fab:
+//                showImageOptions(R.string.add_event);
+//        }
     }
 
     @Override

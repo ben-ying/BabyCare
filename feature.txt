@@ -1,0 +1,12 @@
+1. register
+2. login
+3. forgot password
+4. home page(detail, comments, like, share event)
+5. mine page
+6. liked page
+7. user info
+8. feedback
+9. share app
+10. setting
+11. logout
+12. about us

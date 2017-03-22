@@ -51,6 +51,7 @@
         <activity android:name=".main.PersonalInfoActivity" />
         <activity android:name=".main.event.CommentActivity" android:windowSoftInputMode="adjustResize|stateAlwaysVisible"/>
         <activity android:name=".main.event.AddEventActivity" />
+        <activity android:name=".main.event.EventDetailActivity" />
     </application>
 
 </manifest>

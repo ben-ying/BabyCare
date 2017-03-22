@@ -2,6 +2,7 @@ package com.ben.yjh.babycare.main.event;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -102,6 +103,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
         public EventViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    Intent intent = new Intent(mContext, EventDetailActivity.class);
+//                    mContext.startActivity(intent);
+                }
+            });
         }
     }
 }
