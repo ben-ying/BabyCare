@@ -81,11 +81,12 @@
     </style>
 
     <style name="action_button">
-        <item name="android:padding">@dimen/actions_padding_button</item>
         <item name="android:layout_height">@dimen/actions_icon_height</item>
-        <item name="android:layout_width">@dimen/actions_icon_width</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_marginRight">8dp</item>
-        <item name="android:scaleType">fitCenter</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawablePadding">@dimen/drawable_padding</item>
+        <item name="android:button">@null</item>
         <item name="android:background">?android:selectableItemBackground</item>
     </style>
 

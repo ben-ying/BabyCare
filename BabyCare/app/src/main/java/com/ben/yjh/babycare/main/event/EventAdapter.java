@@ -7,12 +7,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
 
 import com.ben.yjh.babycare.R;
 import com.viewpagerindicator.CirclePageIndicator;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder>
-        implements EventViewpagerAdapter.EventAdapterInterface {
+        implements EventViewpagerAdapter.EventAdapterInterface, CompoundButton.OnCheckedChangeListener {
 
     private Context mContext;
     private EventRecyclerViewInterface mInterface;
@@ -44,7 +47,25 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         pageIndicator.setPageColor(mContext.getResources().getColor(R.color.white));
         pageIndicator.setStrokeColor(mContext.getResources().getColor(R.color.hint_color));
 
+        RadioButton likeCheckBox = (RadioButton) view.findViewById(R.id.rb_like);
+        RadioButton commentCheckBox = (RadioButton) view.findViewById(R.id.rb_comment);
+        RadioButton shareCheckBox = (RadioButton) view.findViewById(R.id.rb_share);
+
+        likeCheckBox.setOnCheckedChangeListener(this);
+        commentCheckBox.setOnCheckedChangeListener(this);
+        shareCheckBox.setOnCheckedChangeListener(this);
+
         return new EventViewHolder(view);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        RadioButton radioButton = (RadioButton) buttonView;
+        int comment = radioButton.getText() == null || radioButton.getText().toString().isEmpty()
+                ? 0 : Integer.valueOf(radioButton.getText().toString());
+        if (isChecked) {
+            radioButton.setText(String.valueOf(++comment));
+        }
     }
 
     @Override

@@ -27,11 +27,12 @@
     <dimen name="actions_padding">16dp</dimen>
     <dimen name="actions_padding_left">8dp</dimen>
     <dimen name="actions_icon_height">40dp</dimen>
-    <dimen name="actions_icon_width">40dp</dimen>
+    <dimen name="actions_icon_width">50dp</dimen>
     <dimen name="actions_textsize">14sp</dimen>
     <dimen name="actions_padding_button">10dp</dimen>
     <dimen name="recycler_view_padding">15dp</dimen>
     <dimen name="setting_text_size">18sp</dimen>
     <dimen name="status_bar_height">24dp</dimen>
+    <dimen name="drawable_padding">3dp</dimen>
 
 </resources>

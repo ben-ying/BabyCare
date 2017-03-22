@@ -33,6 +33,13 @@
                 android:padding="@dimen/text_padding"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+            <ImageView
+                android:src="@android:drawable/ic_menu_more"
+                android:layout_alignParentEnd="true"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </RelativeLayout>
 
         <android.support.v4.view.ViewPager
@@ -49,52 +56,55 @@
             android:layout_centerHorizontal="true"
             android:padding="10dp" />
 
-        <RelativeLayout
-            android:id="@+id/title_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/TextAppearance.AppCompat.Title"
             android:layout_below="@+id/view_pager"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv_title"
-                style="@style/TextAppearance.AppCompat.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Card Title"  />
-
-            <ImageButton
-                android:id="@+id/ic1"
-                android:layout_toLeftOf="@+id/ic2"
-                style="@style/action_button"
-                android:src="@mipmap/ic_event_search" />
-
-
-            <ImageButton
-                android:id="@+id/ic2"
-                android:layout_toLeftOf="@+id/ic3"
-                style="@style/action_button"
-                android:src="@mipmap/ic_event_mail" />
-
-            <ImageButton
-                android:id="@+id/ic3"
-                android:layout_alignParentRight="true"
-                style="@style/action_button"
-                android:src="@mipmap/ic_event_trash" />
-        </RelativeLayout>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Card Title"  />
 
         <TextView
             android:id="@+id/tv_content"
             style="@style/TextAppearance.AppCompat.Body1"
+            android:maxLines="4"
+            android:ellipsize="end"
             android:paddingLeft="@dimen/text_padding"
             android:paddingRight="@dimen/text_padding"
-            android:paddingBottom="@dimen/text_padding"
-            android:layout_below="@+id/title_layout"
+            android:layout_below="@+id/tv_title"
             android:text="宝宝是对小孩儿的亲昵称呼 ，是爸妈或家人对婴儿或幼儿的昵称。孩子对于父母来说，都是宝贵的。古时候，父母有了孩子之后都是如获珍宝。在父母眼里，孩子都是宝贝。孩子的称呼是不分年龄的大小，只要父母在，你永远都是他的孩子。"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:id="@+id/title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_like"
+                android:layout_toStartOf="@+id/rb_comment"
+                style="@style/action_button"
+                android:drawableStart="@drawable/btn_like" />
+
+            <RadioButton
+                android:id="@+id/rb_comment"
+                android:layout_toStartOf="@+id/rb_share"
+                style="@style/action_button"
+                android:drawableStart="@drawable/btn_comment" />
+
+            <RadioButton
+                android:id="@+id/rb_share"
+                android:layout_alignParentEnd="true"
+                style="@style/action_button"
+                android:drawableStart="@drawable/btn_share" />
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
 
