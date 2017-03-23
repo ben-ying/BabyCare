@@ -1,4 +1,5 @@
 <resources>
+    <!--not ever change-->
     <string name="md5_code">md51988</string>
     <!--<string name="app_name">BabyCare</string>-->
     <string name="app_name">嘟嘟手记</string>

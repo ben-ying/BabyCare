@@ -1,6 +1,5 @@
 package com.ben.yjh.babycare.main.event;
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,8 +14,14 @@ import android.view.ViewGroup;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseFragment;
+import com.ben.yjh.babycare.http.EventTaskHandler;
+import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.main.ImagePagerActivity;
+import com.ben.yjh.babycare.model.Event;
+import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.Constants;
+
+import java.util.ArrayList;
 
 public class EventListFragment extends BaseFragment
         implements EventAdapter.EventRecyclerViewInterface {
@@ -27,9 +32,7 @@ public class EventListFragment extends BaseFragment
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public static EventListFragment newInstance() {
-
         Bundle args = new Bundle();
-
         EventListFragment fragment = new EventListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -46,35 +49,25 @@ public class EventListFragment extends BaseFragment
         View view = inflater.inflate(R.layout.fragment_event_list, container, false);
         mFab = (FloatingActionButton) activity.findViewById(R.id.fab);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+
+        return view;
+    }
+
+    @Override
+    public void init() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setNestedScrollingEnabled(false);
-//        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration());// 添加分割线。
-        mAdapter = new EventAdapter(getActivity(), this);
+        mAdapter = new EventAdapter(activity, activity.babyUser, Event.find(Event.class, "user_id = ?",
+                String.valueOf(activity.babyUser.getUserId())), this);
         mRecyclerView.setAdapter(mAdapter);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.google_blue,
                 R.color.google_green, R.color.google_red, R.color.google_yellow);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Refresh items
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mSwipeRefreshLayout.setRefreshing(false);
-                            }
-                        });
-                    }
-                }).start();
+                getEventsTask();
             }
         });
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -101,12 +94,37 @@ public class EventListFragment extends BaseFragment
             }
         });
 
-        return view;
+        getEventsTask();
     }
 
-    @Override
-    public void init() {
+    private void getEventsTask() {
+        new EventTaskHandler(activity, activity.babyUser.getToken()).getEvents(
+                new HttpResponseInterface<Event[]>() {
+                    @Override
+                    public void onStart() {
 
+                    }
+
+                    @Override
+                    public void onSuccess(Event[] classOfT) {
+                        Event.deleteAll(Event.class, "user_id = ?",
+                                String.valueOf(activity.babyUser.getUserId()));
+                        ArrayList<Event> events = new ArrayList<>();
+                        for (Event event : classOfT) {
+                            event.save();
+                            events.add(event);
+                        }
+                        mAdapter.setData(events);
+                    }
+
+                    @Override
+                    public void onFailure(HttpBaseResult result) {
+                    }
+
+                    @Override
+                    public void onHttpError(String error) {
+                    }
+                });
     }
 
     @Override

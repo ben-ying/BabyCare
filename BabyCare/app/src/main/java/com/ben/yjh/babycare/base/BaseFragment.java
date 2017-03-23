@@ -10,12 +10,12 @@ import android.view.ViewGroup;
 
 public abstract class BaseFragment extends Fragment implements OnClickListener {
 
-    public Activity activity;
+    public BaseActivity activity;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        activity = getActivity();
+        activity = (BaseActivity) getActivity();
         return initView(inflater, container, savedInstanceState);
     }
 

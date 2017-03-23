@@ -20,7 +20,7 @@ public class EventViewpagerAdapter extends PagerAdapter {
         void showImageDetail();
     }
 
-    public EventViewpagerAdapter(Context context, EventAdapterInterface adapterInterface) {
+    EventViewpagerAdapter(Context context, EventAdapterInterface adapterInterface) {
         this.mContext = context;
         this.mInterface = adapterInterface;
         BitmapFactory.Options resizeOptions = new BitmapFactory.Options();

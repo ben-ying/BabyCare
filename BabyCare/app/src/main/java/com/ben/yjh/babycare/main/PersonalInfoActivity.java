@@ -27,7 +27,7 @@ import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
-import com.ben.yjh.babycare.login.UserTaskHandler;
+import com.ben.yjh.babycare.http.UserTaskHandler;
 import com.ben.yjh.babycare.model.BabyUser;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.Constants;
