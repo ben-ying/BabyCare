@@ -16,7 +16,9 @@ public class Constants {
     public static final String BASE64 = "base64";
     public static final String BABY_USER = "baby_user";
     public static final String IMAGE_URI = "image_uri";
-    public static final String AVIARY_API_KEY = "a9a692d4-2bf2-4927-9dc3-2cef97ac8a42";
+    public static final String PROFILE_IMAGE_PREFIX = "profile_image_prefix";
+    public static final String EVENT_IMAGE_PREFIX = "event_image_prefix";
+    public static final String AVIARY_API_KEY_SECRET = "a9a692d4-2bf2-4927-9dc3-2cef97ac8a42";
 
     public static final int SIGN_UP_REQUEST_CODE = 100;
     public static final int ADD_EVENT_REQUEST_CODE = 101;
@@ -27,5 +29,6 @@ public class Constants {
     public static final int RESET_PASSWORD_REQUEST_CODE = 106;
     public static final int SETTING_REQUEST_CODE = 107;
     public static final int COMMENT_REQUEST_CODE = 108;
+    public static final int GALLERY_REQUEST_CODE = 109;
 
 }

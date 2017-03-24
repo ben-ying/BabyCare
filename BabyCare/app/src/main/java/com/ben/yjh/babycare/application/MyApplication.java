@@ -26,6 +26,9 @@ public class MyApplication extends SugarApp {
         super.onCreate();
         sInstance = this;
         sAppContext = getApplicationContext();
+
+        // aviary
+
     }
 
     public static MyApplication getInstance() {

@@ -4,8 +4,10 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
@@ -22,6 +24,8 @@ import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.login.LoginActivity;
 import com.ben.yjh.babycare.model.BabyUser;
 import com.ben.yjh.babycare.util.Constants;
+
+import java.io.File;
 
 public abstract class BaseActivity extends AppCompatActivity implements OnClickListener {
 
@@ -61,7 +65,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnClickL
         return true;
     }
 
-    public void showImageOptions(int title) {
+    public void showImageOptions(int title, final Uri cameraUri) {
         if (verifyStoragePermissions()) {
             String[] array = getResources().getStringArray(R.array.picture_choices);
             new AlertDialog.Builder(this)
@@ -73,6 +77,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnClickL
                             switch (which) {
                                 case 0:
                                     intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri);
                                     startActivityForResult(intent, Constants.CAMERA_PICTURE_REQUEST_CODE);
                                     break;
                                 case 1:

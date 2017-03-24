@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.util.Patterns;
@@ -27,6 +28,7 @@ import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 public class RegisterActivity extends BaseActivity {
@@ -43,6 +45,7 @@ public class RegisterActivity extends BaseActivity {
     private String mConfirmPassword;
     private ImageButton mProfileButton;
     private String mProfileBase64;
+    private Uri mCameraUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +125,7 @@ public class RegisterActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case Constants.CAMERA_PICTURE_REQUEST_CODE:
-                    ImageUtils.cropPicture(this, data.getData());
+                    ImageUtils.cropPicture(this, mCameraUri);
                     break;
                 case Constants.GALLERY_PICTURE_REQUEST_CODE:
                     ImageUtils.cropPicture(this, data.getData());
@@ -182,7 +185,9 @@ public class RegisterActivity extends BaseActivity {
                 }
                 break;
             case R.id.ib_profile:
-                showImageOptions(R.string.upload_picture_option);
+                mCameraUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
+                                Constants.PROFILE_IMAGE_PREFIX + System.currentTimeMillis() + ".jpg"));
+                showImageOptions(R.string.upload_picture_option, mCameraUri);
                 break;
         }
     }

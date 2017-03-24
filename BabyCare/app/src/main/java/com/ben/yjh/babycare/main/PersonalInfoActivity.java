@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
@@ -34,6 +35,7 @@ import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
 import com.ben.yjh.babycare.widget.ItemInfo;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Calendar;
 
@@ -54,6 +56,7 @@ public class PersonalInfoActivity extends BaseActivity {
     private boolean mUpdate;
     private String mProfileBase64;
     private ImageView mProfileImageView;
+    private Uri mCameraUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -275,7 +278,9 @@ public class PersonalInfoActivity extends BaseActivity {
                 datePickerDialog.show();
                 break;
             case R.id.img_profile:
-                showImageOptions(R.string.upload_picture_option);
+                mCameraUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
+                        Constants.PROFILE_IMAGE_PREFIX + System.currentTimeMillis() + ".jpg"));
+                showImageOptions(R.string.upload_picture_option, mCameraUri);
                 break;
         }
     }
@@ -303,7 +308,7 @@ public class PersonalInfoActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case Constants.CAMERA_PICTURE_REQUEST_CODE:
-                    ImageUtils.cropPicture(this, data.getData());
+                    ImageUtils.cropPicture(this, mCameraUri);
                     break;
                 case Constants.GALLERY_PICTURE_REQUEST_CODE:
                     ImageUtils.cropPicture(this, data.getData());

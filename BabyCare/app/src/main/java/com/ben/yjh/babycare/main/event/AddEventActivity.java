@@ -4,16 +4,19 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.aviary.android.feather.common.AviaryIntent;
 import com.aviary.android.feather.sdk.FeatherActivity;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
+import com.ben.yjh.babycare.main.GalleryActivity;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
 
@@ -27,6 +30,7 @@ public class AddEventActivity extends BaseActivity {
     private String mTitle;
     private String mContent;
     private String mImageUrl;
+    private Uri mCameraUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +63,9 @@ public class AddEventActivity extends BaseActivity {
                     // high resolution
 //                    newIntent.putExtra(com.aviary.android.feather.library
 //                            .Constants.EXTRA_IN_HIRES_MEGAPIXELS, MegaPixels.Mp5.ordinal());
-                    newIntent.setData(data.getData());
-                    newIntent.putExtra(com.aviary.android.feather.library.
-                            Constants.EXTRA_IN_API_KEY_SECRET, Constants.AVIARY_PICTURE_REQUEST_CODE);
-                    startActivityForResult(newIntent, 1);
+                    newIntent.setData(mCameraUri);
+                    newIntent.putExtra(AviaryIntent.EXTRA_API_KEY_SECRET, Constants.AVIARY_PICTURE_REQUEST_CODE);
+                    startActivityForResult(newIntent, Constants.AVIARY_PICTURE_REQUEST_CODE);
                     break;
                 case Constants.GALLERY_PICTURE_REQUEST_CODE:
                     Intent anewIntent = new Intent(this, FeatherActivity.class);
@@ -70,8 +73,7 @@ public class AddEventActivity extends BaseActivity {
 //                newIntent.putExtra( com.aviary.android.feather.library
 //                        .Constants.EXTRA_IN_HIRES_MEGAPIXELS, MegaPixels.Mp5.ordinal() );
                     anewIntent.setData(data.getData());
-                    anewIntent.putExtra(com.aviary.android.feather.library.
-                            Constants.EXTRA_IN_API_KEY_SECRET, Constants.AVIARY_API_KEY);
+                    anewIntent.putExtra(AviaryIntent.EXTRA_API_KEY_SECRET, Constants.AVIARY_API_KEY_SECRET);
                     startActivityForResult(anewIntent, Constants.AVIARY_PICTURE_REQUEST_CODE);
                     break;
                 case Constants.AVIARY_PICTURE_REQUEST_CODE:
@@ -106,13 +108,11 @@ public class AddEventActivity extends BaseActivity {
                 // todo
                 break;
             case R.id.img_event:
-                showImageOptions(R.string.add_event);
-//                Intent newIntent = new Intent( this, FeatherActivity.class );
-//                // high resolution
-////                newIntent.putExtra( com.aviary.android.feather.library.Constants.EXTRA_IN_HIRES_MEGAPIXELS, MegaPixels.Mp5.ordinal() );
-//                newIntent.setData(ImageUtils.getTempUri());
-//                newIntent.putExtra( com.aviary.android.feather.library.Constants.EXTRA_IN_API_KEY_SECRET, "a9a692d4-2bf2-4927-9dc3-2cef97ac8a42" );
-//                startActivityForResult( newIntent, 1 );
+//                mCameraUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
+//                        Constants.EVENT_IMAGE_PREFIX + System.currentTimeMillis() + ".jpg"));
+//                showImageOptions(R.string.add_event, mCameraUri);
+                Intent intent = new Intent(this, GalleryActivity.class);
+                startActivityForResult(intent, Constants.GALLERY_REQUEST_CODE);
                 break;
         }
     }

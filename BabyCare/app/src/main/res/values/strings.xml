@@ -82,6 +82,8 @@
     <string name="empty_content">内容不能为空</string>
     <string name="comment">评论</string>
     <string name="show_more">更多内容</string>
+    <string name="select_image">选择图片</string>
+    <string name="take_picture">拍摄照片</string>
 
     <string name="delete">删除</string>
     <string name="retry">重试</string>
@@ -104,81 +106,5 @@
     <string name="share_message">一个记录宝宝生活点滴的应用程序，点击下载%1$s\nhttps://play.google.com/store/apps/details?id=%2$s</string>
 
 
-    <!--aviary-->
-    <string name="feather_illuminate">我的</string>
-    <string name="feather_notification_restore_all_completed">我的</string>
-    <string name="feather_acc_decrease_value">我的</string>
-    <string name="feather_image_saved">我的</string>
-    <string name="feather_iap_restore_all_summary">我的</string>
-    <string name="feather_new_effects">我的</string>
-    <string name="feather_new_frames">我的</string>
-    <string name="feather_iap_restore_all">我的</string>
-    <string name="feather_message_title">我的</string>
-    <string name="feather_notification_n_items_cant_be_restored">%1$s 我的</string>
-    <string name="feather_new_stickers">我的</string>
-    <string name="feather_effects_error_update_pack">我的</string>
-    <string name="feather_effects_end_of_list">我的</string>
-    <string name="feather_about_dialog_message">我的</string>
-    <string name="feather_message_button_no">我的</string>
-    <string name="feather_rectangle">我的</string>
-    <string name="feather_effects_error_update_editor">我的</string>
-    <string name="feather_effects_error_update_editors">我的</string>
-    <string name="feather_version">我的</string>
-    <string name="feather_iap_restore">我的</string>
-    <string name="feather_iap_error">我的</string>
-    <string name="feather_hidef">我的</string>
-    <string name="feather_message_button_yes">我的</string>
-    <string name="feather_iap_failed_download_previews">我的</string>
-    <string name="feather_feedback_dialog_message">我的</string>
-    <string name="feather_circle">我的</string>
-    <string name="feather_effects_beginning_of_list">我的</string>
-    <string name="feather_plugin_error_download">我的</string>
-    <string name="feather_acc_increase_value">我的</string>
-    <string name="feather_iap_restore_all_in_progress">我的</string>
-    <string name="feather_shapes">我的</string>
-    <string name="feather_plugin_error_storage_not_available">我的</string>
-    <string name="feather_effects_error_update_packs">我的</string>
-    <string name="feather_purchase_failed">我的</string>
-    <string name="feather_send_feedback">我的</string>
-    <string name="feather_iap_owned">我的</string>
-    <string name="feather_iap_failed_download_informations">我的</string>
-    <string name="feather_colorfix">我的</string>
-    <string name="feather_notification_some_items_cant_be_restored">我的</string>
-    <string name="feather_item_not_found">我的</string>
-    <string name="feather_no_purchase_made">我的</string>
-    <string name="feather_message_text">我的</string>
-    <string name="feather_effects_error_loading_packs">我的</string>
-    <string name="feather_acc_a_sticker">我的</string>
-    <string name="feather_acc_lens_toggle">我的</string>
-    <string name="feather_restore_all_request_sent">我的</string>
-    <string name="feather_iap_pack_installed">我的</string>
-    <string name="feather_effects_error_update_multiple">我的</string>
-    <string name="feather_feedback">我的</string>
-    <string name="feather_iap_unavailable">我的</string>
-    <string name="feather_iap_download_failed">我的</string>
-    <string name="feather_iap_restore_all_failed">我的</string>
-    <string name="feather_effects_unknown_errors">我的</string>
-    <string name="feather_effects_error_loading_pack">我的</string>
-    <string name="feather_notification_plus_more">%1$d 我的</string>
-    <string name="feather_please_try_again_later">我的</string>
-    <string name="feather_iap_download">我的</string>
-    <string name="feather_effects_unknown_error">我的</string>
-    <string name="feather_iap_list_empty_message">我的</string>
-    <string name="feather_tool_leave_question">我的</string>
-    <string name="feather_download_start_failed">我的</string>
-    <string name="feather_plugin_error_corrupted">我的</string>
-    <string name="feather_acc_flip_v">我的</string>
-    <string name="feather_acc_size">我的</string>
-    <string name="feather_iap_notification_installed_summary">我的</string>
-    <string name="feather_try_again">我的</string>
-    <string name="feather_acc_rotate_cw">我的</string>
-    <string name="feather_notification_no_items_to_restore">我的</string>
-    <string name="feather_acc_flip_h">我的</string>
-    <string name="feather_acc_rotate_ccw">我的</string>
-    <string name="feather_acc_color">我的</string>
-    <string name="feather_unsaved_from_camera">我的</string>
-    <string name="feather_iap_banner_text">我的</string>
-    <string name="feather_iap_installing">我的</string>
-    <string name="feather_notification_plugins_installed_count">%1$d 我的</string>
-    <string name="feather_iap_retry">Retry</string>
+
 </resources>

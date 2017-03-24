@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.ben.yjh.babycare.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -76,6 +78,21 @@ public class ImageUtils {
                 .showImageOnLoading(defaultIconId)
                 .showImageOnFail(defaultIconId)
                 .showImageForEmptyUri(defaultIconId)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
+    }
+
+    public static DisplayImageOptions getThumbnailImageOptions() {
+        BitmapFactory.Options resizeOptions = new BitmapFactory.Options();
+        resizeOptions.inSampleSize = 5;
+        resizeOptions.inScaled = true;
+
+        return new DisplayImageOptions.Builder()
+                .showImageOnLoading(0)
+                .showImageOnFail(0)
+                .showImageForEmptyUri(0)
+                .decodingOptions(resizeOptions)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .build();

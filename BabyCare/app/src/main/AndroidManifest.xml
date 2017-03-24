@@ -95,6 +95,7 @@
             <!-- </intent-filter> -->
         </activity>
         <activity android:name=".main.ImagePagerActivity" />
+        <activity android:name=".main.GalleryActivity" />
         <activity android:name=".main.PersonalInfoActivity" />
         <activity android:name=".main.event.CommentActivity" android:windowSoftInputMode="adjustResize|stateAlwaysVisible"/>
         <activity android:name=".main.event.AddEventActivity" />
