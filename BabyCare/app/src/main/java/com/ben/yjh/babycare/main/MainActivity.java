@@ -209,7 +209,7 @@ public class MainActivity extends BaseActivity
                             getResources().getInteger(R.integer.event_width),
                             getResources().getInteger(R.integer.event_height));
                     break;
-                case Constants.CROP_PICTURE_REQUEST_CODE:
+                case Constants.AVIARY_PICTURE_REQUEST_CODE:
                     Uri uri = data.getData() == null ? ImageUtils.getTempUri() : data.getData();
                     if (uri != null) {
                         Intent intent = new Intent(this, AddEventActivity.class);

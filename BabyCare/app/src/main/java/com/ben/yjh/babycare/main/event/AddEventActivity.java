@@ -5,15 +5,19 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.aviary.android.feather.sdk.FeatherActivity;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
+
+import java.io.File;
 
 public class AddEventActivity extends BaseActivity {
 
@@ -29,12 +33,17 @@ public class AddEventActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
-        setTitle(R.string.add_event);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.add_event);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        setStatusBarMargin(R.id.content_layout);
         mTitleEditText = (EditText) findViewById(R.id.et_title);
         mContentEditText = (EditText) findViewById(R.id.et_content);
         mImageView = (ImageView) findViewById(R.id.img_event);
         mImageUrl = getIntent().getStringExtra(Constants.IMAGE_URI);
-        MyApplication.displayImage(mImageUrl, mImageView, ImageUtils.getEventImageOptions(this), true);
+        MyApplication.displayImage(mImageUrl, mImageView, ImageUtils.getEventImageOptions(), true);
 
         findViewById(R.id.btn_add).setOnClickListener(this);
         mImageView.setOnClickListener(this);
@@ -46,22 +55,35 @@ public class AddEventActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case Constants.CAMERA_PICTURE_REQUEST_CODE:
-                    ImageUtils.cropPicture(this, data.getData(),
-                            getResources().getInteger(R.integer.event_width),
-                            getResources().getInteger(R.integer.event_height));
+                    Intent newIntent = new Intent(this, FeatherActivity.class);
+                    // high resolution
+//                    newIntent.putExtra(com.aviary.android.feather.library
+//                            .Constants.EXTRA_IN_HIRES_MEGAPIXELS, MegaPixels.Mp5.ordinal());
+                    newIntent.setData(data.getData());
+                    newIntent.putExtra(com.aviary.android.feather.library.
+                            Constants.EXTRA_IN_API_KEY_SECRET, Constants.AVIARY_PICTURE_REQUEST_CODE);
+                    startActivityForResult(newIntent, 1);
                     break;
                 case Constants.GALLERY_PICTURE_REQUEST_CODE:
-                    ImageUtils.cropPicture(this, data.getData(),
-                            getResources().getInteger(R.integer.event_width),
-                            getResources().getInteger(R.integer.event_height));
+                    Intent anewIntent = new Intent(this, FeatherActivity.class);
+                    // high resolution
+//                newIntent.putExtra( com.aviary.android.feather.library
+//                        .Constants.EXTRA_IN_HIRES_MEGAPIXELS, MegaPixels.Mp5.ordinal() );
+                    anewIntent.setData(data.getData());
+                    anewIntent.putExtra(com.aviary.android.feather.library.
+                            Constants.EXTRA_IN_API_KEY_SECRET, Constants.AVIARY_API_KEY);
+                    startActivityForResult(anewIntent, Constants.AVIARY_PICTURE_REQUEST_CODE);
                     break;
-                case Constants.CROP_PICTURE_REQUEST_CODE:
-                    Uri uri = data.getData() == null ? ImageUtils.getTempUri() : data.getData();
-                    if (uri != null) {
-                        Intent intent = new Intent(this, AddEventActivity.class);
-                        intent.putExtra(Constants.IMAGE_URI, uri.toString());
-                        startActivityForResult(intent, Constants.ADD_EVENT_REQUEST_CODE);
+                case Constants.AVIARY_PICTURE_REQUEST_CODE:
+                    Uri uri = data.getData();
+                    Bundle extra = data.getExtras();
+                    if (null != extra) {
+                        // image has been changed by the user?
+                        boolean changed = extra.getBoolean(com.aviary.android.feather.library
+                                .Constants.EXTRA_OUT_BITMAP_CHANGED);
                     }
+                    MyApplication.displayImage(Uri.fromFile(new File(uri.toString())).toString(),
+                            mImageView, ImageUtils.getEventImageOptions(), false);
                     break;
                 case Constants.ADD_EVENT_REQUEST_CODE:
                     break;
@@ -85,6 +107,12 @@ public class AddEventActivity extends BaseActivity {
                 break;
             case R.id.img_event:
                 showImageOptions(R.string.add_event);
+//                Intent newIntent = new Intent( this, FeatherActivity.class );
+//                // high resolution
+////                newIntent.putExtra( com.aviary.android.feather.library.Constants.EXTRA_IN_HIRES_MEGAPIXELS, MegaPixels.Mp5.ordinal() );
+//                newIntent.setData(ImageUtils.getTempUri());
+//                newIntent.putExtra( com.aviary.android.feather.library.Constants.EXTRA_IN_API_KEY_SECRET, "a9a692d4-2bf2-4927-9dc3-2cef97ac8a42" );
+//                startActivityForResult( newIntent, 1 );
                 break;
         }
     }

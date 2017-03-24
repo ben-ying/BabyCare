@@ -308,7 +308,7 @@ public class PersonalInfoActivity extends BaseActivity {
                 case Constants.GALLERY_PICTURE_REQUEST_CODE:
                     ImageUtils.cropPicture(this, data.getData());
                     break;
-                case Constants.CROP_PICTURE_REQUEST_CODE:
+                case Constants.AVIARY_PICTURE_REQUEST_CODE:
                     Uri uri = data.getData() == null ? ImageUtils.getTempUri() : data.getData();
                     if (uri != null) {
                         try {

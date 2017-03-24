@@ -127,7 +127,7 @@ public class RegisterActivity extends BaseActivity {
                 case Constants.GALLERY_PICTURE_REQUEST_CODE:
                     ImageUtils.cropPicture(this, data.getData());
                     break;
-                case Constants.CROP_PICTURE_REQUEST_CODE:
+                case Constants.AVIARY_PICTURE_REQUEST_CODE:
                     Uri uri = data.getData() == null ? ImageUtils.getTempUri() : data.getData();
                     if (uri != null) {
                         try {
@@ -135,7 +135,7 @@ public class RegisterActivity extends BaseActivity {
                                     getContentResolver().openInputStream(uri));
                             mProfileBase64 = ImageUtils.getBase64FromBitmap(bitmap);
                             MyApplication.displayImage(uri.toString(),
-                                    mProfileButton, ImageUtils.getProfileImageOptions(this), true);
+                                    mProfileButton, ImageUtils.getEventImageOptions(), true);
                             findViewById(R.id.tv_add_profile).setVisibility(View.GONE);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();

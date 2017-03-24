@@ -121,8 +121,7 @@ public class LoginActivity extends BaseActivity {
                     mGenderImageView.setClickable(false);
                     mGenderImageView.setEnabled(false);
                     MyApplication.displayImage(userHistories.get(0).getProfile(), mGenderImageView,
-                            ImageUtils.getProfileImageOptions(LoginActivity.this,
-                                    userHistories.get(0).getGender() == 1
+                            ImageUtils.getProfileImageOptions(userHistories.get(0).getGender() == 1
                                             ? R.mipmap.girl : R.mipmap.boy), false);
                 }
             }

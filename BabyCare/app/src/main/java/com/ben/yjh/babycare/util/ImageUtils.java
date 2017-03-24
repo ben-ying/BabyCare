@@ -43,7 +43,7 @@ public class ImageUtils {
             cropIntent.putExtra("outputY", height);
             cropIntent.putExtra("return-data", false);
             cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, getTempUri());
-            activity.startActivityForResult(cropIntent, Constants.CROP_PICTURE_REQUEST_CODE);
+            activity.startActivityForResult(cropIntent, Constants.AVIARY_PICTURE_REQUEST_CODE);
         } catch (ActivityNotFoundException anfe) {
             Toast toast = Toast.makeText(activity, R.string.not_support_crop, Toast.LENGTH_SHORT);
             toast.show();
@@ -81,8 +81,9 @@ public class ImageUtils {
                 .build();
     }
 
-    public static DisplayImageOptions getEventImageOptions(Context context) {
+    public static DisplayImageOptions getEventImageOptions() {
         return new DisplayImageOptions.Builder()
+                .displayer(new RoundedBitmapDisplayer(2))
                 .showImageOnLoading(0)
                 .showImageOnFail(0)
                 .showImageForEmptyUri(0)
@@ -91,7 +92,7 @@ public class ImageUtils {
                 .build();
     }
 
-    public static DisplayImageOptions getProfileImageOptions(Context context, int defaultIconId) {
+    public static DisplayImageOptions getProfileImageOptions(int defaultIconId) {
         return new DisplayImageOptions.Builder()
                 .displayer(new RoundedBitmapDisplayer(180))
                 .showImageOnLoading(defaultIconId)
