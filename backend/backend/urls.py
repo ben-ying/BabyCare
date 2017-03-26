@@ -3,7 +3,7 @@ from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from rest_framework.schemas import get_schema_view
 
-from babycare.views import UserViewSet
+from babycare.user_views import UserViewSet
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)

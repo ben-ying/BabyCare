@@ -61,3 +61,12 @@ class LoginLog(models.Model):
         return self.baby.username
 
 
+class Verify(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    email_verify_code = models.CharField(max_length=10, blank=True, null=True)
+    phone_verify_code = models.CharField(max_length=10, blank=True, null=True)
+    created = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    def __str__(self):
+        return self.baby.username + '(' + \
+               self.email_verify_code + ',' + self.phone_verify_code + ')'

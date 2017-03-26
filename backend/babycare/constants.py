@@ -7,7 +7,6 @@ from django.utils.translation import ugettext_lazy as _
 MIN_PASSWORD_LEN = 6
 TEMP_IMAGE = os.path.join(os.path.dirname(__file__), 'temp.jpg')
 PROFILE_FOOTER_IMAGE = '_profile.jpg'
-EVENT_FOOTER_IMAGE = '_event.jpg'
 
 # register & user
 CODE_SUCCESS = 200
@@ -39,6 +38,7 @@ MSG_EMPTY_BABY_NAME = _(u'宝宝名不能为空')
 MSG_EMPTY_EMAIL = _(u'邮箱不能为空')
 MSG_EMPTY_PASSWORD = _(u'密码不能为空')
 MSG_INVALID_EMAIL = _(u'邮箱格式不正确')
+MSG_NO_SUCH_EMAIL = _(u'此邮箱不存在')
 MSG_INVALID_PASSWORD = _(u'密码不能少于6位')
 MSG_DUPLICATE_USER = _(u'该用户已存在')
 MSG_DUPLICATE_EMAIL = _(u'该邮箱已存在')
@@ -49,6 +49,8 @@ MSG_GET_USERS_SUCCESS = _(u'获取用户成功')
 MSG_LOGIN_SUCCESS = _(u'登入成功')
 MSG_NOT_ACTIVE_USER = _(u'该用户暂时不可用')
 MSG_INCORRECT_USER_NAME_OR_PASSWORD = _(u'用户名或账号错误')
+MSG_SEND_VERIFY_CODE_SUCCESS = _(u'验证码发送成功')
+MSG_SEND_VERIFY_CODE_MESSAGES = _(u'你的验证码为%s')
 
 # event message
 MSG_EMPTY_EVENT_TITLE = _(u'标题不能为空')

@@ -14,14 +14,14 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from validate_email import validate_email
-
+from django.utils.crypto import get_random_string
 from babycare.serializers.baby_user import BabyUserSerializer
 from babycare.serializers.event import EventSerializer
 from backend.settings import OSS_ACCESS_KEY_ID
 from backend.settings import OSS_ACCESS_KEY_SECRET
 from backend.settings import OSS_BUCKET_NAME
 from backend.settings import OSS_ENDPOINT
-from constants import CODE_DUPLICATE_EMAIL
+from constants import CODE_DUPLICATE_EMAIL, MSG_SEND_VERIFY_CODE_SUCCESS, MSG_NO_SUCH_EMAIL
 from constants import CODE_DUPLICATE_USER
 from constants import CODE_EMPTY_EMAIL
 from constants import CODE_EMPTY_PASSWORD
@@ -32,7 +32,8 @@ from constants import CODE_INVALID_REQUEST
 from constants import CODE_SUCCESS, MSG_EMPTY_EVENT_TITLE, CODE_EMPTY_EVENT_TITLE, MSG_EMPTY_EVENT_MESSAGE, \
     CODE_EMPTY_EVENT_MESSAGE, \
     MSG_CREATE_EVENT_SUCCESS, MSG_INCORRECT_USER_NAME_OR_PASSWORD, \
-    CODE_INCORRECT_USER_NAME_OR_PASSWORD, MSG_NOT_ACTIVE_USER, CODE_NOT_ACTIVE, MSG_LOGIN_SUCCESS, MSG_GET_USERS_SUCCESS, \
+    CODE_INCORRECT_USER_NAME_OR_PASSWORD, MSG_NOT_ACTIVE_USER, CODE_NOT_ACTIVE, MSG_LOGIN_SUCCESS, \
+    MSG_GET_USERS_SUCCESS, \
     MSG_EMPTY_BABY_NAME, CODE_EMPTY_BABY_NAME, PROFILE_FOOTER_IMAGE
 from constants import MIN_PASSWORD_LEN
 from constants import MSG_400
@@ -46,7 +47,7 @@ from constants import MSG_INVALID_EMAIL
 from constants import MSG_INVALID_PASSWORD
 from models import BabyUser
 from models import Event
-from utils import json_response, invalid_token_response, upload_image_to_oss
+from utils import json_response, invalid_token_response, upload_image_to_oss, send_email
 from utils import simple_json_response
 
 
@@ -78,7 +79,8 @@ class UserViewSet(CustomModelViewSet):
         serializer.is_valid()
         # pdb.set_trace()
 
-        return json_response(super(UserViewSet, self).list(request, *args, **kwargs).data, CODE_SUCCESS, MSG_GET_USERS_SUCCESS)
+        return json_response(super(UserViewSet, self).list(request, *args, **kwargs).data, CODE_SUCCESS,
+                             MSG_GET_USERS_SUCCESS)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -171,6 +173,27 @@ def login_view(request):
             return simple_json_response(CODE_INCORRECT_USER_NAME_OR_PASSWORD, MSG_INCORRECT_USER_NAME_OR_PASSWORD)
     else:
         return simple_json_response(CODE_INCORRECT_USER_NAME_OR_PASSWORD, MSG_INCORRECT_USER_NAME_OR_PASSWORD)
+
+
+@api_view(['POST'])
+def send_verify_code_view(request):
+    email = request.data.get('email')
+    # pdb.set_trace()
+    if not email:
+        return simple_json_response(CODE_EMPTY_EMAIL, MSG_EMPTY_EMAIL)
+    elif not User.objects.filter(email=email.lower()) and \
+            not User.objects.filter(username=email.lower()):
+        return simple_json_response(CODE_INVALID_EMAIL, MSG_NO_SUCH_EMAIL)
+
+    if User.objects.filter(email=email.lower()):
+        baby = User.objects.get(email=email.lower())
+    elif User.objects.filter(username=email.lower()):
+        baby = User.objects.get(username=email.lower())
+
+    verify_code = get_random_string(length=4).lower()
+    send_email(baby, email, verify_code)
+
+    return simple_json_response(CODE_SUCCESS, MSG_SEND_VERIFY_CODE_SUCCESS)
 
 
 class EventViewSet(CustomModelViewSet):
