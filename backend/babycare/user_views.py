@@ -158,7 +158,7 @@ class UserViewSet(CustomModelViewSet):
                     if hobbies:
                         baby.hobbies = hobbies
                     if base64:
-                        image_name = user.name + time.strftime('%Y%m%d%H%M%S') + PROFILE_FOOTER_IMAGE
+                        image_name = user.username + time.strftime('%Y%m%d%H%M%S') + PROFILE_FOOTER_IMAGE
                         profile = upload_image_to_oss(image_name, base64)
                         baby.profile = profile
                     baby.save()
