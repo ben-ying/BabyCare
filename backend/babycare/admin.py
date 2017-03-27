@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from models import BabyUser
+from models import BabyUser, Verify
 from models import Event
 
 
@@ -16,3 +16,8 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ('title', 'baby',)
     search_fields = ('title', 'baby',)
 admin.site.register(Event, EventAdmin)
+
+class VerifyAdmin(admin.ModelAdmin):
+    list_display = ('user', 'email_verify_code', 'created')
+    search_fields = ('user', 'email_verify_code', 'created')
+admin.site.register(Verify, VerifyAdmin)

@@ -76,15 +76,15 @@ public class UserHistory extends SugarRecord {
         isPhoneActive = phoneActive;
     }
 
-    public static void saveUserHistory(String username, BabyUser babyUser) {
+    public static void saveUserHistory(String username, User user) {
         UserHistory.deleteAll(UserHistory.class, "username = ?", username);
         UserHistory userHistory = new UserHistory();
         userHistory.setUsername(username);
-        userHistory.setBabyName(babyUser.getBabyName());
-        userHistory.setProfile(babyUser.getProfile());
-        userHistory.setGender(babyUser.getGender());
-        userHistory.setEmailActivate(babyUser.isEmailActivate());
-        userHistory.setPhoneActive(babyUser.isPhoneActive());
+        userHistory.setBabyName(user.getBabyName());
+        userHistory.setProfile(user.getProfile());
+        userHistory.setGender(user.getGender());
+        userHistory.setEmailActivate(user.isEmailActivate());
+        userHistory.setPhoneActive(user.isPhoneActive());
         userHistory.save();
     }
 }

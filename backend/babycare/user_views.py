@@ -21,7 +21,8 @@ from backend.settings import OSS_ACCESS_KEY_ID
 from backend.settings import OSS_ACCESS_KEY_SECRET
 from backend.settings import OSS_BUCKET_NAME
 from backend.settings import OSS_ENDPOINT
-from constants import CODE_DUPLICATE_EMAIL, MSG_SEND_VERIFY_CODE_SUCCESS, MSG_NO_SUCH_EMAIL
+from constants import CODE_DUPLICATE_EMAIL, MSG_SEND_VERIFY_CODE_SUCCESS, MSG_NO_SUCH_EMAIL, MSG_EMPTY_VERIFY_CODE, \
+    CODE_EMPTY_VERIFY_CODE, MSG_USER_NOT_EXISTS, CODE_USER_NOT_EXISTS
 from constants import CODE_DUPLICATE_USER
 from constants import CODE_EMPTY_EMAIL
 from constants import CODE_EMPTY_PASSWORD
@@ -45,9 +46,9 @@ from constants import MSG_EMPTY_PASSWORD
 from constants import MSG_EMPTY_USERNAME
 from constants import MSG_INVALID_EMAIL
 from constants import MSG_INVALID_PASSWORD
-from models import BabyUser
+from models import BabyUser, Verify
 from models import Event
-from utils import json_response, invalid_token_response, upload_image_to_oss, send_email
+from utils import json_response, invalid_token_response, upload_image_to_oss, send_email, get_user_by_token
 from utils import simple_json_response
 
 
@@ -68,16 +69,8 @@ class UserViewSet(CustomModelViewSet):
     serializer_class = BabyUserSerializer
 
     def list(self, request, *args, **kwargs):
-        # for param in (OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET_NAME, OSS_ENDPOINT):
-        #     assert '<' not in param, '请设置参数：' + param
-        #
-        # bucket = oss2.Bucket(oss2.Auth(OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET), OSS_ENDPOINT, OSS_BUCKET_NAME)
-        # result = bucket.get_object('test.png', process='image/info')
-        # json_content = result.read()
-        # decoded_json = json.loads(oss2.to_unicode(json_content))
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid()
-        # pdb.set_trace()
 
         return json_response(super(UserViewSet, self).list(request, *args, **kwargs).data, CODE_SUCCESS,
                              MSG_GET_USERS_SUCCESS)
@@ -135,6 +128,49 @@ class UserViewSet(CustomModelViewSet):
         self.request.user.save()
         serializer.save(user=self.request.user)
 
+    def update(self, request, *args, **kwargs):
+        token = request.data.get('token')
+        baby_name = request.data.get('baby_name')
+        phone = request.data.get('phone')
+        email = request.data.get('email')
+        gender = request.data.get('gender')
+        birthday = request.data.get('birthday')
+        hobbies = request.data.get('hobbies')
+        base64 = request.data.get('base64')
+        user = get_user_by_token(token)
+
+        if user:
+            if BabyUser.objects.filter(user=user):
+                if email:
+                    user.email = email
+                    user.save()
+
+                baby = BabyUser.objects.get(user=user)
+                if baby:
+                    if baby_name:
+                        baby.baby_name = baby_name
+                    if phone:
+                        baby.phone = phone
+                    if gender:
+                        baby.gender = gender
+                    if birthday:
+                        baby.birth = birthday
+                    if hobbies:
+                        baby.hobbies = hobbies
+                    if base64:
+                        image_name = user.name + time.strftime('%Y%m%d%H%M%S') + PROFILE_FOOTER_IMAGE
+                        profile = upload_image_to_oss(image_name, base64)
+                        baby.profile = profile
+                    baby.save()
+
+                # pdb.set_trace()
+                response_data = BabyUserSerializer(baby).data
+                response_data['token'] = Token.objects.get(user=user).key
+
+                return json_response(response_data, CODE_SUCCESS, MSG_LOGIN_SUCCESS)
+
+        return invalid_token_response()
+
 
 @api_view(['POST'])
 def login_view(request):
@@ -160,7 +196,6 @@ def login_view(request):
         if baby:
             if user.is_active:
                 response_data = BabyUserSerializer(baby).data
-                # pdb.set_trace()
                 if Token.objects.filter(user=user):
                     response_data['token'] = Token.objects.get(user=user).key
                     return json_response(response_data, CODE_SUCCESS, MSG_LOGIN_SUCCESS)
@@ -178,6 +213,7 @@ def login_view(request):
 @api_view(['POST'])
 def send_verify_code_view(request):
     email = request.data.get('email')
+
     # pdb.set_trace()
     if not email:
         return simple_json_response(CODE_EMPTY_EMAIL, MSG_EMPTY_EMAIL)
@@ -196,6 +232,24 @@ def send_verify_code_view(request):
     return simple_json_response(CODE_SUCCESS, MSG_SEND_VERIFY_CODE_SUCCESS)
 
 
+@api_view(['POST'])
+def verify_code_view(request):
+    code = request.data.get('code')
+    token = request.data.get('token')
+    user = get_user_by_token(token)
+    # pdb.set_trace()
+    if not code:
+        return simple_json_response(CODE_EMPTY_VERIFY_CODE, MSG_EMPTY_VERIFY_CODE)
+
+    if user:
+        if Verify.objects.filter(user=user, email_verify_code=code):
+            return simple_json_response(CODE_SUCCESS, MSG_SEND_VERIFY_CODE_SUCCESS)
+        else:
+            return simple_json_response(CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS)
+    else:
+        return invalid_token_response()
+
+
 class EventViewSet(CustomModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
@@ -205,14 +259,14 @@ class EventViewSet(CustomModelViewSet):
         token = request.data.get('token')
         title = request.data.get('title')
         message = request.data.get('message')
+        user = get_user_by_token(token)
 
         if not title:
             return simple_json_response(CODE_EMPTY_EVENT_TITLE, MSG_EMPTY_EVENT_TITLE)
         elif not message:
             return simple_json_response(CODE_EMPTY_EVENT_MESSAGE, MSG_EMPTY_EVENT_MESSAGE)
         elif serializer.is_valid():
-            if Token.objects.filter(key=token):
-                user = Token.objects.get(key=token).user
+            if user:
                 serializer.validated_data['baby_id'] = BabyUser.objects.get(user=user).id
                 self.perform_create(serializer)
                 return json_response(serializer.data, CODE_SUCCESS, MSG_CREATE_EVENT_SUCCESS)

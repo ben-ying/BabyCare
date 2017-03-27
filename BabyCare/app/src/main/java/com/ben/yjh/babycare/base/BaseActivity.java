@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
@@ -22,10 +21,8 @@ import android.view.ViewConfiguration;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.login.LoginActivity;
-import com.ben.yjh.babycare.model.BabyUser;
+import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.util.Constants;
-
-import java.io.File;
 
 public abstract class BaseActivity extends AppCompatActivity implements OnClickListener {
 
@@ -35,7 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnClickL
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
     public Toolbar toolbar;
-    public BabyUser babyUser;
+    public User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,10 +135,10 @@ public abstract class BaseActivity extends AppCompatActivity implements OnClickL
     }
 
     public void logout() {
-        if (babyUser != null) {
-            babyUser.setLogin(false);
-            babyUser.setToken(null);
-            babyUser.save();
+        if (user != null) {
+            user.setLogin(false);
+            user.setToken(null);
+            user.save();
         }
         Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

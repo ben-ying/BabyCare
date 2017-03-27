@@ -29,7 +29,7 @@ import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.UserTaskHandler;
-import com.ben.yjh.babycare.model.BabyUser;
+import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
@@ -39,7 +39,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Calendar;
 
-public class PersonalInfoActivity extends BaseActivity {
+public class UserInfoActivity extends BaseActivity {
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -61,11 +61,11 @@ public class PersonalInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_personal_info);
+        setContentView(R.layout.activity_user_info);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
-        babyUser = BabyUser.getBabyUser();
-        if (babyUser == null) {
+        user = User.getBabyUser();
+        if (user == null) {
             logout();
         }
 
@@ -95,15 +95,15 @@ public class PersonalInfoActivity extends BaseActivity {
     }
 
     private void setValues() {
-        mBabyNameItem.setValue(R.string.baby_name, babyUser.getBabyName(), R.string.edit_baby_name);
-        mEmailItem.setValue(R.string.email, babyUser.getEmail(), R.string.edit_email);
-        mPhoneItem.setValue(R.string.phone, babyUser.getPhone(), R.string.edit_phone);
-        mGenderItem.setValue(R.string.gender, babyUser.getGenderValue(this), R.string.male);
-        mBirthItem.setValue(R.string.birth, babyUser.getBirth(), R.string.edit_birth);
-        mHobbiesItem.setValue(R.string.hobbies, babyUser.getHobbies(), R.string.edit_hobbies);
-        MyApplication.displayImage(babyUser.getProfile(),
+        mBabyNameItem.setValue(R.string.baby_name, user.getBabyName(), R.string.edit_baby_name);
+        mEmailItem.setValue(R.string.email, user.getEmail(), R.string.edit_email);
+        mPhoneItem.setValue(R.string.phone, user.getPhone(), R.string.edit_phone);
+        mGenderItem.setValue(R.string.gender, user.getGenderValue(this), R.string.male);
+        mBirthItem.setValue(R.string.birth, user.getBirth(), R.string.edit_birth);
+        mHobbiesItem.setValue(R.string.hobbies, user.getHobbies(), R.string.edit_hobbies);
+        MyApplication.displayImage(user.getProfile(),
                 mProfileImageView, ImageUtils.getProfileImageOptions(this), false);
-        ((TextView) findViewById(R.id.tv_name)).setText(babyUser.getUsername());
+        ((TextView) findViewById(R.id.tv_name)).setText(user.getUsername());
         ((TextView) findViewById(R.id.tv_name_title)).setText(R.string.username);
     }
 
@@ -111,7 +111,7 @@ public class PersonalInfoActivity extends BaseActivity {
         String key = null;
         switch (id) {
             case R.id.item_baby_name:
-                key = Constants.USERNAME;
+                key = Constants.BABY_NAME;
                 break;
             case R.id.item_email:
                 key = Constants.EMAIL;
@@ -134,38 +134,19 @@ public class PersonalInfoActivity extends BaseActivity {
         }
 
         if (key != null) {
-            new UserTaskHandler(this).editUserInfo(key, value,
-                    new HttpResponseInterface<HttpBaseResult>() {
+            new UserTaskHandler(this).editUserInfo(user.getUserId(), key, value, user.getToken(),
+                    new HttpResponseInterface<User>() {
                         @Override
                         public void onStart() {
 
                         }
 
                         @Override
-                        public void onSuccess(HttpBaseResult classOfT) {
-                            switch (id) {
-                                case R.id.item_baby_name:
-                                    babyUser.setBabyName(value);
-                                    break;
-                                case R.id.item_email:
-                                    babyUser.setEmail(value);
-                                    break;
-                                case R.id.item_phone:
-                                    babyUser.setPhone(value);
-                                    break;
-                                case R.id.item_gender:
-                                    babyUser.setGenderStr(PersonalInfoActivity.this, value);
-                                    break;
-                                case R.id.item_birth:
-                                    babyUser.setBirth(value);
-                                    break;
-                                case R.id.item_hobbies:
-                                    babyUser.setHobbies(value);
-                                    break;
-                            }
-
-                            babyUser.save();
+                        public void onSuccess(User classOfT) {
+                            user = classOfT;
+                            user.save();
                             mUpdate = true;
+                            setValues();
                         }
 
                         @Override
@@ -198,8 +179,6 @@ public class PersonalInfoActivity extends BaseActivity {
                     editText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 } else if (id == R.id.item_phone) {
                     editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                } else if (id == R.id.item_hobbies) {
-                    editText.setLines(5);
                 }
                 editText.setSelection(editText.getText().length());
                 final AlertDialog dialog = new AlertDialog.Builder(this, R.style.MyDialogTheme)
@@ -266,7 +245,7 @@ public class PersonalInfoActivity extends BaseActivity {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-                                editPersonalInfoTask(id, year + "-" + monthOfYear + "-" + dayOfMonth);
+                                editPersonalInfoTask(id, year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                             }
                         }
                         , c.get(Calendar.YEAR), c.get(Calendar.MONTH), c
@@ -347,7 +326,7 @@ public class PersonalInfoActivity extends BaseActivity {
     public void finish() {
         if (mUpdate) {
             Intent intent = getIntent();
-            intent.putExtra(Constants.BABY_USER, babyUser);
+            intent.putExtra(Constants.BABY_USER, user);
             setResult(RESULT_OK, intent);
         }
 

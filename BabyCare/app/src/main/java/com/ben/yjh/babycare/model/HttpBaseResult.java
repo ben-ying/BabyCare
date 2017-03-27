@@ -2,18 +2,18 @@ package com.ben.yjh.babycare.model;
 
 
 public class HttpBaseResult {
-    private String code;
+    private int code;
     private String message;
 
     public boolean isSuccess() {
-        return code.equals("200");
+        return code == 200;
     }
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 

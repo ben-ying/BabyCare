@@ -31,4 +31,7 @@ public class Constants {
     public static final int COMMENT_REQUEST_CODE = 108;
     public static final int GALLERY_REQUEST_CODE = 109;
 
+
+    public static final int INVALID_ACCESS_TOKEN = 401;
+
 }

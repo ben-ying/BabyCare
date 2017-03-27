@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 
-public class BabyUser extends UserHistory implements Serializable {
+public class User extends UserHistory implements Serializable {
     @SerializedName("baby_id") int babyId;
     @SerializedName("user_id") int userId;
     @SerializedName("email") String email;
@@ -22,16 +22,16 @@ public class BabyUser extends UserHistory implements Serializable {
 
     @Override
     public long save() {
-        BabyUser.deleteAll(BabyUser.class);
+        User.deleteAll(User.class);
         isLogin = true;
 
         return super.save();
     }
 
-    public static BabyUser getBabyUser() {
-        List<BabyUser> babyUsers = BabyUser.find(BabyUser.class, "is_login = ?", "1");
-        if (babyUsers.size() == 1 && !babyUsers.get(0).getToken().isEmpty()) {
-            return babyUsers.get(0);
+    public static User getBabyUser() {
+        List<User> users = User.find(User.class, "is_login = ?", "1");
+        if (users.size() == 1 && !users.get(0).getToken().isEmpty()) {
+            return users.get(0);
         } else {
             return null;
         }

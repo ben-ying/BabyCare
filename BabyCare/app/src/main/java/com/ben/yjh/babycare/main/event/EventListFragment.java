@@ -59,8 +59,8 @@ public class EventListFragment extends BaseFragment
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setNestedScrollingEnabled(false);
-        mAdapter = new EventAdapter(activity, activity.babyUser, Event.find(Event.class, "user_id = ?",
-                String.valueOf(activity.babyUser.getUserId())), this);
+        mAdapter = new EventAdapter(activity, activity.user, Event.find(Event.class, "user_id = ?",
+                String.valueOf(activity.user.getUserId())), this);
         mRecyclerView.setAdapter(mAdapter);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.google_blue,
                 R.color.google_green, R.color.google_red, R.color.google_yellow);
@@ -98,7 +98,7 @@ public class EventListFragment extends BaseFragment
     }
 
     private void getEventsTask() {
-        new EventTaskHandler(activity, activity.babyUser.getToken()).getEvents(
+        new EventTaskHandler(activity, activity.user.getToken()).getEvents(
                 new HttpResponseInterface<Event[]>() {
                     @Override
                     public void onStart() {
@@ -108,7 +108,7 @@ public class EventListFragment extends BaseFragment
                     @Override
                     public void onSuccess(Event[] classOfT) {
                         Event.deleteAll(Event.class, "user_id = ?",
-                                String.valueOf(activity.babyUser.getUserId()));
+                                String.valueOf(activity.user.getUserId()));
                         ArrayList<Event> events = new ArrayList<>();
                         for (Event event : classOfT) {
                             event.save();

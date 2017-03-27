@@ -28,7 +28,7 @@ import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.main.event.AddEventActivity;
 import com.ben.yjh.babycare.main.event.EventListFragment;
 import com.ben.yjh.babycare.main.setting.SettingFragment;
-import com.ben.yjh.babycare.model.BabyUser;
+import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
@@ -52,8 +52,8 @@ public class MainActivity extends BaseActivity
         setSupportActionBar(toolbar);
         setStatusBarMargin(R.id.cl_layout);
 
-        babyUser = BabyUser.getBabyUser();
-        if (babyUser == null) {
+        user = User.getBabyUser();
+        if (user == null) {
             logout();
         }
 
@@ -117,11 +117,11 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.design_navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
         TextView nameTextView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_name);
-        nameTextView.setText(babyUser.getBabyName());
+        nameTextView.setText(user.getBabyName());
         TextView emailTextView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_email);
-        emailTextView.setText(babyUser.getEmail());
+        emailTextView.setText(user.getEmail());
         ImageView profileImageView = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.img_profile);
-        MyApplication.displayImage(babyUser.getProfile(),
+        MyApplication.displayImage(user.getProfile(),
                 profileImageView, ImageUtils.getProfileImageOptions(this), false);
     }
 
@@ -133,7 +133,7 @@ public class MainActivity extends BaseActivity
 
         switch (item.getItemId()) {
             case R.id.nav_personal_info:
-                intent = new Intent(this, PersonalInfoActivity.class);
+                intent = new Intent(this, UserInfoActivity.class);
                 startActivityForResult(intent, Constants.SETTING_REQUEST_CODE);
                 break;
 //            case R.id.nav_gallery:

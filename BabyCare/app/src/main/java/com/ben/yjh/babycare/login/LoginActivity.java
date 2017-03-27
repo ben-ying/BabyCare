@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,7 +22,7 @@ import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.UserTaskHandler;
 import com.ben.yjh.babycare.main.MainActivity;
-import com.ben.yjh.babycare.model.BabyUser;
+import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.model.UserHistory;
 import com.ben.yjh.babycare.util.AlertUtils;
@@ -56,12 +57,12 @@ public class LoginActivity extends BaseActivity {
         findViewById(R.id.tv_forgot_password).setOnClickListener(this);
         mGenderImageView = (ImageView) findViewById(R.id.img_profile);
         mGenderImageView.setOnClickListener(this);
-        List<BabyUser> babyUsers = BabyUser.find(BabyUser.class, "is_login = ?", "1");
-        if (babyUsers.size() > 0) {
-            if (babyUsers.get(0).getToken().isEmpty()) {
+        List<User> users = User.find(User.class, "is_login = ?", "1");
+        if (users.size() > 0) {
+            if (users.get(0).getToken().isEmpty()) {
                 mGenderImageView.setClickable(false);
                 mGenderImageView.setEnabled(false);
-                MyApplication.displayImage(babyUsers.get(0).getProfile(), mGenderImageView,
+                MyApplication.displayImage(users.get(0).getProfile(), mGenderImageView,
                         ImageUtils.getProfileImageOptions(this), false, new ImageLoadingListener() {
                             @Override
                             public void onLoadingStarted(String s, View view) {
@@ -150,14 +151,14 @@ public class LoginActivity extends BaseActivity {
 
     private void loginTask() {
         new UserTaskHandler(this).login(mUsername, mPassword,
-                new HttpResponseInterface<BabyUser>() {
+                new HttpResponseInterface<User>() {
                     @Override
                     public void onStart() {
 
                     }
 
                     @Override
-                    public void onSuccess(BabyUser classOfT) {
+                    public void onSuccess(User classOfT) {
                         classOfT.save();
                         UserHistory.saveUserHistory(mUsername, classOfT);
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -175,7 +176,7 @@ public class LoginActivity extends BaseActivity {
                 });
     }
 
-    private void sendVerifyCodeTask(final String email) {
+    private void sendVerifyCodeTask(final String email, final AlertDialog dialog) {
         new UserTaskHandler(this).sendVerifyCode(email,
                 new HttpResponseInterface<HttpBaseResult>() {
                     @Override
@@ -185,9 +186,10 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(HttpBaseResult classOfT) {
-//                        Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
-//                        intent.putExtra(Constants.EMAIL, email);
-//                        startActivityForResult(intent, Constants.RESET_PASSWORD_REQUEST_CODE);
+                        dialog.dismiss();
+                        Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+                        intent.putExtra(Constants.EMAIL, email);
+                        startActivityForResult(intent, Constants.RESET_PASSWORD_REQUEST_CODE);
                     }
 
                     @Override
@@ -245,18 +247,13 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         String sentEmail = emailEditText.getText().toString();
-//                        if (sentEmail.isEmpty()) {
-//                            emailEditText.setError(getString(R.string.empty_email));
-//                        } else if (!Patterns.EMAIL_ADDRESS.matcher(sentEmail).matches()) {
-//                            emailEditText.setError(getString(R.string.invalid_email));
-//                        } else {
-                            // TODO: 3/10/17
-//                                    sendVerifyCodeTask(sentEmail);
-                            dialog.dismiss();
-                            Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
-                            intent.putExtra(Constants.EMAIL, sentEmail);
-                            startActivityForResult(intent, Constants.RESET_PASSWORD_REQUEST_CODE);
-//                        }
+                        if (sentEmail.isEmpty()) {
+                            emailEditText.setError(getString(R.string.empty_email));
+                        } else if (!Patterns.EMAIL_ADDRESS.matcher(sentEmail).matches()) {
+                            emailEditText.setError(getString(R.string.invalid_email));
+                        } else {
+                            sendVerifyCodeTask(sentEmail, dialog);
+                        }
                     }
                 });
                 break;

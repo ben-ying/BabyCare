@@ -17,6 +17,7 @@ from constants import CODE_SUCCESS, CODE_INVALID_TOKEN, MSG_401, TEMP_IMAGE, PRO
 from constants import MIN_PASSWORD_LEN
 import smtplib
 from email.mime.text import MIMEText
+from rest_framework.authtoken.models import Token
 
 
 def json_response(result, code=CODE_SUCCESS, message=''):
@@ -74,10 +75,21 @@ def send_email(user, to_email, verify_code, is_email_verify=True):
         if is_email_verify:
             verify.email_verify_code = verify_code
 
-    # import pdb;
+    # import pdb
     # pdb.set_trace()
     s = smtplib.SMTP('localhost')
+    # s = smtplib.SMTP('192.168.1.130:8000')
+    # pdb.set_trace()
     s.sendmail(EMAIL_HOST_USER, [to_email], msg)
     s.quit()
+
+
+def get_user_by_token(token):
+    if Token.objects.filter(key=token):
+        return Token.objects.get(key=token).user
+
+    return None
+
+
 
 

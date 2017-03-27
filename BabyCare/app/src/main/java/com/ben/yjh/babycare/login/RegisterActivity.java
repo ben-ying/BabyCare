@@ -21,7 +21,7 @@ import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.UserTaskHandler;
 import com.ben.yjh.babycare.main.MainActivity;
-import com.ben.yjh.babycare.model.BabyUser;
+import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.model.UserHistory;
 import com.ben.yjh.babycare.util.AlertUtils;
@@ -159,14 +159,14 @@ public class RegisterActivity extends BaseActivity {
             case R.id.btn_register:
                 if (isValid()) {
                     new UserTaskHandler(this).register(mUsername, mBabyName, mPassword, mEmail,
-                            mProfileBase64, new HttpResponseInterface<BabyUser>() {
+                            mProfileBase64, new HttpResponseInterface<User>() {
                         @Override
                         public void onStart() {
 
                         }
 
                         @Override
-                        public void onSuccess(BabyUser classOfT) {
+                        public void onSuccess(User classOfT) {
                             classOfT.save();
                             UserHistory.saveUserHistory(mUsername, classOfT);
                             Intent intent = new Intent(RegisterActivity.this, MainActivity.class);

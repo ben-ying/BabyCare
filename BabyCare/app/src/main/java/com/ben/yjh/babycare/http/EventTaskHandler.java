@@ -4,19 +4,14 @@ package com.ben.yjh.babycare.http;
 import android.content.Context;
 
 import com.android.volley.Request;
-import com.ben.yjh.babycare.model.BabyUser;
 import com.ben.yjh.babycare.model.Event;
 import com.ben.yjh.babycare.model.EventComment;
-import com.ben.yjh.babycare.model.EventLike;
 import com.ben.yjh.babycare.model.HttpBaseResult;
-import com.google.gson.JsonObject;
-import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class EventTaskHandler extends BaseTaskHandler {

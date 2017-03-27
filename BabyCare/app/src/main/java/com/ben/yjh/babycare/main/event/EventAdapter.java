@@ -2,7 +2,6 @@ package com.ben.yjh.babycare.main.event;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,18 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
-import android.widget.Toast;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.http.EventTaskHandler;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
-import com.ben.yjh.babycare.login.LoginActivity;
-import com.ben.yjh.babycare.http.UserTaskHandler;
-import com.ben.yjh.babycare.main.MainActivity;
-import com.ben.yjh.babycare.model.BabyUser;
+import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.model.Event;
 import com.ben.yjh.babycare.model.HttpBaseResult;
-import com.ben.yjh.babycare.model.UserHistory;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.List;
@@ -31,7 +25,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     private Context mContext;
-    private BabyUser mBabyUser;
+    private User mUser;
     private EventRecyclerViewInterface mInterface;
     private List<Event> mEvents;
 
@@ -48,10 +42,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         void intent2CommentList();
     }
 
-    EventAdapter(Context context, BabyUser babyUser, List<Event> events,
+    EventAdapter(Context context, User user, List<Event> events,
                  EventRecyclerViewInterface recyclerViewInterface) {
         this.mContext = context;
-        this.mBabyUser = babyUser;
+        this.mUser = user;
         this.mEvents = events;
         this.mInterface = recyclerViewInterface;
     }
@@ -128,7 +122,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     }
 
     private void likeTask(final RadioButton radioButton, Event event) {
-        new EventTaskHandler(mContext, mBabyUser.getToken()).addLike(mBabyUser.getUserId(), event,
+        new EventTaskHandler(mContext, mUser.getToken()).addLike(mUser.getUserId(), event,
                 new HttpResponseInterface<HttpBaseResult>() {
                     @Override
                     public void onStart() {

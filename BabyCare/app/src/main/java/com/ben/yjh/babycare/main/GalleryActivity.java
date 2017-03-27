@@ -14,7 +14,7 @@ import android.widget.GridView;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
-import com.ben.yjh.babycare.model.BabyUser;
+import com.ben.yjh.babycare.model.User;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,8 +30,8 @@ public class GalleryActivity extends BaseActivity {
         setContentView(R.layout.activity_gallery);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
-        babyUser = BabyUser.getBabyUser();
-        if (babyUser == null) {
+        user = User.getBabyUser();
+        if (user == null) {
             logout();
         }
 
