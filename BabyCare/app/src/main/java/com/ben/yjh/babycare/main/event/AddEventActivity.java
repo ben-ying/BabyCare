@@ -111,8 +111,10 @@ public class AddEventActivity extends BaseActivity {
 //                mCameraUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
 //                        Constants.EVENT_IMAGE_PREFIX + System.currentTimeMillis() + ".jpg"));
 //                showImageOptions(R.string.add_event, mCameraUri);
-                Intent intent = new Intent(this, GalleryActivity.class);
-                startActivityForResult(intent, Constants.GALLERY_REQUEST_CODE);
+                if (verifyStoragePermissions()) {
+                    Intent intent = new Intent(this, GalleryActivity.class);
+                    startActivityForResult(intent, Constants.GALLERY_REQUEST_CODE);
+                }
                 break;
         }
     }

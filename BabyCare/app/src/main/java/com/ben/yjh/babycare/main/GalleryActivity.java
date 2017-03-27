@@ -43,11 +43,11 @@ public class GalleryActivity extends BaseActivity {
         setStatusBarMargin(R.id.content_layout);
 
         GridView gridView = (GridView) findViewById(R.id.gridView);
-        String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID, MediaStore.Images.Thumbnails.DATA};
-        String orderBy = MediaStore.Images.Media._ID;
+        String[] columns = {MediaStore.Images.Thumbnails._ID, MediaStore.Images.Thumbnails.DATA};
+        String orderBy = MediaStore.Images.Thumbnails._ID;
         Cursor cursor = getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
-        int columnIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
+                MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
+        int columnIndex = cursor.getColumnIndex(MediaStore.Images.Thumbnails._ID);
         int count = cursor.getCount();
         List<Bitmap> bitmaps = new ArrayList<>();
         List<String> urls = new ArrayList<>();
@@ -56,14 +56,14 @@ public class GalleryActivity extends BaseActivity {
             cursor.moveToPosition(i);
             int id = cursor.getInt(columnIndex);
             int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA);
-            bitmaps.add(MediaStore.Images.Thumbnails.getThumbnail(
-                    getApplicationContext().getContentResolver(), id,
-                    MediaStore.Images.Thumbnails.MICRO_KIND, null));
+//            bitmaps.add(MediaStore.Images.Thumbnails.getThumbnail(
+//                    getApplicationContext().getContentResolver(), id,
+//                    MediaStore.Images.Thumbnails.MICRO_KIND, null));
             urls.add(Uri.fromFile(new File(cursor.getString(dataColumnIndex))).toString());
 
         }
         Log.d("TEST", "time: " + (System.currentTimeMillis() - time));
-        mAdapter = new GalleryAdapter(GalleryActivity.this, bitmaps, urls);
+        mAdapter = new GalleryAdapter(GalleryActivity.this, urls);
         gridView.setAdapter(mAdapter);
         cursor.close();
     }

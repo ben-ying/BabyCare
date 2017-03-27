@@ -84,15 +84,10 @@ public class ImageUtils {
     }
 
     public static DisplayImageOptions getThumbnailImageOptions() {
-        BitmapFactory.Options resizeOptions = new BitmapFactory.Options();
-        resizeOptions.inSampleSize = 5;
-        resizeOptions.inScaled = true;
-
         return new DisplayImageOptions.Builder()
                 .showImageOnLoading(0)
                 .showImageOnFail(0)
                 .showImageForEmptyUri(0)
-                .decodingOptions(resizeOptions)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .build();
