@@ -7,7 +7,7 @@ from django.forms import IntegerField
 
 class BabyUser(models.Model):
     id = IntegerField(label='ID')
-    user = models.ForeignKey(on_delete=models.CASCADE)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     baby_name = models.CharField(max_length=100, blank=True, null=True)
     phone = models.CharField(max_length=30, blank=True, null=True)
     gender = models.IntegerField(default=2) #0 for boy, 1 for girl, 2 for others
@@ -63,7 +63,7 @@ class LoginLog(models.Model):
 
 
 class Verify(models.Model):
-    user = models.ForeignKey(on_delete=models.CASCADE)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     email_verify_code = models.CharField(max_length=10, blank=True, null=True)
     phone_verify_code = models.CharField(max_length=10, blank=True, null=True)
     created = models.DateTimeField(auto_now=True, blank=True, null=True)
