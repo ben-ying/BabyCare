@@ -13,11 +13,12 @@ from django.http import HttpResponse
 from babycare.models import Verify
 from backend.settings import OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET_NAME, OSS_ENDPOINT, EMAIL_HOST_USER
 from constants import CODE_SUCCESS, CODE_INVALID_TOKEN, MSG_401, TEMP_IMAGE, PROFILE_FOOTER_IMAGE, \
-    MSG_SEND_VERIFY_CODE_MESSAGES
+    PASSWORD_VERIFY_CODE_EMAIL_SUBJECT, PASSWORD_VERIFY_CODE_EMAIL_CONTENT
 from constants import MIN_PASSWORD_LEN
 import smtplib
 from email.mime.text import MIMEText
 from rest_framework.authtoken.models import Token
+from django.core.mail import EmailMessage
 
 
 def json_response(result, code=CODE_SUCCESS, message=''):
@@ -60,11 +61,6 @@ def upload_image_to_oss(name, base64):
 
 
 def send_email(user, to_email, verify_code, is_email_verify=True):
-    msg = dict()
-    msg['Subject'] = MSG_SEND_VERIFY_CODE_MESSAGES % verify_code
-    msg['From'] = EMAIL_HOST_USER
-    msg['To'] = to_email
-
     if Verify.objects.filter(user=user):
         verify = Verify.objects.get(user=user)
         if is_email_verify:
@@ -75,13 +71,8 @@ def send_email(user, to_email, verify_code, is_email_verify=True):
         if is_email_verify:
             verify.email_verify_code = verify_code
 
-    # import pdb
-    # pdb.set_trace()
-    s = smtplib.SMTP('localhost')
-    # s = smtplib.SMTP('192.168.1.130:8000')
-    # pdb.set_trace()
-    s.sendmail(EMAIL_HOST_USER, [to_email], msg)
-    s.quit()
+    email = EmailMessage(PASSWORD_VERIFY_CODE_EMAIL_SUBJECT, PASSWORD_VERIFY_CODE_EMAIL_CONTENT %verify_code, to_email)
+    email.send()
 
 
 def get_user_by_token(token):
