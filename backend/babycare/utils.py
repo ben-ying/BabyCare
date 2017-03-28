@@ -8,6 +8,8 @@ from shutil import copyfile
 
 import oss2
 import time
+
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 
 from babycare.models import Verify
@@ -33,6 +35,7 @@ def simple_json_response(code=CODE_SUCCESS, message=''):
     response_data = dict()
     response_data['code'] = code
     response_data['message'] = unicode(message)
+    response_data['result'] = {}
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
@@ -44,6 +47,12 @@ def invalid_token_response():
 def password_generator(size=MIN_PASSWORD_LEN, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
+
+def get_user(email):
+    try:
+        return User.objects.get(email=email.lower())
+    except User.DoesNotExist:
+        return None
 
 def upload_image_to_oss(name, base64):
     with open(TEMP_IMAGE, "wb") as fh:
@@ -71,8 +80,13 @@ def send_email(user, to_email, verify_code, is_email_verify=True):
         if is_email_verify:
             verify.email_verify_code = verify_code
 
-    email = EmailMessage(PASSWORD_VERIFY_CODE_EMAIL_SUBJECT, PASSWORD_VERIFY_CODE_EMAIL_CONTENT %verify_code, to_email)
-    email.send()
+    email = EmailMessage(PASSWORD_VERIFY_CODE_EMAIL_SUBJECT, PASSWORD_VERIFY_CODE_EMAIL_CONTENT %verify_code, to=[to_email])
+    try:
+        email.send()
+        verify.save()
+    except smtplib.SMTPDataError:
+        # todo not send email
+        pass
 
 
 def get_user_by_token(token):

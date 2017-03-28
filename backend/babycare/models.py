@@ -4,7 +4,6 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.forms import IntegerField
 
-
 class BabyUser(models.Model):
     id = IntegerField(label='ID')
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
@@ -69,5 +68,4 @@ class Verify(models.Model):
     created = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
-        return self.baby.username + '(' + \
-               self.email_verify_code + ',' + self.phone_verify_code + ')'
+        return self.user.username

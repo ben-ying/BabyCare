@@ -22,7 +22,8 @@ from backend.settings import OSS_ACCESS_KEY_SECRET
 from backend.settings import OSS_BUCKET_NAME
 from backend.settings import OSS_ENDPOINT
 from constants import CODE_DUPLICATE_EMAIL, MSG_SEND_VERIFY_CODE_SUCCESS, MSG_NO_SUCH_EMAIL, MSG_EMPTY_VERIFY_CODE, \
-    CODE_EMPTY_VERIFY_CODE, MSG_USER_NOT_EXISTS, CODE_USER_NOT_EXISTS
+    CODE_EMPTY_VERIFY_CODE, MSG_INCORRECT_VERIFY_CODE, CODE_INCORRECT_VERIFY_CODE, CODE_EXPIRED_VERIFY_CODE, MSG_EXPIRED_VERIFY_CODE, \
+    VERIFY_CODE_EXPIRED_TIME, CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS
 from constants import CODE_DUPLICATE_USER
 from constants import CODE_EMPTY_EMAIL
 from constants import CODE_EMPTY_PASSWORD
@@ -48,9 +49,9 @@ from constants import MSG_INVALID_EMAIL
 from constants import MSG_INVALID_PASSWORD
 from models import BabyUser, Verify
 from models import Event
-from utils import json_response, invalid_token_response, upload_image_to_oss, send_email, get_user_by_token
+from utils import json_response, invalid_token_response, upload_image_to_oss, send_email, get_user_by_token, get_user
 from utils import simple_json_response
-
+from django.utils.dateformat import format
 
 @api_view(['GET'])
 def api_root(request, format=None):
@@ -176,13 +177,6 @@ class UserViewSet(CustomModelViewSet):
 def login_view(request):
     username = request.data.get('username')
     password = request.data.get('password')
-
-    def get_user(email):
-        try:
-            return User.objects.get(email=email.lower())
-        except User.DoesNotExist:
-            return None
-
     user = authenticate(username=username, password=password)
 
     if not user and validate_email(username):
@@ -214,7 +208,6 @@ def login_view(request):
 def send_verify_code_view(request):
     email = request.data.get('email')
 
-    # pdb.set_trace()
     if not email:
         return simple_json_response(CODE_EMPTY_EMAIL, MSG_EMPTY_EMAIL)
     elif not User.objects.filter(email=email.lower()) and \
@@ -226,28 +219,44 @@ def send_verify_code_view(request):
     elif User.objects.filter(username=email.lower()):
         baby = User.objects.get(username=email.lower())
 
-    verify_code = get_random_string(length=4).lower()
+    verify_code = get_random_string(length=6, allowed_chars='0123456789').lower()
     send_email(baby, email, verify_code)
 
     return simple_json_response(CODE_SUCCESS, MSG_SEND_VERIFY_CODE_SUCCESS)
 
 
 @api_view(['POST'])
-def verify_code_view(request):
-    code = request.data.get('code')
-    token = request.data.get('token')
-    user = get_user_by_token(token)
-    # pdb.set_trace()
+def reset_password_with_verify_code_view(request):
+    code = request.data.get('verify_code')
+    email = request.data.get('email')
+    password = request.data.get('password')
+
     if not code:
         return simple_json_response(CODE_EMPTY_VERIFY_CODE, MSG_EMPTY_VERIFY_CODE)
+    elif not email:
+        return simple_json_response(CODE_EMPTY_EMAIL, MSG_EMPTY_EMAIL)
+    elif not password:
+        return simple_json_response(CODE_EMPTY_PASSWORD, MSG_EMPTY_PASSWORD)
+    elif not validate_email(email):
+        return simple_json_response(CODE_INVALID_EMAIL, MSG_INVALID_EMAIL)
+    elif len(password) < MIN_PASSWORD_LEN:
+        return simple_json_response(CODE_INVALID_PASSWORD, MSG_INVALID_PASSWORD)
 
+    user = get_user(email=email)
     if user:
-        if Verify.objects.filter(user=user, email_verify_code=code):
-            return simple_json_response(CODE_SUCCESS, MSG_SEND_VERIFY_CODE_SUCCESS)
+        if Verify.objects.filter(user=user, email_verify_code=code.lower()):
+            verify = Verify.objects.get(user=user, email_verify_code=code.lower())
+            if (time.time() - float(format(verify.created, 'U'))) > VERIFY_CODE_EXPIRED_TIME:
+                return simple_json_response(CODE_EXPIRED_VERIFY_CODE, MSG_EXPIRED_VERIFY_CODE)
+            else:
+                user.set_password(password)
+                user.save()
+                # pdb.set_trace()
+                return simple_json_response(CODE_SUCCESS, MSG_SEND_VERIFY_CODE_SUCCESS)
         else:
-            return simple_json_response(CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS)
+            return simple_json_response(CODE_INCORRECT_VERIFY_CODE, MSG_INCORRECT_VERIFY_CODE)
     else:
-        return invalid_token_response()
+        return simple_json_response(CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS)
 
 
 class EventViewSet(CustomModelViewSet):

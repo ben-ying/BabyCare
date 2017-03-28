@@ -5,6 +5,7 @@ import os
 from django.utils.translation import ugettext_lazy as _
 
 MIN_PASSWORD_LEN = 6
+VERIFY_CODE_EXPIRED_TIME = 5 * 60 # 5minutes
 TEMP_IMAGE = os.path.join(os.path.dirname(__file__), 'temp.jpg')
 PROFILE_FOOTER_IMAGE = '_profile.jpg'
 
@@ -23,7 +24,9 @@ CODE_NOT_EXISTS_EMAIL = 210
 CODE_NOT_ACTIVE = 211
 CODE_INCORRECT_USER_NAME_OR_PASSWORD = 212
 CODE_EMPTY_VERIFY_CODE = 213
-CODE_USER_NOT_EXISTS = 214
+CODE_INCORRECT_VERIFY_CODE = 214
+CODE_EXPIRED_VERIFY_CODE = 215
+CODE_USER_NOT_EXISTS = 216
 
 # event
 CODE_EMPTY_EVENT_TITLE = 300
@@ -53,7 +56,9 @@ MSG_NOT_ACTIVE_USER = _(u'该用户暂时不可用')
 MSG_INCORRECT_USER_NAME_OR_PASSWORD = _(u'用户名或账号错误')
 MSG_SEND_VERIFY_CODE_SUCCESS = _(u'验证码发送成功')
 MSG_EMPTY_VERIFY_CODE = _(u'验证码不能为空')
-MSG_USER_NOT_EXISTS = _(u'此邮箱用户不存在')
+MSG_INCORRECT_VERIFY_CODE = _(u'验证码错误')
+MSG_EXPIRED_VERIFY_CODE = _(u'验证码已过期')
+MSG_USER_NOT_EXISTS = _(u'该用户不存在')
 
 PASSWORD_VERIFY_CODE_EMAIL_SUBJECT = _(u'忘记密码验证码－嘟嘟手记')
 PASSWORD_VERIFY_CODE_EMAIL_CONTENT = _(u'您的验证码：%s。\n本邮件是系统自动发送的，请勿直接回复！感谢您的访问，祝您使用愉快！')

@@ -18,6 +18,7 @@ public class UserTaskHandler extends BaseTaskHandler {
     private static final String URL_USERS = "users/";
     private static final String URL_USER_LOGIN = "user/login";
     private static final String URL_SEND_VERIFY_CODE = "user/send_verify_code";
+    private static final String URL_RESET_PASSWORD = "user/reset_password";
 
     public UserTaskHandler(Context context) {
         super(context);
@@ -55,11 +56,27 @@ public class UserTaskHandler extends BaseTaskHandler {
         }
     }
 
-    public void sendVerifyCode(String email, HttpResponseInterface<HttpBaseResult> httpResponseInterface) {
+    public void sendVerifyCode(String email,
+                               HttpResponseInterface<HttpBaseResult> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
             bodyObject.put("email", email);
             new HttpPostTask(context).startTask(URL_SEND_VERIFY_CODE, Request.Method.POST,
+                    bodyObject, HttpBaseResult.class, true, httpResponseInterface);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void resetPassword(String email,String code, String password,
+                              HttpResponseInterface<HttpBaseResult> httpResponseInterface) {
+        try {
+            JSONObject bodyObject = new JSONObject();
+            bodyObject.put("email", email);
+            bodyObject.put("verify_code", code);
+            bodyObject.put("password", MD5Utils.getMD5ofStr(
+                    context.getString(R.string.md5_code) + password).toLowerCase());
+            new HttpPostTask(context).startTask(URL_RESET_PASSWORD, Request.Method.POST,
                     bodyObject, HttpBaseResult.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();

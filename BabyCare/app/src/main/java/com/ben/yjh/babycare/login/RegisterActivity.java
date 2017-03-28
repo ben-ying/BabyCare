@@ -93,7 +93,7 @@ public class RegisterActivity extends BaseActivity {
             AlertUtils.showAlertDialog(this, R.string.empty_password);
             return false;
         }
-        if (mPassword.length() < 6) {
+        if (mPassword.length() < Constants.MIN_PASSWORD_LENGTH) {
             AlertUtils.showAlertDialog(this, R.string.invalid_password);
             return false;
         }
