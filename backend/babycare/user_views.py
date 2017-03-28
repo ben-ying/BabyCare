@@ -258,12 +258,12 @@ class EventViewSet(CustomModelViewSet):
         serializer = self.get_serializer(data=request.data)
         token = request.data.get('token')
         title = request.data.get('title')
-        message = request.data.get('message')
+        content = request.data.get('content')
         user = get_user_by_token(token)
 
         if not title:
             return simple_json_response(CODE_EMPTY_EVENT_TITLE, MSG_EMPTY_EVENT_TITLE)
-        elif not message:
+        elif not content:
             return simple_json_response(CODE_EMPTY_EVENT_MESSAGE, MSG_EMPTY_EVENT_MESSAGE)
         elif serializer.is_valid():
             if user:
