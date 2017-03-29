@@ -2,9 +2,10 @@ package com.ben.yjh.babycare.main.event;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.main.GalleryActivity;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.io.File;
 
@@ -29,8 +32,6 @@ public class AddEventActivity extends BaseActivity {
     private ImageView mImageView;
     private String mTitle;
     private String mContent;
-    private String mImageUrl;
-    private Uri mCameraUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +47,6 @@ public class AddEventActivity extends BaseActivity {
         mTitleEditText = (EditText) findViewById(R.id.et_title);
         mContentEditText = (EditText) findViewById(R.id.et_content);
         mImageView = (ImageView) findViewById(R.id.img_event);
-        mImageUrl = getIntent().getStringExtra(Constants.IMAGE_URI);
-        MyApplication.displayImage(mImageUrl, mImageView, ImageUtils.getEventImageOptions(), true);
 
         findViewById(R.id.btn_add).setOnClickListener(this);
         mImageView.setOnClickListener(this);
@@ -58,36 +57,34 @@ public class AddEventActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case Constants.CAMERA_PICTURE_REQUEST_CODE:
-                    Intent newIntent = new Intent(this, FeatherActivity.class);
-                    // high resolution
-//                    newIntent.putExtra(com.aviary.android.feather.library
-//                            .Constants.EXTRA_IN_HIRES_MEGAPIXELS, MegaPixels.Mp5.ordinal());
-                    newIntent.setData(mCameraUri);
-                    newIntent.putExtra(AviaryIntent.EXTRA_API_KEY_SECRET, Constants.AVIARY_PICTURE_REQUEST_CODE);
-                    startActivityForResult(newIntent, Constants.AVIARY_PICTURE_REQUEST_CODE);
-                    break;
-                case Constants.GALLERY_PICTURE_REQUEST_CODE:
-                    Intent anewIntent = new Intent(this, FeatherActivity.class);
-                    // high resolution
-//                newIntent.putExtra( com.aviary.android.feather.library
-//                        .Constants.EXTRA_IN_HIRES_MEGAPIXELS, MegaPixels.Mp5.ordinal() );
-                    anewIntent.setData(data.getData());
-                    anewIntent.putExtra(AviaryIntent.EXTRA_API_KEY_SECRET, Constants.AVIARY_API_KEY_SECRET);
-                    startActivityForResult(anewIntent, Constants.AVIARY_PICTURE_REQUEST_CODE);
-                    break;
-                case Constants.AVIARY_PICTURE_REQUEST_CODE:
-                    Uri uri = data.getData();
-                    Bundle extra = data.getExtras();
-                    if (null != extra) {
-                        // image has been changed by the user?
-                        boolean changed = extra.getBoolean(com.aviary.android.feather.library
-                                .Constants.EXTRA_OUT_BITMAP_CHANGED);
+                case Constants.GALLERY_REQUEST_CODE:
+                    if (data != null) {
+                        String imageUrl = data.getStringExtra(Constants.IMAGE_URL);
+                        if (imageUrl != null) {
+                            MyApplication.displayImage(Uri.fromFile(new File(imageUrl)).toString(),
+                                    mImageView, ImageUtils.getEventImageOptions(), true, new ImageLoadingListener() {
+                                        @Override
+                                        public void onLoadingStarted(String s, View view) {
+
+                                        }
+
+                                        @Override
+                                        public void onLoadingFailed(String s, View view, FailReason failReason) {
+
+                                        }
+
+                                        @Override
+                                        public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                                            mImageView.setImageBitmap(bitmap);
+                                        }
+
+                                        @Override
+                                        public void onLoadingCancelled(String s, View view) {
+
+                                        }
+                                    });
+                        }
                     }
-                    MyApplication.displayImage(Uri.fromFile(new File(uri.toString())).toString(),
-                            mImageView, ImageUtils.getEventImageOptions(), false);
-                    break;
-                case Constants.ADD_EVENT_REQUEST_CODE:
                     break;
             }
         }

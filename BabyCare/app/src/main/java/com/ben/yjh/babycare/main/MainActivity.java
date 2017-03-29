@@ -174,14 +174,12 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onClick(View v) {
-        Intent intent;
-        intent = new Intent(this, AddEventActivity.class);
-        intent.putExtra(Constants.IMAGE_URI, "http://");
-        startActivityForResult(intent, Constants.ADD_EVENT_REQUEST_CODE);
-//        switch (v.getId()) {
-//            case R.id.fab:
-//                showImageOptions(R.string.add_event);
-//        }
+        switch (v.getId()) {
+            case R.id.fab:
+                Intent intent = new Intent(this, AddEventActivity.class);
+                startActivityForResult(intent, Constants.ADD_EVENT_REQUEST_CODE);
+                break;
+        }
     }
 
     @Override
@@ -190,35 +188,6 @@ public class MainActivity extends BaseActivity
         if (requestCode == REQUEST_EXTERNAL_STORAGE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 mFab.performClick();
-            }
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case Constants.CAMERA_PICTURE_REQUEST_CODE:
-                    ImageUtils.cropPicture(this, data.getData(),
-                            getResources().getInteger(R.integer.event_width),
-                            getResources().getInteger(R.integer.event_height));
-                    break;
-                case Constants.GALLERY_PICTURE_REQUEST_CODE:
-                    ImageUtils.cropPicture(this, data.getData(),
-                            getResources().getInteger(R.integer.event_width),
-                            getResources().getInteger(R.integer.event_height));
-                    break;
-                case Constants.AVIARY_PICTURE_REQUEST_CODE:
-                    Uri uri = data.getData() == null ? ImageUtils.getTempUri() : data.getData();
-                    if (uri != null) {
-                        Intent intent = new Intent(this, AddEventActivity.class);
-                        intent.putExtra(Constants.IMAGE_URI, uri.toString());
-                        startActivityForResult(intent, Constants.ADD_EVENT_REQUEST_CODE);
-                    }
-                    break;
-                case Constants.ADD_EVENT_REQUEST_CODE:
-                    break;
             }
         }
     }

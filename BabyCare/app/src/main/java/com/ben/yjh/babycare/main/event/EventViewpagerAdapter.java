@@ -38,15 +38,15 @@ public class EventViewpagerAdapter extends PagerAdapter {
 //        TextView textView = (TextView) view.findViewById(R.id.title);
 //        textView.setText("Title" + position);
         switch (position) {
-            case 0:
-                imageView.setImageResource(R.drawable.test);
-                break;
-            case 1:
-                imageView.setImageResource(R.drawable.test2);
-                break;
-            case 2:
-                imageView.setImageResource(R.drawable.test);
-                break;
+//            case 0:
+//                imageView.setImageResource(R.drawable.test);
+//                break;
+//            case 1:
+//                imageView.setImageResource(R.drawable.test2);
+//                break;
+//            case 2:
+//                imageView.setImageResource(R.drawable.test);
+//                break;
         }
 
         imageView.setOnClickListener(new View.OnClickListener() {

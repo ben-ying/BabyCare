@@ -83,7 +83,7 @@ public class ImageUtils {
                 .build();
     }
 
-    public static DisplayImageOptions getThumbnailImageOptions() {
+    public static DisplayImageOptions getGalleryOptions() {
         return new DisplayImageOptions.Builder()
                 .showImageOnLoading(0)
                 .showImageOnFail(0)

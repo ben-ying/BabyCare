@@ -15,7 +15,9 @@ public class Constants {
     public static final String LAST_NAME = "last_name";
     public static final String BASE64 = "base64";
     public static final String BABY_USER = "baby_user";
-    public static final String IMAGE_URI = "image_uri";
+    public static final String IMAGE_URL = "image_url";
+    public static final String POSITION = "position";
+    public static final String IMAGE_URLS = "image_urls";
     public static final String PROFILE_IMAGE_PREFIX = "profile_image_prefix";
     public static final String EVENT_IMAGE_PREFIX = "event_image_prefix";
     public static final String AVIARY_API_KEY_SECRET = "a9a692d4-2bf2-4927-9dc3-2cef97ac8a42";
@@ -31,6 +33,7 @@ public class Constants {
     public static final int SETTING_REQUEST_CODE = 107;
     public static final int COMMENT_REQUEST_CODE = 108;
     public static final int GALLERY_REQUEST_CODE = 109;
+    public static final int GALLERY_PAGER_REQUEST_CODE = 110;
 
 
     public static final int INVALID_ACCESS_TOKEN = 401;

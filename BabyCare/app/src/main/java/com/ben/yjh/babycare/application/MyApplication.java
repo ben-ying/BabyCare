@@ -32,6 +32,7 @@ public class MyApplication extends SugarApp {
     private static MyApplication sInstance;
     private static Context sAppContext;
     private static ImageLoader sImageLoader;
+    private static ImageLoader sThumbnailImageLoader;
 
     @Override
     public void onCreate() {
@@ -42,7 +43,7 @@ public class MyApplication extends SugarApp {
         // aviary
         Intent cdsIntent = AviaryIntent.createCdsInitIntent(
                 getBaseContext(), Constants.AVIARY_API_KEY_SECRET, null);
-        startService( cdsIntent );
+        startService(cdsIntent);
     }
 
     public static MyApplication getInstance() {
@@ -59,8 +60,8 @@ public class MyApplication extends SugarApp {
             sImageLoader = ImageLoader.getInstance();
             File cacheDir = StorageUtils.getCacheDirectory(context);
             ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-                    .memoryCacheExtraOptions(480, 800) // default = device screen dimensions
-                    .diskCacheExtraOptions(480, 800, null)
+//                    .memoryCacheExtraOptions(480, 800) // default = device screen dimensions
+//                    .diskCacheExtraOptions(480, 800, null)
                     .threadPoolSize(3) // default
                     .threadPriority(Thread.NORM_PRIORITY - 2) // default
                     .tasksProcessingOrder(QueueProcessingType.FIFO) // default
@@ -83,10 +84,33 @@ public class MyApplication extends SugarApp {
         return sImageLoader;
     }
 
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-        sImageLoader = null;
+    private static ImageLoader getThumbnailImageLoader(Context context) {
+        if (sThumbnailImageLoader == null) {
+            sThumbnailImageLoader = ImageLoader.getInstance();
+            File cacheDir = StorageUtils.getCacheDirectory(context);
+            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
+                    .memoryCacheExtraOptions(200, 200)
+                    .diskCacheExtraOptions(200, 200, null)
+                    .threadPoolSize(3) // default
+                    .threadPriority(Thread.NORM_PRIORITY - 2) // default
+                    .tasksProcessingOrder(QueueProcessingType.FIFO) // default
+                    .denyCacheImageMultipleSizesInMemory()
+                    .memoryCache(new LruMemoryCache(30 * 1024 * 1024))
+                    .memoryCacheSize(30 * 1024 * 1024)
+                    .memoryCacheSizePercentage(13) // default
+                    .diskCache(new UnlimitedDiskCache(cacheDir)) // default
+                    .diskCacheSize(200 * 1024 * 1024)
+                    .diskCacheFileCount(300)
+                    .diskCacheFileNameGenerator(new HashCodeFileNameGenerator()) // default
+                    .imageDownloader(new BaseImageDownloader(context)) // default
+                    .imageDecoder(new BaseImageDecoder(false)) // default
+                    .defaultDisplayImageOptions(DisplayImageOptions.createSimple()) // default
+//                    .writeDebugLogs()
+                    .build();
+            sThumbnailImageLoader.init(config);
+        }
+
+        return sThumbnailImageLoader;
     }
 
     public static void displayImage(String uri, ImageView imageView,
@@ -103,6 +127,17 @@ public class MyApplication extends SugarApp {
         }
 
         getImageLoader(sAppContext).displayImage(uri, imageView, options, listener);
+    }
+
+    public static void displayThumbnailImage(String uri, ImageView imageView,
+                                    DisplayImageOptions options, boolean removeCache,
+                                    ImageLoadingListener listener) {
+        if (removeCache) {
+            DiskCacheUtils.removeFromCache(uri, MyApplication.getThumbnailImageLoader(sAppContext).getDiskCache());
+            MemoryCacheUtils.removeFromCache(uri, MyApplication.getThumbnailImageLoader(sAppContext).getMemoryCache());
+        }
+
+        getThumbnailImageLoader(sAppContext).displayImage(uri, imageView, options, listener);
     }
 
     public <T> void addToRequestQueue(Request<T> req) {

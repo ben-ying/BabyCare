@@ -2,7 +2,6 @@ package com.ben.yjh.babycare.main;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +11,7 @@ import android.widget.ImageView;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.util.ImageUtils;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GalleryAdapter extends BaseAdapter {
@@ -23,24 +19,19 @@ public class GalleryAdapter extends BaseAdapter {
     private static final int TYPE_CAMERA = 0;
     private static final int TYPE_IMAGE = 1;
 
-    private Context mContext;
-    private List<Bitmap> mBitmaps;
     private List<String> mUrls;
     private LayoutInflater mInflater;
+    private GalleryInterface mInterface;
 
-    public GalleryAdapter(Context context, List<String> urls) {
-        this.mContext = context;
-        this.mUrls = urls;
-//        this.mBitmaps = bitmaps;
-        this.mInflater = LayoutInflater.from(context);
-//        for (String url : urls) {
-//            mBitmaps.add(null);
-//        }
+    interface GalleryInterface {
+        void intent2Gallery(String url);
+        void intent2Camera();
     }
 
-    public void addItem(Bitmap bitmap, int position) {
-        mBitmaps.set(position, bitmap);
-        notifyDataSetChanged();
+    GalleryAdapter(Context context, List<String> urls, GalleryInterface galleryInterface) {
+        this.mUrls = urls;
+        this.mInterface = galleryInterface;
+        this.mInflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -73,7 +64,7 @@ public class GalleryAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
 
         if (convertView == null) {
@@ -90,28 +81,22 @@ public class GalleryAdapter extends BaseAdapter {
         if (getItemViewType(position) == TYPE_IMAGE) {
             viewHolder = (ViewHolder) convertView.getTag();
             final ImageView imageView = viewHolder.imageView;
-            MyApplication.displayImage(mUrls.get(position - 1), imageView,
-                    ImageUtils.getThumbnailImageOptions(), false, new ImageLoadingListener() {
-                        @Override
-                        public void onLoadingStarted(String s, View view) {
-                            imageView.setImageResource(0);
-                        }
-
-                        @Override
-                        public void onLoadingFailed(String s, View view, FailReason failReason) {
-
-                        }
-
-                        @Override
-                        public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-
-                        }
-
-                        @Override
-                        public void onLoadingCancelled(String s, View view) {
-
-                        }
-                    });
+            imageView.setImageResource(0);
+            MyApplication.displayThumbnailImage(mUrls.get(position - 1),
+                    imageView, ImageUtils.getGalleryOptions(), false, null);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mInterface.intent2Gallery(mUrls.get(position - 1));
+                }
+            });
+        } else {
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mInterface.intent2Camera();
+                }
+            });
         }
 
         return convertView;
