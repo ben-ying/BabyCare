@@ -39,11 +39,6 @@ public class GalleryActivity extends BaseActivity implements GalleryAdapter.Gall
         setContentView(R.layout.activity_gallery);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
-        user = User.getBabyUser();
-        if (user == null) {
-            logout();
-        }
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.select_image);
         setSupportActionBar(toolbar);

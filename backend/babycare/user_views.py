@@ -1,26 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
+import time
 import pdb
 
-import oss2
-import time
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.urls import reverse
-from rest_framework import viewsets
+from django.utils.crypto import get_random_string
+from django.utils.dateformat import format
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from validate_email import validate_email
-from django.utils.crypto import get_random_string
+from django.utils import timezone
+
 from babycare.serializers.baby_user import BabyUserSerializer
-from babycare.serializers.event import EventSerializer
-from backend.settings import OSS_ACCESS_KEY_ID
-from backend.settings import OSS_ACCESS_KEY_SECRET
-from backend.settings import OSS_BUCKET_NAME
-from backend.settings import OSS_ENDPOINT
 from constants import CODE_DUPLICATE_EMAIL, MSG_SEND_VERIFY_CODE_SUCCESS, MSG_NO_SUCH_EMAIL, MSG_EMPTY_VERIFY_CODE, \
     CODE_EMPTY_VERIFY_CODE, MSG_INCORRECT_VERIFY_CODE, CODE_INCORRECT_VERIFY_CODE, CODE_EXPIRED_VERIFY_CODE, MSG_EXPIRED_VERIFY_CODE, \
     VERIFY_CODE_EXPIRED_TIME, CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS
@@ -31,9 +26,7 @@ from constants import CODE_EMPTY_USER
 from constants import CODE_INVALID_EMAIL
 from constants import CODE_INVALID_PASSWORD
 from constants import CODE_INVALID_REQUEST
-from constants import CODE_SUCCESS, MSG_EMPTY_EVENT_TITLE, CODE_EMPTY_EVENT_TITLE, MSG_EMPTY_EVENT_MESSAGE, \
-    CODE_EMPTY_EVENT_MESSAGE, \
-    MSG_CREATE_EVENT_SUCCESS, MSG_INCORRECT_USER_NAME_OR_PASSWORD, \
+from constants import CODE_SUCCESS, MSG_INCORRECT_USER_NAME_OR_PASSWORD, \
     CODE_INCORRECT_USER_NAME_OR_PASSWORD, MSG_NOT_ACTIVE_USER, CODE_NOT_ACTIVE, MSG_LOGIN_SUCCESS, \
     MSG_GET_USERS_SUCCESS, \
     MSG_EMPTY_BABY_NAME, CODE_EMPTY_BABY_NAME, PROFILE_FOOTER_IMAGE
@@ -48,10 +41,10 @@ from constants import MSG_EMPTY_USERNAME
 from constants import MSG_INVALID_EMAIL
 from constants import MSG_INVALID_PASSWORD
 from models import BabyUser, Verify
-from models import Event
-from utils import json_response, invalid_token_response, upload_image_to_oss, send_email, get_user_by_token, get_user
+from utils import json_response, invalid_token_response, upload_image_to_oss, send_email, get_user_by_token, get_user, \
+    CustomModelViewSet
 from utils import simple_json_response
-from django.utils.dateformat import format
+
 
 @api_view(['GET'])
 def api_root(request, format=None):
@@ -59,9 +52,6 @@ def api_root(request, format=None):
         'users': reverse('user-list'),
     })
 
-
-class CustomModelViewSet(viewsets.ModelViewSet):
-    code = CODE_SUCCESS
     # permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
 
 
@@ -120,6 +110,7 @@ class UserViewSet(CustomModelViewSet):
                 response_data['profile'] = upload_image_to_oss(image_name, base64)
                 baby_user = BabyUser.objects.get(user=user)
                 baby_user.profile = response_data['profile']
+                baby_user.created = timezone.now()
                 baby_user.save()
             return json_response(response_data, CODE_SUCCESS, MSG_CREATE_USER_SUCCESS)
         else:
@@ -181,10 +172,8 @@ def login_view(request):
 
     if not user and validate_email(username):
         user = get_user(email=username)
-        # pdb.set_trace()
         if not user:
             user = authenticate(username=user.username, password=password)
-
     if user:
         baby = BabyUser.objects.get(user=user)
         if baby:
@@ -259,27 +248,3 @@ def reset_password_with_verify_code_view(request):
         return simple_json_response(CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS)
 
 
-class EventViewSet(CustomModelViewSet):
-    queryset = Event.objects.all()
-    serializer_class = EventSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        token = request.data.get('token')
-        title = request.data.get('title')
-        content = request.data.get('content')
-        user = get_user_by_token(token)
-
-        if not title:
-            return simple_json_response(CODE_EMPTY_EVENT_TITLE, MSG_EMPTY_EVENT_TITLE)
-        elif not content:
-            return simple_json_response(CODE_EMPTY_EVENT_MESSAGE, MSG_EMPTY_EVENT_MESSAGE)
-        elif serializer.is_valid():
-            if user:
-                serializer.validated_data['baby_id'] = BabyUser.objects.get(user=user).id
-                self.perform_create(serializer)
-                return json_response(serializer.data, CODE_SUCCESS, MSG_CREATE_EVENT_SUCCESS)
-            else:
-                return invalid_token_response()
-        else:
-            return simple_json_response(CODE_INVALID_REQUEST, MSG_400)

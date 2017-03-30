@@ -64,11 +64,6 @@ public class UserInfoActivity extends BaseActivity {
         setContentView(R.layout.activity_user_info);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
-        user = User.getBabyUser();
-        if (user == null) {
-            logout();
-        }
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.user_info);
         setSupportActionBar(toolbar);

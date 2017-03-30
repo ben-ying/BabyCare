@@ -18,19 +18,29 @@
             android:layout_height="wrap_content">
             <ImageButton
                 android:id="@+id/ib_profile"
-                android:src="@mipmap/ic_launcher"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/text_padding"
+                android:layout_marginStart="@dimen/text_padding"
                 android:background="@android:color/transparent"
                 android:layout_width="20dp"
                 android:layout_height="20dp" />
 
             <TextView
                 android:id="@+id/tv_name"
-                android:text="BenYing"
-                android:layout_toRightOf="@+id/ib_profile"
+                android:layout_toEndOf="@+id/ib_profile"
                 android:layout_centerVertical="true"
                 android:padding="@dimen/text_padding"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_toStartOf="@+id/tv_datetime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_datetime"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/text_padding"
+                android:maxLines="1"
+                android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -62,8 +72,7 @@
             android:layout_below="@+id/view_pager"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="Card Title"  />
+            android:padding="10dp" />
 
         <com.ben.yjh.babycare.widget.ExpandableTextView
             android:id="@+id/tv_content"
@@ -72,7 +81,6 @@
             android:paddingLeft="@dimen/text_padding"
             android:paddingRight="@dimen/text_padding"
             android:layout_below="@+id/tv_title"
-            android:text="宝宝是对小孩儿的亲昵称呼 ，是爸妈或家人对婴儿或幼儿的昵称。孩子对于父母来说，都是宝贵的。古时候，父母有了孩子之后都是如获珍宝。在父母眼里，孩子都是宝贝。孩子的称呼是不分年龄的大小，只要父母在，你永远都是他的孩子。"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

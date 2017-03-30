@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
+import com.ben.yjh.babycare.base.BaseAllActivity;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.UserTaskHandler;
 import com.ben.yjh.babycare.model.HttpBaseResult;
@@ -22,7 +23,7 @@ import com.ben.yjh.babycare.util.Constants;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ResetPasswordActivity extends BaseActivity {
+public class ResetPasswordActivity extends BaseAllActivity {
 
     private static final int COUNTDOWN_SECONDS = 60;
     private static final String RESET_PASSWORD = "reset_password";

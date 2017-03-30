@@ -3,27 +3,31 @@ package com.ben.yjh.babycare.main.event;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.aviary.android.feather.common.AviaryIntent;
-import com.aviary.android.feather.sdk.FeatherActivity;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
+import com.ben.yjh.babycare.http.EventTaskHandler;
+import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.main.GalleryActivity;
+import com.ben.yjh.babycare.model.Event;
+import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddEventActivity extends BaseActivity {
 
@@ -32,6 +36,8 @@ public class AddEventActivity extends BaseActivity {
     private ImageView mImageView;
     private String mTitle;
     private String mContent;
+    private String mBase64Image;
+    private String mImageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +58,38 @@ public class AddEventActivity extends BaseActivity {
         mImageView.setOnClickListener(this);
     }
 
+    private void postEventTask() {
+        List<String> base64Images = new ArrayList<>();
+        if (mBase64Image != null) {
+            base64Images.add(mBase64Image);
+        }
+        new EventTaskHandler(this, user.getToken()).addEvent(user.getUserId(),
+                mTitle, mContent, base64Images, new HttpResponseInterface<Event>() {
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Event classOfT) {
+                        Log.d("", "");
+                        classOfT.setImage1(mImageUrl);
+                        classOfT.save();
+                        Intent intent = getIntent();
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(HttpBaseResult result) {
+                    }
+
+                    @Override
+                    public void onHttpError(String error) {
+                    }
+                });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -59,9 +97,9 @@ public class AddEventActivity extends BaseActivity {
             switch (requestCode) {
                 case Constants.GALLERY_REQUEST_CODE:
                     if (data != null) {
-                        String imageUrl = data.getStringExtra(Constants.IMAGE_URL);
-                        if (imageUrl != null) {
-                            MyApplication.displayImage(Uri.fromFile(new File(imageUrl)).toString(),
+                        mImageUrl = data.getStringExtra(Constants.IMAGE_URL);
+                        if (mImageUrl != null) {
+                            MyApplication.displayImage(Uri.fromFile(new File(mImageUrl)).toString(),
                                     mImageView, ImageUtils.getEventImageOptions(), true, new ImageLoadingListener() {
                                         @Override
                                         public void onLoadingStarted(String s, View view) {
@@ -75,7 +113,9 @@ public class AddEventActivity extends BaseActivity {
 
                                         @Override
                                         public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                                            mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                             mImageView.setImageBitmap(bitmap);
+                                            mBase64Image = ImageUtils.getBase64FromBitmap(bitmap);
                                         }
 
                                         @Override
@@ -94,20 +134,13 @@ public class AddEventActivity extends BaseActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add:
-                mTitle = mTitleEditText.getText().toString();
-                mContent = mContentEditText.getText().toString();
-                if (mTitle.isEmpty()) {
-                    mTitleEditText.setError(getString(R.string.empty_title));
+                mTitle = mTitleEditText.getText().toString().trim();
+                mContent = mContentEditText.getText().toString().trim();
+                if (!mContent.isEmpty() || mBase64Image != null) {
+                    postEventTask();
                 }
-                if (mContent.isEmpty()) {
-                    mContentEditText.setError(getString(R.string.empty_content));
-                }
-                // todo
                 break;
             case R.id.img_event:
-//                mCameraUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
-//                        Constants.EVENT_IMAGE_PREFIX + System.currentTimeMillis() + ".jpg"));
-//                showImageOptions(R.string.add_event, mCameraUri);
                 if (verifyStoragePermissions()) {
                     Intent intent = new Intent(this, GalleryActivity.class);
                     startActivityForResult(intent, Constants.GALLERY_REQUEST_CODE);

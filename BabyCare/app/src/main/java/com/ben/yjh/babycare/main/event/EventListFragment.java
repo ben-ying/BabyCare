@@ -22,6 +22,7 @@ import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.Constants;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EventListFragment extends BaseFragment
         implements EventAdapter.EventRecyclerViewInterface {
@@ -107,6 +108,7 @@ public class EventListFragment extends BaseFragment
 
                     @Override
                     public void onSuccess(Event[] classOfT) {
+                        mSwipeRefreshLayout.setRefreshing(false);
                         Event.deleteAll(Event.class, "user_id = ?",
                                 String.valueOf(activity.user.getUserId()));
                         ArrayList<Event> events = new ArrayList<>();
@@ -119,10 +121,12 @@ public class EventListFragment extends BaseFragment
 
                     @Override
                     public void onFailure(HttpBaseResult result) {
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
 
                     @Override
                     public void onHttpError(String error) {
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
                 });
     }
@@ -147,6 +151,12 @@ public class EventListFragment extends BaseFragment
                 case Constants.SHOW_EVENT_IMAGE_DETAIL_REQUEST_CODE:
                     break;
                 case Constants.COMMENT_REQUEST_CODE:
+                    break;
+                case Constants.ADD_EVENT_REQUEST_CODE:
+                    List<Event> events = Event.find(Event.class, "user_id = ?",
+                            String.valueOf(activity.user.getUserId()));
+                    mAdapter.setData(events);
+                    getEventsTask();
                     break;
             }
         }

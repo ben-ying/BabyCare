@@ -33,6 +33,7 @@ public class MyApplication extends SugarApp {
     private static Context sAppContext;
     private static ImageLoader sImageLoader;
     private static ImageLoader sThumbnailImageLoader;
+    private static ImageLoader sTinyImageLoader;
 
     @Override
     public void onCreate() {
@@ -113,6 +114,35 @@ public class MyApplication extends SugarApp {
         return sThumbnailImageLoader;
     }
 
+    private static ImageLoader getTinyImageLoader(Context context) {
+        if (sTinyImageLoader == null) {
+            sTinyImageLoader = ImageLoader.getInstance();
+            File cacheDir = StorageUtils.getCacheDirectory(context);
+            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
+                    .memoryCacheExtraOptions(50, 50)
+                    .diskCacheExtraOptions(50, 50, null)
+                    .threadPoolSize(3) // default
+                    .threadPriority(Thread.NORM_PRIORITY - 2) // default
+                    .tasksProcessingOrder(QueueProcessingType.FIFO) // default
+                    .denyCacheImageMultipleSizesInMemory()
+                    .memoryCache(new LruMemoryCache(20 * 1024 * 1024))
+                    .memoryCacheSize(20 * 1024 * 1024)
+                    .memoryCacheSizePercentage(13) // default
+                    .diskCache(new UnlimitedDiskCache(cacheDir)) // default
+                    .diskCacheSize(100 * 1024 * 1024)
+                    .diskCacheFileCount(100)
+                    .diskCacheFileNameGenerator(new HashCodeFileNameGenerator()) // default
+                    .imageDownloader(new BaseImageDownloader(context)) // default
+                    .imageDecoder(new BaseImageDecoder(false)) // default
+                    .defaultDisplayImageOptions(DisplayImageOptions.createSimple()) // default
+//                    .writeDebugLogs()
+                    .build();
+            sTinyImageLoader.init(config);
+        }
+
+        return sTinyImageLoader;
+    }
+
     public static void displayImage(String uri, ImageView imageView,
                                     DisplayImageOptions options, boolean removeCache) {
         displayImage(uri, imageView, options, removeCache, null);
@@ -129,15 +159,14 @@ public class MyApplication extends SugarApp {
         getImageLoader(sAppContext).displayImage(uri, imageView, options, listener);
     }
 
-    public static void displayThumbnailImage(String uri, ImageView imageView,
-                                    DisplayImageOptions options, boolean removeCache,
-                                    ImageLoadingListener listener) {
-        if (removeCache) {
-            DiskCacheUtils.removeFromCache(uri, MyApplication.getThumbnailImageLoader(sAppContext).getDiskCache());
-            MemoryCacheUtils.removeFromCache(uri, MyApplication.getThumbnailImageLoader(sAppContext).getMemoryCache());
-        }
+    public static void displayThumbnailImage(String uri,
+                                             ImageView imageView, DisplayImageOptions options) {
+        getThumbnailImageLoader(sAppContext).displayImage(uri, imageView, options);
+    }
 
-        getThumbnailImageLoader(sAppContext).displayImage(uri, imageView, options, listener);
+    public static void displayTinyImage(String uri,
+                                        ImageView imageView, DisplayImageOptions options) {
+        getTinyImageLoader(sAppContext).displayImage(uri, imageView, options);
     }
 
     public <T> void addToRequestQueue(Request<T> req) {

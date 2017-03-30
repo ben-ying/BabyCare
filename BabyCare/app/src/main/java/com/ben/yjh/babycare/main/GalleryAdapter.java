@@ -83,7 +83,7 @@ public class GalleryAdapter extends BaseAdapter {
             final ImageView imageView = viewHolder.imageView;
             imageView.setImageResource(0);
             MyApplication.displayThumbnailImage(mUrls.get(position - 1),
-                    imageView, ImageUtils.getGalleryOptions(), false, null);
+                    imageView, ImageUtils.getGalleryOptions());
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

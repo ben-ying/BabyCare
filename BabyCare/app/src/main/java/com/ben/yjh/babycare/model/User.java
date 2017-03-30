@@ -7,7 +7,6 @@ import java.util.List;
 
 
 public class User extends UserHistory implements Serializable {
-    @SerializedName("baby_id") int babyId;
     @SerializedName("user_id") int userId;
     @SerializedName("email") String email;
     @SerializedName("phone") String phone;
@@ -28,7 +27,7 @@ public class User extends UserHistory implements Serializable {
         return super.save();
     }
 
-    public static User getBabyUser() {
+    public static User getUser() {
         List<User> users = User.find(User.class, "is_login = ?", "1");
         if (users.size() == 1 && !users.get(0).getToken().isEmpty()) {
             return users.get(0);
@@ -45,20 +44,12 @@ public class User extends UserHistory implements Serializable {
         this.zone = zone;
     }
 
-    public int getBabyId() {
-        return babyId;
-    }
-
     public boolean isLogin() {
         return isLogin;
     }
 
     public void setLogin(boolean login) {
         isLogin = login;
-    }
-
-    public void setBabyId(int babyId) {
-        this.babyId = babyId;
     }
 
     public int getUserId() {

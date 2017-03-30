@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
+import com.ben.yjh.babycare.base.BaseAllActivity;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.UserTaskHandler;
 import com.ben.yjh.babycare.main.MainActivity;
@@ -36,7 +37,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseAllActivity {
 
     private AutoCompleteTextView mUsernameEditText;
     private EditText mPasswordEditText;

@@ -43,6 +43,7 @@ public class MainActivity extends BaseActivity
     private HomeViewPagerAdapter mPagerAdapter;
     private FloatingActionButton mFab;
     private TabLayout mTabLayout;
+    private EventListFragment mEventListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +53,9 @@ public class MainActivity extends BaseActivity
         setSupportActionBar(toolbar);
         setStatusBarMargin(R.id.cl_layout);
 
-        user = User.getBabyUser();
-        if (user == null) {
-            logout();
-        }
-
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(EventListFragment.newInstance());
-        fragments.add(SettingFragment.newInstance());
-        fragments.add(EventListFragment.newInstance());
+        mEventListFragment = EventListFragment.newInstance();
+        fragments.add(mEventListFragment);
 
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mPagerAdapter = new HomeViewPagerAdapter(getSupportFragmentManager(), fragments);
@@ -170,6 +165,18 @@ public class MainActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case Constants.ADD_EVENT_REQUEST_CODE:
+                    mEventListFragment.onActivityResult(requestCode, resultCode, data);
+                    break;
+            }
+        }
     }
 
     @Override

@@ -83,6 +83,17 @@ public class ImageUtils {
                 .build();
     }
 
+    public static DisplayImageOptions getTinyProfileImageOptions() {
+        return new DisplayImageOptions.Builder()
+                .displayer(new RoundedBitmapDisplayer(5))
+                .showImageOnLoading(R.drawable.ic_profile)
+                .showImageOnFail(R.drawable.ic_profile)
+                .showImageForEmptyUri(R.drawable.ic_profile)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
+    }
+
     public static DisplayImageOptions getGalleryOptions() {
         return new DisplayImageOptions.Builder()
                 .showImageOnLoading(0)

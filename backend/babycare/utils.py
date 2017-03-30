@@ -4,6 +4,7 @@ import json
 import os
 import random
 import string
+import pdb
 from shutil import copyfile
 
 import oss2
@@ -11,6 +12,7 @@ import time
 
 from django.contrib.auth.models import User
 from django.http import HttpResponse
+from rest_framework import viewsets
 
 from babycare.models import Verify
 from backend.settings import OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET_NAME, OSS_ENDPOINT, EMAIL_HOST_USER
@@ -21,6 +23,9 @@ import smtplib
 from email.mime.text import MIMEText
 from rest_framework.authtoken.models import Token
 from django.core.mail import EmailMessage
+
+class CustomModelViewSet(viewsets.ModelViewSet):
+    code = CODE_SUCCESS
 
 
 def json_response(result, code=CODE_SUCCESS, message=''):
@@ -53,6 +58,7 @@ def get_user(email):
         return User.objects.get(email=email.lower())
     except User.DoesNotExist:
         return None
+
 
 def upload_image_to_oss(name, base64):
     with open(TEMP_IMAGE, "wb") as fh:

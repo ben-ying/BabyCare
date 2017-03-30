@@ -12,12 +12,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class EventTaskHandler extends BaseTaskHandler {
 
     private static final String URL_EVENTS = "events/";
-    private static final String URL_EVENT = "event/";
     private static final String URL_LIKES = "event/likes";
     private static final String URL_LIKE = "event/like";
     private static final String URL_COMMENTS = "event/comments";
@@ -41,29 +41,29 @@ public class EventTaskHandler extends BaseTaskHandler {
         }
     }
 
-    public void addEvent(String token, String userId, String title, String content,
-                         ArrayList<String> base64s, HttpResponseInterface<Event> httpResponseInterface) {
+    public void addEvent(int userId, String title, String content,
+                         List<String> base64Images, HttpResponseInterface<Event> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
-            bodyObject.put("token", token);
             bodyObject.put("user_id", userId);
             bodyObject.put("title", title);
             bodyObject.put("content", content);
-            JSONArray jsonArray = new JSONArray();
-            for (String base64 : base64s) {
-                JSONObject object = new JSONObject();
-                object.put("base64", base64);
-                jsonArray.put(object);
+            bodyObject.put("token", mToken);
+            if (base64Images.size() > 0) {
+                JSONArray jsonArray = new JSONArray();
+                for (String base64 : base64Images) {
+                    jsonArray.put(base64);
+                }
+                bodyObject.put("base64_images", jsonArray);
             }
-            bodyObject.put("images", jsonArray);
-            new HttpPostTask(context).startTask(URL_EVENT, Request.Method.POST,
+            new HttpPostTask(context).startTask(URL_EVENTS, Request.Method.POST,
                     bodyObject, Event.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void getEvent(int eventId, HttpResponseInterface<Event[]> httpResponseInterface) {
+    public void getEvents(int eventId, HttpResponseInterface<Event[]> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
             new HttpPostTask(context).startTask(URL_EVENTS + eventId, Request.Method.GET,

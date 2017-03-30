@@ -4,6 +4,9 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.forms import IntegerField
 
+from babycare.constants import DATE_TIME_FORMAT
+
+
 class BabyUser(models.Model):
     id = IntegerField(label='ID')
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
@@ -34,17 +37,20 @@ class Event(models.Model):
     baby = models.ForeignKey(BabyUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     content = models.TextField()
-    like = models.BooleanField(default=False)
-    images = ArrayField(ArrayField(models.CharField(max_length=200, blank=True, null=True)))
-    size = models.CharField(max_length=100, blank=True, null=True)
-    height = models.FloatField(blank=True, null=True)
-    weight = models.FloatField(blank=True, null=True)
-    remark = models.TextField(blank=True, null=True)
+    image1 = models.CharField(max_length=200, blank=True, null=True)
+    image2 = models.CharField(max_length=200, blank=True, null=True)
+    image3 = models.CharField(max_length=200, blank=True, null=True)
+    image4 = models.CharField(max_length=200, blank=True, null=True)
+    image5 = models.CharField(max_length=200, blank=True, null=True)
+    image6 = models.CharField(max_length=200, blank=True, null=True)
+    image7 = models.CharField(max_length=200, blank=True, null=True)
+    image8 = models.CharField(max_length=200, blank=True, null=True)
+    image9 = models.CharField(max_length=200, blank=True, null=True)
     created = models.DateTimeField(editable=False, blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
-        return self.title
+        return self.baby.user.username
 
 
 class LoginLog(models.Model):
