@@ -62,7 +62,7 @@ public class EventViewpagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return mImages.size();
     }
 
     @Override
