@@ -83,16 +83,22 @@ public class ImageUtils {
                 .build();
     }
 
-    public static DisplayImageOptions getThumbnailImageOptions() {
-        BitmapFactory.Options resizeOptions = new BitmapFactory.Options();
-        resizeOptions.inSampleSize = 5;
-        resizeOptions.inScaled = true;
+    public static DisplayImageOptions getTinyProfileImageOptions() {
+        return new DisplayImageOptions.Builder()
+                .displayer(new RoundedBitmapDisplayer(5))
+                .showImageOnLoading(R.drawable.ic_profile)
+                .showImageOnFail(R.drawable.ic_profile)
+                .showImageForEmptyUri(R.drawable.ic_profile)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
+    }
 
+    public static DisplayImageOptions getGalleryOptions() {
         return new DisplayImageOptions.Builder()
                 .showImageOnLoading(0)
                 .showImageOnFail(0)
                 .showImageForEmptyUri(0)
-                .decodingOptions(resizeOptions)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .build();

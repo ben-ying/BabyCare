@@ -70,13 +70,14 @@
     <string name="click_resend_verify_code">点击重新发送验证码</string>
     <string name="sent_verify_code_message">验证码已发送到你的邮箱，请查收</string>
     <string name="countdown_resend_message">%d秒后重新发送</string>
+    <string name="empty_verify_code">验证码不能为空</string>
 
 
     <!--event-->
     <string name="title">标题</string>
     <string name="date">日期</string>
-    <string name="content">内容</string>
-    <string name="add">添加</string>
+    <string name="add_content">添加内容</string>
+    <string name="post">发布</string>
     <string name="add_event">新增手记</string>
     <string name="empty_title">标题不能为空</string>
     <string name="empty_content">内容不能为空</string>
@@ -104,7 +105,11 @@
     <string name="bookmark">收藏</string>
     <string name="mine">我的</string>
     <string name="share_message">一个记录宝宝生活点滴的应用程序，点击下载%1$s\nhttps://play.google.com/store/apps/details?id=%2$s</string>
-
-
+    <string name="seconds_ago">刚刚</string>
+    <string name="minutes_ago">分钟前</string>
+    <string name="hours_ago">小时前</string>
+    <string name="yesterday">昨天</string>
+    <string name="the_day_before_yesterday">前天</string>
+    <string name="days_ago">天前</string>
 
 </resources>

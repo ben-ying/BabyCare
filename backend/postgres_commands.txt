@@ -23,6 +23,8 @@ Add a new line to the top of pg_hba.conf:
     To learn more, read the "client authentication" chapter of the user manual and the docs on pg_hba.conf.
 
 12. # kill postgres session
+psql
+
 SELECT 
     pg_terminate_backend(pid) 
 FROM 
@@ -31,5 +33,4 @@ WHERE
     -- don't kill my own connection!
         pid <> pg_backend_pid()
     -- don't kill the connections to other databases
-    AND datname = 'babycare'
-                            ;
+    AND datname = 'babycare';

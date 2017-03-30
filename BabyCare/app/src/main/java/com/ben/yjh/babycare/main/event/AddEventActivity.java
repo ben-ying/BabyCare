@@ -2,25 +2,32 @@ package com.ben.yjh.babycare.main.event;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.aviary.android.feather.common.AviaryIntent;
-import com.aviary.android.feather.sdk.FeatherActivity;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
+import com.ben.yjh.babycare.http.EventTaskHandler;
+import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.main.GalleryActivity;
+import com.ben.yjh.babycare.model.Event;
+import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddEventActivity extends BaseActivity {
 
@@ -29,8 +36,8 @@ public class AddEventActivity extends BaseActivity {
     private ImageView mImageView;
     private String mTitle;
     private String mContent;
+    private String mBase64Image;
     private String mImageUrl;
-    private Uri mCameraUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +53,41 @@ public class AddEventActivity extends BaseActivity {
         mTitleEditText = (EditText) findViewById(R.id.et_title);
         mContentEditText = (EditText) findViewById(R.id.et_content);
         mImageView = (ImageView) findViewById(R.id.img_event);
-        mImageUrl = getIntent().getStringExtra(Constants.IMAGE_URI);
-        MyApplication.displayImage(mImageUrl, mImageView, ImageUtils.getEventImageOptions(), true);
 
         findViewById(R.id.btn_add).setOnClickListener(this);
         mImageView.setOnClickListener(this);
+    }
+
+    private void postEventTask() {
+        List<String> base64Images = new ArrayList<>();
+        if (mBase64Image != null) {
+            base64Images.add(mBase64Image);
+        }
+        new EventTaskHandler(this, user.getToken()).addEvent(user.getUserId(),
+                mTitle, mContent, base64Images, new HttpResponseInterface<Event>() {
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Event classOfT) {
+                        Log.d("", "");
+                        classOfT.setImage1(mImageUrl);
+                        classOfT.save();
+                        Intent intent = getIntent();
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(HttpBaseResult result) {
+                    }
+
+                    @Override
+                    public void onHttpError(String error) {
+                    }
+                });
     }
 
     @Override
@@ -58,36 +95,36 @@ public class AddEventActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case Constants.CAMERA_PICTURE_REQUEST_CODE:
-                    Intent newIntent = new Intent(this, FeatherActivity.class);
-                    // high resolution
-//                    newIntent.putExtra(com.aviary.android.feather.library
-//                            .Constants.EXTRA_IN_HIRES_MEGAPIXELS, MegaPixels.Mp5.ordinal());
-                    newIntent.setData(mCameraUri);
-                    newIntent.putExtra(AviaryIntent.EXTRA_API_KEY_SECRET, Constants.AVIARY_PICTURE_REQUEST_CODE);
-                    startActivityForResult(newIntent, Constants.AVIARY_PICTURE_REQUEST_CODE);
-                    break;
-                case Constants.GALLERY_PICTURE_REQUEST_CODE:
-                    Intent anewIntent = new Intent(this, FeatherActivity.class);
-                    // high resolution
-//                newIntent.putExtra( com.aviary.android.feather.library
-//                        .Constants.EXTRA_IN_HIRES_MEGAPIXELS, MegaPixels.Mp5.ordinal() );
-                    anewIntent.setData(data.getData());
-                    anewIntent.putExtra(AviaryIntent.EXTRA_API_KEY_SECRET, Constants.AVIARY_API_KEY_SECRET);
-                    startActivityForResult(anewIntent, Constants.AVIARY_PICTURE_REQUEST_CODE);
-                    break;
-                case Constants.AVIARY_PICTURE_REQUEST_CODE:
-                    Uri uri = data.getData();
-                    Bundle extra = data.getExtras();
-                    if (null != extra) {
-                        // image has been changed by the user?
-                        boolean changed = extra.getBoolean(com.aviary.android.feather.library
-                                .Constants.EXTRA_OUT_BITMAP_CHANGED);
+                case Constants.GALLERY_REQUEST_CODE:
+                    if (data != null) {
+                        mImageUrl = data.getStringExtra(Constants.IMAGE_URL);
+                        if (mImageUrl != null) {
+                            MyApplication.displayImage(Uri.fromFile(new File(mImageUrl)).toString(),
+                                    mImageView, ImageUtils.getEventImageOptions(), true, new ImageLoadingListener() {
+                                        @Override
+                                        public void onLoadingStarted(String s, View view) {
+
+                                        }
+
+                                        @Override
+                                        public void onLoadingFailed(String s, View view, FailReason failReason) {
+
+                                        }
+
+                                        @Override
+                                        public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                                            mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                            mImageView.setImageBitmap(bitmap);
+                                            mBase64Image = ImageUtils.getBase64FromBitmap(bitmap);
+                                        }
+
+                                        @Override
+                                        public void onLoadingCancelled(String s, View view) {
+
+                                        }
+                                    });
+                        }
                     }
-                    MyApplication.displayImage(Uri.fromFile(new File(uri.toString())).toString(),
-                            mImageView, ImageUtils.getEventImageOptions(), false);
-                    break;
-                case Constants.ADD_EVENT_REQUEST_CODE:
                     break;
             }
         }
@@ -97,22 +134,17 @@ public class AddEventActivity extends BaseActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add:
-                mTitle = mTitleEditText.getText().toString();
-                mContent = mContentEditText.getText().toString();
-                if (mTitle.isEmpty()) {
-                    mTitleEditText.setError(getString(R.string.empty_title));
+                mTitle = mTitleEditText.getText().toString().trim();
+                mContent = mContentEditText.getText().toString().trim();
+                if (!mContent.isEmpty() || mBase64Image != null) {
+                    postEventTask();
                 }
-                if (mContent.isEmpty()) {
-                    mContentEditText.setError(getString(R.string.empty_content));
-                }
-                // todo
                 break;
             case R.id.img_event:
-//                mCameraUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
-//                        Constants.EVENT_IMAGE_PREFIX + System.currentTimeMillis() + ".jpg"));
-//                showImageOptions(R.string.add_event, mCameraUri);
-                Intent intent = new Intent(this, GalleryActivity.class);
-                startActivityForResult(intent, Constants.GALLERY_REQUEST_CODE);
+                if (verifyStoragePermissions()) {
+                    Intent intent = new Intent(this, GalleryActivity.class);
+                    startActivityForResult(intent, Constants.GALLERY_REQUEST_CODE);
+                }
                 break;
         }
     }

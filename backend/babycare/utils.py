@@ -4,20 +4,28 @@ import json
 import os
 import random
 import string
+import pdb
 from shutil import copyfile
 
 import oss2
 import time
+
+from django.contrib.auth.models import User
 from django.http import HttpResponse
+from rest_framework import viewsets
 
 from babycare.models import Verify
 from backend.settings import OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET_NAME, OSS_ENDPOINT, EMAIL_HOST_USER
 from constants import CODE_SUCCESS, CODE_INVALID_TOKEN, MSG_401, TEMP_IMAGE, PROFILE_FOOTER_IMAGE, \
-    MSG_SEND_VERIFY_CODE_MESSAGES
+    PASSWORD_VERIFY_CODE_EMAIL_SUBJECT, PASSWORD_VERIFY_CODE_EMAIL_CONTENT
 from constants import MIN_PASSWORD_LEN
 import smtplib
 from email.mime.text import MIMEText
 from rest_framework.authtoken.models import Token
+from django.core.mail import EmailMessage
+
+class CustomModelViewSet(viewsets.ModelViewSet):
+    code = CODE_SUCCESS
 
 
 def json_response(result, code=CODE_SUCCESS, message=''):
@@ -32,6 +40,7 @@ def simple_json_response(code=CODE_SUCCESS, message=''):
     response_data = dict()
     response_data['code'] = code
     response_data['message'] = unicode(message)
+    response_data['result'] = {}
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
@@ -42,6 +51,13 @@ def invalid_token_response():
 
 def password_generator(size=MIN_PASSWORD_LEN, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
+
+def get_user(email):
+    try:
+        return User.objects.get(email=email.lower())
+    except User.DoesNotExist:
+        return None
 
 
 def upload_image_to_oss(name, base64):
@@ -60,11 +76,6 @@ def upload_image_to_oss(name, base64):
 
 
 def send_email(user, to_email, verify_code, is_email_verify=True):
-    msg = dict()
-    msg['Subject'] = MSG_SEND_VERIFY_CODE_MESSAGES % verify_code
-    msg['From'] = EMAIL_HOST_USER
-    msg['To'] = to_email
-
     if Verify.objects.filter(user=user):
         verify = Verify.objects.get(user=user)
         if is_email_verify:
@@ -75,13 +86,13 @@ def send_email(user, to_email, verify_code, is_email_verify=True):
         if is_email_verify:
             verify.email_verify_code = verify_code
 
-    # import pdb
-    # pdb.set_trace()
-    s = smtplib.SMTP('localhost')
-    # s = smtplib.SMTP('192.168.1.130:8000')
-    # pdb.set_trace()
-    s.sendmail(EMAIL_HOST_USER, [to_email], msg)
-    s.quit()
+    email = EmailMessage(PASSWORD_VERIFY_CODE_EMAIL_SUBJECT, PASSWORD_VERIFY_CODE_EMAIL_CONTENT %verify_code, to=[to_email])
+    try:
+        email.send()
+        verify.save()
+    except smtplib.SMTPDataError:
+        # todo not send email
+        pass
 
 
 def get_user_by_token(token):

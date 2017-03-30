@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
+import com.ben.yjh.babycare.base.BaseAllActivity;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.UserTaskHandler;
 import com.ben.yjh.babycare.main.MainActivity;
@@ -31,7 +32,7 @@ import com.ben.yjh.babycare.util.ImageUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class RegisterActivity extends BaseActivity {
+public class RegisterActivity extends BaseAllActivity {
 
     private EditText mUsernameEditText;
     private EditText mBabyNameEditText;
@@ -93,7 +94,7 @@ public class RegisterActivity extends BaseActivity {
             AlertUtils.showAlertDialog(this, R.string.empty_password);
             return false;
         }
-        if (mPassword.length() < 6) {
+        if (mPassword.length() < Constants.MIN_PASSWORD_LENGTH) {
             AlertUtils.showAlertDialog(this, R.string.invalid_password);
             return false;
         }
@@ -138,7 +139,7 @@ public class RegisterActivity extends BaseActivity {
                                     getContentResolver().openInputStream(uri));
                             mProfileBase64 = ImageUtils.getBase64FromBitmap(bitmap);
                             MyApplication.displayImage(uri.toString(),
-                                    mProfileButton, ImageUtils.getEventImageOptions(), true);
+                                    mProfileButton, ImageUtils.getProfileImageOptions(RegisterActivity.this), true);
                             findViewById(R.id.tv_add_profile).setVisibility(View.GONE);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();

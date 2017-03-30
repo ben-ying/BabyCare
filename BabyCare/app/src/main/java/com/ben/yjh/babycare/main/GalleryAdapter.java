@@ -2,7 +2,6 @@ package com.ben.yjh.babycare.main;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,29 +12,26 @@ import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.util.ImageUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GalleryAdapter extends BaseAdapter {
 
-    private Context mContext;
-    private List<Bitmap> mBitmaps;
+    private static final int TYPE_CAMERA = 0;
+    private static final int TYPE_IMAGE = 1;
+
     private List<String> mUrls;
     private LayoutInflater mInflater;
+    private GalleryInterface mInterface;
 
-    public GalleryAdapter(Context context, List<Bitmap> bitmaps, List<String> urls) {
-        this.mContext = context;
-        this.mUrls = urls;
-        this.mBitmaps = bitmaps;
-        this.mInflater = LayoutInflater.from(context);
-//        for (String url : urls) {
-//            mBitmaps.add(null);
-//        }
+    interface GalleryInterface {
+        void intent2Gallery(String url);
+        void intent2Camera();
     }
 
-    public void addItem(Bitmap bitmap, int position) {
-        mBitmaps.set(position, bitmap);
-        notifyDataSetChanged();
+    GalleryAdapter(Context context, List<String> urls, GalleryInterface galleryInterface) {
+        this.mUrls = urls;
+        this.mInterface = galleryInterface;
+        this.mInflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -59,11 +55,20 @@ public class GalleryAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return TYPE_CAMERA;
+        } else {
+            return TYPE_IMAGE;
+        }
+    }
+
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
 
-        if (convertView == null || convertView.getTag() == null) {
-            if (position == 0) {
+        if (convertView == null) {
+            if (getItemViewType(position) == TYPE_CAMERA) {
                 convertView = mInflater.inflate(R.layout.item_camera, null);
             } else {
                 convertView = mInflater.inflate(R.layout.item_gallery, null);
@@ -73,12 +78,27 @@ public class GalleryAdapter extends BaseAdapter {
             }
         }
 
-        if (position != 0) {
+        if (getItemViewType(position) == TYPE_IMAGE) {
             viewHolder = (ViewHolder) convertView.getTag();
-            viewHolder.imageView.setImageBitmap(mBitmaps.get(position - 1));
-//            MyApplication.displayImage(mUrls.get(position - 1), viewHolder.imageView,
-//                    ImageUtils.getThumbnailImageOptions(), false);
+            final ImageView imageView = viewHolder.imageView;
+            imageView.setImageResource(0);
+            MyApplication.displayThumbnailImage(mUrls.get(position - 1),
+                    imageView, ImageUtils.getGalleryOptions());
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mInterface.intent2Gallery(mUrls.get(position - 1));
+                }
+            });
+        } else {
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mInterface.intent2Camera();
+                }
+            });
         }
+
         return convertView;
     }
 

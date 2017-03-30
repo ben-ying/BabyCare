@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
+import com.ben.yjh.babycare.base.BaseAllActivity;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.UserTaskHandler;
 import com.ben.yjh.babycare.main.MainActivity;
@@ -36,7 +37,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseAllActivity {
 
     private AutoCompleteTextView mUsernameEditText;
     private EditText mPasswordEditText;
@@ -52,6 +53,8 @@ public class LoginActivity extends BaseActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.login);
+        mUsername = getIntent().getStringExtra(Constants.USERNAME);
+        mPassword = getIntent().getStringExtra(Constants.PASSWORD);
         findViewById(R.id.btn_login).setOnClickListener(this);
         findViewById(R.id.tv_link_signup).setOnClickListener(this);
         findViewById(R.id.tv_forgot_password).setOnClickListener(this);
@@ -100,7 +103,13 @@ public class LoginActivity extends BaseActivity {
         }
         mUsernameEditText = (AutoCompleteTextView) findViewById(R.id.et_username);
         mPasswordEditText = (EditText) findViewById(R.id.et_password);
-
+        if (mUsername != null) {
+            mUsernameEditText.setText(mUsername);
+            mUsernameEditText.setSelection(mUsername.length());
+        }
+        if (mPassword != null) {
+            mPasswordEditText.setText(mPassword);
+        }
         List<String> autoStrings = new ArrayList<>();
         List<UserHistory> userHistories = UserHistory.listAll(UserHistory.class);
         for (int i = 0; i < userHistories.size() && i < 5; i++) {
@@ -141,7 +150,7 @@ public class LoginActivity extends BaseActivity {
             AlertUtils.showAlertDialog(this, R.string.empty_password);
             return false;
         }
-        if (mPassword.length() < 6) {
+        if (mPassword.length() < Constants.MIN_PASSWORD_LENGTH) {
             AlertUtils.showAlertDialog(this, R.string.invalid_password);
             return false;
         }

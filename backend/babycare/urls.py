@@ -2,8 +2,8 @@ from django.conf.urls import url
 from rest_framework import renderers
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from user_views import UserViewSet, login_view, send_verify_code_view
-from user_views import EventViewSet
+from babycare.event_views import EventViewSet
+from user_views import UserViewSet, login_view, send_verify_code_view, reset_password_with_verify_code_view
 from user_views import api_root
 
 user_list = UserViewSet.as_view({
@@ -44,7 +44,8 @@ urlpatterns = [
     url(r'^users/(?P<pk>[0-9]+)$', user_detail, name='user-detail'),
     url(r'^users/(?P<pk>[0-9]+)/highlight/$', user_highlight, name='user-highlight'),
     url(r'^user/login$', login_view, name='user-login'),
-    url(r'^user/send_verify_code', send_verify_code_view, name='send-verify-code'),
+    url(r'^user/send_verify_code$', send_verify_code_view, name='send-verify-code'),
+    url(r'^user/reset_password$', reset_password_with_verify_code_view, name='reset-password-with-verify-code'),
     url(r'^events/$', event_list, name='event-list'),
     url(r'^events/(?P<pk>[0-9]+)$', event_detail, name='event-detail'),
 ]
