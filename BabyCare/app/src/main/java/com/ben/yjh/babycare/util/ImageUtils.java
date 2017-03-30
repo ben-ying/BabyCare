@@ -106,7 +106,7 @@ public class ImageUtils {
 
     public static DisplayImageOptions getEventImageOptions() {
         return new DisplayImageOptions.Builder()
-                .displayer(new RoundedBitmapDisplayer(2))
+                .displayer(new RoundedBitmapDisplayer(5))
                 .showImageOnLoading(0)
                 .showImageOnFail(0)
                 .showImageForEmptyUri(0)

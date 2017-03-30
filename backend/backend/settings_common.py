@@ -142,6 +142,7 @@ USE_I18N = True
 
 USE_L10N = True
 
+# make timezone to UTC
 USE_TZ = True
 
 

@@ -40,6 +40,7 @@ class EventViewSet(CustomModelViewSet):
             event = Event()
             event.baby = BabyUser.objects.get(user=user)
             event.created = timezone.now()
+            pdb.set_trace()
             if title:
                 event.title = title
             if content:
