@@ -24,6 +24,7 @@ from email.mime.text import MIMEText
 from rest_framework.authtoken.models import Token
 from django.core.mail import EmailMessage
 
+
 class CustomModelViewSet(viewsets.ModelViewSet):
     code = CODE_SUCCESS
 

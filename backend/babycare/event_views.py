@@ -23,7 +23,8 @@ class EventViewSet(CustomModelViewSet):
     def list(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid()
-        return json_response(super(EventViewSet, self).list(request, *args, **kwargs).data, CODE_SUCCESS, MSG_GET_EVENTS_SUCCESS)
+        return json_response(super(EventViewSet, self)
+                             .list(request, *args, **kwargs).data, CODE_SUCCESS, MSG_GET_EVENTS_SUCCESS)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

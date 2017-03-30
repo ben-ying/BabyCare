@@ -23,6 +23,7 @@ import com.ben.yjh.babycare.util.ImageUtils;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder>
@@ -53,10 +54,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         this.mUser = user;
         this.mEvents = events;
         this.mInterface = recyclerViewInterface;
+        Collections.reverse(mEvents);
     }
 
     void setData(List<Event> events) {
         this.mEvents = events;
+        Collections.reverse(mEvents);
         notifyDataSetChanged();
     }
 
