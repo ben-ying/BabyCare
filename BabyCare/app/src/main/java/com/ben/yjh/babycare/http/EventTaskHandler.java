@@ -63,7 +63,7 @@ public class EventTaskHandler extends BaseTaskHandler {
         }
     }
 
-    public void getEvents(int eventId, HttpResponseInterface<Event[]> httpResponseInterface) {
+    public void getEvent(int eventId, HttpResponseInterface<Event[]> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
             new HttpPostTask(context).startTask(URL_EVENTS + eventId, Request.Method.GET,

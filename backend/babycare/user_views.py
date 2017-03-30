@@ -17,7 +17,8 @@ from django.utils import timezone
 
 from babycare.serializers.baby_user import BabyUserSerializer
 from constants import CODE_DUPLICATE_EMAIL, MSG_SEND_VERIFY_CODE_SUCCESS, MSG_NO_SUCH_EMAIL, MSG_EMPTY_VERIFY_CODE, \
-    CODE_EMPTY_VERIFY_CODE, MSG_INCORRECT_VERIFY_CODE, CODE_INCORRECT_VERIFY_CODE, CODE_EXPIRED_VERIFY_CODE, MSG_EXPIRED_VERIFY_CODE, \
+    CODE_EMPTY_VERIFY_CODE, MSG_INCORRECT_VERIFY_CODE, CODE_INCORRECT_VERIFY_CODE, CODE_EXPIRED_VERIFY_CODE, \
+    MSG_EXPIRED_VERIFY_CODE, \
     VERIFY_CODE_EXPIRED_TIME, CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS
 from constants import CODE_DUPLICATE_USER
 from constants import CODE_EMPTY_EMAIL
@@ -62,9 +63,14 @@ class UserViewSet(CustomModelViewSet):
     def list(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid()
+        token = request.data.get('token')
+        user = get_user_by_token(token)
 
-        return json_response(super(UserViewSet, self).list(request, *args, **kwargs).data, CODE_SUCCESS,
-                             MSG_GET_USERS_SUCCESS)
+        if user:
+            return json_response(super(UserViewSet, self).list(request, *args, **kwargs).data,
+                                 CODE_SUCCESS, MSG_GET_USERS_SUCCESS)
+        else:
+            return invalid_token_response()
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -246,5 +252,3 @@ def reset_password_with_verify_code_view(request):
             return simple_json_response(CODE_INCORRECT_VERIFY_CODE, MSG_INCORRECT_VERIFY_CODE)
     else:
         return simple_json_response(CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS)
-
-
