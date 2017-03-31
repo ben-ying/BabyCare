@@ -19,6 +19,6 @@
 
     <color name="black_overlay">#66000000</color>
     <color name="camera_background_color">#c6c6c6</color>
-    <color name="unchecked_icon_color">@color/hint_color</color>
+    <color name="unchecked_icon_color">#888888</color>
     <color name="checked_icon_color">#FF0000</color>
 </resources>

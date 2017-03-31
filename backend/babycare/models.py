@@ -75,3 +75,14 @@ class Verify(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class Like(models.Model):
+    id = IntegerField(label='ID')
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    baby = models.ForeignKey(BabyUser, on_delete=models.CASCADE)
+    datetime = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    def __str__(self):
+        return self.baby.user.username
+

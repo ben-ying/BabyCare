@@ -4,6 +4,7 @@ package com.ben.yjh.babycare.main.event;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.http.EventTaskHandler;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
+import com.ben.yjh.babycare.model.EventLike;
 import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.model.Event;
 import com.ben.yjh.babycare.model.HttpBaseResult;
@@ -27,8 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder>
-        implements EventViewpagerAdapter.EventAdapterInterface,
-        CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+        implements EventViewpagerAdapter.EventAdapterInterface, View.OnClickListener {
 
     private Context mContext;
     private User mUser;
@@ -73,8 +74,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     public void onBindViewHolder(EventViewHolder holder, int position) {
         Event event = mEvents.get(position);
 
-        holder.likeCheckBox.setOnCheckedChangeListener(this);
+        holder.likeCheckBox.setOnClickListener(this);
         holder.likeCheckBox.setTag(event);
+        setLikeCount(holder.likeCheckBox, event);
         holder.commentCheckBox.setOnClickListener(this);
         holder.shareCheckBox.setOnClickListener(this);
 
@@ -155,18 +157,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        RadioButton radioButton = (RadioButton) buttonView;
-        switch (radioButton.getId()) {
-            case R.id.rb_like:
-                if (isChecked) {
-                    likeTask(radioButton, (Event) buttonView.getTag());
-                }
-                break;
-        }
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rb_comment:
@@ -174,23 +164,42 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 break;
             case R.id.rb_share:
                 break;
+            case R.id.rb_like:
+                if (((RadioButton) v).isChecked()) {
+                    likeTask(((RadioButton) v), (Event) v.getTag());
+                }
+                break;
         }
     }
 
-    private void likeTask(final RadioButton radioButton, Event event) {
-        new EventTaskHandler(mContext, mUser.getToken()).addLike(mUser.getUserId(), event,
-                new HttpResponseInterface<HttpBaseResult>() {
+    private void setLikeCount(RadioButton radioButton, Event event) {
+        List<EventLike> likes = EventLike.find(EventLike.class,
+                "event_id = ?", String.valueOf(event.getEventId()));
+        radioButton.setChecked(false);
+        radioButton.setEnabled(true);
+        for (EventLike like : likes) {
+            if (User.find(User.class, "user_id = ?",
+                    String.valueOf(like.getLikeUserId())).size() > 0) {
+                radioButton.setChecked(true);
+                radioButton.setEnabled(false);
+                break;
+            }
+        }
+        radioButton.setText(String.valueOf(likes.size()));
+    }
+
+    private void likeTask(final RadioButton radioButton, final Event event) {
+        new EventTaskHandler(mContext, mUser.getToken()).addLike(event,
+                new HttpResponseInterface<EventLike>() {
                     @Override
                     public void onStart() {
 
                     }
 
                     @Override
-                    public void onSuccess(HttpBaseResult classOfT) {
-                        int count = radioButton.getText() == null ||
-                                radioButton.getText().toString().isEmpty()
-                                ? 0 : Integer.valueOf(radioButton.getText().toString());
-                        radioButton.setText(String.valueOf(++count));
+                    public void onSuccess(EventLike classOfT) {
+                        classOfT.save();
+                        setLikeCount(radioButton, event);
                     }
 
                     @Override

@@ -36,8 +36,12 @@ DATE_TIME_FORMAT = ('%Y-%m-%d %H:%M:%S')
 
 CODE_INVALID_REQUEST = 400
 CODE_INVALID_TOKEN = 401
+CODE_EXCEPTION = 402
+CODE_DUPLICATE = 403
 MSG_400 = _(u'请求数据格式不正确')
 MSG_401 = _(u'AccessToken异常')
+MSG_402 = _(u'接口发生异常')
+MSG_403 = _(u'重复保存')
 
 # register message
 MSG_EMPTY_USERNAME = _(u'用户名不能为空')

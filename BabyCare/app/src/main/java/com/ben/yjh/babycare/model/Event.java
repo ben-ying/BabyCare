@@ -28,6 +28,10 @@ public class Event extends SugarRecord implements Serializable {
     @SerializedName("created") String created;
     @SerializedName("modified") String modified;
 
+    // not in event model
+    @SerializedName("likes") List<EventLike> eventLikes;
+    @SerializedName("comments") List<EventComment> eventComments;
+
     public int getEventId() {
         return eventId;
     }
@@ -116,5 +120,21 @@ public class Event extends SugarRecord implements Serializable {
 
     public void setModified(String modified) {
         this.modified = modified;
+    }
+
+    public List<EventLike> getEventLikes() {
+        return eventLikes == null ? new ArrayList<EventLike>() : eventLikes;
+    }
+
+    public void setEventLikes(List<EventLike> eventLikes) {
+        this.eventLikes = eventLikes;
+    }
+
+    public List<EventComment> getEventComments() {
+        return eventComments == null ? new ArrayList<EventComment>() : eventComments;
+    }
+
+    public void setEventComments(List<EventComment> eventComments) {
+        this.eventComments = eventComments;
     }
 }

@@ -18,6 +18,8 @@ import com.ben.yjh.babycare.http.EventTaskHandler;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.main.ImagePagerActivity;
 import com.ben.yjh.babycare.model.Event;
+import com.ben.yjh.babycare.model.EventComment;
+import com.ben.yjh.babycare.model.EventLike;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.Constants;
 
@@ -115,6 +117,16 @@ public class EventListFragment extends BaseFragment
                         for (Event event : classOfT) {
                             event.save();
                             events.add(event);
+                            EventLike.deleteAll(EventLike.class,
+                                    "event_id = ?", String.valueOf(event.getEventId()));
+                            EventComment.deleteAll(EventComment.class, "event_id = ?",
+                                    String.valueOf(event.getEventId()));
+                            for (EventLike like : event.getEventLikes()) {
+                                like.save();
+                            }
+                            for (EventComment comment : event.getEventComments()) {
+                                comment.save();
+                            }
                         }
                         mAdapter.setData(events);
                     }

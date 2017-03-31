@@ -6,6 +6,7 @@ import android.content.Context;
 import com.android.volley.Request;
 import com.ben.yjh.babycare.model.Event;
 import com.ben.yjh.babycare.model.EventComment;
+import com.ben.yjh.babycare.model.EventLike;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 
 import org.json.JSONArray;
@@ -86,16 +87,15 @@ public class EventTaskHandler extends BaseTaskHandler {
         }
     }
 
-    public void addLike(int userId, Event event,
-                     HttpResponseInterface<HttpBaseResult> httpResponseInterface) {
+    public void addLike(Event event,
+                     HttpResponseInterface<EventLike> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
             bodyObject.put("token", mToken);
-            bodyObject.put("like_user_id", userId);
             bodyObject.put("event_id", event.getEventId());
-            bodyObject.put("event_user_id", event.getUserId());
+            bodyObject.put("like_user_id", event.getUserId());
             new HttpPostTask(context).startTask(URL_LIKE, Request.Method.POST,
-                    bodyObject, HttpBaseResult.class, false, httpResponseInterface);
+                    bodyObject, EventLike.class, false, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();
         }

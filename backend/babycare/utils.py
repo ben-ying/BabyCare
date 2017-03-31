@@ -17,7 +17,8 @@ from rest_framework import viewsets
 from babycare.models import Verify
 from backend.settings import OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET_NAME, OSS_ENDPOINT, EMAIL_HOST_USER
 from constants import CODE_SUCCESS, CODE_INVALID_TOKEN, MSG_401, TEMP_IMAGE, PROFILE_FOOTER_IMAGE, \
-    PASSWORD_VERIFY_CODE_EMAIL_SUBJECT, PASSWORD_VERIFY_CODE_EMAIL_CONTENT
+    PASSWORD_VERIFY_CODE_EMAIL_SUBJECT, PASSWORD_VERIFY_CODE_EMAIL_CONTENT, MSG_402, CODE_EXCEPTION, CODE_DUPLICATE, \
+    MSG_403
 from constants import MIN_PASSWORD_LEN
 import smtplib
 from email.mime.text import MIMEText
@@ -48,6 +49,10 @@ def simple_json_response(code=CODE_SUCCESS, message=''):
 
 def invalid_token_response():
     return simple_json_response(CODE_INVALID_TOKEN, MSG_401)
+
+
+def duplicate_response():
+    return simple_json_response(CODE_DUPLICATE, MSG_403)
 
 
 def password_generator(size=MIN_PASSWORD_LEN, chars=string.ascii_lowercase + string.digits):
@@ -102,6 +107,11 @@ def get_user_by_token(token):
 
     return None
 
+
+def save_error_log(request, exception):
+    view_name = request.resolver_match.view_name
+    # todo
+    return simple_json_response(CODE_EXCEPTION, MSG_402)
 
 
 

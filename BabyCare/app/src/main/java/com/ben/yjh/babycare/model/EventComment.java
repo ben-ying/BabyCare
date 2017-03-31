@@ -9,7 +9,6 @@ import java.io.Serializable;
 public class EventComment extends SugarRecord implements Serializable {
     @SerializedName("comment_id") int commentId;
     @SerializedName("event_id") int eventId;
-    @SerializedName("event_user_id") int eventUserId;
     // who comment user and commented by comment user
     @SerializedName("indirect_user_id") int indirectUserId;
     @SerializedName("comment_user_id") int commentUserId;
@@ -22,14 +21,6 @@ public class EventComment extends SugarRecord implements Serializable {
 
     public void setEventId(int eventId) {
         this.eventId = eventId;
-    }
-
-    public int getEventUserId() {
-        return eventUserId;
-    }
-
-    public void setEventUserId(int eventUserId) {
-        this.eventUserId = eventUserId;
     }
 
     public int getIndirectUserId() {

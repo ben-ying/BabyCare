@@ -10,7 +10,6 @@ import java.util.List;
 public class EventLike extends SugarRecord implements Serializable {
     @SerializedName("like_id") int likeId;
     @SerializedName("event_id") int eventId;
-    @SerializedName("event_user_id") int eventUserId;
     @SerializedName("like_user_id") int likeUserId;
     @SerializedName("datetime") String datetime;
 
@@ -28,14 +27,6 @@ public class EventLike extends SugarRecord implements Serializable {
 
     public void setEventId(int eventId) {
         this.eventId = eventId;
-    }
-
-    public int getEventUserId() {
-        return eventUserId;
-    }
-
-    public void setEventUserId(int eventUserId) {
-        this.eventUserId = eventUserId;
     }
 
     public int getLikeUserId() {
