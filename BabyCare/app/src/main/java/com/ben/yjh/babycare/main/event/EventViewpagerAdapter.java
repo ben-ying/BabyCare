@@ -20,15 +20,17 @@ public class EventViewpagerAdapter extends PagerAdapter {
     private Context mContext;
     private List<String> mImages;
     private EventAdapterInterface mInterface;
+    private int mEventPosition;
 
     interface EventAdapterInterface {
-        void showImageDetail();
+        void showImageDetail(int position);
     }
 
-    EventViewpagerAdapter(Context context, List<String> images,
+    EventViewpagerAdapter(Context context, List<String> images, int position,
                           EventAdapterInterface adapterInterface) {
         this.mContext = context;
         this.mImages = images;
+        this.mEventPosition = position;
         this.mInterface = adapterInterface;
     }
 
@@ -46,7 +48,7 @@ public class EventViewpagerAdapter extends PagerAdapter {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mInterface.showImageDetail();
+                mInterface.showImageDetail(mEventPosition);
             }
         });
 

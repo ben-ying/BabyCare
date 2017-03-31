@@ -47,8 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/add_content"
-                android:gravity="bottom"
-                android:textColor="@color/black" />
+                android:gravity="bottom" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.v7.widget.AppCompatButton

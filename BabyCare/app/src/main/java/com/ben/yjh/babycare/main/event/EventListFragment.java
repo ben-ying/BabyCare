@@ -144,8 +144,11 @@ public class EventListFragment extends BaseFragment
     }
 
     @Override
-    public void showImageDetail() {
+    public void showImageDetail(int position) {
+        ArrayList<String> urls = new ArrayList<>();
+        List<Event> events = mAdapter.getEvents();
         Intent intent = new Intent(activity, ImagePagerActivity.class);
+        intent.putExtra(Constants.IMAGE_URL, events.get(position).getImage1());
         startActivityForResult(intent, Constants.SHOW_EVENT_IMAGE_DETAIL_REQUEST_CODE);
     }
 

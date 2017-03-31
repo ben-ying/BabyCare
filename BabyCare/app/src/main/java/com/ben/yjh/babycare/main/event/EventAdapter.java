@@ -36,8 +36,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     private EventRecyclerViewInterface mInterface;
     private List<Event> mEvents;
 
-    public void showImageDetail() {
-        mInterface.showImageDetail();
+    public void showImageDetail(int position) {
+        mInterface.showImageDetail(position);
     }
 
     public void intent2CommentList() {
@@ -45,7 +45,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     }
 
     interface EventRecyclerViewInterface {
-        void showImageDetail();
+        void showImageDetail(int position);
         void intent2CommentList();
     }
 
@@ -62,6 +62,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         this.mEvents = events;
         Collections.reverse(mEvents);
         notifyDataSetChanged();
+    }
+
+    public List<Event> getEvents() {
+        return mEvents;
     }
 
     @Override
@@ -88,7 +92,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             holder.pageIndicator.setVisibility(View.GONE);
             List<String> images = new ArrayList<>();
             images.add(event.getImage1());
-            holder.viewPager.setAdapter(new EventViewpagerAdapter(mContext, images, this));
+            holder.viewPager.setAdapter(new EventViewpagerAdapter(mContext, images, position, this));
             holder.pageIndicator.setViewPager(holder.viewPager);
             holder.pageIndicator.setSnap(true);
             holder.pageIndicator.setFillColor(mContext.getResources().getColor(R.color.colorPrimary));
