@@ -112,4 +112,6 @@
     <string name="the_day_before_yesterday">前天</string>
     <string name="days_ago">天前</string>
 
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+
 </resources>

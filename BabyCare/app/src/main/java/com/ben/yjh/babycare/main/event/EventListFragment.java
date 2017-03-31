@@ -16,6 +16,7 @@ import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseFragment;
 import com.ben.yjh.babycare.http.EventTaskHandler;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
+import com.ben.yjh.babycare.main.FullscreenActivity;
 import com.ben.yjh.babycare.main.ImagePagerActivity;
 import com.ben.yjh.babycare.model.Event;
 import com.ben.yjh.babycare.model.EventComment;

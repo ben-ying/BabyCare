@@ -30,10 +30,11 @@ public class Constants {
     public static final int GALLERY_PICTURE_REQUEST_CODE = 104;
     public static final int AVIARY_PICTURE_REQUEST_CODE = 105;
     public static final int RESET_PASSWORD_REQUEST_CODE = 106;
-    public static final int SETTING_REQUEST_CODE = 107;
-    public static final int COMMENT_REQUEST_CODE = 108;
-    public static final int GALLERY_REQUEST_CODE = 109;
-    public static final int GALLERY_PAGER_REQUEST_CODE = 110;
+    public static final int USER_INFO_REQUEST_CODE = 107;
+    public static final int SETTING_REQUEST_CODE = 108;
+    public static final int COMMENT_REQUEST_CODE = 109;
+    public static final int GALLERY_REQUEST_CODE = 110;
+    public static final int GALLERY_PAGER_REQUEST_CODE = 111;
 
 
     public static final int INVALID_ACCESS_TOKEN = 401;

@@ -3,7 +3,6 @@ package com.ben.yjh.babycare.main;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -27,8 +26,8 @@ import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.main.event.AddEventActivity;
 import com.ben.yjh.babycare.main.event.EventListFragment;
-import com.ben.yjh.babycare.main.setting.SettingFragment;
-import com.ben.yjh.babycare.model.User;
+import com.ben.yjh.babycare.main.left.SettingActivity;
+import com.ben.yjh.babycare.main.left.UserInfoActivity;
 import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
@@ -129,7 +128,7 @@ public class MainActivity extends BaseActivity
         switch (item.getItemId()) {
             case R.id.nav_personal_info:
                 intent = new Intent(this, UserInfoActivity.class);
-                startActivityForResult(intent, Constants.SETTING_REQUEST_CODE);
+                startActivityForResult(intent, Constants.USER_INFO_REQUEST_CODE);
                 break;
 //            case R.id.nav_gallery:
 //                break;
@@ -148,16 +147,9 @@ public class MainActivity extends BaseActivity
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
                 break;
-//            case R.id.nav_send:
-//                break;
-            case R.id.nav_logout:
-                AlertUtils.showConfirmDialog(this,
-                        R.string.logout_message, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                logout();
-                            }
-                        });
+            case R.id.nav_setting:
+                intent = new Intent(this, SettingActivity.class);
+                startActivityForResult(intent, Constants.SETTING_REQUEST_CODE);
                 break;
         }
 

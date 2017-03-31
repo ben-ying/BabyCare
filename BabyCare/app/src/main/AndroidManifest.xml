@@ -15,26 +15,27 @@
         android:supportsRtl="true"
         android:theme="@style/TranslucentTheme">
 
-        <!--aviary start-->
+        <!-- aviary start -->
         <meta-data
             android:name="com.aviary.android.feather.v1.API_KEY"
             android:value="a92b6a8037ee4212998210468032fb45" />
+
         <activity
             android:name="com.aviary.android.feather.sdk.FeatherActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="unspecified"
             android:hardwareAccelerated="true"
             android:largeHeap="true"
             android:process=":aviarysdk"
+            android:screenOrientation="unspecified"
             android:theme="@style/AviaryTheme.Dark" />
         <!-- CDS Content Service -->
         <service
-            android:process=":aviarycds"
             android:name="com.aviary.android.feather.cds.AviaryCdsService"
-            android:exported="false">
+            android:exported="false"
+            android:process=":aviarycds">
             <intent-filter>
-                <action android:name="aviary.intent.action.CDS_DOWNLOAD_START"/>
-                <action android:name="aviary.intent.action.CDS_RESTORE_USER_ITEMS"/>
+                <action android:name="aviary.intent.action.CDS_DOWNLOAD_START" />
+                <action android:name="aviary.intent.action.CDS_RESTORE_USER_ITEMS" />
             </intent-filter>
         </service>
 
@@ -42,23 +43,23 @@
             Cds Content Provider,
             NOTE that the "authorities" value MUST be formatted in this way:
             android:authorities="{your.packagename}.AviaryCdsProvider"
-         -->
+        -->
         <provider
             android:name="com.aviary.android.feather.cds.AviaryCdsProvider"
             android:authorities="com.ben.yjh.babycare.AviaryCdsProvider"
-            android:process=":aviarycds"
             android:exported="false"
+            android:process=":aviarycds"
             android:syncable="true" />
 
         <!-- CDS Download Receiver -->
         <receiver
             android:name="com.aviary.android.feather.cds.AviaryCdsReceiver"
-            android:process=":aviarycds" >
+            android:process=":aviarycds">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
-        <!--aviary end-->
+        <!-- aviary end -->
 
 
         <!-- sugar config start -->
@@ -96,10 +97,18 @@
         </activity>
         <activity android:name=".main.ImagePagerActivity" />
         <activity android:name=".main.GalleryActivity" />
-        <activity android:name=".main.UserInfoActivity" />
-        <activity android:name=".main.event.CommentActivity" android:windowSoftInputMode="adjustResize|stateAlwaysVisible"/>
+        <activity android:name=".main.left.UserInfoActivity" />
+        <activity android:name=".main.left.SettingActivity" />
+        <activity
+            android:name=".main.event.CommentActivity"
+            android:windowSoftInputMode="adjustResize|stateAlwaysVisible" />
         <activity android:name=".main.event.AddEventActivity" />
         <activity android:name=".main.event.EventDetailActivity" />
+        <activity
+            android:name=".main.FullscreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

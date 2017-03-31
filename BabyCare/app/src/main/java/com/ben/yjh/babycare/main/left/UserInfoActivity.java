@@ -1,4 +1,4 @@
-package com.ben.yjh.babycare.main;
+package com.ben.yjh.babycare.main.left;
 
 import android.Manifest;
 import android.app.AlertDialog;
