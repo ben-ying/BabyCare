@@ -97,12 +97,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         if (event.getTitle().isEmpty()) {
             holder.titleTextView.setVisibility(View.GONE);
         } else {
+            holder.titleTextView.setVisibility(View.VISIBLE);
             holder.titleTextView.setText(event.getTitle());
         }
 
         if (event.getContent().isEmpty()) {
             holder.contentTextView.setVisibility(View.GONE);
         } else {
+            holder.contentTextView.setVisibility(View.VISIBLE);
             holder.contentTextView.setText(event.getContent());
         }
 
