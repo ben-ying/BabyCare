@@ -24,7 +24,8 @@ user_detail = UserViewSet.as_view({
 
 event_list = EventViewSet.as_view({
     'get': 'list',
-    'post': 'create'
+    'post': 'create',
+    'delete': 'destroy'
 })
 
 event_detail = EventViewSet.as_view({

@@ -21,6 +21,7 @@ public class EventTaskHandler extends BaseTaskHandler {
     private static final String URL_EVENTS = "events/";
     private static final String URL_LIKES = "event/likes";
     private static final String URL_LIKE = "event/like";
+    private static final String URL_DELETE = "event/delete";
     private static final String URL_COMMENTS = "event/comments";
     private static final String URL_COMMENT = "event/comment";
 
@@ -74,6 +75,18 @@ public class EventTaskHandler extends BaseTaskHandler {
         }
     }
 
+    public void delete(int eventId,
+                       HttpResponseInterface<HttpBaseResult> httpResponseInterface) {
+        try {
+            JSONObject bodyObject = new JSONObject();
+            bodyObject.put("token", mToken);
+            new HttpPostTask(context).startTask(URL_EVENTS + eventId, Request.Method.DELETE,
+                    bodyObject, HttpBaseResult.class, false, httpResponseInterface);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void getLikes(int eventId,
                      HttpResponseInterface<HttpBaseResult> httpResponseInterface) {
         try {
@@ -87,8 +100,18 @@ public class EventTaskHandler extends BaseTaskHandler {
         }
     }
 
+    public void getLike(int likeId, HttpResponseInterface<HttpBaseResult> httpResponseInterface) {
+        try {
+            JSONObject bodyObject = new JSONObject();
+            new HttpPostTask(context).startTask(URL_LIKES + likeId, Request.Method.GET,
+                    bodyObject, HttpBaseResult.class, true, httpResponseInterface);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void addLike(Event event,
-                     HttpResponseInterface<EventLike> httpResponseInterface) {
+                        HttpResponseInterface<EventLike> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
             bodyObject.put("token", mToken);
@@ -96,16 +119,6 @@ public class EventTaskHandler extends BaseTaskHandler {
             bodyObject.put("like_user_id", event.getUserId());
             new HttpPostTask(context).startTask(URL_LIKE, Request.Method.POST,
                     bodyObject, EventLike.class, false, httpResponseInterface);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getLike(int likeId, HttpResponseInterface<HttpBaseResult> httpResponseInterface) {
-        try {
-            JSONObject bodyObject = new JSONObject();
-            new HttpPostTask(context).startTask(URL_LIKES + likeId, Request.Method.GET,
-                    bodyObject, HttpBaseResult.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();
         }

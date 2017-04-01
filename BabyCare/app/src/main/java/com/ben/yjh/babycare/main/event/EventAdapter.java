@@ -2,13 +2,12 @@ package com.ben.yjh.babycare.main.event;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -21,6 +20,7 @@ import com.ben.yjh.babycare.model.EventLike;
 import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.model.Event;
 import com.ben.yjh.babycare.model.HttpBaseResult;
+import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.ImageUtils;
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -78,11 +78,20 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     public void onBindViewHolder(EventViewHolder holder, int position) {
         Event event = mEvents.get(position);
 
-        holder.likeCheckBox.setOnClickListener(this);
-        holder.likeCheckBox.setTag(event);
-        setLikeCount(holder.likeCheckBox, event);
-        holder.commentCheckBox.setOnClickListener(this);
-        holder.shareCheckBox.setOnClickListener(this);
+        holder.commonRadioButton.setOnClickListener(this);
+        holder.commonRadioButton.setTag(event);
+        holder.commentRadioButton.setOnClickListener(this);
+        holder.shareRadioButton.setOnClickListener(this);
+
+        if (event.getUserId() == mUser.getUserId()) {
+            holder.commonRadioButton.setCompoundDrawablesWithIntrinsicBounds(
+                    mContext.getResources().getDrawable(R.drawable.btn_delete), null, null, null);
+            holder.commentRadioButton.setText("");
+        } else {
+            holder.commonRadioButton.setCompoundDrawablesWithIntrinsicBounds(
+                    mContext.getResources().getDrawable(R.drawable.btn_like), null, null, null);
+            setLikeCount(holder.commonRadioButton, event);
+        }
 
         if (event.getImage1().isEmpty()) {
             holder.viewPager.setVisibility(View.GONE);
@@ -136,9 +145,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     class EventViewHolder extends RecyclerView.ViewHolder {
         ViewPager viewPager;
         CirclePageIndicator pageIndicator;
-        RadioButton likeCheckBox;
-        RadioButton commentCheckBox;
-        RadioButton shareCheckBox;
+        RadioButton commonRadioButton;
+        RadioButton commentRadioButton;
+        RadioButton shareRadioButton;
         ImageButton profileButton;
         TextView nameTextView;
         TextView dateTextView;
@@ -149,9 +158,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             super(itemView);
             this.viewPager = (ViewPager) itemView.findViewById(R.id.view_pager);
             this.pageIndicator = (CirclePageIndicator) itemView.findViewById(R.id.indicator);
-            this.likeCheckBox = (RadioButton) itemView.findViewById(R.id.rb_like);
-            this.commentCheckBox = (RadioButton) itemView.findViewById(R.id.rb_comment);
-            this.shareCheckBox = (RadioButton) itemView.findViewById(R.id.rb_share);
+            this.commonRadioButton = (RadioButton) itemView.findViewById(R.id.rb_common);
+            this.commentRadioButton = (RadioButton) itemView.findViewById(R.id.rb_comment);
+            this.shareRadioButton = (RadioButton) itemView.findViewById(R.id.rb_share);
             this.profileButton = (ImageButton) itemView.findViewById(R.id.ib_profile);
             this.nameTextView = (TextView) itemView.findViewById(R.id.tv_name);
             this.dateTextView = (TextView) itemView.findViewById(R.id.tv_datetime);
@@ -168,9 +177,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 break;
             case R.id.rb_share:
                 break;
-            case R.id.rb_like:
-                if (((RadioButton) v).isChecked()) {
-                    likeTask(((RadioButton) v), (Event) v.getTag());
+            case R.id.rb_common:
+                Event event = (Event) v.getTag();
+                if (event.getUserId() == mUser.getUserId()) {
+                    showDeleteAlert(event);
+                } else {
+                    if (((RadioButton) v).isChecked()) {
+                        likeTask(((RadioButton) v), event);
+                    }
                 }
                 break;
         }
@@ -190,6 +204,40 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             }
         }
         radioButton.setText(String.valueOf(likes.size()));
+    }
+
+    private void showDeleteAlert(final Event event) {
+        AlertUtils.showConfirmDialog(mContext, R.string.delete_event_alert,
+                new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteTask(event);
+            }
+        });
+    }
+
+    private void deleteTask(final Event event) {
+        new EventTaskHandler(mContext, mUser.getToken()).delete(event.getEventId(),
+                new HttpResponseInterface<HttpBaseResult>() {
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onSuccess(HttpBaseResult classOfT) {
+                        mEvents.remove(event);
+                        notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailure(HttpBaseResult result) {
+                    }
+
+                    @Override
+                    public void onHttpError(String error) {
+                    }
+                });
     }
 
     private void likeTask(final RadioButton radioButton, final Event event) {
@@ -215,6 +263,4 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                     }
                 });
     }
-
-
 }

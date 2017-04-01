@@ -88,7 +88,7 @@
 
     <string name="delete">删除</string>
     <string name="retry">重试</string>
-    <string name="delete_event_alert">是否确定删除？</string>
+    <string name="delete_event_alert">点击确定将永久删除帖子，是否确定删除？</string>
 
     <string name="title_activity_image_pager">ImagePagerActivity</string>
     <string name="dummy_button">Dummy Button</string>

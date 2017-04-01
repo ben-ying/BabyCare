@@ -82,6 +82,18 @@ class EventViewSet(CustomModelViewSet):
         except Exception as e:
             return save_error_log(request, e)
 
+    def destroy(self, request, *args, **kwargs):
+        try:
+            token = request.data.get('token')
+            user = get_user_by_token(token)
+            pdb.set_trace()
+            if user:
+                return super(EventViewSet, self).destroy(request, *args, **kwargs)
+            else:
+                return invalid_token_response()
+        except Exception as e:
+            return save_error_log(request, e)
+
 
 @api_view(['POST'])
 def like_view(request):

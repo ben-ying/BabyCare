@@ -81,6 +81,7 @@
 
         <RelativeLayout
             android:id="@+id/title_layout"
+            android:paddingTop="@dimen/text_padding"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_content"
@@ -88,7 +89,7 @@
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/rb_like"
+                android:id="@+id/rb_common"
                 android:layout_toStartOf="@+id/rb_comment"
                 style="@style/action_button"
                 android:drawableStart="@drawable/btn_like" />
