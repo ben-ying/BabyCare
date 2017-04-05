@@ -3,6 +3,7 @@ package com.ben.yjh.babycare.main;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -42,6 +43,8 @@ public class MainActivity extends BaseActivity
     private FloatingActionButton mFab;
     private TabLayout mTabLayout;
     private EventListFragment mEventListFragment;
+    private Runnable mPendingRunnable;
+    private Handler mHandler = new Handler();;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +106,19 @@ public class MainActivity extends BaseActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+//                getActionBar().setTitle(mTitle);
+//                invalidateOptionsMenu();
+
+                if (mPendingRunnable != null) {
+                    mHandler.post(mPendingRunnable);
+                    mPendingRunnable = null;
+                }
+            }
+        };
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -125,38 +140,38 @@ public class MainActivity extends BaseActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        Intent intent = null;
-
-        switch (item.getItemId()) {
-            case R.id.nav_personal_info:
-                intent = new Intent(this, UserInfoActivity.class);
-                startActivityForResult(intent, Constants.USER_INFO_REQUEST_CODE);
-                break;
-//            case R.id.nav_gallery:
-//                break;
-            case R.id.nav_feedback:
-                break;
-            case R.id.nav_message:
-                break;
-            case R.id.nav_share:
-                int stringId = getApplicationInfo().labelRes;
-                String appName = stringId == 0 ? getApplicationInfo()
-                        .nonLocalizedLabel.toString() : getString(stringId);
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, String.format(
-                        getString(R.string.share_message), appName, getPackageName()));
-                sendIntent.setType("text/plain");
-                startActivityForResult(sendIntent, Constants.SHARE_APP_REQUEST_CODE);
-                break;
-            case R.id.nav_setting:
-                intent = new Intent(this, SettingActivity.class);
-                startActivityForResult(intent, Constants.SETTING_REQUEST_CODE);
-                break;
-        }
-
+    public boolean onNavigationItemSelected(final MenuItem item) {
+        mPendingRunnable = new Runnable() {
+            @Override
+            public void run() {
+                Intent intent;
+                switch (item.getItemId()) {
+                    case R.id.nav_personal_info:
+                        intent = new Intent(MainActivity.this, UserInfoActivity.class);
+                        startActivityForResult(intent, Constants.USER_INFO_REQUEST_CODE);
+                        break;
+                    case R.id.nav_feedback:
+                        break;
+                    case R.id.nav_message:
+                        break;
+                    case R.id.nav_share:
+                        int stringId = getApplicationInfo().labelRes;
+                        String appName = stringId == 0 ? getApplicationInfo()
+                                .nonLocalizedLabel.toString() : getString(stringId);
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, String.format(
+                                getString(R.string.share_message), appName, getPackageName()));
+                        sendIntent.setType("text/plain");
+                        startActivityForResult(sendIntent, Constants.SHARE_APP_REQUEST_CODE);
+                        break;
+                    case R.id.nav_setting:
+                        intent = new Intent(MainActivity.this, SettingActivity.class);
+                        startActivityForResult(intent, Constants.SETTING_REQUEST_CODE);
+                        break;
+                }
+            }
+        };
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

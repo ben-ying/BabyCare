@@ -15,10 +15,10 @@ sudo pip install Django==1.10.4
 django-admin.py startproject backend
 #create an app
 python manage.py startapp babycare
-#create tables
-python manage.py migrate
 #crete babycate tables
 python manage.py makemigrations babycare
+#create tables
+python manage.py migrate
 #pip install file
 sudo pip install -r requirements.txt
 #show migration sql
