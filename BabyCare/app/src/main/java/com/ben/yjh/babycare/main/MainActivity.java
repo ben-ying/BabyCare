@@ -1,6 +1,5 @@
 package com.ben.yjh.babycare.main;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -28,7 +27,7 @@ import com.ben.yjh.babycare.main.event.AddEventActivity;
 import com.ben.yjh.babycare.main.event.EventListFragment;
 import com.ben.yjh.babycare.main.left.SettingActivity;
 import com.ben.yjh.babycare.main.left.UserInfoActivity;
-import com.ben.yjh.babycare.util.AlertUtils;
+import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
 
@@ -108,6 +107,11 @@ public class MainActivity extends BaseActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        initNavigationView();
+    }
+
+    private void initNavigationView() {
+        user = User.getUser();
         NavigationView navigationView = (NavigationView) findViewById(R.id.design_navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
         TextView nameTextView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_name);
@@ -145,7 +149,7 @@ public class MainActivity extends BaseActivity
                 sendIntent.putExtra(Intent.EXTRA_TEXT, String.format(
                         getString(R.string.share_message), appName, getPackageName()));
                 sendIntent.setType("text/plain");
-                startActivity(sendIntent);
+                startActivityForResult(sendIntent, Constants.SHARE_APP_REQUEST_CODE);
                 break;
             case R.id.nav_setting:
                 intent = new Intent(this, SettingActivity.class);
@@ -165,8 +169,14 @@ public class MainActivity extends BaseActivity
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case Constants.ADD_EVENT_REQUEST_CODE:
-                    mEventListFragment.onActivityResult(requestCode, resultCode, data);
                     break;
+                case Constants.USER_INFO_REQUEST_CODE:
+                    initNavigationView();
+                    break;
+            }
+
+            if (mEventListFragment != null) {
+                mEventListFragment.onActivityResult(requestCode, resultCode, data);
             }
         }
     }

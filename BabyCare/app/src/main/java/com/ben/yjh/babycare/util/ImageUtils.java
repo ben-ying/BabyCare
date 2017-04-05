@@ -75,7 +75,7 @@ public class ImageUtils {
 
         return new DisplayImageOptions.Builder()
                 .displayer(new RoundedBitmapDisplayer(180))
-                .showImageOnLoading(defaultIconId)
+                .showImageOnLoading(0)
                 .showImageOnFail(defaultIconId)
                 .showImageForEmptyUri(defaultIconId)
                 .cacheInMemory(true)

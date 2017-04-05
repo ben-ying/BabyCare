@@ -1,4 +1,4 @@
-package com.ben.yjh.babycare.widget;
+package com.ben.yjh.babycare.widget.volley;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -9,7 +9,8 @@ public class VolleySingleton {
     private RequestQueue mRequestQueue;
 
     private VolleySingleton() {
-        mRequestQueue = Volley.newRequestQueue(MyApplication.getAppContext());
+        CustomHurlStack customHurlStack = new CustomHurlStack();
+        mRequestQueue = Volley.newRequestQueue(MyApplication.getAppContext(), customHurlStack);
     }
 
     public static VolleySingleton getInstance() {

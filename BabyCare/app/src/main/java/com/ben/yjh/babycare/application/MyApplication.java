@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import com.android.volley.Request;
 import com.aviary.android.feather.common.AviaryIntent;
 import com.ben.yjh.babycare.util.Constants;
-import com.ben.yjh.babycare.widget.VolleySingleton;
+import com.ben.yjh.babycare.widget.volley.VolleySingleton;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;

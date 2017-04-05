@@ -35,6 +35,7 @@ public class Constants {
     public static final int COMMENT_REQUEST_CODE = 109;
     public static final int GALLERY_REQUEST_CODE = 110;
     public static final int GALLERY_PAGER_REQUEST_CODE = 111;
+    public static final int SHARE_APP_REQUEST_CODE = 112;
 
 
     public static final int INVALID_ACCESS_TOKEN = 401;

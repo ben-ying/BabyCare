@@ -29,6 +29,8 @@ public class Event extends SugarRecord implements Serializable {
     @SerializedName("modified") String modified;
 
     // not in event model
+    @SerializedName("username") String username;
+    @SerializedName("user_profile") String userProfile;
     @SerializedName("likes") List<EventLike> eventLikes;
     @SerializedName("comments") List<EventComment> eventComments;
 
@@ -42,6 +44,22 @@ public class Event extends SugarRecord implements Serializable {
 
     public int getUserId() {
         return userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(String userProfile) {
+        this.userProfile = userProfile;
     }
 
     public void setUserId(int userId) {

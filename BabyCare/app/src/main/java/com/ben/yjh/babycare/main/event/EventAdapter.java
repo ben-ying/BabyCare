@@ -86,7 +86,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         if (event.getUserId() == mUser.getUserId()) {
             holder.commonRadioButton.setCompoundDrawablesWithIntrinsicBounds(
                     mContext.getResources().getDrawable(R.drawable.btn_delete), null, null, null);
-            holder.commentRadioButton.setText("");
+            holder.commonRadioButton.setText("");
         } else {
             holder.commonRadioButton.setCompoundDrawablesWithIntrinsicBounds(
                     mContext.getResources().getDrawable(R.drawable.btn_like), null, null, null);
@@ -123,17 +123,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             holder.contentTextView.setText(event.getContent());
         }
 
-        List<User> users = User.find(User.class, "user_id = ?", String.valueOf(event.getUserId()));
-        if (users.size() > 0) {
-            MyApplication.displayTinyImage(users.get(0).getProfile(),
-                    holder.profileButton, ImageUtils.getTinyProfileImageOptions());
-            holder.nameTextView.setText(users.get(0).getBabyName());
-        } else {
-            MyApplication.displayTinyImage("drawable://" + R.drawable.ic_profile,
-                    holder.profileButton, ImageUtils.getTinyProfileImageOptions());
-            holder.nameTextView.setText("");
-        }
-
+        MyApplication.displayTinyImage(event.getUserProfile(),
+                holder.profileButton, ImageUtils.getTinyProfileImageOptions());
+        holder.nameTextView.setText(event.getUsername());
         holder.dateTextView.setText(event.getCreatedDate(mContext));
     }
 
@@ -203,7 +195,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 break;
             }
         }
-        radioButton.setText(String.valueOf(likes.size()));
+        if (likes.size() > 0) {
+            radioButton.setText(String.valueOf(likes.size()));
+        } else {
+            radioButton.setText("");
+        }
     }
 
     private void showDeleteAlert(final Event event) {
@@ -218,16 +214,20 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     private void deleteTask(final Event event) {
         new EventTaskHandler(mContext, mUser.getToken()).delete(event.getEventId(),
-                new HttpResponseInterface<HttpBaseResult>() {
+                new HttpResponseInterface<Event>() {
                     @Override
                     public void onStart() {
 
                     }
 
                     @Override
-                    public void onSuccess(HttpBaseResult classOfT) {
+                    public void onSuccess(Event classOfT) {
                         mEvents.remove(event);
                         notifyDataSetChanged();
+                        if (classOfT != null || event.getEventId() < 0) {
+                            Event.deleteAll(Event.class, "event_id = ?",
+                                    String.valueOf(classOfT.getEventId()));
+                        }
                     }
 
                     @Override
@@ -241,7 +241,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     }
 
     private void likeTask(final RadioButton radioButton, final Event event) {
-        new EventTaskHandler(mContext, mUser.getToken()).addLike(event,
+        new EventTaskHandler(mContext, mUser.getToken()).addLike(event, mUser.getUserId(),
                 new HttpResponseInterface<EventLike>() {
                     @Override
                     public void onStart() {

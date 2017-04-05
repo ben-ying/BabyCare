@@ -74,4 +74,5 @@ PASSWORD_VERIFY_CODE_EMAIL_CONTENT = _(u'您的验证码：%s。\n本邮件是�
 # event message
 MSG_EMPTY_EVENT = _(u'数据不能全为空')
 MSG_CREATE_EVENT_SUCCESS = _(u'发布成功')
+MSG_DELETE_EVENT_SUCCESS = _(u'删除成功')
 

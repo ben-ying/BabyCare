@@ -173,9 +173,10 @@ public class EventListFragment extends BaseFragment
                             String.valueOf(activity.user.getUserId()));
                     mAdapter.setData(events);
                     mRecyclerView.scrollToPosition(0);
-                    getEventsTask();
                     break;
             }
+
+            getEventsTask();
         }
     }
 

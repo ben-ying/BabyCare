@@ -25,7 +25,6 @@ user_detail = UserViewSet.as_view({
 event_list = EventViewSet.as_view({
     'get': 'list',
     'post': 'create',
-    'delete': 'destroy'
 })
 
 event_detail = EventViewSet.as_view({
@@ -48,7 +47,7 @@ urlpatterns = [
     url(r'^user/send_verify_code$', send_verify_code_view, name='send-verify-code'),
     url(r'^user/reset_password$', reset_password_with_verify_code_view, name='reset-password-with-verify-code'),
     url(r'^events/$', event_list, name='event-list'),
-    url(r'^events/(?P<pk>[0-9]+)$', event_detail, name='event-detail'),
+    url(r'^events/(?P<pk>[0-9]+)', event_detail, name='event-detail'),
     url(r'^event/like$', like_view, name='like'),
 ]
 

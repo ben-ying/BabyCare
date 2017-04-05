@@ -4,16 +4,18 @@
 import pdb
 
 import time
+import json
 
 from django.contrib.auth.models import User
 from django.utils import timezone
+from rest_framework import status
 from rest_framework.decorators import api_view
 
 from babycare.serializers import like
 from babycare.serializers.event import EventSerializer
 from babycare.serializers.like import LikeSerializer
 from constants import CODE_EMPTY_EVENT, MSG_EMPTY_EVENT, PROFILE_FOOTER_IMAGE, EVENT_FOOTER_IMAGE, \
-    MSG_GET_EVENTS_SUCCESS
+    MSG_GET_EVENTS_SUCCESS, MSG_DELETE_EVENT_SUCCESS
 from constants import CODE_SUCCESS, MSG_CREATE_EVENT_SUCCESS
 from models import BabyUser, Like
 from models import Event
@@ -68,14 +70,14 @@ class EventViewSet(CustomModelViewSet):
                         image = upload_image_to_oss(image_name, image)
                         event.image1 = image
                 event.save()
-                serializer.is_valid()
-                response = serializer.data
-                response['event_id'] = event.id
-                baby_user = BabyUser.objects.get(user=user)
-                response['user_id'] = baby_user.id
-                response['image1'] = image
-                response['modified'] = str(event.modified)
-                response['created'] = str(event.created)
+                # serializer.is_valid()
+                response = EventSerializer(event).data
+                # response['event_id'] = event.id
+                # baby_user = BabyUser.objects.get(user=user)
+                # response['user_id'] = baby_user.id
+                # response['image1'] = image
+                # response['modified'] = str(event.modified)
+                # response['created'] = str(event.created)
                 return json_response(response, CODE_SUCCESS, MSG_CREATE_EVENT_SUCCESS)
             else:
                 return invalid_token_response()
@@ -84,11 +86,23 @@ class EventViewSet(CustomModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         try:
-            token = request.data.get('token')
+            obj = json.loads(request.body)
+            token = obj.get('token')
             user = get_user_by_token(token)
-            pdb.set_trace()
             if user:
-                return super(EventViewSet, self).destroy(request, *args, **kwargs)
+                try:
+                    response = super(EventViewSet, self).destroy(request, *args, **kwargs)
+                    if response.status_code == status.HTTP_204_NO_CONTENT:
+                        event_json = EventSerializer(self.get_object()).data
+                    else:
+                        event = Event()
+                        event.id = -1
+                        event_json = EventSerializer(event).data
+                except Exception as e:
+                    event = Event()
+                    event.id = -1
+                    event_json = EventSerializer(event).data
+                return json_response(event_json, CODE_SUCCESS, MSG_DELETE_EVENT_SUCCESS)
             else:
                 return invalid_token_response()
         except Exception as e:

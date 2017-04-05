@@ -76,12 +76,12 @@ public class EventTaskHandler extends BaseTaskHandler {
     }
 
     public void delete(int eventId,
-                       HttpResponseInterface<HttpBaseResult> httpResponseInterface) {
+                       HttpResponseInterface<Event> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
             bodyObject.put("token", mToken);
             new HttpPostTask(context).startTask(URL_EVENTS + eventId, Request.Method.DELETE,
-                    bodyObject, HttpBaseResult.class, false, httpResponseInterface);
+                    bodyObject, Event.class, false, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -110,13 +110,13 @@ public class EventTaskHandler extends BaseTaskHandler {
         }
     }
 
-    public void addLike(Event event,
+    public void addLike(Event event, int userId,
                         HttpResponseInterface<EventLike> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
             bodyObject.put("token", mToken);
             bodyObject.put("event_id", event.getEventId());
-            bodyObject.put("like_user_id", event.getUserId());
+            bodyObject.put("like_user_id", userId);
             new HttpPostTask(context).startTask(URL_LIKE, Request.Method.POST,
                     bodyObject, EventLike.class, false, httpResponseInterface);
         } catch (Exception e) {
