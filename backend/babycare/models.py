@@ -86,3 +86,23 @@ class Like(models.Model):
     def __str__(self):
         return self.baby.user.username
 
+
+class Feedback(models.Model):
+    id = IntegerField(label='ID')
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    description = models.TextField()
+    image1 = models.CharField(max_length=200, blank=True, null=True)
+    image2 = models.CharField(max_length=200, blank=True, null=True)
+    image3 = models.CharField(max_length=200, blank=True, null=True)
+    image4 = models.CharField(max_length=200, blank=True, null=True)
+    image5 = models.CharField(max_length=200, blank=True, null=True)
+    image6 = models.CharField(max_length=200, blank=True, null=True)
+    image7 = models.CharField(max_length=200, blank=True, null=True)
+    image8 = models.CharField(max_length=200, blank=True, null=True)
+    image9 = models.CharField(max_length=200, blank=True, null=True)
+    created = models.DateTimeField(editable=False, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username
+

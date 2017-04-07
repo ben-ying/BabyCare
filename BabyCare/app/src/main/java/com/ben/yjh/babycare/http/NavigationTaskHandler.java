@@ -12,6 +12,7 @@ import com.ben.yjh.babycare.model.HttpBaseResult;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,12 +27,21 @@ public class NavigationTaskHandler extends BaseTaskHandler {
         this.mToken = token;
     }
 
-    public void sendFeedback(HttpResponseInterface<Event[]> httpResponseInterface) {
+    public void sendFeedback(String description, ArrayList<String> base64Images,
+                             HttpResponseInterface<HttpBaseResult> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
+            bodyObject.put("description", description);
             bodyObject.put("token", mToken);
+            if (base64Images.size() > 0) {
+                JSONArray jsonArray = new JSONArray();
+                for (String base64 : base64Images) {
+                    jsonArray.put(base64);
+                }
+                bodyObject.put("base64_images", jsonArray);
+            }
             new HttpPostTask(context).startTask(URL_SEND_FEEDBACK, Request.Method.POST,
-                    bodyObject, Event[].class, true, httpResponseInterface);
+                    bodyObject, HttpBaseResult.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();
         }

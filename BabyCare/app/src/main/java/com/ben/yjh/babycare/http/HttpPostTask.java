@@ -34,8 +34,8 @@ import java.util.TimeZone;
 public class HttpPostTask {
 
 //    private static final String DOMAIN = "http://116.62.47.105/webservice/";
-    private static final String DOMAIN = "http://www.bensbabycare.com/webservice/";
-//        private static final String DOMAIN = "http://192.168.1.130:8000/webservice/";
+//    private static final String DOMAIN = "http://www.bensbabycare.com/webservice/";
+        private static final String DOMAIN = "http://192.168.1.130:8000/webservice/";
     private static final String TAG_JSON_OBJ = "tag_json_obj";
     private static final String VERSION = "1.0.0";
 
@@ -99,12 +99,16 @@ public class HttpPostTask {
                                     response.toString(), HttpBaseResult.class);
                             if (httpResponse.isSuccess()) {
                                 try {
-                                    if (classOfT.isArray()) {
-                                        httpResponseInterface.onSuccess(
-                                                HttpUtils.getJsonData(response.getJSONArray("result").toString(), classOfT));
+                                    if (classOfT == HttpBaseResult.class) {
+                                        httpResponseInterface.onSuccess(httpResponse);
                                     } else {
-                                        httpResponseInterface.onSuccess(
-                                                HttpUtils.getJsonData(response.getJSONObject("result"), classOfT));
+                                        if (classOfT.isArray()) {
+                                            httpResponseInterface.onSuccess(
+                                                    HttpUtils.getJsonData(response.getJSONArray("result").toString(), classOfT));
+                                        } else {
+                                            httpResponseInterface.onSuccess(
+                                                    HttpUtils.getJsonData(response.getJSONObject("result"), classOfT));
+                                        }
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
