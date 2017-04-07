@@ -1,7 +1,10 @@
 package com.ben.yjh.babycare.main;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -20,12 +23,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.main.event.AddEventActivity;
 import com.ben.yjh.babycare.main.event.EventListFragment;
+import com.ben.yjh.babycare.main.left.FeedbackActivity;
 import com.ben.yjh.babycare.main.left.SettingActivity;
 import com.ben.yjh.babycare.main.left.UserInfoActivity;
 import com.ben.yjh.babycare.model.User;
@@ -44,7 +49,8 @@ public class MainActivity extends BaseActivity
     private TabLayout mTabLayout;
     private EventListFragment mEventListFragment;
     private Runnable mPendingRunnable;
-    private Handler mHandler = new Handler();;
+    private Handler mHandler = new Handler();
+    ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +157,16 @@ public class MainActivity extends BaseActivity
                         startActivityForResult(intent, Constants.USER_INFO_REQUEST_CODE);
                         break;
                     case R.id.nav_feedback:
+//                        intent = new Intent(Intent.ACTION_SENDTO);
+//                        intent.setData(Uri.parse("mailto:bensbabycare@163.com"));
+//                        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedback));
+//                        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.feedback_message));
+//                        if (intent.resolveActivity(getPackageManager()) != null) {
+//                            startActivity(intent);
+//                        } else {
+                            intent = new Intent(MainActivity.this, FeedbackActivity.class);
+                            startActivity(intent);
+//                        }
                         break;
                     case R.id.nav_message:
                         break;

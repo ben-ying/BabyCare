@@ -9,4 +9,8 @@
         <item>男</item>
         <item>女</item>
     </string-array>
+
+    <string-array name="delete_choices">
+        <item>删除</item>
+    </string-array>
 </resources>

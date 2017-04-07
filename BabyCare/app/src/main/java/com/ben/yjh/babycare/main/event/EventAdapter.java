@@ -124,7 +124,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         }
 
         MyApplication.displayTinyImage(event.getUserProfile(),
-                holder.profileButton, ImageUtils.getTinyProfileImageOptions());
+                holder.profileButton, ImageUtils.getTinyProfileImageOptions(mContext));
         holder.nameTextView.setText(event.getUsername());
         holder.dateTextView.setText(event.getCreatedDate(mContext));
     }

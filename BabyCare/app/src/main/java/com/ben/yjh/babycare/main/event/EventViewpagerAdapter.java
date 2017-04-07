@@ -44,7 +44,7 @@ public class EventViewpagerAdapter extends PagerAdapter {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_event_image, null);
         ImageView imageView = (ImageView) view.findViewById(R.id.img_event);
         MyApplication.displayImage(mImages.get(position),
-                imageView, ImageUtils.getEventImageOptions(), false);
+                imageView, ImageUtils.getEventImageOptions(mContext), false);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

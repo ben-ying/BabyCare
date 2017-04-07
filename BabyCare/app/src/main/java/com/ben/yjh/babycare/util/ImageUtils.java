@@ -52,7 +52,7 @@ public class ImageUtils {
         }
     }
 
-    public static final Uri getTempUri() {
+    public static Uri getTempUri() {
         return Uri.fromFile(new File(Environment.getExternalStorageDirectory().getPath(), "temp.jpg"));
     }
 
@@ -83,9 +83,10 @@ public class ImageUtils {
                 .build();
     }
 
-    public static DisplayImageOptions getTinyProfileImageOptions() {
+    public static DisplayImageOptions getTinyProfileImageOptions(Context context) {
         return new DisplayImageOptions.Builder()
-                .displayer(new RoundedBitmapDisplayer(5))
+                .displayer(new RoundedBitmapDisplayer(
+                        (int) context.getResources().getDimension(R.dimen.image_radius)))
                 .showImageOnLoading(R.drawable.ic_profile)
                 .showImageOnFail(R.drawable.ic_profile)
                 .showImageForEmptyUri(R.drawable.ic_profile)
@@ -104,9 +105,10 @@ public class ImageUtils {
                 .build();
     }
 
-    public static DisplayImageOptions getEventImageOptions() {
+    public static DisplayImageOptions getEventImageOptions(Context context) {
         return new DisplayImageOptions.Builder()
-                .displayer(new RoundedBitmapDisplayer(5))
+                .displayer(new RoundedBitmapDisplayer(
+                        (int) context.getResources().getDimension(R.dimen.image_radius)))
                 .showImageOnLoading(0)
                 .showImageOnFail(0)
                 .showImageForEmptyUri(0)
@@ -140,8 +142,10 @@ public class ImageUtils {
                 return null;
             } finally {
                 try {
-                    out.flush();
-                    out.close();
+                    if (out != null) {
+                        out.flush();
+                        out.close();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
