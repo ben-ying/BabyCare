@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +17,6 @@ import android.widget.GridView;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.main.GalleryActivity;
-import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
 
 import java.io.File;
@@ -69,13 +67,20 @@ public class FeedbackActivity extends BaseActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 if (!mImageUrls.get(position).equals(DEFAULT_ADD_IMAGE)) {
-                    String[] array = getResources().getStringArray(R.array.delete_choices);
+                    String[] array = getResources().getStringArray(R.array.feedback_image_choices);
                     new AlertDialog.Builder(FeedbackActivity.this)
                             .setItems(array, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     switch (which) {
                                         case 0:
+                                            mCurrentPosition = position;
+                                            if (verifyStoragePermissions()) {
+                                                Intent intent = new Intent(FeedbackActivity.this, GalleryActivity.class);
+                                                startActivityForResult(intent, Constants.GALLERY_REQUEST_CODE);
+                                            }
+                                            break;
+                                        case 1:
                                             mImageUrls.remove(position);
                                             mImageUrls.remove(DEFAULT_ADD_IMAGE);
                                             mImageUrls.add(DEFAULT_ADD_IMAGE);
@@ -86,7 +91,6 @@ public class FeedbackActivity extends BaseActivity {
                                     }
                                 }
                             })
-                            .setNegativeButton(R.string.cancel, null)
                             .show();
                 }
                 return true;

@@ -10,7 +10,8 @@
         <item>女</item>
     </string-array>
 
-    <string-array name="delete_choices">
+    <string-array name="feedback_image_choices">
+        <item>替换</item>
         <item>删除</item>
     </string-array>
 </resources>
