@@ -46,7 +46,7 @@ public class CardFragmentPagerAdapter extends FragmentStatePagerAdapter implemen
 
     @Override
     public Fragment getItem(int position) {
-        return CardFragment.getInstance(position);
+        return CardFragment.newInstance(position);
     }
 
     @Override

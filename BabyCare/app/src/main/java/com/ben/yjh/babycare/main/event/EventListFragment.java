@@ -62,8 +62,8 @@ public class EventListFragment extends BaseFragment
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setNestedScrollingEnabled(false);
-        mAdapter = new EventAdapter(activity, activity.user, Event.find(Event.class, "user_id = ?",
-                String.valueOf(activity.user.getUserId())), this);
+        mAdapter = new EventAdapter(activity, user, Event.find(Event.class, "user_id = ?",
+                String.valueOf(user.getUserId())), this);
         mRecyclerView.setAdapter(mAdapter);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.google_blue,
                 R.color.google_green, R.color.google_red, R.color.google_yellow);
@@ -101,7 +101,7 @@ public class EventListFragment extends BaseFragment
     }
 
     private void getEventsTask() {
-        new EventTaskHandler(activity, activity.user.getToken()).getEvents(
+        new EventTaskHandler(activity, user.getToken()).getEvents(
                 new HttpResponseInterface<Event[]>() {
                     @Override
                     public void onStart() {
@@ -111,8 +111,7 @@ public class EventListFragment extends BaseFragment
                     @Override
                     public void onSuccess(Event[] classOfT) {
                         mSwipeRefreshLayout.setRefreshing(false);
-                        Event.deleteAll(Event.class, "user_id = ?",
-                                String.valueOf(activity.user.getUserId()));
+                        Event.deleteAll(Event.class, "user_id = ?", String.valueOf(user.getUserId()));
                         ArrayList<Event> events = new ArrayList<>();
                         for (Event event : classOfT) {
                             event.save();
@@ -145,7 +144,6 @@ public class EventListFragment extends BaseFragment
 
     @Override
     public void showImageDetail(int position) {
-        ArrayList<String> urls = new ArrayList<>();
         List<Event> events = mAdapter.getEvents();
         Intent intent = new Intent(activity, ImagePagerActivity.class);
         intent.putExtra(Constants.IMAGE_URL, events.get(position).getImage1());
@@ -169,7 +167,7 @@ public class EventListFragment extends BaseFragment
                     break;
                 case Constants.ADD_EVENT_REQUEST_CODE:
                     List<Event> events = Event.find(Event.class, "user_id = ?",
-                            String.valueOf(activity.user.getUserId()));
+                            String.valueOf(user.getUserId()));
                     mAdapter.setData(events);
                     mRecyclerView.scrollToPosition(0);
                     break;

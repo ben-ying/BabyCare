@@ -8,15 +8,21 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
+import com.ben.yjh.babycare.model.User;
+
 public abstract class BaseFragment extends Fragment implements OnClickListener {
 
     public BaseActivity activity;
+    public User user;
+    public View rootView;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         activity = (BaseActivity) getActivity();
-        return initView(inflater, container, savedInstanceState);
+        user = activity.user;
+        rootView = initView(inflater, container, savedInstanceState);
+        return rootView;
     }
 
 

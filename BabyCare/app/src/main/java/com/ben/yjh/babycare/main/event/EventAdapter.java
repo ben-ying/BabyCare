@@ -50,12 +50,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         mInterface.intent2CommentList();
     }
 
-    interface EventRecyclerViewInterface {
+    public interface EventRecyclerViewInterface {
         void showImageDetail(int position);
         void intent2CommentList();
     }
 
-    EventAdapter(Context context, User user, List<Event> events,
+    public EventAdapter(Context context, User user, List<Event> events,
                  EventRecyclerViewInterface recyclerViewInterface) {
         this.mContext = context;
         this.mUser = user;
@@ -64,7 +64,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         Collections.reverse(mEvents);
     }
 
-    void setData(List<Event> events) {
+    public void setData(List<Event> events) {
         this.mEvents = events;
         Collections.reverse(mEvents);
         notifyDataSetChanged();

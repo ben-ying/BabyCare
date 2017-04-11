@@ -47,7 +47,6 @@ public class MainActivity extends BaseActivity
     private EventListFragment mEventListFragment;
     private Runnable mPendingRunnable;
     private Handler mHandler = new Handler();
-    ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

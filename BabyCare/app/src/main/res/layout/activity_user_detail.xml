@@ -106,6 +106,12 @@
                     android:id="@+id/item_hobbies"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:padding="@dimen/recycler_view_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
 

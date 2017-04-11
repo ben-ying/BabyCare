@@ -16,7 +16,7 @@ public class CardFragment extends Fragment {
 
     private CardView cardView;
 
-    public static Fragment getInstance(int position) {
+    public static Fragment newInstance(int position) {
         CardFragment f = new CardFragment();
         Bundle args = new Bundle();
         args.putInt("position", position);
