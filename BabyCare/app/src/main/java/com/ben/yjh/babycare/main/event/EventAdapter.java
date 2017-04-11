@@ -41,6 +41,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     private User mUser;
     private EventRecyclerViewInterface mInterface;
     private List<Event> mEvents;
+    private boolean mIsHomeEvent;
 
     public void showImageDetail(int position) {
         mInterface.showImageDetail(position);
@@ -55,11 +56,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         void intent2CommentList();
     }
 
-    public EventAdapter(Context context, User user, List<Event> events,
+    public EventAdapter(Context context, User user, List<Event> events, boolean isHomeEvent,
                  EventRecyclerViewInterface recyclerViewInterface) {
         this.mContext = context;
         this.mUser = user;
         this.mEvents = events;
+        this.mIsHomeEvent = isHomeEvent;
         this.mInterface = recyclerViewInterface;
         Collections.reverse(mEvents);
     }
@@ -191,16 +193,18 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 break;
             case R.id.ib_profile:
             case R.id.tv_name:
-                Intent intent;
-                int userId = (int) v.getTag();
-                if (userId == mUser.getUserId()) {
-                    intent = new Intent(mContext, UserInfoActivity.class);
-                    ((Activity) mContext).startActivityForResult(
-                            intent, Constants.USER_INFO_REQUEST_CODE);
-                } else {
-                    intent = new Intent(mContext, UserDetailActivity.class);
-                    intent.putExtra(Constants.USER_ID, userId);
-                    mContext.startActivity(intent);
+                if (mIsHomeEvent) {
+                    Intent intent;
+                    int userId = (int) v.getTag();
+                    if (userId == mUser.getUserId()) {
+                        intent = new Intent(mContext, UserInfoActivity.class);
+                        ((Activity) mContext).startActivityForResult(
+                                intent, Constants.USER_INFO_REQUEST_CODE);
+                    } else {
+                        intent = new Intent(mContext, UserDetailActivity.class);
+                        intent.putExtra(Constants.USER_ID, userId);
+                        mContext.startActivity(intent);
+                    }
                 }
                 break;
         }

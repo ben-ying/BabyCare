@@ -1,5 +1,6 @@
 package com.ben.yjh.babycare.main.setting;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,11 @@ public class SettingFragment extends BaseFragment {
     @Override
     public void init() {
 
+    }
+
+    @Override
+    public String getTitle(Context context) {
+        return context.getResources().getString(R.string.setting);
     }
 
     @Override

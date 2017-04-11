@@ -245,7 +245,7 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="MyDialogTheme" parent="@android:style/Theme.Material.Light.Dialog.Alert">
+    <style name="MyDialogTheme" parent="@android:style/Theme.DeviceDefault.Light.Dialog.NoActionBar.MinWidth">
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 

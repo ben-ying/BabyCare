@@ -74,6 +74,7 @@
 
 
     <!--event-->
+    <string name="event">动态</string>
     <string name="title">标题</string>
     <string name="date">日期</string>
     <string name="add_content">添加内容</string>
@@ -85,7 +86,6 @@
     <string name="show_more">更多内容</string>
     <string name="select_image">选择图片</string>
     <string name="take_picture">拍摄照片</string>
-
     <string name="delete">删除</string>
     <string name="retry">重试</string>
     <string name="delete_event_alert">点击确定将永久删除帖子，是否确定删除？</string>
@@ -97,6 +97,7 @@
     <!--navigation-->
     <string name="others">其它</string>
     <string name="user_info">用户信息</string>
+    <string name="basic_info">基本信息</string>
     <string name="share">分享</string>
     <string name="message">消息</string>
     <string name="feedback">反馈信息</string>

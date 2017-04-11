@@ -1,27 +1,13 @@
 package com.ben.yjh.babycare.main.left;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -29,43 +15,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.ben.yjh.babycare.R;
-import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseFragment;
-import com.ben.yjh.babycare.http.EventTaskHandler;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.UserTaskHandler;
-import com.ben.yjh.babycare.main.event.CommentActivity;
-import com.ben.yjh.babycare.main.event.EventAdapter;
-import com.ben.yjh.babycare.main.event.EventListFragment;
-import com.ben.yjh.babycare.main.user.CardAdapter;
-import com.ben.yjh.babycare.main.user.ImagePagerActivity;
-import com.ben.yjh.babycare.model.Event;
-import com.ben.yjh.babycare.model.EventComment;
-import com.ben.yjh.babycare.model.EventLike;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.util.Constants;
-import com.ben.yjh.babycare.util.ImageUtils;
 import com.ben.yjh.babycare.widget.ItemInfo;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 
 public class PersonalInfoFragment extends BaseFragment {
-
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
 
     private ItemInfo mBabyNameItem;
     private ItemInfo mEmailItem;
@@ -73,7 +36,7 @@ public class PersonalInfoFragment extends BaseFragment {
     private ItemInfo mGenderItem;
     private ItemInfo mBirthItem;
     private ItemInfo mHobbiesItem;
-    private boolean mUpdate;
+    private UserInfoActivity mActivity;
 
     public static PersonalInfoFragment newInstance() {
         Bundle args = new Bundle();
@@ -98,12 +61,14 @@ public class PersonalInfoFragment extends BaseFragment {
         mGenderItem.setOnClickListener(this);
         mBirthItem.setOnClickListener(this);
         mHobbiesItem.setOnClickListener(this);
+        mActivity = (UserInfoActivity) activity;
 
         return view;
     }
 
     @Override
     public void init() {
+        user = mActivity.user;
         mBabyNameItem.setValue(R.string.baby_name, user.getBabyName(), R.string.edit_baby_name);
         mEmailItem.setValue(R.string.email, user.getEmail(), R.string.edit_email);
         mPhoneItem.setValue(R.string.phone, user.getPhone(), R.string.edit_phone);
@@ -116,61 +81,6 @@ public class PersonalInfoFragment extends BaseFragment {
         mGenderItem.setValue(R.string.gender, user.getGenderValue(activity), R.string.male);
         mBirthItem.setValue(R.string.birth, user.getBirth(), R.string.edit_birth);
         mHobbiesItem.setValue(R.string.hobbies, user.getHobbies(), R.string.edit_hobbies);
-    }
-
-    private void editPersonalInfoTask(final int id, final String value) {
-        String key = null;
-        switch (id) {
-//            case R.id.item_baby_name:
-//                key = Constants.BABY_NAME;
-//                break;
-//            case R.id.item_email:
-//                key = Constants.EMAIL;
-//                break;
-//            case R.id.item_phone:
-//                key = Constants.PHONE;
-//                break;
-//            case R.id.item_gender:
-//                key = Constants.GENDER;
-//                break;
-//            case R.id.item_birth:
-//                key = Constants.BIRTHDAY;
-//                break;
-//            case R.id.item_hobbies:
-//                key = Constants.HOBBIES;
-//                break;
-//            case R.id.img_profile:
-//                key = Constants.BASE64;
-//                break;
-        }
-
-//        if (key != null) {
-//            new UserTaskHandler(this).editUserInfo(user.getUserId(), key, value, user.getToken(),
-//                    new HttpResponseInterface<User>() {
-//                        @Override
-//                        public void onStart() {
-//
-//                        }
-//
-//                        @Override
-//                        public void onSuccess(User classOfT) {
-//                            user = classOfT;
-//                            user.save();
-//                            mUpdate = true;
-//                            setValues();
-//                        }
-//
-//                        @Override
-//                        public void onFailure(HttpBaseResult result) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onHttpError(String error) {
-//
-//                        }
-//                    });
-//        }
     }
 
     @Override
@@ -217,11 +127,11 @@ public class PersonalInfoFragment extends BaseFragment {
                                 editText.setError(getString(R.string.invalid_email));
                             } else {
                                 dialog.dismiss();
-                                editPersonalInfoTask(id, value);
+                                mActivity.editPersonalInfoTask(id, value);
                             }
                         } else {
                             dialog.dismiss();
-                            editPersonalInfoTask(id, value);
+                            mActivity.editPersonalInfoTask(id, value);
                         }
                     }
                 });
@@ -236,10 +146,10 @@ public class PersonalInfoFragment extends BaseFragment {
                                 Intent intent = null;
                                 switch (which) {
                                     case 0:
-                                        editPersonalInfoTask(id, "0");
+                                        mActivity.editPersonalInfoTask(id, "0");
                                         break;
                                     case 1:
-                                        editPersonalInfoTask(id, "1");
+                                        mActivity.editPersonalInfoTask(id, "1");
                                         break;
                                     default:
                                         break;
@@ -256,7 +166,7 @@ public class PersonalInfoFragment extends BaseFragment {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-                                editPersonalInfoTask(id, year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                                mActivity.editPersonalInfoTask(id, year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                             }
                         }
                         , c.get(Calendar.YEAR), c.get(Calendar.MONTH), c
@@ -268,23 +178,6 @@ public class PersonalInfoFragment extends BaseFragment {
                 datePickerDialog.show();
                 break;
         }
-    }
-
-    public boolean verifyStoragePermissions() {
-        int permission = ActivityCompat.checkSelfPermission(
-                activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    activity,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
-            );
-
-            return false;
-        }
-
-        return true;
     }
 
     @Override
@@ -325,5 +218,10 @@ public class PersonalInfoFragment extends BaseFragment {
 
                     }
                 });
+    }
+
+    @Override
+    public String getTitle(Context context) {
+        return context.getResources().getString(R.string.basic_info);
     }
 }

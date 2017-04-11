@@ -1,6 +1,7 @@
 package com.ben.yjh.babycare.main.event;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,13 +30,16 @@ import java.util.List;
 public class EventListFragment extends BaseFragment
         implements EventAdapter.EventRecyclerViewInterface {
 
+    private static final String IS_HOME_EVENT = "is_home_event";
+
     private RecyclerView mRecyclerView;
     private EventAdapter mAdapter;
     private FloatingActionButton mFab;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    public static EventListFragment newInstance() {
+    public static EventListFragment newInstance(boolean isHomeEvent) {
         Bundle args = new Bundle();
+        args.putBoolean(IS_HOME_EVENT, isHomeEvent);
         EventListFragment fragment = new EventListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -63,7 +67,7 @@ public class EventListFragment extends BaseFragment
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setNestedScrollingEnabled(false);
         mAdapter = new EventAdapter(activity, user, Event.find(Event.class, "user_id = ?",
-                String.valueOf(user.getUserId())), this);
+                String.valueOf(user.getUserId())), getArguments().getBoolean(IS_HOME_EVENT, false), this);
         mRecyclerView.setAdapter(mAdapter);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.google_blue,
                 R.color.google_green, R.color.google_red, R.color.google_yellow);
@@ -175,6 +179,11 @@ public class EventListFragment extends BaseFragment
 
             getEventsTask();
         }
+    }
+
+    @Override
+    public String getTitle(Context context) {
+        return context.getResources().getString(R.string.event);
     }
 
     @Override

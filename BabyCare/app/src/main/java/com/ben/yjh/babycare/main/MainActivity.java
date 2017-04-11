@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
+import com.ben.yjh.babycare.base.BaseFragment;
 import com.ben.yjh.babycare.main.event.AddEventActivity;
 import com.ben.yjh.babycare.main.event.EventListFragment;
 import com.ben.yjh.babycare.main.left.FeedbackActivity;
@@ -56,12 +57,12 @@ public class MainActivity extends BaseActivity
         setSupportActionBar(toolbar);
         setStatusBarMargin(R.id.cl_layout);
 
-        List<Fragment> fragments = new ArrayList<>();
-        mEventListFragment = EventListFragment.newInstance();
+        List<BaseFragment> fragments = new ArrayList<>();
+        mEventListFragment = EventListFragment.newInstance(true);
         fragments.add(mEventListFragment);
 
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
-        mPagerAdapter = new HomeViewPagerAdapter(getSupportFragmentManager(), fragments);
+        mPagerAdapter = new HomeViewPagerAdapter(this, getSupportFragmentManager(), fragments);
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(mPagerAdapter);
 

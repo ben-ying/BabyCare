@@ -78,13 +78,13 @@ public class UserDetailActivity extends BaseActivity
                 mUser = classOfT;
                 setValues();
                 toolbar.setTitle(mUser.getUsername());
-                if (mAdapter == null) {
-                    mAdapter = new EventAdapter(UserDetailActivity.this,
-                            mUser, mUser.getEvents(), UserDetailActivity.this);
-                } else {
-                    mAdapter.setData(mUser.getEvents());
-                }
-                mRecyclerView.setAdapter(mAdapter);
+//                if (mAdapter == null) {
+//                    mAdapter = new EventAdapter(UserDetailActivity.this,
+//                            mUser, mUser.getEvents(), UserDetailActivity.this);
+//                } else {
+//                    mAdapter.setData(mUser.getEvents());
+//                }
+//                mRecyclerView.setAdapter(mAdapter);
             }
 
             @Override

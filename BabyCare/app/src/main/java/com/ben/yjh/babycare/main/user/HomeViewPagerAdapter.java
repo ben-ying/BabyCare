@@ -1,21 +1,27 @@
 package com.ben.yjh.babycare.main.user;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.ben.yjh.babycare.base.BaseFragment;
+
 import java.util.List;
 
 public class HomeViewPagerAdapter extends FragmentStatePagerAdapter {
-    private List<Fragment> mFragments;
 
-    public HomeViewPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
+    private Context mContext;
+    private List<BaseFragment> mFragments;
+
+    public HomeViewPagerAdapter(Context context, FragmentManager fm, List<BaseFragment> fragments) {
         super(fm);
-        mFragments = fragments;
+        this.mContext = context;
+        this.mFragments = fragments;
     }
 
     @Override
-    public Fragment getItem(int position) {
+    public BaseFragment getItem(int position) {
         return mFragments.get(position);
     }
 
@@ -26,6 +32,6 @@ public class HomeViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return "Page" + position;
+        return mFragments.get(position).getTitle(mContext);
     }
 }
