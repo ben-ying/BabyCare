@@ -15,11 +15,14 @@ from rest_framework.response import Response
 from validate_email import validate_email
 from django.utils import timezone
 
+from babycare.event_views import EventViewSet
 from babycare.serializers.baby_user import BabyUserSerializer
+from babycare.serializers.event import EventSerializer
 from constants import CODE_DUPLICATE_EMAIL, MSG_SEND_VERIFY_CODE_SUCCESS, MSG_NO_SUCH_EMAIL, MSG_EMPTY_VERIFY_CODE, \
     CODE_EMPTY_VERIFY_CODE, MSG_INCORRECT_VERIFY_CODE, CODE_INCORRECT_VERIFY_CODE, CODE_EXPIRED_VERIFY_CODE, \
     MSG_EXPIRED_VERIFY_CODE, \
-    VERIFY_CODE_EXPIRED_TIME, CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS
+    VERIFY_CODE_EXPIRED_TIME, CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS, MSG_CREATE_EVENT_SUCCESS, \
+    MSG_GET_USER_DETAIL_SUCCESS
 from constants import CODE_DUPLICATE_USER
 from constants import CODE_EMPTY_EMAIL
 from constants import CODE_EMPTY_PASSWORD
@@ -41,7 +44,7 @@ from constants import MSG_EMPTY_PASSWORD
 from constants import MSG_EMPTY_USERNAME
 from constants import MSG_INVALID_EMAIL
 from constants import MSG_INVALID_PASSWORD
-from models import BabyUser, Verify
+from models import BabyUser, Verify, Event
 from utils import json_response, invalid_token_response, upload_image_to_oss, send_email, get_user_by_token, get_user, \
     CustomModelViewSet, save_error_log
 from utils import simple_json_response
@@ -74,7 +77,6 @@ class UserViewSet(CustomModelViewSet):
                 return invalid_token_response()
         except Exception as e:
             return save_error_log(request, e)
-
 
     def create(self, request, *args, **kwargs):
         try:
@@ -132,6 +134,26 @@ class UserViewSet(CustomModelViewSet):
     def perform_create(self, serializer):
         self.request.user.save()
         serializer.save(user=self.request.user)
+
+    def retrieve(self, request, *args, **kwargs):
+        token = request.query_params.get('token')
+        try:
+            user = get_user_by_token(token)
+            if user:
+                response = super(UserViewSet, self).retrieve(request, *args, **kwargs).data
+                baby = BabyUser.objects.get(user=user)
+                events = Event.objects.filter(baby=baby)
+                event_list = list()
+
+                for event in events:
+                    event_json = EventSerializer(event).data
+                    event_list.append(event_json)
+                response['events'] = event_list
+                return json_response(response, CODE_SUCCESS, MSG_GET_USER_DETAIL_SUCCESS)
+            else:
+                return invalid_token_response()
+        except Exception as e:
+            return save_error_log(request, e)
 
     def update(self, request, *args, **kwargs):
         token = request.data.get('token')

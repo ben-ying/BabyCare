@@ -2,11 +2,13 @@ package com.ben.yjh.babycare.model;
 
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Unique;
 
 import java.io.Serializable;
 
 
 public class EventComment extends SugarRecord implements Serializable {
+    @Unique
     @SerializedName("comment_id") int commentId;
     @SerializedName("event_id") int eventId;
     // who comment user and commented by comment user

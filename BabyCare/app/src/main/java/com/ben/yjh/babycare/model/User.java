@@ -1,12 +1,15 @@
 package com.ben.yjh.babycare.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.orm.dsl.Ignore;
+import com.orm.dsl.Unique;
 
 import java.io.Serializable;
 import java.util.List;
 
 
 public class User extends UserHistory implements Serializable {
+    @Unique
     @SerializedName("user_id") int userId;
     @SerializedName("email") String email;
     @SerializedName("phone") String phone;
@@ -18,6 +21,8 @@ public class User extends UserHistory implements Serializable {
     @SerializedName("highlighted") String highlighted;
     @SerializedName("token") String token;
     @SerializedName("is_login") boolean isLogin;
+    @Ignore
+    @SerializedName("events") List<Event> events;
 
     @Override
     public long save() {
@@ -124,4 +129,11 @@ public class User extends UserHistory implements Serializable {
         this.token = token;
     }
 
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
 }

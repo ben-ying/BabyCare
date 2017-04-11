@@ -68,6 +68,7 @@ MSG_EXPIRED_VERIFY_CODE = _(u'验证码已过期')
 MSG_USER_NOT_EXISTS = _(u'该用户不存在')
 MSG_GET_EVENTS_SUCCESS = _(u'获取Events成功')
 MSG_SEND_FEEDBACK_SUCCESS = _(u'反馈消息发送成功')
+MSG_GET_USER_DETAIL_SUCCESS = _(u'获取用户信息成功')
 
 PASSWORD_VERIFY_CODE_EMAIL_SUBJECT = _(u'忘记密码验证码－嘟嘟手记')
 PASSWORD_VERIFY_CODE_EMAIL_CONTENT = _(u'您的验证码：%s。\n本邮件是系统自动发送的，请勿直接回复！感谢您的访问，祝您使用愉快！')

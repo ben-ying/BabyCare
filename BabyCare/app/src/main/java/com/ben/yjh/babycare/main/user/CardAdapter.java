@@ -1,4 +1,4 @@
-package com.ben.yjh.babycare.main;
+package com.ben.yjh.babycare.main.user;
 
 
 import android.support.v7.widget.CardView;

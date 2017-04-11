@@ -5,10 +5,12 @@ import android.content.Context;
 import com.ben.yjh.babycare.R;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Unique;
 
 
 public class UserHistory extends SugarRecord {
 
+    @Unique
     @SerializedName("username") String username;
     @SerializedName("baby_name") String babyName;
     @SerializedName("profile") String profile;

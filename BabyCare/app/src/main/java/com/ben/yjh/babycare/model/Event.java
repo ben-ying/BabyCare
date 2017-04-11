@@ -5,6 +5,8 @@ import android.content.Context;
 import com.ben.yjh.babycare.util.Utils;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
+import com.orm.dsl.Unique;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -18,6 +20,7 @@ import java.util.TimeZone;
 
 public class Event extends SugarRecord implements Serializable {
 
+    @Unique
     @SerializedName("event_id") int eventId;
     @SerializedName("user_id") int userId;
     @SerializedName("title") String title;
@@ -31,7 +34,9 @@ public class Event extends SugarRecord implements Serializable {
     // not in event model
     @SerializedName("username") String username;
     @SerializedName("user_profile") String userProfile;
+    @Ignore
     @SerializedName("likes") List<EventLike> eventLikes;
+    @Ignore
     @SerializedName("comments") List<EventComment> eventComments;
 
     public int getEventId() {

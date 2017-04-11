@@ -15,6 +15,7 @@ public class Constants {
     public static final String LAST_NAME = "last_name";
     public static final String BASE64 = "base64";
     public static final String BABY_USER = "baby_user";
+    public static final String USER_ID = "user_id";
     public static final String IMAGE_URL = "image_url";
     public static final String POSITION = "position";
     public static final String IMAGE_URLS = "image_urls";

@@ -1,8 +1,10 @@
 package com.ben.yjh.babycare.main.event;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,11 +18,15 @@ import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.http.EventTaskHandler;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
+import com.ben.yjh.babycare.main.MainActivity;
+import com.ben.yjh.babycare.main.left.UserInfoActivity;
+import com.ben.yjh.babycare.main.user.UserDetailActivity;
 import com.ben.yjh.babycare.model.EventLike;
 import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.model.Event;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.AlertUtils;
+import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -82,6 +88,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.commonRadioButton.setTag(event);
         holder.commentRadioButton.setOnClickListener(this);
         holder.shareRadioButton.setOnClickListener(this);
+        holder.profileButton.setOnClickListener(this);
+        holder.nameTextView.setOnClickListener(this);
+        holder.profileButton.setTag(event.getUserId());
+        holder.nameTextView.setTag(event.getUserId());
 
         if (event.getUserId() == mUser.getUserId()) {
             holder.commonRadioButton.setCompoundDrawablesWithIntrinsicBounds(
@@ -177,6 +187,20 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                     if (((RadioButton) v).isChecked()) {
                         likeTask(((RadioButton) v), event);
                     }
+                }
+                break;
+            case R.id.ib_profile:
+            case R.id.tv_name:
+                Intent intent;
+                int userId = (int) v.getTag();
+                if (userId == mUser.getUserId()) {
+                    intent = new Intent(mContext, UserInfoActivity.class);
+                    ((Activity) mContext).startActivityForResult(
+                            intent, Constants.USER_INFO_REQUEST_CODE);
+                } else {
+                    intent = new Intent(mContext, UserDetailActivity.class);
+                    intent.putExtra(Constants.USER_ID, userId);
+                    mContext.startActivity(intent);
                 }
                 break;
         }

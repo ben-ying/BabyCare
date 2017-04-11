@@ -1,10 +1,7 @@
 package com.ben.yjh.babycare.main;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -23,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
@@ -33,6 +29,7 @@ import com.ben.yjh.babycare.main.event.EventListFragment;
 import com.ben.yjh.babycare.main.left.FeedbackActivity;
 import com.ben.yjh.babycare.main.left.SettingActivity;
 import com.ben.yjh.babycare.main.left.UserInfoActivity;
+import com.ben.yjh.babycare.main.user.HomeViewPagerAdapter;
 import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;

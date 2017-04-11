@@ -1,4 +1,4 @@
-package com.ben.yjh.babycare.main;
+package com.ben.yjh.babycare.main.user;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -4,7 +4,7 @@ SECRET_KEY = '!(poief@tj(fc*o3hifd6a2^$(1qk!m)hv-uug2eh)anp^9u5%'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'yjh.babycare.com', '192.168.1.133', '192.168.1.130']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'yjh.babycare.com', '192.168.1.132', '192.168.1.130']
 DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',

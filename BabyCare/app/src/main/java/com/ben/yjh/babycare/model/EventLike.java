@@ -2,12 +2,14 @@ package com.ben.yjh.babycare.model;
 
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Unique;
 
 import java.io.Serializable;
 import java.util.List;
 
 
 public class EventLike extends SugarRecord implements Serializable {
+    @Unique
     @SerializedName("like_id") int likeId;
     @SerializedName("event_id") int eventId;
     @SerializedName("like_user_id") int likeUserId;

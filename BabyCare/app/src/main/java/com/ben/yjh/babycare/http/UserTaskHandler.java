@@ -42,6 +42,17 @@ public class UserTaskHandler extends BaseTaskHandler {
         }
     }
 
+    public void getUserDetail(String token, int userId,
+                         HttpResponseInterface<User> httpResponseInterface) {
+        try {
+            JSONObject bodyObject = new JSONObject();
+            new HttpPostTask(context).startTask(URL_USERS + userId + "?token=" + token, Request.Method.GET,
+                    bodyObject, User.class, true, httpResponseInterface);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void login(String username, String password,
                          HttpResponseInterface<User> httpResponseInterface) {
         try {

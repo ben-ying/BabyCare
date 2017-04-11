@@ -30,28 +30,34 @@ class EventViewSet(CustomModelViewSet):
     serializer_class = EventSerializer
 
     def list(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid()
-        response = super(EventViewSet, self).list(request, *args, **kwargs).data
-        for eventDict in response:
-            like_list = list()
-            likes = Like.objects.filter(event=eventDict['event_id'])
-            for like in likes:
-                data = LikeSerializer(like).data
-                like_list.append(data)
-            eventDict['likes'] = like_list
-        # pdb.set_trace()
-        return json_response(response, CODE_SUCCESS, MSG_GET_EVENTS_SUCCESS)
+        try:
+            token = request.query_params.get('token')
+            user = get_user_by_token(token)
+            if user:
+                serializer = self.get_serializer(data=request.data)
+                serializer.is_valid()
+                response = super(EventViewSet, self).list(request, *args, **kwargs).data
+                for eventDict in response:
+                    like_list = list()
+                    likes = Like.objects.filter(event=eventDict['event_id'])
+                    for like in likes:
+                        data = LikeSerializer(like).data
+                        like_list.append(data)
+                    eventDict['likes'] = like_list
+
+                return json_response(response, CODE_SUCCESS, MSG_GET_EVENTS_SUCCESS)
+            else:
+                return invalid_token_response()
+        except Exception as e:
+            return save_error_log(request, e)
 
     def create(self, request, *args, **kwargs):
         try:
-            serializer = self.get_serializer(data=request.data)
             token = request.data.get('token')
             title = request.data.get('title')
             content = request.data.get('content')
             base64_images = request.data.get('base64_images')
             user = get_user_by_token(token)
-            image = None
 
             if not title and not content and not base64_images:
                 return simple_json_response(CODE_EMPTY_EVENT, MSG_EMPTY_EVENT)
@@ -70,19 +76,15 @@ class EventViewSet(CustomModelViewSet):
                         image = upload_image_to_oss(image_name, image)
                         event.image1 = image
                 event.save()
-                # serializer.is_valid()
                 response = EventSerializer(event).data
-                # response['event_id'] = event.id
-                # baby_user = BabyUser.objects.get(user=user)
-                # response['user_id'] = baby_user.id
-                # response['image1'] = image
-                # response['modified'] = str(event.modified)
-                # response['created'] = str(event.created)
                 return json_response(response, CODE_SUCCESS, MSG_CREATE_EVENT_SUCCESS)
             else:
                 return invalid_token_response()
         except Exception as e:
             return save_error_log(request, e)
+
+    def retrieve(self, request, *args, **kwargs):
+        return super(EventViewSet, self).retrieve(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
         try:

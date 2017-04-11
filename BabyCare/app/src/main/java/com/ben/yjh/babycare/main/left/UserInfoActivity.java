@@ -61,7 +61,7 @@ public class UserInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_info);
+        setContentView(R.layout.activity_personal_info);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -87,6 +87,33 @@ public class UserInfoActivity extends BaseActivity {
         mHobbiesItem.setOnClickListener(this);
 
         setValues();
+        getUserDetail();
+    }
+
+    private void getUserDetail() {
+        new UserTaskHandler(this).getUserDetail(user.getToken(), user.getUserId(),
+                new HttpResponseInterface<User>() {
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onSuccess(User classOfT) {
+                        user = classOfT;
+                        setValues();
+                    }
+
+                    @Override
+                    public void onFailure(HttpBaseResult result) {
+
+                    }
+
+                    @Override
+                    public void onHttpError(String error) {
+
+                    }
+                });
     }
 
     private void setValues() {

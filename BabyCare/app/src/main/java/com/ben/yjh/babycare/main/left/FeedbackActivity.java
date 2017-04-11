@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -20,12 +19,9 @@ import android.widget.Toast;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
-import com.ben.yjh.babycare.http.BaseTaskHandler;
-import com.ben.yjh.babycare.http.EventTaskHandler;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.NavigationTaskHandler;
-import com.ben.yjh.babycare.main.GalleryActivity;
-import com.ben.yjh.babycare.model.Event;
+import com.ben.yjh.babycare.main.user.GalleryActivity;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
@@ -33,7 +29,6 @@ import com.ben.yjh.babycare.util.ImageUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class FeedbackActivity extends BaseActivity {
 

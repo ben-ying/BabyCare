@@ -35,7 +35,7 @@ public class HttpPostTask {
 
 //    private static final String DOMAIN = "http://116.62.47.105/webservice/";
 //    private static final String DOMAIN = "http://www.bensbabycare.com/webservice/";
-        private static final String DOMAIN = "http://192.168.1.130:8000/webservice/";
+        private static final String DOMAIN = "http://192.168.1.132:8000/webservice/";
     private static final String TAG_JSON_OBJ = "tag_json_obj";
     private static final String VERSION = "1.0.0";
 

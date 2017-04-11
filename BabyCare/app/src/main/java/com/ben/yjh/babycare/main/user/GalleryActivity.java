@@ -1,9 +1,7 @@
-package com.ben.yjh.babycare.main;
+package com.ben.yjh.babycare.main.user;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,16 +14,11 @@ import android.widget.GridView;
 import com.aviary.android.feather.common.AviaryIntent;
 import com.aviary.android.feather.sdk.FeatherActivity;
 import com.ben.yjh.babycare.R;
-import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
-import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.util.Constants;
-import com.ben.yjh.babycare.util.ImageUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class GalleryActivity extends BaseActivity implements GalleryAdapter.GalleryInterface {
 

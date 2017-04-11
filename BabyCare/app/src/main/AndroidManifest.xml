@@ -96,8 +96,9 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".main.ImagePagerActivity" />
-        <activity android:name=".main.GalleryActivity" />
+        <activity android:name=".main.user.ImagePagerActivity" />
+        <activity android:name=".main.user.GalleryActivity" />
+        <activity android:name=".main.user.UserDetailActivity" />
         <activity android:name=".main.left.UserInfoActivity" />
         <activity android:name=".main.left.SettingActivity" />
         <activity android:name=".main.left.FeedbackActivity" />
@@ -106,11 +107,6 @@
             android:windowSoftInputMode="adjustResize|stateAlwaysVisible" />
         <activity android:name=".main.event.AddEventActivity" />
         <activity android:name=".main.event.EventDetailActivity" />
-        <activity
-            android:name=".main.FullscreenActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_fullscreen"
-            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

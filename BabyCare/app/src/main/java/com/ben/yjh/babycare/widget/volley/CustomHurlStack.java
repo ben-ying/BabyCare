@@ -185,7 +185,7 @@ public class CustomHurlStack implements HttpStack {
                 break;
             case Request.Method.DELETE:
                 connection.setRequestMethod("DELETE");
-                addBodyIfExists(connection, request); // 2015/11/06 | For API19- ProtocolException ("DELETE does not support writing") will be thrown
+                addBodyIfExists(connection, request);
                 break;
             case Request.Method.POST:
                 connection.setRequestMethod("POST");
