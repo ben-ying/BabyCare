@@ -36,6 +36,7 @@ public class EventListFragment extends BaseFragment
     private EventAdapter mAdapter;
     private FloatingActionButton mFab;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private boolean mIsHomeEvent;
 
     public static EventListFragment newInstance(boolean isHomeEvent) {
         Bundle args = new Bundle();
@@ -66,8 +67,18 @@ public class EventListFragment extends BaseFragment
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setNestedScrollingEnabled(false);
-        mAdapter = new EventAdapter(activity, user, Event.find(Event.class, "user_id = ?",
-                String.valueOf(user.getUserId())), getArguments().getBoolean(IS_HOME_EVENT, false), this);
+        mIsHomeEvent = getArguments().getBoolean(IS_HOME_EVENT, false);
+        if (mIsHomeEvent) {
+            getEventsTask();
+            mSwipeRefreshLayout.setEnabled(true);
+            mAdapter = new EventAdapter(activity, user,
+                    Event.listAll(Event.class), mIsHomeEvent, this);
+        } else {
+            user = activity.user;
+            mSwipeRefreshLayout.setEnabled(false);
+            mAdapter = new EventAdapter(activity, user, Event.find(Event.class, "user_id = ?",
+                    String.valueOf(user.getUserId())), mIsHomeEvent, this);
+        }
         mRecyclerView.setAdapter(mAdapter);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.google_blue,
                 R.color.google_green, R.color.google_red, R.color.google_yellow);
@@ -100,8 +111,6 @@ public class EventListFragment extends BaseFragment
 //                }
             }
         });
-
-        getEventsTask();
     }
 
     private void getEventsTask() {

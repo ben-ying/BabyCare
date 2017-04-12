@@ -9,37 +9,37 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.ben.yjh.babycare.widget.ItemInfo
+        <com.ben.yjh.babycare.widget.ItemDetail
             android:id="@+id/item_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.ben.yjh.babycare.widget.ItemInfo
+        <com.ben.yjh.babycare.widget.ItemDetail
             android:id="@+id/item_baby_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.ben.yjh.babycare.widget.ItemInfo
+        <com.ben.yjh.babycare.widget.ItemDetail
             android:id="@+id/item_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.ben.yjh.babycare.widget.ItemInfo
+        <com.ben.yjh.babycare.widget.ItemDetail
             android:id="@+id/item_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.ben.yjh.babycare.widget.ItemInfo
+        <com.ben.yjh.babycare.widget.ItemDetail
             android:id="@+id/item_gender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.ben.yjh.babycare.widget.ItemInfo
+        <com.ben.yjh.babycare.widget.ItemDetail
             android:id="@+id/item_birth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <com.ben.yjh.babycare.widget.ItemInfo
+        <com.ben.yjh.babycare.widget.ItemDetail
             android:id="@+id/item_hobbies"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

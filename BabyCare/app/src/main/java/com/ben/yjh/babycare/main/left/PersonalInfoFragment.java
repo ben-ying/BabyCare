@@ -23,6 +23,7 @@ import com.ben.yjh.babycare.http.UserTaskHandler;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.util.Constants;
+import com.ben.yjh.babycare.widget.ItemDetail;
 import com.ben.yjh.babycare.widget.ItemInfo;
 
 import java.util.Calendar;
@@ -30,6 +31,7 @@ import java.util.Calendar;
 
 public class PersonalInfoFragment extends BaseFragment {
 
+    private ItemInfo mUsernameItem;
     private ItemInfo mBabyNameItem;
     private ItemInfo mEmailItem;
     private ItemInfo mPhoneItem;
@@ -49,6 +51,7 @@ public class PersonalInfoFragment extends BaseFragment {
     @Override
     public View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_personal_info, container, false);
+        mUsernameItem = (ItemInfo) view.findViewById(R.id.item_username);
         mBabyNameItem = (ItemInfo) view.findViewById(R.id.item_baby_name);
         mEmailItem = (ItemInfo) view.findViewById(R.id.item_email);
         mPhoneItem = (ItemInfo) view.findViewById(R.id.item_phone);
@@ -69,6 +72,7 @@ public class PersonalInfoFragment extends BaseFragment {
     @Override
     public void init() {
         user = mActivity.user;
+        mUsernameItem.setValue(R.string.username, user.getUsername(), 0);
         mBabyNameItem.setValue(R.string.baby_name, user.getBabyName(), R.string.edit_baby_name);
         mEmailItem.setValue(R.string.email, user.getEmail(), R.string.edit_email);
         mPhoneItem.setValue(R.string.phone, user.getPhone(), R.string.edit_phone);
@@ -186,38 +190,11 @@ public class PersonalInfoFragment extends BaseFragment {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case Constants.SHOW_EVENT_IMAGE_DETAIL_REQUEST_CODE:
-                    getUserDetail();
                     break;
                 case Constants.COMMENT_REQUEST_CODE:
-                    getUserDetail();
                     break;
             }
         }
-    }
-
-    private void getUserDetail() {
-        new UserTaskHandler(activity).getUserDetail(user.getToken(), user.getUserId(),
-                new HttpResponseInterface<User>() {
-                    @Override
-                    public void onStart() {
-
-                    }
-
-                    @Override
-                    public void onSuccess(User classOfT) {
-                        user = classOfT;
-                    }
-
-                    @Override
-                    public void onFailure(HttpBaseResult result) {
-
-                    }
-
-                    @Override
-                    public void onHttpError(String error) {
-
-                    }
-                });
     }
 
     @Override

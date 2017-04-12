@@ -141,7 +141,7 @@ class UserViewSet(CustomModelViewSet):
             user = get_user_by_token(token)
             if user:
                 response = super(UserViewSet, self).retrieve(request, *args, **kwargs).data
-                baby = BabyUser.objects.get(user=user)
+                baby = self.get_object()
                 events = Event.objects.filter(baby=baby)
                 event_list = list()
 

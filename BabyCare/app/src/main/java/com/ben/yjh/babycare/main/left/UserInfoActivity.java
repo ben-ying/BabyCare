@@ -13,7 +13,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -27,12 +26,8 @@ import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.base.BaseFragment;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.UserTaskHandler;
-import com.ben.yjh.babycare.main.event.CommentActivity;
-import com.ben.yjh.babycare.main.event.EventAdapter;
 import com.ben.yjh.babycare.main.event.EventListFragment;
 import com.ben.yjh.babycare.main.user.HomeViewPagerAdapter;
-import com.ben.yjh.babycare.main.user.ImagePagerActivity;
-import com.ben.yjh.babycare.model.Event;
 import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.Constants;
@@ -65,7 +60,7 @@ public class UserInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_personal_info);
+        setContentView(R.layout.activity_user_detail);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -254,9 +249,11 @@ public class UserInfoActivity extends BaseActivity {
                     }
                     break;
                 case Constants.SHOW_EVENT_IMAGE_DETAIL_REQUEST_CODE:
+                    mUpdate = true;
                     getUserDetail();
                     break;
                 case Constants.COMMENT_REQUEST_CODE:
+                    mUpdate = true;
                     getUserDetail();
                     break;
             }
