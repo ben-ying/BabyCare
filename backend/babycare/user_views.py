@@ -2,27 +2,24 @@
 # -*- coding: utf-8 -*-
 
 import time
-import pdb
 
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.dateformat import format
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from validate_email import validate_email
-from django.utils import timezone
 
-from babycare.event_views import EventViewSet
 from babycare.serializers.baby_user import BabyUserSerializer
 from babycare.serializers.event import EventSerializer
 from constants import CODE_DUPLICATE_EMAIL, MSG_SEND_VERIFY_CODE_SUCCESS, MSG_NO_SUCH_EMAIL, MSG_EMPTY_VERIFY_CODE, \
     CODE_EMPTY_VERIFY_CODE, MSG_INCORRECT_VERIFY_CODE, CODE_INCORRECT_VERIFY_CODE, CODE_EXPIRED_VERIFY_CODE, \
     MSG_EXPIRED_VERIFY_CODE, \
-    VERIFY_CODE_EXPIRED_TIME, CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS, MSG_CREATE_EVENT_SUCCESS, \
-    MSG_GET_USER_DETAIL_SUCCESS
+    VERIFY_CODE_EXPIRED_TIME, CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS, MSG_GET_USER_DETAIL_SUCCESS
 from constants import CODE_DUPLICATE_USER
 from constants import CODE_EMPTY_EMAIL
 from constants import CODE_EMPTY_PASSWORD

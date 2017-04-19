@@ -76,6 +76,7 @@ public class AddEventActivity extends BaseActivity {
                         classOfT.setImage1(mImageUrl);
                         classOfT.save();
                         Intent intent = getIntent();
+                        intent.putExtra(Constants.EVENT, classOfT);
                         setResult(RESULT_OK, intent);
                         finish();
                     }

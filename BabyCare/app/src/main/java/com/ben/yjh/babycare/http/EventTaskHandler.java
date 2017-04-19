@@ -7,6 +7,7 @@ import com.android.volley.Request;
 import com.ben.yjh.babycare.model.Event;
 import com.ben.yjh.babycare.model.EventComment;
 import com.ben.yjh.babycare.model.EventLike;
+import com.ben.yjh.babycare.model.EventsResult;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 
 import org.json.JSONArray;
@@ -32,11 +33,21 @@ public class EventTaskHandler extends BaseTaskHandler {
         this.mToken = token;
     }
 
-    public void getEvents(HttpResponseInterface<Event[]> httpResponseInterface) {
+    public void getEvents(HttpResponseInterface<EventsResult> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
-            new HttpPostTask(context).startTask(URL_EVENTS + "?token=" + mToken, Request.Method.GET,
-                    bodyObject, Event[].class, true, httpResponseInterface);
+            new HttpPostTask(context).startTask(URL_EVENTS + "?token=" + mToken,
+                    Request.Method.GET, bodyObject, EventsResult.class, true, httpResponseInterface);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadMoreEvents(String url, HttpResponseInterface<EventsResult> httpResponseInterface) {
+        try {
+            JSONObject bodyObject = new JSONObject();
+            new HttpPostTask(context).startTask(url, Request.Method.GET, bodyObject,
+                    EventsResult.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();
         }

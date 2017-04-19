@@ -107,21 +107,27 @@ public class LoadMoreRecyclerView extends RecyclerView {
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
 
-        if (state == RecyclerView.SCROLL_STATE_IDLE && mLoadMoreListener != null && !mIsLoadingData && mCanloadMore) {
+        if (state == RecyclerView.SCROLL_STATE_IDLE
+                && mLoadMoreListener != null && !mIsLoadingData && mCanloadMore) {
             LayoutManager layoutManager = getLayoutManager();
             int lastVisibleItemPosition;
             if (layoutManager instanceof GridLayoutManager) {
-                lastVisibleItemPosition = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
+                lastVisibleItemPosition = ((GridLayoutManager)
+                        layoutManager).findLastVisibleItemPosition();
             } else if (layoutManager instanceof StaggeredGridLayoutManager) {
                 int[] into = new int[((StaggeredGridLayoutManager) layoutManager).getSpanCount()];
                 ((StaggeredGridLayoutManager) layoutManager).findLastVisibleItemPositions(into);
                 lastVisibleItemPosition = last(into);
             } else {
-                lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+                lastVisibleItemPosition =
+                        ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
             }
 
+//            if (layoutManager.getChildCount() > 1
+//                    && lastVisibleItemPosition >= layoutManager.getItemCount() - 1
+//                    && layoutManager.getItemCount() > layoutManager.getChildCount()) {
             if (layoutManager.getChildCount() > 1
-                    && lastVisibleItemPosition >= layoutManager.getItemCount() - 1 && layoutManager.getItemCount() > layoutManager.getChildCount()) {
+                    && lastVisibleItemPosition >= layoutManager.getItemCount() - 1) {
                 if (mLoadingMoreFooter != null) {
                     mLoadingMoreFooter.setVisible();
                 }

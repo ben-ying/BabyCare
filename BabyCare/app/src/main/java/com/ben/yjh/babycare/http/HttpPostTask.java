@@ -19,6 +19,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.login.LoginActivity;
+import com.ben.yjh.babycare.model.EventsResult;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.util.Constants;
@@ -33,10 +34,10 @@ import java.util.TimeZone;
 
 public class HttpPostTask {
 
-//    private static final String DOMAIN = "http://116.62.47.105/webservice/";
+    //    private static final String DOMAIN = "http://116.62.47.105/webservice/";
     private static final String DOMAIN = "http://www.bensbabycare.com/webservice/";
-//        private static final String DOMAIN = "http://192.168.1.132:8000/webservice/";
-//        private static final String DOMAIN = "http://192.168.43.177:8000/webservice/";
+//    private static final String DOMAIN = "http://192.168.1.130:8000/webservice/";
+    //        private static final String DOMAIN = "http://192.168.43.177:8000/webservice/";
     private static final String TAG_JSON_OBJ = "tag_json_obj";
     private static final String VERSION = "1.0.0";
 
@@ -87,12 +88,13 @@ public class HttpPostTask {
         if (httpResponseInterface != null) {
             httpResponseInterface.onStart();
         }
+        Log.d("HTTP", "url: " + DOMAIN + url);
+        Log.d("HTTP", "params: " + jsonObject);
 
-        JsonObjectRequest request = new JsonObjectRequest(method, DOMAIN + url, jsonObject,
-                new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(method, DOMAIN +
+                url.replace(HttpPostTask.DOMAIN, ""), jsonObject, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("HTTP", "url: " + DOMAIN + url);
                         Log.d("HTTP", "response: " + response);
                         hideProgress();
                         if (httpResponseInterface != null) {
@@ -103,13 +105,8 @@ public class HttpPostTask {
                                     if (classOfT == HttpBaseResult.class) {
                                         httpResponseInterface.onSuccess(httpResponse);
                                     } else {
-                                        if (classOfT.isArray()) {
-                                            httpResponseInterface.onSuccess(
-                                                    HttpUtils.getJsonData(response.getJSONArray("result").toString(), classOfT));
-                                        } else {
-                                            httpResponseInterface.onSuccess(
-                                                    HttpUtils.getJsonData(response.getJSONObject("result"), classOfT));
-                                        }
+                                        httpResponseInterface.onSuccess(
+                                                HttpUtils.getJsonData(response.getJSONObject("result"), classOfT));
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();

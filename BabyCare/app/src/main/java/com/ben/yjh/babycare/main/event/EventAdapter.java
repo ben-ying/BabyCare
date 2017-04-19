@@ -63,12 +63,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         this.mEvents = events;
         this.mIsHomeEvent = isHomeEvent;
         this.mInterface = recyclerViewInterface;
-        Collections.reverse(mEvents);
     }
 
     public void setData(List<Event> events) {
         this.mEvents = events;
-        Collections.reverse(mEvents);
         notifyDataSetChanged();
     }
 
@@ -252,9 +250,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                     public void onSuccess(Event classOfT) {
                         mEvents.remove(event);
                         notifyDataSetChanged();
-                        if (classOfT != null || event.getEventId() < 0) {
+                        if (classOfT != null) {
                             Event.deleteAll(Event.class, "event_id = ?",
-                                    String.valueOf(classOfT.getEventId()));
+                                    String.valueOf(event.getEventId()));
                         }
                     }
 

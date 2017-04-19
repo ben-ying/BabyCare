@@ -202,10 +202,10 @@ public class MainActivity extends BaseActivity
                     initNavigationView();
                     break;
             }
+        }
 
-            if (mEventListFragment != null) {
-                mEventListFragment.onActivityResult(requestCode, resultCode, data);
-            }
+        if (mEventListFragment != null) {
+            mEventListFragment.onActivityResult(requestCode, resultCode, data);
         }
     }
 

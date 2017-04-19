@@ -1,10 +1,7 @@
 from __future__ import unicode_literals
 
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.forms import IntegerField
-
-from babycare.constants import DATE_TIME_FORMAT
 
 
 class BabyUser(models.Model):

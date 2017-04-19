@@ -50,5 +50,6 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
     compile 'com.aviary.android.feather.sdk:aviary-sdk:3.6.3'
+    compile 'com.wang.avi:library:1.0.1'
     testCompile 'junit:junit:4.12'
 }

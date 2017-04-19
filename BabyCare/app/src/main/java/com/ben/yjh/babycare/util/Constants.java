@@ -19,6 +19,7 @@ public class Constants {
     public static final String IMAGE_URL = "image_url";
     public static final String POSITION = "position";
     public static final String IMAGE_URLS = "image_urls";
+    public static final String EVENT = "event";
     public static final String PROFILE_IMAGE_PREFIX = "profile_image_prefix";
     public static final String EVENT_IMAGE_PREFIX = "event_image_prefix";
     public static final String AVIARY_API_KEY_SECRET = "a9a692d4-2bf2-4927-9dc3-2cef97ac8a42";
