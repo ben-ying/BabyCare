@@ -188,8 +188,6 @@ public class EventListFragment extends BaseFragment
                     public void onSuccess(EventsResult classOfT) {
                         mNextUrl = classOfT.getNext();
                         for (Event event : classOfT.getEvents()) {
-                            Event.deleteAll(Event.class,
-                                    "event_id = ?", String.valueOf(event.getEventId()));
                             saveEventData(event);
                         }
                         mAdapter.setData(mEvents);
@@ -209,6 +207,8 @@ public class EventListFragment extends BaseFragment
     }
 
     private void saveEventData(Event event) {
+        Event.deleteAll(Event.class,
+                "event_id = ?", String.valueOf(event.getEventId()));
         event.save();
         EventLike.deleteAll(EventLike.class,
                 "event_id = ?", String.valueOf(event.getEventId()));
