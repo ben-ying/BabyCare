@@ -13,7 +13,7 @@ admin.site.register(BabyUser, BabyAdmin)
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('baby','title', 'content', 'image1', 'created', 'modified')
+    list_display = ('id', 'baby','title', 'content', 'image1', 'created', 'modified')
     search_fields = ('baby','title', 'content', 'image1')
 admin.site.register(Event, EventAdmin)
 

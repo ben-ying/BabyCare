@@ -72,7 +72,7 @@ public class SharedPreferenceUtils {
 
     public static int getSharedPreferenceInt(Context context, String name, String key) {
         SharedPreferences savedPreference = context.getSharedPreferences(name, Context.MODE_PRIVATE);
-        return savedPreference.getInt(key, -1);
+        return savedPreference.getInt(key, Constants.INVALID_VALUE);
     }
 
     public static int getSharedPreferenceInt(Context context, String name, String key, int defaultValue) {
@@ -83,7 +83,7 @@ public class SharedPreferenceUtils {
     public static long getSharedPreferenceLong(Context context, String name, String key) {
         SharedPreferences savedPreference = context.getSharedPreferences(name, Context.MODE_PRIVATE);
         try {
-            return savedPreference.getLong(key, -1);
+            return savedPreference.getLong(key, Constants.INVALID_VALUE);
         } catch (ClassCastException e) {
             return -1;
         }

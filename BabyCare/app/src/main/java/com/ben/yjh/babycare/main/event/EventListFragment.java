@@ -1,17 +1,14 @@
 package com.ben.yjh.babycare.main.event;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +18,7 @@ import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseFragment;
 import com.ben.yjh.babycare.http.EventTaskHandler;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
+import com.ben.yjh.babycare.main.MainActivity;
 import com.ben.yjh.babycare.main.user.ImagePagerActivity;
 import com.ben.yjh.babycare.model.Event;
 import com.ben.yjh.babycare.model.EventComment;
@@ -38,19 +36,18 @@ import java.util.List;
 public class EventListFragment extends BaseFragment
         implements EventAdapter.EventRecyclerViewInterface {
 
-    private static final String IS_HOME_EVENT = "is_home_event";
-
     private LoadMoreRecyclerView mRecyclerView;
     private EventAdapter mAdapter;
     private FloatingActionButton mFab;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private boolean mIsHomeEvent;
     private List<Event> mEvents;
     private String mNextUrl;
+    private int mUserId;
+    private boolean mIsHomeEvents;
 
-    public static EventListFragment newInstance(boolean isHomeEvent) {
+    public static EventListFragment newInstance(int userId) {
         Bundle args = new Bundle();
-        args.putBoolean(IS_HOME_EVENT, isHomeEvent);
+        args.putInt(Constants.USER_ID, userId);
         EventListFragment fragment = new EventListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -74,20 +71,14 @@ public class EventListFragment extends BaseFragment
 
     @Override
     public void init() {
-        mIsHomeEvent = getArguments().getBoolean(IS_HOME_EVENT, false);
+        mIsHomeEvents = activity instanceof MainActivity;
+        mUserId = getArguments().getInt(Constants.USER_ID, Constants.INVALID_VALUE);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setNestedScrollingEnabled(false);
-        if (mIsHomeEvent) {
-            getEventsTask();
-            mSwipeRefreshLayout.setEnabled(true);
-            mEvents = Event.listAll(Event.class);
-        } else {
-            user = activity.user;
-            mSwipeRefreshLayout.setEnabled(false);
-            mEvents = Event.find(Event.class, "user_id = ?", String.valueOf(user.getUserId()));
-        }
-        mAdapter = new EventAdapter(activity, user, mEvents, mIsHomeEvent, this);
+        mSwipeRefreshLayout.setEnabled(true);
+        mEvents = getEvents();
+        mAdapter = new EventAdapter(activity, user, mEvents, mIsHomeEvents, this);
         mRecyclerView.setAdapter(mAdapter);
         ProgressView progressView = new ProgressView(activity);
         progressView.setIndicatorId(ProgressView.BallPulse);
@@ -139,10 +130,22 @@ public class EventListFragment extends BaseFragment
                         }
                     }
                 });
+
+        getEventsTask();
+    }
+
+    private List<Event> getEvents() {
+        if (mIsHomeEvents) {
+            return Event.listAll(Event.class, "-event_id");
+        } else {
+            return Event.find(Event.class, "user_id=?",
+                    new String[]{String.valueOf(mUserId)}, null, "-event_id", null);
+        }
     }
 
     private void getEventsTask() {
-        new EventTaskHandler(activity, user.getToken()).getEvents(
+        int userId = mIsHomeEvents ? Constants.INVALID_VALUE : mUserId;
+        new EventTaskHandler(activity, user.getToken()).getEvents(userId,
                 new HttpResponseInterface<EventsResult>() {
                     @Override
                     public void onStart() {
@@ -153,7 +156,9 @@ public class EventListFragment extends BaseFragment
                     public void onSuccess(EventsResult classOfT) {
                         mRecyclerView.refreshComplete();
                         mSwipeRefreshLayout.setRefreshing(false);
-                        Event.deleteAll(Event.class, "user_id = ?", String.valueOf(user.getUserId()));
+                        if (mIsHomeEvents) {
+                            Event.deleteAll(Event.class);
+                        }
                         mNextUrl = classOfT.getNext();
                         mEvents = new ArrayList<>();
                         for (Event event : classOfT.getEvents()) {
@@ -240,23 +245,25 @@ public class EventListFragment extends BaseFragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            switch (requestCode) {
-                case Constants.SHOW_EVENT_IMAGE_DETAIL_REQUEST_CODE:
-                    break;
-                case Constants.COMMENT_REQUEST_CODE:
-                    break;
-                case Constants.ADD_EVENT_REQUEST_CODE:
-                    if (data != null && data.getSerializableExtra(Constants.EVENT) != null) {
-                        mEvents.add((Event) data.getSerializableExtra(Constants.EVENT));
-                        mAdapter.setData(mEvents);
-                        mRecyclerView.scrollToPosition(0);
-                    }
-                    break;
-            }
-
-            getEventsTask();
-        }
+//        if (resultCode == Activity.RESULT_OK) {
+//            switch (requestCode) {
+//                case Constants.SHOW_EVENT_IMAGE_DETAIL_REQUEST_CODE:
+//                    break;
+//                case Constants.COMMENT_REQUEST_CODE:
+//                    break;
+//                case Constants.ADD_EVENT_REQUEST_CODE:
+//                    if (data != null && data.getSerializableExtra(Constants.EVENT) != null) {
+//                        mEvents.add((Event) data.getSerializableExtra(Constants.EVENT));
+//                        mAdapter.setData(mEvents);
+//                        mRecyclerView.scrollToPosition(0);
+//                    }
+//                    break;
+//            }
+//
+//            getEventsTask();
+//        }
+        mEvents = getEvents();
+        mAdapter.setData(mEvents);
     }
 
     @Override

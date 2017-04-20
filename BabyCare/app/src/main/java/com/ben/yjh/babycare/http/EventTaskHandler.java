@@ -33,10 +33,10 @@ public class EventTaskHandler extends BaseTaskHandler {
         this.mToken = token;
     }
 
-    public void getEvents(HttpResponseInterface<EventsResult> httpResponseInterface) {
+    public void getEvents(int userId, HttpResponseInterface<EventsResult> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
-            new HttpPostTask(context).startTask(URL_EVENTS + "?token=" + mToken,
+            new HttpPostTask(context).startTask(URL_EVENTS + "?token=" + mToken + "&user_id=" + userId,
                     Request.Method.GET, bodyObject, EventsResult.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();

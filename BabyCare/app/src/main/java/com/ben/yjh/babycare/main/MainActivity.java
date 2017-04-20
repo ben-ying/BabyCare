@@ -58,7 +58,7 @@ public class MainActivity extends BaseActivity
         setStatusBarMargin(R.id.cl_layout);
 
         List<BaseFragment> fragments = new ArrayList<>();
-        mEventListFragment = EventListFragment.newInstance(true);
+        mEventListFragment = EventListFragment.newInstance(user.getUserId());
         fragments.add(mEventListFragment);
 
         mViewPager = (ViewPager) findViewById(R.id.view_pager);

@@ -16,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.ben.yjh.babycare.BuildConfig;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.login.LoginActivity;
@@ -35,8 +36,8 @@ import java.util.TimeZone;
 public class HttpPostTask {
 
     //    private static final String DOMAIN = "http://116.62.47.105/webservice/";
-    private static final String DOMAIN = "http://www.bensbabycare.com/webservice/";
-//    private static final String DOMAIN = "http://192.168.1.130:8000/webservice/";
+//    private static final String DOMAIN = "http://www.bensbabycare.com/webservice/";
+    private static final String DOMAIN = "http://192.168.1.130:8000/webservice/";
     //        private static final String DOMAIN = "http://192.168.43.177:8000/webservice/";
     private static final String TAG_JSON_OBJ = "tag_json_obj";
     private static final String VERSION = "1.0.0";
@@ -88,14 +89,18 @@ public class HttpPostTask {
         if (httpResponseInterface != null) {
             httpResponseInterface.onStart();
         }
-        Log.d("HTTP", "url: " + DOMAIN + url);
-        Log.d("HTTP", "params: " + jsonObject);
+        if (BuildConfig.DEBUG) {
+            Log.e("HTTP", "url: " + DOMAIN + url);
+            Log.e("HTTP", "params: " + jsonObject);
+        }
 
         JsonObjectRequest request = new JsonObjectRequest(method, DOMAIN +
                 url.replace(HttpPostTask.DOMAIN, ""), jsonObject, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("HTTP", "response: " + response);
+                        if (BuildConfig.DEBUG) {
+                            Log.e("HTTP", "response: " + response);
+                        }
                         hideProgress();
                         if (httpResponseInterface != null) {
                             HttpBaseResult httpResponse = HttpUtils.getJsonData(

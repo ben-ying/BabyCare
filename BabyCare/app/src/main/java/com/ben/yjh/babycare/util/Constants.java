@@ -24,6 +24,7 @@ public class Constants {
     public static final String EVENT_IMAGE_PREFIX = "event_image_prefix";
     public static final String AVIARY_API_KEY_SECRET = "a9a692d4-2bf2-4927-9dc3-2cef97ac8a42";
 
+    public static final int INVALID_VALUE = -1;
     public static final int MIN_PASSWORD_LENGTH = 6;
     public static final int SIGN_UP_REQUEST_CODE = 100;
     public static final int ADD_EVENT_REQUEST_CODE = 101;

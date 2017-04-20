@@ -53,7 +53,6 @@ public class UserInfoActivity extends BaseActivity {
     private PersonalInfoFragment mPersonalInfoFragment;
     private ImageView mProfileImageView;
     private TextView mNameTextView;
-    private boolean mUpdate;
     private String mProfileBase64;
     private Uri mCameraUri;
 
@@ -72,7 +71,7 @@ public class UserInfoActivity extends BaseActivity {
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         List<BaseFragment> fragments = new ArrayList<>();
         mPersonalInfoFragment = PersonalInfoFragment.newInstance();
-        mEventListFragment = EventListFragment.newInstance(false);
+        mEventListFragment = EventListFragment.newInstance(user.getUserId());
         fragments.add(mPersonalInfoFragment);
         fragments.add(mEventListFragment);
         mPagerAdapter = new HomeViewPagerAdapter(this, getSupportFragmentManager(), fragments);
@@ -88,11 +87,11 @@ public class UserInfoActivity extends BaseActivity {
         mNameTextView.setText(user.getBabyName());
         ((AppBarLayout) findViewById(R.id.app_bar_scrolling))
                 .addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            int scrollRange = -1;
+            int scrollRange = Constants.INVALID_VALUE;
 
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
+                if (scrollRange == Constants.INVALID_VALUE) {
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
                 if (scrollRange + verticalOffset <= toolbar.getHeight()) {
@@ -110,88 +109,6 @@ public class UserInfoActivity extends BaseActivity {
         });
     }
 
-    private void getUserDetail() {
-        new UserTaskHandler(this).getUserDetail(user.getToken(), user.getUserId(),
-                new HttpResponseInterface<User>() {
-                    @Override
-                    public void onStart() {
-
-                    }
-
-                    @Override
-                    public void onSuccess(User classOfT) {
-                        user = classOfT;
-                        mPersonalInfoFragment.init();
-                        mEventListFragment.init();
-                    }
-
-                    @Override
-                    public void onFailure(HttpBaseResult result) {
-
-                    }
-
-                    @Override
-                    public void onHttpError(String error) {
-
-                    }
-                });
-    }
-
-    protected void editPersonalInfoTask(final int id, final String value) {
-        String key = null;
-        switch (id) {
-            case R.id.item_baby_name:
-                key = Constants.BABY_NAME;
-                break;
-            case R.id.item_email:
-                key = Constants.EMAIL;
-                break;
-            case R.id.item_phone:
-                key = Constants.PHONE;
-                break;
-            case R.id.item_gender:
-                key = Constants.GENDER;
-                break;
-            case R.id.item_birth:
-                key = Constants.BIRTHDAY;
-                break;
-            case R.id.item_hobbies:
-                key = Constants.HOBBIES;
-                break;
-            case R.id.img_profile:
-                key = Constants.BASE64;
-                break;
-        }
-
-        if (key != null) {
-            new UserTaskHandler(this).editUserInfo(user.getUserId(), key, value, user.getToken(),
-                    new HttpResponseInterface<User>() {
-                        @Override
-                        public void onStart() {
-
-                        }
-
-                        @Override
-                        public void onSuccess(User classOfT) {
-                            user = classOfT;
-                            user.save();
-                            mUpdate = true;
-                            mPersonalInfoFragment.init();
-                            mEventListFragment.init();
-                        }
-
-                        @Override
-                        public void onFailure(HttpBaseResult result) {
-
-                        }
-
-                        @Override
-                        public void onHttpError(String error) {
-
-                        }
-                    });
-        }
-    }
 
     @Override
     public void onClick(final View v) {
@@ -241,7 +158,7 @@ public class UserInfoActivity extends BaseActivity {
                             mProfileBase64 = ImageUtils.getBase64FromBitmap(bitmap);
                             MyApplication.displayImage(uri.toString(),
                                     mProfileImageView, ImageUtils.getProfileImageOptions(this), true);
-                            editPersonalInfoTask(R.id.img_profile, mProfileBase64);
+                            mPersonalInfoFragment.editPersonalInfoTask(R.id.img_profile, mProfileBase64);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                             mProfileBase64 = "";
@@ -249,12 +166,8 @@ public class UserInfoActivity extends BaseActivity {
                     }
                     break;
                 case Constants.SHOW_EVENT_IMAGE_DETAIL_REQUEST_CODE:
-                    mUpdate = true;
-                    getUserDetail();
                     break;
                 case Constants.COMMENT_REQUEST_CODE:
-                    mUpdate = true;
-                    getUserDetail();
                     break;
             }
         }
@@ -268,16 +181,5 @@ public class UserInfoActivity extends BaseActivity {
                 mProfileImageView.performClick();
             }
         }
-    }
-
-    @Override
-    public void finish() {
-        if (mUpdate) {
-            Intent intent = getIntent();
-            intent.putExtra(Constants.BABY_USER, user);
-            setResult(RESULT_OK, intent);
-        }
-
-        super.finish();
     }
 }

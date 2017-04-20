@@ -34,7 +34,6 @@ class EventViewSet(CustomModelViewSet):
                 response = super(EventViewSet, self).list(request, *args, **kwargs).data
                 for eventDict in response['results']:
                     # pdb.set_trace()
-
                     like_list = list()
                     likes = Like.objects.filter(event=eventDict['event_id'])
                     for like in likes:
@@ -49,7 +48,12 @@ class EventViewSet(CustomModelViewSet):
             return save_error_log(request, e)
 
     def get_queryset(self):
-        return super(EventViewSet, self).get_queryset().order_by("-id")
+        user_id = self.request.query_params.get('user_id', -1)
+
+        if int(user_id) < 0:
+            return super(EventViewSet, self).get_queryset().order_by("-id")
+        else:
+            return super(EventViewSet, self).get_queryset().filter(baby_id=user_id).order_by("-id")
 
     def create(self, request, *args, **kwargs):
         try:

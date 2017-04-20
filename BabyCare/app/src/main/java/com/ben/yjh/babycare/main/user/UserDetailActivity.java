@@ -43,7 +43,7 @@ public class UserDetailActivity extends BaseActivity {
     private UserDetailFragment mUserDetailFragment;
     private ImageView mProfileImageView;
     private TextView mNameTextView;
-    private boolean mUpdate;
+    private int mUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +57,11 @@ public class UserDetailActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         setStatusBarMargin(R.id.content_layout);
+        mUserId = getIntent().getIntExtra(Constants.USER_ID, Constants.INVALID_VALUE);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         List<BaseFragment> fragments = new ArrayList<>();
         mUserDetailFragment = UserDetailFragment.newInstance();
-        mEventListFragment = EventListFragment.newInstance(false);
+        mEventListFragment = EventListFragment.newInstance(mUserId);
         fragments.add(mUserDetailFragment);
         fragments.add(mEventListFragment);
         mPagerAdapter = new HomeViewPagerAdapter(this, getSupportFragmentManager(), fragments);
@@ -76,8 +77,7 @@ public class UserDetailActivity extends BaseActivity {
     }
 
     private void getUserDetail() {
-        new UserTaskHandler(this).getUserDetail(User.getUser().getToken(),
-                getIntent().getIntExtra(Constants.USER_ID, 0),
+        new UserTaskHandler(this).getUserDetail(User.getUser().getToken(), mUserId,
                 new HttpResponseInterface<User>() {
                     @Override
                     public void onStart() {
@@ -94,12 +94,12 @@ public class UserDetailActivity extends BaseActivity {
                         ((AppBarLayout) findViewById(R.id.app_bar_scrolling))
                                 .addOnOffsetChangedListener(
                                         new AppBarLayout.OnOffsetChangedListener() {
-                                    int scrollRange = -1;
+                                    int scrollRange = Constants.INVALID_VALUE;
 
                                     @Override
                                     public void onOffsetChanged(
                                             AppBarLayout appBarLayout, int verticalOffset) {
-                                        if (scrollRange == -1) {
+                                        if (scrollRange == Constants.INVALID_VALUE) {
                                             scrollRange = appBarLayout.getTotalScrollRange();
                                         }
                                         if (scrollRange + verticalOffset <= toolbar.getHeight()) {
@@ -121,7 +121,6 @@ public class UserDetailActivity extends BaseActivity {
                                     }
                                 });
                         mUserDetailFragment.init();
-                        mEventListFragment.init();
                     }
 
                     @Override
@@ -142,12 +141,8 @@ public class UserDetailActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case Constants.SHOW_EVENT_IMAGE_DETAIL_REQUEST_CODE:
-                    mUpdate = true;
-                    getUserDetail();
                     break;
                 case Constants.COMMENT_REQUEST_CODE:
-                    mUpdate = true;
-                    getUserDetail();
                     break;
             }
         }
@@ -156,16 +151,5 @@ public class UserDetailActivity extends BaseActivity {
     @Override
     public void onClick(View v) {
 
-    }
-
-    @Override
-    public void finish() {
-        if (mUpdate) {
-            Intent intent = getIntent();
-            intent.putExtra(Constants.BABY_USER, user);
-            setResult(RESULT_OK, intent);
-        }
-
-        super.finish();
     }
 }

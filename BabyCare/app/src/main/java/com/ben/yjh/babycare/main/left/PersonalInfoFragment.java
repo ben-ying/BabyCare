@@ -71,6 +71,11 @@ public class PersonalInfoFragment extends BaseFragment {
 
     @Override
     public void init() {
+        setData();
+        getUserDetail();
+    }
+
+    private void setData() {
         user = mActivity.user;
         mUsernameItem.setValue(R.string.username, user.getUsername(), 0);
         mBabyNameItem.setValue(R.string.baby_name, user.getBabyName(), R.string.edit_baby_name);
@@ -86,6 +91,87 @@ public class PersonalInfoFragment extends BaseFragment {
         mBirthItem.setValue(R.string.birth, user.getBirth(), R.string.edit_birth);
         mHobbiesItem.setValue(R.string.hobbies, user.getHobbies(), R.string.edit_hobbies);
     }
+
+    private void getUserDetail() {
+        new UserTaskHandler(activity).getUserDetail(user.getToken(), user.getUserId(),
+                new HttpResponseInterface<User>() {
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onSuccess(User classOfT) {
+                        user = classOfT;
+                        setData();
+                    }
+
+                    @Override
+                    public void onFailure(HttpBaseResult result) {
+
+                    }
+
+                    @Override
+                    public void onHttpError(String error) {
+
+                    }
+                });
+    }
+
+    protected void editPersonalInfoTask(final int id, final String value) {
+        String key = null;
+        switch (id) {
+            case R.id.item_baby_name:
+                key = Constants.BABY_NAME;
+                break;
+            case R.id.item_email:
+                key = Constants.EMAIL;
+                break;
+            case R.id.item_phone:
+                key = Constants.PHONE;
+                break;
+            case R.id.item_gender:
+                key = Constants.GENDER;
+                break;
+            case R.id.item_birth:
+                key = Constants.BIRTHDAY;
+                break;
+            case R.id.item_hobbies:
+                key = Constants.HOBBIES;
+                break;
+            case R.id.img_profile:
+                key = Constants.BASE64;
+                break;
+        }
+
+        if (key != null) {
+            new UserTaskHandler(activity).editUserInfo(user.getUserId(), key, value, user.getToken(),
+                    new HttpResponseInterface<User>() {
+                        @Override
+                        public void onStart() {
+
+                        }
+
+                        @Override
+                        public void onSuccess(User classOfT) {
+                            user = classOfT;
+                            user.save();
+                            init();
+                        }
+
+                        @Override
+                        public void onFailure(HttpBaseResult result) {
+
+                        }
+
+                        @Override
+                        public void onHttpError(String error) {
+
+                        }
+                    });
+        }
+    }
+
 
     @Override
     public void onClick(final View v) {
@@ -131,11 +217,11 @@ public class PersonalInfoFragment extends BaseFragment {
                                 editText.setError(getString(R.string.invalid_email));
                             } else {
                                 dialog.dismiss();
-                                mActivity.editPersonalInfoTask(id, value);
+                                editPersonalInfoTask(id, value);
                             }
                         } else {
                             dialog.dismiss();
-                            mActivity.editPersonalInfoTask(id, value);
+                            editPersonalInfoTask(id, value);
                         }
                     }
                 });
@@ -150,10 +236,10 @@ public class PersonalInfoFragment extends BaseFragment {
                                 Intent intent = null;
                                 switch (which) {
                                     case 0:
-                                        mActivity.editPersonalInfoTask(id, "0");
+                                        editPersonalInfoTask(id, "0");
                                         break;
                                     case 1:
-                                        mActivity.editPersonalInfoTask(id, "1");
+                                        editPersonalInfoTask(id, "1");
                                         break;
                                     default:
                                         break;
@@ -170,7 +256,7 @@ public class PersonalInfoFragment extends BaseFragment {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-                                mActivity.editPersonalInfoTask(id, year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                                editPersonalInfoTask(id, year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                             }
                         }
                         , c.get(Calendar.YEAR), c.get(Calendar.MONTH), c
