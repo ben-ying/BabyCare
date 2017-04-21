@@ -13,7 +13,7 @@ from babycare.serializers.event import EventSerializer
 from babycare.serializers.like import LikeSerializer
 from babycare.constants import CODE_EMPTY_EVENT, MSG_EMPTY_EVENT, EVENT_FOOTER_IMAGE, \
     MSG_GET_EVENTS_SUCCESS, MSG_DELETE_EVENT_SUCCESS
-from babycare.constants import CODE_SUCCESS, MSG_CREATE_EVENT_SUCCESS
+from babycare.constants import CODE_SUCCESS, MSG_POST_EVENT_SUCCESS
 from babycare.models import BabyUser, Like
 from babycare.models import Event
 from babycare.utils import json_response, invalid_token_response, get_user_by_token, CustomModelViewSet, upload_image_to_oss, \
@@ -81,7 +81,7 @@ class EventViewSet(CustomModelViewSet):
                         event.image1 = image
                 event.save()
                 response = EventSerializer(event).data
-                return json_response(response, CODE_SUCCESS, MSG_CREATE_EVENT_SUCCESS)
+                return json_response(response, CODE_SUCCESS, MSG_POST_EVENT_SUCCESS)
             else:
                 return invalid_token_response()
         except Exception as e:
@@ -133,7 +133,7 @@ def like_view(request):
             like.save()
             # pdb.set_trace()
             response = LikeSerializer(like).data
-            return json_response(response, CODE_SUCCESS, MSG_CREATE_EVENT_SUCCESS)
+            return json_response(response, CODE_SUCCESS, MSG_POST_EVENT_SUCCESS)
         else:
             return invalid_token_response()
     except Exception as e:

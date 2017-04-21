@@ -1,6 +1,8 @@
 from django.conf.urls import url
 from rest_framework import renderers
 from rest_framework.urlpatterns import format_suffix_patterns
+
+from babycare.views.comment_views import CommentViewSet
 from views.user_views import UserViewSet, login_view, send_verify_code_view, reset_password_with_verify_code_view
 from views.user_views import api_root
 
@@ -28,6 +30,18 @@ event_list = EventViewSet.as_view({
     'post': 'create',
 })
 
+comment_list = CommentViewSet.as_view({
+    'get': 'list',
+    'post': 'create',
+})
+
+comment_detail = CommentViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy'
+})
+
 event_detail = EventViewSet.as_view({
     'get': 'retrieve',
     'put': 'update',
@@ -50,6 +64,8 @@ urlpatterns = [
     url(r'^events/$', event_list, name='event-list'),
     url(r'^events/(?P<pk>[0-9]+)', event_detail, name='event-detail'),
     url(r'^event/like$', like_view, name='like'),
+    url(r'^event/comments/$', comment_list, name='comment-list'),
+    url(r'^event/comments/(?P<pk>[0-9]+)$', comment_detail, name='comment-detail'),
     url(r'^feedback/$', send_feedback, name='send-feedback'),
 ]
 

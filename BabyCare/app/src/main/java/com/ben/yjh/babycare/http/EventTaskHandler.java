@@ -4,6 +4,7 @@ package com.ben.yjh.babycare.http;
 import android.content.Context;
 
 import com.android.volley.Request;
+import com.ben.yjh.babycare.model.CommentsResult;
 import com.ben.yjh.babycare.model.Event;
 import com.ben.yjh.babycare.model.EventComment;
 import com.ben.yjh.babycare.model.EventLike;
@@ -12,6 +13,7 @@ import com.ben.yjh.babycare.model.HttpBaseResult;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Comment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,7 @@ public class EventTaskHandler extends BaseTaskHandler {
     private static final String URL_LIKES = "event/likes";
     private static final String URL_LIKE = "event/like";
     private static final String URL_DELETE = "event/delete";
-    private static final String URL_COMMENTS = "event/comments";
+    private static final String URL_COMMENTS = "event/comments/";
     private static final String URL_COMMENT = "event/comment";
 
     private String mToken;
@@ -85,13 +87,13 @@ public class EventTaskHandler extends BaseTaskHandler {
         }
     }
 
-    public void delete(int eventId,
+    public void deleteEvent(int eventId,
                        HttpResponseInterface<Event> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
             bodyObject.put("token", mToken);
             new HttpPostTask(context).startTask(URL_EVENTS + eventId, Request.Method.DELETE,
-                    bodyObject, Event.class, false, httpResponseInterface);
+                    bodyObject, Event.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -134,30 +136,39 @@ public class EventTaskHandler extends BaseTaskHandler {
         }
     }
 
-    public void getComments(String token, String eventId,
-                     HttpResponseInterface<EventComment[]> httpResponseInterface) {
+    public void getComments(int eventId,
+                     HttpResponseInterface<CommentsResult> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
-            bodyObject.put("token", token);
-            bodyObject.put("event_id", eventId);
-            new HttpPostTask(context).startTask(URL_COMMENTS, Request.Method.GET,
-                    bodyObject, EventComment[].class, true, httpResponseInterface);
+            new HttpPostTask(context).startTask(URL_COMMENTS + "?token=" + mToken + "&event_id=" + eventId,
+                    Request.Method.GET, bodyObject, CommentsResult.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void addComment(int userId, Event event, String indirectUserId, String comment,
+    public void addComment(String text, int eventId, int userId, int replyCommentId,
                         HttpResponseInterface<EventComment> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
             bodyObject.put("token", mToken);
-            bodyObject.put("event_id", event.getEventId());
-            bodyObject.put("comment_user_id", userId);
-            bodyObject.put("event_user_id", event.getUserId());
-            bodyObject.put("indirect_user_id", indirectUserId);
-            bodyObject.put("comment", comment);
-            new HttpPostTask(context).startTask(URL_COMMENT, Request.Method.POST,
+            bodyObject.put("text", text);
+            bodyObject.put("event_id", eventId);
+            bodyObject.put("user_id", userId);
+            bodyObject.put("source_comment_id", replyCommentId);
+            new HttpPostTask(context).startTask(URL_COMMENTS, Request.Method.POST,
+                    bodyObject, EventComment.class, true, httpResponseInterface);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteComment(int commentId,
+                           HttpResponseInterface<EventComment> httpResponseInterface) {
+        try {
+            JSONObject bodyObject = new JSONObject();
+            bodyObject.put("token", mToken);
+            new HttpPostTask(context).startTask(URL_COMMENTS + commentId, Request.Method.DELETE,
                     bodyObject, EventComment.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();

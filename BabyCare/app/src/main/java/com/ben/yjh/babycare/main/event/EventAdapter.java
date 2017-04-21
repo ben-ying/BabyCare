@@ -28,6 +28,7 @@ import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
+import com.ben.yjh.babycare.util.Utils;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.ArrayList;
@@ -47,13 +48,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         mInterface.showImageDetail(position);
     }
 
-    public void intent2CommentList() {
-        mInterface.intent2CommentList();
+    public void intent2CommentList(int eventId) {
+        mInterface.intent2CommentList(eventId);
     }
 
     public interface EventRecyclerViewInterface {
         void showImageDetail(int position);
-        void intent2CommentList();
+        void intent2CommentList(int eventId);
     }
 
     public EventAdapter(Context context, User user, List<Event> events, boolean isHomeEvent,
@@ -92,6 +93,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.nameTextView.setOnClickListener(this);
         holder.profileButton.setTag(event.getUserId());
         holder.nameTextView.setTag(event.getUserId());
+        holder.commentRadioButton.setTag(event.getEventId());
 
         if (event.getUserId() == mUser.getUserId()) {
             holder.commonRadioButton.setCompoundDrawablesWithIntrinsicBounds(
@@ -136,7 +138,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         MyApplication.displayTinyImage(event.getUserProfile(),
                 holder.profileButton, ImageUtils.getTinyProfileImageOptions(mContext));
         holder.nameTextView.setText(event.getUsername());
-        holder.dateTextView.setText(event.getCreatedDate(mContext));
+        holder.dateTextView.setText(Utils.getFormatDate(mContext, event.getCreated()));
     }
 
     @Override
@@ -175,7 +177,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rb_comment:
-                intent2CommentList();
+                intent2CommentList((int) v.getTag());
                 break;
             case R.id.rb_share:
                 break;
@@ -239,7 +241,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     }
 
     private void deleteTask(final Event event) {
-        new EventTaskHandler(mContext, mUser.getToken()).delete(event.getEventId(),
+        new EventTaskHandler(mContext, mUser.getToken()).deleteEvent(event.getEventId(),
                 new HttpResponseInterface<Event>() {
                     @Override
                     public void onStart() {

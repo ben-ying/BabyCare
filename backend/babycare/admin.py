@@ -5,7 +5,7 @@ from models import Event
 
 
 class BabyAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone', 'baby_name', 'created', 'modified')
+    list_display = ('user', 'phone', 'baby_name', 'profile', 'created', 'modified')
     search_fields = ('user', 'phone', 'baby_name')
     #fields = ('email', 'name', 'baby_name')
 
@@ -37,6 +37,6 @@ admin.site.register(Feedback, FeedbackAdmin)
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('text', 'event', 'baby', 'source_comment', 'datetime')
+    list_display = ('id', 'text', 'event', 'baby', 'source_comment', 'datetime')
     search_fields = ('text', 'event', 'baby')
 admin.site.register(Comment, CommentAdmin)

@@ -238,8 +238,9 @@ public class EventListFragment extends BaseFragment
     }
 
     @Override
-    public void intent2CommentList() {
+    public void intent2CommentList(int eventId) {
         Intent intent = new Intent(activity, CommentActivity.class);
+        intent.putExtra(Constants.EVENT_ID, eventId);
         startActivityForResult(intent, Constants.COMMENT_REQUEST_CODE);
     }
 

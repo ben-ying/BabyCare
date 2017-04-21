@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class Utils {
 
@@ -48,6 +49,16 @@ public class Utils {
             InputMethodManager keyboard = (InputMethodManager)
                     activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             keyboard.showSoftInput(editText, 0);
+        }
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        if (activity.getCurrentFocus() != null) {
+            inputMethodManager.hideSoftInputFromWindow(
+                    activity.getCurrentFocus().getWindowToken(), 0);
         }
     }
 
@@ -96,5 +107,23 @@ public class Utils {
         return now.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)
                 && now.get(Calendar.MONTH) == calendar.get(Calendar.MONTH)
                 && now.get(Calendar.DATE) == calendar.get(Calendar.DATE);
+    }
+
+    public static String getFormatDate(Context context, String dateStr) {
+        SimpleDateFormat format = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        try {
+            Date utcDate = format.parse(dateStr);
+            format.setTimeZone(TimeZone.getDefault());
+            String localDate = format.format(utcDate);
+            Date date = format.parse(localDate);
+            return Utils.getDateStr(context, date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "";
     }
 }

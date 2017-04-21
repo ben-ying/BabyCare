@@ -1,37 +1,84 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import pdb
+import json
 
-import time
+from rest_framework import status
 
-from django.utils import timezone
-
-from babycare.constants import CODE_SUCCESS
-from babycare.utils import invalid_token_response, get_user_by_token, save_error_log, upload_image_to_oss, \
-    CustomModelViewSet
-from babycare.utils import simple_json_response
+from babycare.constants import CODE_SUCCESS, MSG_GET_COMMENTS_SUCCESS, MSG_DELETE_COMMENT_SUCCESS, CODE_EMPTY_COMMENT, \
+    MSG_EMPTY_COMMENT_FIELD, MSG_POST_COMMENT_SUCCESS
+from babycare.models import Comment, Event, BabyUser
+from babycare.serializers.comment import CommentSerializer
+from babycare.utils import invalid_token_response, get_user_by_token, save_error_log, CustomModelViewSet, json_response, \
+    simple_json_response
 
 
 class CommentViewSet(CustomModelViewSet):
-    queryset = Event.objects.all()
-    serializer_class = EventSerializer
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def create(self, request, *args, **kwargs):
+        try:
+            token = request.data.get('token')
+            text = request.data.get('text')
+            event_id = request.data.get('event_id')
+            user_id = request.data.get('user_id')
+            source_comment_id = request.data.get('source_comment_id', -1)
+            user = get_user_by_token(token)
+
+            if not text or not event_id or not user_id:
+                return simple_json_response(CODE_EMPTY_COMMENT, MSG_EMPTY_COMMENT_FIELD)
+            if user:
+                comment = Comment()
+                comment.text = text
+                comment.event = Event.objects.get(id=event_id)
+                comment.baby = BabyUser.objects.get(id=user_id)
+                if source_comment_id > 0 and Comment.objects.filter(id=source_comment_id):
+                    comment.source_comment = Comment.objects.get(id=source_comment_id)
+                comment.save()
+                response = CommentSerializer(comment).data
+                return json_response(response, CODE_SUCCESS, MSG_POST_COMMENT_SUCCESS)
+            else:
+                return invalid_token_response()
+        except Exception as e:
+            return save_error_log(request, e)
 
     def list(self, request, *args, **kwargs):
-
         try:
             token = request.query_params.get('token')
             user = get_user_by_token(token)
             if user:
-                response = super(EventViewSet, self).list(request, *args, **kwargs).data
-                for eventDict in response['results']:
-                    # pdb.set_trace()
-                    like_list = list()
-                    likes = Like.objects.filter(event=eventDict['event_id'])
-                    for like in likes:
-                        data = LikeSerializer(like).data
-                        like_list.append(data)
-                    eventDict['likes'] = like_list
+                response = super(CommentViewSet, self).list(request, *args, **kwargs).data
+                return json_response(response, CODE_SUCCESS, MSG_GET_COMMENTS_SUCCESS)
+            else:
+                return invalid_token_response()
+        except Exception as e:
+            return save_error_log(request, e)
 
-                return json_response(response, CODE_SUCCESS, MSG_GET_EVENTS_SUCCESS)
+    def get_queryset(self):
+        event_id = self.request.query_params.get('event_id', -1)
+        return super(CommentViewSet, self).get_queryset().filter(event_id=event_id)
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            obj = json.loads(request.body)
+            token = obj.get('token')
+            user = get_user_by_token(token)
+            if user:
+                try:
+                    pdb.set_trace()
+                    response = super(CommentViewSet, self).destroy(request, *args, **kwargs)
+                    if response.status_code == status.HTTP_204_NO_CONTENT:
+                        comment_json = CommentSerializer(self.get_object()).data
+                    else:
+                        comment = Comment()
+                        comment.id = -1
+                        comment_json = CommentSerializer(comment).data
+                except Exception as e:
+                    comment = Comment()
+                    comment.id = -1
+                    comment_json = CommentSerializer(comment).data
+                return json_response(comment_json, CODE_SUCCESS, MSG_DELETE_COMMENT_SUCCESS)
             else:
                 return invalid_token_response()
         except Exception as e:

@@ -97,6 +97,11 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
+    <!--comment-->
+    <string name="reply_user">回复 %1$s 的评论: %2$s</string>
+    <string name="cancel_reply">取消回复</string>
+    <string name="add_comment">添加评论</string>
+
     <!--navigation-->
     <string name="others">其它</string>
     <string name="user_info">用户信息</string>

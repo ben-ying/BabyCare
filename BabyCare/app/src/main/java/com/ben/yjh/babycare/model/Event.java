@@ -115,24 +115,6 @@ public class Event extends SugarRecord implements Serializable {
         return created == null ? "" : created;
     }
 
-    public String getCreatedDate(Context context) {
-        SimpleDateFormat format = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        format.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-        try {
-            Date utcDate = format.parse(created);
-            format.setTimeZone(TimeZone.getDefault());
-            String localDate = format.format(utcDate);
-            Date date = format.parse(localDate);
-            return Utils.getDateStr(context, date);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return "";
-    }
-
     public void setCreated(String created) {
         this.created = created;
     }

@@ -14,4 +14,8 @@
         <item>替换</item>
         <item>删除</item>
     </string-array>
+
+    <string-array name="self_comment_choices">
+        <item>删除</item>
+    </string-array>
 </resources>

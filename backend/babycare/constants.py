@@ -32,6 +32,8 @@ CODE_USER_NOT_EXISTS = 216
 
 # event
 CODE_EMPTY_EVENT = 301
+# comment
+CODE_EMPTY_COMMENT = 351
 
 DATE_TIME_FORMAT = ('%Y-%m-%d %H:%M:%S')
 
@@ -66,7 +68,8 @@ MSG_EMPTY_VERIFY_CODE = _(u'验证码不能为空')
 MSG_INCORRECT_VERIFY_CODE = _(u'验证码错误')
 MSG_EXPIRED_VERIFY_CODE = _(u'验证码已过期')
 MSG_USER_NOT_EXISTS = _(u'该用户不存在')
-MSG_GET_EVENTS_SUCCESS = _(u'获取Events成功')
+MSG_GET_EVENTS_SUCCESS = _(u'获取动态成功')
+MSG_GET_COMMENTS_SUCCESS = _(u'获取评论成功')
 MSG_SEND_FEEDBACK_SUCCESS = _(u'反馈消息发送成功')
 MSG_GET_USER_DETAIL_SUCCESS = _(u'获取用户信息成功')
 
@@ -76,6 +79,10 @@ PASSWORD_VERIFY_CODE_EMAIL_CONTENT = _(u'您的验证码：%s。\n本邮件是�
 
 # event message
 MSG_EMPTY_EVENT = _(u'数据不能全为空')
-MSG_CREATE_EVENT_SUCCESS = _(u'发布成功')
-MSG_DELETE_EVENT_SUCCESS = _(u'删除成功')
+MSG_POST_EVENT_SUCCESS = _(u'发布成功')
+MSG_DELETE_EVENT_SUCCESS = _(u'删除动态成功')
+MSG_DELETE_COMMENT_SUCCESS = _(u'删除评论成功')
+# comment
+MSG_EMPTY_COMMENT_FIELD = _(u'数据格式不正确')
+MSG_POST_COMMENT_SUCCESS = _(u'评论发布成功')
 

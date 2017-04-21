@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -12,23 +13,24 @@
         android:layout_width="@dimen/profile_small_size"
         android:layout_height="@dimen/profile_small_size"
         android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/text_padding" />
+        android:layout_marginEnd="@dimen/text_padding" />
 
     <TextView
         android:id="@+id/tv_name"
-        android:text="123"
         android:layout_toEndOf="@+id/img_profile"
         android:layout_alignTop="@+id/img_profile"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:text="123"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/tv_comment"
-        android:text="宝是对小孩儿的亲昵称。 宝是对小孩儿的亲昵称。宝是对小孩儿的亲昵称。"
         android:layout_below="@+id/tv_name"
         android:layout_marginTop="@dimen/text_padding"
-        android:paddingRight="@dimen/recycler_view_padding"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:paddingEnd="@dimen/recycler_view_padding"
+        android:paddingStart="0dp"
         android:layout_alignStart="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -36,16 +38,15 @@
     <TextView
         android:id="@+id/tv_datetime"
         android:layout_marginTop="@dimen/text_padding"
-        android:layout_alignLeft="@+id/tv_name"
+        android:layout_alignStart="@+id/tv_name"
         android:layout_below="@+id/tv_comment"
-        android:text="2017-03-22 12:22"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <TextView
         android:background="@color/divider_color"
         android:layout_marginTop="@dimen/text_padding"
-        android:layout_alignLeft="@+id/tv_name"
+        android:layout_alignStart="@+id/tv_name"
         android:layout_below="@+id/tv_datetime"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"/>

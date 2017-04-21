@@ -102,6 +102,7 @@ public class FeedbackActivity extends BaseActivity {
                                     }
                                 }
                             })
+                            .setNegativeButton(R.string.cancel, null)
                             .show();
                 }
                 return true;

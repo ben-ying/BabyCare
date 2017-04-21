@@ -15,7 +15,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from validate_email import validate_email
 
-from babycare.serializers.baby_user import BabyUserSerializer
+from babycare.serializers.baby import BabyUserSerializer
 from babycare.serializers.event import EventSerializer
 from babycare.constants import CODE_DUPLICATE_EMAIL, MSG_SEND_VERIFY_CODE_SUCCESS, MSG_NO_SUCH_EMAIL, MSG_EMPTY_VERIFY_CODE, \
     CODE_EMPTY_VERIFY_CODE, MSG_INCORRECT_VERIFY_CODE, CODE_INCORRECT_VERIFY_CODE, CODE_EXPIRED_VERIFY_CODE, \
