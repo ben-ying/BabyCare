@@ -1,11 +1,11 @@
 from django.conf.urls import url
 from rest_framework import renderers
 from rest_framework.urlpatterns import format_suffix_patterns
+from views.user_views import UserViewSet, login_view, send_verify_code_view, reset_password_with_verify_code_view
+from views.user_views import api_root
 
-from babycare.event_views import EventViewSet, like_view
-from babycare.views import send_feedback
-from user_views import UserViewSet, login_view, send_verify_code_view, reset_password_with_verify_code_view
-from user_views import api_root
+from babycare.views.views import send_feedback
+from babycare.views.event_views import EventViewSet, like_view
 
 user_list = UserViewSet.as_view({
     'get': 'list',

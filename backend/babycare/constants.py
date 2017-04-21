@@ -5,7 +5,7 @@ import os
 from django.utils.translation import ugettext_lazy as _
 
 MIN_PASSWORD_LEN = 6
-VERIFY_CODE_EXPIRED_TIME = 5 * 60 # 5minutes
+VERIFY_CODE_EXPIRED_TIME = 5 * 60 # 5 minutes
 TEMP_IMAGE = os.path.join(os.path.dirname(__file__), 'temp.jpg')
 PROFILE_FOOTER_IMAGE = '_profile.jpg'
 EVENT_FOOTER_IMAGE = '_event.jpg'

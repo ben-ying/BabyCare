@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import time
+import pdb
 
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
@@ -16,35 +17,35 @@ from validate_email import validate_email
 
 from babycare.serializers.baby_user import BabyUserSerializer
 from babycare.serializers.event import EventSerializer
-from constants import CODE_DUPLICATE_EMAIL, MSG_SEND_VERIFY_CODE_SUCCESS, MSG_NO_SUCH_EMAIL, MSG_EMPTY_VERIFY_CODE, \
+from babycare.constants import CODE_DUPLICATE_EMAIL, MSG_SEND_VERIFY_CODE_SUCCESS, MSG_NO_SUCH_EMAIL, MSG_EMPTY_VERIFY_CODE, \
     CODE_EMPTY_VERIFY_CODE, MSG_INCORRECT_VERIFY_CODE, CODE_INCORRECT_VERIFY_CODE, CODE_EXPIRED_VERIFY_CODE, \
     MSG_EXPIRED_VERIFY_CODE, \
     VERIFY_CODE_EXPIRED_TIME, CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS, MSG_GET_USER_DETAIL_SUCCESS
-from constants import CODE_DUPLICATE_USER
-from constants import CODE_EMPTY_EMAIL
-from constants import CODE_EMPTY_PASSWORD
-from constants import CODE_EMPTY_USER
-from constants import CODE_INVALID_EMAIL
-from constants import CODE_INVALID_PASSWORD
-from constants import CODE_INVALID_REQUEST
-from constants import CODE_SUCCESS, MSG_INCORRECT_USER_NAME_OR_PASSWORD, \
+from babycare.constants import CODE_DUPLICATE_USER
+from babycare.constants import CODE_EMPTY_EMAIL
+from babycare.constants import CODE_EMPTY_PASSWORD
+from babycare.constants import CODE_EMPTY_USER
+from babycare.constants import CODE_INVALID_EMAIL
+from babycare.constants import CODE_INVALID_PASSWORD
+from babycare.constants import CODE_INVALID_REQUEST
+from babycare.constants import CODE_SUCCESS, MSG_INCORRECT_USER_NAME_OR_PASSWORD, \
     CODE_INCORRECT_USER_NAME_OR_PASSWORD, MSG_NOT_ACTIVE_USER, CODE_NOT_ACTIVE, MSG_LOGIN_SUCCESS, \
     MSG_GET_USERS_SUCCESS, \
     MSG_EMPTY_BABY_NAME, CODE_EMPTY_BABY_NAME, PROFILE_FOOTER_IMAGE
-from constants import MIN_PASSWORD_LEN
-from constants import MSG_400
-from constants import MSG_CREATE_USER_SUCCESS
-from constants import MSG_DUPLICATE_EMAIL
-from constants import MSG_DUPLICATE_USER
-from constants import MSG_EMPTY_EMAIL
-from constants import MSG_EMPTY_PASSWORD
-from constants import MSG_EMPTY_USERNAME
-from constants import MSG_INVALID_EMAIL
-from constants import MSG_INVALID_PASSWORD
-from models import BabyUser, Verify, Event
-from utils import json_response, invalid_token_response, upload_image_to_oss, send_email, get_user_by_token, get_user, \
+from babycare.constants import MIN_PASSWORD_LEN
+from babycare.constants import MSG_400
+from babycare.constants import MSG_CREATE_USER_SUCCESS
+from babycare.constants import MSG_DUPLICATE_EMAIL
+from babycare.constants import MSG_DUPLICATE_USER
+from babycare.constants import MSG_EMPTY_EMAIL
+from babycare.constants import MSG_EMPTY_PASSWORD
+from babycare.constants import MSG_EMPTY_USERNAME
+from babycare.constants import MSG_INVALID_EMAIL
+from babycare.constants import MSG_INVALID_PASSWORD
+from babycare.models import BabyUser, Verify, Event
+from babycare.utils import json_response, invalid_token_response, upload_image_to_oss, send_email, get_user_by_token, get_user, \
     CustomModelViewSet, save_error_log
-from utils import simple_json_response
+from babycare.utils import simple_json_response
 
 
 @api_view(['GET'])
@@ -243,10 +244,13 @@ def send_verify_code_view(request):
                 not User.objects.filter(username=email.lower()):
             return simple_json_response(CODE_INVALID_EMAIL, MSG_NO_SUCH_EMAIL)
 
+        baby = None
         if User.objects.filter(email=email.lower()):
-            baby = User.objects.get(email=email.lower())
+            user = User.objects.get(email=email.lower())
+            baby = BabyUser.objects.get(user=user)
         elif User.objects.filter(username=email.lower()):
-            baby = User.objects.get(username=email.lower())
+            user = User.objects.get(username=email.lower())
+            baby = BabyUser.objects.get(user=user)
 
         verify_code = get_random_string(length=6, allowed_chars='0123456789').lower()
         send_email(baby, email, verify_code)
@@ -276,8 +280,9 @@ def reset_password_with_verify_code_view(request):
 
         user = get_user(email=email)
         if user:
-            if Verify.objects.filter(user=user, email_verify_code=code.lower()):
-                verify = Verify.objects.get(user=user, email_verify_code=code.lower())
+            baby = BabyUser.objects.get(user=user)
+            if Verify.objects.filter(baby=baby, email_verify_code=code.lower()):
+                verify = Verify.objects.get(baby=baby, email_verify_code=code.lower())
                 if (time.time() - float(format(verify.created, 'U'))) > VERIFY_CODE_EXPIRED_TIME:
                     return simple_json_response(CODE_EXPIRED_VERIFY_CODE, MSG_EXPIRED_VERIFY_CODE)
                 else:

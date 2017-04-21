@@ -11,14 +11,14 @@ from rest_framework.decorators import api_view
 
 from babycare.serializers.event import EventSerializer
 from babycare.serializers.like import LikeSerializer
-from constants import CODE_EMPTY_EVENT, MSG_EMPTY_EVENT, EVENT_FOOTER_IMAGE, \
+from babycare.constants import CODE_EMPTY_EVENT, MSG_EMPTY_EVENT, EVENT_FOOTER_IMAGE, \
     MSG_GET_EVENTS_SUCCESS, MSG_DELETE_EVENT_SUCCESS
-from constants import CODE_SUCCESS, MSG_CREATE_EVENT_SUCCESS
-from models import BabyUser, Like
-from models import Event
-from utils import json_response, invalid_token_response, get_user_by_token, CustomModelViewSet, upload_image_to_oss, \
+from babycare.constants import CODE_SUCCESS, MSG_CREATE_EVENT_SUCCESS
+from babycare.models import BabyUser, Like
+from babycare.models import Event
+from babycare.utils import json_response, invalid_token_response, get_user_by_token, CustomModelViewSet, upload_image_to_oss, \
     save_error_log
-from utils import simple_json_response
+from babycare.utils import simple_json_response
 
 
 class EventViewSet(CustomModelViewSet):

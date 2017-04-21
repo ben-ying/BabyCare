@@ -65,7 +65,7 @@ class LoginLog(models.Model):
 
 
 class Verify(models.Model):
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    baby = models.ForeignKey(BabyUser, on_delete=models.CASCADE)
     email_verify_code = models.CharField(max_length=10, blank=True, null=True)
     phone_verify_code = models.CharField(max_length=10, blank=True, null=True)
     created = models.DateTimeField(auto_now=True, blank=True, null=True)
@@ -86,7 +86,7 @@ class Like(models.Model):
 
 class Feedback(models.Model):
     id = IntegerField(label='ID')
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    baby = models.ForeignKey(BabyUser, on_delete=models.CASCADE)
     description = models.TextField()
     image1 = models.CharField(max_length=200, blank=True, null=True)
     image2 = models.CharField(max_length=200, blank=True, null=True)
@@ -103,3 +103,14 @@ class Feedback(models.Model):
     def __str__(self):
         return self.user.username
 
+
+class Comment(models.Model):
+    id = IntegerField(label='ID')
+    text = models.TextField()
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    baby = models.ForeignKey(BabyUser, on_delete=models.CASCADE)
+    source_comment = models.ForeignKey('self', on_delete=models.CASCADE)
+    datetime = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    def __str__(self):
+        return self.text

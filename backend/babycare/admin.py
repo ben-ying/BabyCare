@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from models import BabyUser, Verify, Like, Feedback
+from models import BabyUser, Verify, Like, Feedback, Comment
 from models import Event
 
 
@@ -19,8 +19,8 @@ admin.site.register(Event, EventAdmin)
 
 
 class VerifyAdmin(admin.ModelAdmin):
-    list_display = ('user', 'email_verify_code', 'created')
-    search_fields = ('user', 'email_verify_code')
+    list_display = ('baby', 'email_verify_code', 'created')
+    search_fields = ('baby', 'email_verify_code')
 admin.site.register(Verify, VerifyAdmin)
 
 
@@ -31,6 +31,12 @@ admin.site.register(Like, LikeAdmin)
 
 
 class FeedbackAdmin(admin.ModelAdmin):
-    list_display = ('user', 'description', 'image1', 'image2', 'image3', 'created')
-    search_fields = ('user', 'description')
+    list_display = ('baby', 'description', 'image1', 'image2', 'image3', 'created')
+    search_fields = ('baby', 'description')
 admin.site.register(Feedback, FeedbackAdmin)
+
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('text', 'event', 'baby', 'source_comment', 'datetime')
+    search_fields = ('text', 'event', 'baby')
+admin.site.register(Comment, CommentAdmin)

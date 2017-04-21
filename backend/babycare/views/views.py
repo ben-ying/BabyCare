@@ -5,11 +5,11 @@ import time
 import pdb
 
 from rest_framework.decorators import api_view
-from babycare.models import Feedback
-from constants import CODE_SUCCESS, FEEDBACK_FOOTER_IMAGE
-from constants import MSG_SEND_FEEDBACK_SUCCESS
-from utils import invalid_token_response, get_user_by_token, save_error_log, upload_image_to_oss
-from utils import simple_json_response
+from babycare.models import Feedback, BabyUser
+from babycare.constants import CODE_SUCCESS, FEEDBACK_FOOTER_IMAGE
+from babycare.constants import MSG_SEND_FEEDBACK_SUCCESS
+from babycare.utils import invalid_token_response, get_user_by_token, save_error_log, upload_image_to_oss
+from babycare.utils import simple_json_response
 from django.utils import timezone
 
 
@@ -23,7 +23,7 @@ def send_feedback(request):
     try:
         if user:
             feedback = Feedback()
-            feedback.user = user
+            feedback.baby = BabyUser.objects.get(user=user)
             feedback.description = description
             feedback.created = timezone.now()
             i = 0

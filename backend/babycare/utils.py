@@ -81,18 +81,19 @@ def upload_image_to_oss(name, base64):
         return "https://" + OSS_BUCKET_NAME + "." + OSS_ENDPOINT + "/" + name
 
 
-def send_email(user, to_email, verify_code, is_email_verify=True):
-    if Verify.objects.filter(user=user):
-        verify = Verify.objects.get(user=user)
+def send_email(baby, to_email, verify_code, is_email_verify=True):
+    if Verify.objects.filter(baby=baby):
+        verify = Verify.objects.get(baby=baby)
         if is_email_verify:
             verify.email_verify_code = verify_code
     else:
         verify = Verify()
-        verify.user = user
+        verify.baby = baby
         if is_email_verify:
             verify.email_verify_code = verify_code
 
-    email = EmailMessage(PASSWORD_VERIFY_CODE_EMAIL_SUBJECT, PASSWORD_VERIFY_CODE_EMAIL_CONTENT %verify_code, to=[to_email])
+    email = EmailMessage(PASSWORD_VERIFY_CODE_EMAIL_SUBJECT,
+                         PASSWORD_VERIFY_CODE_EMAIL_CONTENT % verify_code, to=[to_email])
     try:
         email.send()
         verify.save()
