@@ -20,7 +20,8 @@ from babycare.serializers.event import EventSerializer
 from babycare.constants import CODE_DUPLICATE_EMAIL, MSG_SEND_VERIFY_CODE_SUCCESS, MSG_NO_SUCH_EMAIL, MSG_EMPTY_VERIFY_CODE, \
     CODE_EMPTY_VERIFY_CODE, MSG_INCORRECT_VERIFY_CODE, CODE_INCORRECT_VERIFY_CODE, CODE_EXPIRED_VERIFY_CODE, \
     MSG_EXPIRED_VERIFY_CODE, \
-    VERIFY_CODE_EXPIRED_TIME, CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS, MSG_GET_USER_DETAIL_SUCCESS
+    VERIFY_CODE_EXPIRED_TIME, CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS, MSG_GET_USER_DETAIL_SUCCESS, \
+    MSG_DUPLICATE_PHONE, CODE_DUPLICATE_PHONE
 from babycare.constants import CODE_DUPLICATE_USER
 from babycare.constants import CODE_EMPTY_EMAIL
 from babycare.constants import CODE_EMPTY_PASSWORD
@@ -99,9 +100,9 @@ class UserViewSet(CustomModelViewSet):
                 return simple_json_response(CODE_INVALID_EMAIL, MSG_INVALID_EMAIL)
             elif len(password) < MIN_PASSWORD_LEN:
                 return simple_json_response(CODE_INVALID_PASSWORD, MSG_INVALID_PASSWORD)
-            elif User.objects.filter(username=username) or User.objects.filter(username=email.lower()):
+            elif User.objects.filter(username__iexact=username) or User.objects.filter(username__iexact=email):
                 return simple_json_response(CODE_DUPLICATE_USER, MSG_DUPLICATE_USER)
-            elif User.objects.filter(email=email.lower()) or User.objects.filter(email=username):
+            elif User.objects.filter(email__iexact=email) or User.objects.filter(email__iexact=username):
                 return simple_json_response(CODE_DUPLICATE_EMAIL, MSG_DUPLICATE_EMAIL)
             elif serializer.is_valid():
                 user = User()
@@ -167,27 +168,32 @@ class UserViewSet(CustomModelViewSet):
             user = get_user_by_token(token)
             if user:
                 if BabyUser.objects.filter(user=user):
-                    if email:
-                        user.email = email
-                        user.save()
-
                     baby = BabyUser.objects.get(user=user)
-                    if baby:
-                        if baby_name:
-                            baby.baby_name = baby_name
-                        if phone:
+
+                    if email:
+                        if User.objects.filter(username__iexact=email) or User.objects.filter(email__iexact=email):
+                            return simple_json_response(CODE_DUPLICATE_USER, MSG_DUPLICATE_EMAIL)
+                        else:
+                            user.email = email
+                            user.save()
+                    if baby_name:
+                        baby.baby_name = baby_name
+                    if phone:
+                        if BabyUser.objects.filter(phone=phone):
+                            return simple_json_response(CODE_DUPLICATE_PHONE, MSG_DUPLICATE_PHONE)
+                        else:
                             baby.phone = phone
-                        if gender:
-                            baby.gender = gender
-                        if birthday:
-                            baby.birth = birthday
-                        if hobbies:
-                            baby.hobbies = hobbies
-                        if base64:
-                            image_name = user.username + time.strftime('%Y%m%d%H%M%S') + PROFILE_FOOTER_IMAGE
-                            profile = upload_image_to_oss(image_name, base64)
-                            baby.profile = profile
-                        baby.save()
+                    if gender:
+                        baby.gender = gender
+                    if birthday:
+                        baby.birth = birthday
+                    if hobbies:
+                        baby.hobbies = hobbies
+                    if base64:
+                        image_name = user.username + time.strftime('%Y%m%d%H%M%S') + PROFILE_FOOTER_IMAGE
+                        profile = upload_image_to_oss(image_name, base64)
+                        baby.profile = profile
+                    baby.save()
 
                     # pdb.set_trace()
                     response_data = BabyUserSerializer(baby).data

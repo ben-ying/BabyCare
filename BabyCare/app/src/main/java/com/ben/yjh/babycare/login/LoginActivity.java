@@ -169,7 +169,7 @@ public class LoginActivity extends BaseAllActivity {
                     @Override
                     public void onSuccess(User classOfT) {
                         classOfT.save();
-                        UserHistory.saveUserHistory(mUsername, classOfT);
+                        UserHistory.saveUserHistory(classOfT);
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);

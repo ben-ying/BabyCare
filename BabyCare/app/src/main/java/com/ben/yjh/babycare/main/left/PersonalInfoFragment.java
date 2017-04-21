@@ -20,13 +20,16 @@ import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseFragment;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.UserTaskHandler;
+import com.ben.yjh.babycare.model.Event;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.model.User;
+import com.ben.yjh.babycare.model.UserHistory;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.widget.ItemDetail;
 import com.ben.yjh.babycare.widget.ItemInfo;
 
 import java.util.Calendar;
+import java.util.List;
 
 
 public class PersonalInfoFragment extends BaseFragment {
@@ -38,7 +41,6 @@ public class PersonalInfoFragment extends BaseFragment {
     private ItemInfo mGenderItem;
     private ItemInfo mBirthItem;
     private ItemInfo mHobbiesItem;
-    private UserInfoActivity mActivity;
 
     public static PersonalInfoFragment newInstance() {
         Bundle args = new Bundle();
@@ -64,7 +66,6 @@ public class PersonalInfoFragment extends BaseFragment {
         mGenderItem.setOnClickListener(this);
         mBirthItem.setOnClickListener(this);
         mHobbiesItem.setOnClickListener(this);
-        mActivity = (UserInfoActivity) activity;
 
         return view;
     }
@@ -76,7 +77,7 @@ public class PersonalInfoFragment extends BaseFragment {
     }
 
     private void setData() {
-        user = mActivity.user;
+        user = activity.user;
         mUsernameItem.setValue(R.string.username, user.getUsername(), 0);
         mBabyNameItem.setValue(R.string.baby_name, user.getBabyName(), R.string.edit_baby_name);
         mEmailItem.setValue(R.string.email, user.getEmail(), R.string.edit_email);
@@ -154,9 +155,19 @@ public class PersonalInfoFragment extends BaseFragment {
 
                         @Override
                         public void onSuccess(User classOfT) {
-                            user = classOfT;
-                            user.save();
-                            init();
+                            activity.user = classOfT;
+                            activity.user.save();
+                            UserHistory.saveUserHistory(classOfT);
+                            setData();
+                            if (id == R.id.item_baby_name || id == R.id.img_profile) {
+                                List<Event> eventList = Event.find(
+                                        Event.class, "user_id = ?", String.valueOf(user.getUserId()));
+                                for (Event event : eventList) {
+                                    event.setUsername(user.getBabyName());
+                                    event.setUserProfile(user.getProfile());
+                                    event.save();
+                                }
+                            }
                         }
 
                         @Override

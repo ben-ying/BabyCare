@@ -32,8 +32,8 @@ class BabyUser(models.Model):
 class Event(models.Model):
     id = IntegerField(label='ID')
     baby = models.ForeignKey(BabyUser, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
-    content = models.TextField()
+    title = models.CharField(max_length=100, blank=True, null=True)
+    content = models.TextField(blank=True, null=True)
     image1 = models.CharField(max_length=200, blank=True, null=True)
     image2 = models.CharField(max_length=200, blank=True, null=True)
     image3 = models.CharField(max_length=200, blank=True, null=True)

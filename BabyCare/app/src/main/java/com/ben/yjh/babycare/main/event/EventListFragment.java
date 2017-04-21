@@ -25,6 +25,7 @@ import com.ben.yjh.babycare.model.EventComment;
 import com.ben.yjh.babycare.model.EventLike;
 import com.ben.yjh.babycare.model.EventsResult;
 import com.ben.yjh.babycare.model.HttpBaseResult;
+import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.widget.recyclerview.LoadMoreListener;
 import com.ben.yjh.babycare.widget.recyclerview.LoadMoreRecyclerView;
@@ -263,6 +264,7 @@ public class EventListFragment extends BaseFragment
 //            getEventsTask();
 //        }
         mEvents = getEvents();
+        user = User.getUser();
         mAdapter.setData(mEvents);
     }
 
