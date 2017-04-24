@@ -195,7 +195,6 @@ class UserViewSet(CustomModelViewSet):
                         baby.profile = profile
                     baby.save()
 
-                    # pdb.set_trace()
                     response_data = BabyUserSerializer(baby).data
                     response_data['token'] = Token.objects.get(user=user).key
 
@@ -222,7 +221,6 @@ def login_view(request):
             if baby:
                 if user.is_active:
                     response_data = BabyUserSerializer(baby).data
-                    # pdb.set_trace()
                     if Token.objects.filter(user=user):
                         response_data['token'] = Token.objects.get(user=user).key
                         return json_response(response_data, CODE_SUCCESS, MSG_LOGIN_SUCCESS)

@@ -6,7 +6,7 @@ import json
 from rest_framework import status
 
 from babycare.constants import CODE_SUCCESS, MSG_GET_COMMENTS_SUCCESS, MSG_DELETE_COMMENT_SUCCESS, CODE_EMPTY_COMMENT, \
-    MSG_EMPTY_COMMENT_FIELD, MSG_POST_COMMENT_SUCCESS
+    MSG_EMPTY_COMMENT_FIELD, MSG_POST_COMMENT_SUCCESS, CODE_NO_CONTENT, MSG_204
 from babycare.models import Comment, Event, BabyUser
 from babycare.serializers.comment import CommentSerializer
 from babycare.utils import invalid_token_response, get_user_by_token, save_error_log, CustomModelViewSet, json_response, \
@@ -57,7 +57,10 @@ class CommentViewSet(CustomModelViewSet):
 
     def get_queryset(self):
         event_id = self.request.query_params.get('event_id', -1)
-        return super(CommentViewSet, self).get_queryset().filter(event_id=event_id)
+        if int(event_id) < 0:
+            return super(CommentViewSet, self).get_queryset()
+        else:
+            return super(CommentViewSet, self).get_queryset().filter(event_id=event_id)
 
     def destroy(self, request, *args, **kwargs):
         try:
@@ -65,20 +68,18 @@ class CommentViewSet(CustomModelViewSet):
             token = obj.get('token')
             user = get_user_by_token(token)
             if user:
-                try:
-                    pdb.set_trace()
-                    response = super(CommentViewSet, self).destroy(request, *args, **kwargs)
-                    if response.status_code == status.HTTP_204_NO_CONTENT:
-                        comment_json = CommentSerializer(self.get_object()).data
-                    else:
-                        comment = Comment()
+                comment = self.get_object()
+                if comment:
+                    try:
+                        response = super(CommentViewSet, self).destroy(request, *args, **kwargs)
+                        if response.status_code != status.HTTP_204_NO_CONTENT:
+                            comment.id = -1
+                    except Exception as e:
                         comment.id = -1
-                        comment_json = CommentSerializer(comment).data
-                except Exception as e:
-                    comment = Comment()
-                    comment.id = -1
                     comment_json = CommentSerializer(comment).data
-                return json_response(comment_json, CODE_SUCCESS, MSG_DELETE_COMMENT_SUCCESS)
+                    return json_response(comment_json, CODE_SUCCESS, MSG_DELETE_COMMENT_SUCCESS)
+                else:
+                    return simple_json_response(CODE_NO_CONTENT, MSG_204)
             else:
                 return invalid_token_response()
         except Exception as e:

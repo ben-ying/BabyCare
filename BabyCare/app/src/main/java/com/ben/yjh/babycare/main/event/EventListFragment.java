@@ -150,7 +150,7 @@ public class EventListFragment extends BaseFragment
                 new HttpResponseInterface<EventsResult>() {
                     @Override
                     public void onStart() {
-
+                        mSwipeRefreshLayout.setRefreshing(true);
                     }
 
                     @Override

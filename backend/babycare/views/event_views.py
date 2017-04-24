@@ -12,7 +12,7 @@ from rest_framework.decorators import api_view
 from babycare.serializers.event import EventSerializer
 from babycare.serializers.like import LikeSerializer
 from babycare.constants import CODE_EMPTY_EVENT, MSG_EMPTY_EVENT, EVENT_FOOTER_IMAGE, \
-    MSG_GET_EVENTS_SUCCESS, MSG_DELETE_EVENT_SUCCESS
+    MSG_GET_EVENTS_SUCCESS, MSG_DELETE_EVENT_SUCCESS, CODE_NO_CONTENT, MSG_204
 from babycare.constants import CODE_SUCCESS, MSG_POST_EVENT_SUCCESS
 from babycare.models import BabyUser, Like
 from babycare.models import Event
@@ -26,14 +26,12 @@ class EventViewSet(CustomModelViewSet):
     serializer_class = EventSerializer
 
     def list(self, request, *args, **kwargs):
-
         try:
             token = request.query_params.get('token')
             user = get_user_by_token(token)
             if user:
                 response = super(EventViewSet, self).list(request, *args, **kwargs).data
                 for eventDict in response['results']:
-                    # pdb.set_trace()
                     like_list = list()
                     likes = Like.objects.filter(event=eventDict['event_id'])
                     for like in likes:
@@ -49,7 +47,6 @@ class EventViewSet(CustomModelViewSet):
 
     def get_queryset(self):
         user_id = self.request.query_params.get('user_id', -1)
-
         if int(user_id) < 0:
             return super(EventViewSet, self).get_queryset().order_by("-id")
         else:
@@ -96,19 +93,18 @@ class EventViewSet(CustomModelViewSet):
             token = obj.get('token')
             user = get_user_by_token(token)
             if user:
-                try:
-                    response = super(EventViewSet, self).destroy(request, *args, **kwargs)
-                    if response.status_code == status.HTTP_204_NO_CONTENT:
-                        event_json = EventSerializer(self.get_object()).data
-                    else:
-                        event = Event()
+                event = self.get_object()
+                if event:
+                    try:
+                        response = super(EventViewSet, self).destroy(request, *args, **kwargs)
+                        if response.status_code != status.HTTP_204_NO_CONTENT:
+                            event.id = -1
+                    except Exception as e:
                         event.id = -1
-                        event_json = EventSerializer(event).data
-                except Exception as e:
-                    event = Event()
-                    event.id = -1
                     event_json = EventSerializer(event).data
-                return json_response(event_json, CODE_SUCCESS, MSG_DELETE_EVENT_SUCCESS)
+                    return json_response(event_json, CODE_SUCCESS, MSG_DELETE_EVENT_SUCCESS)
+                else:
+                    return simple_json_response(CODE_NO_CONTENT, MSG_204)
             else:
                 return invalid_token_response()
         except Exception as e:
@@ -131,7 +127,6 @@ def like_view(request):
             like.baby = baby
             like.event = event
             like.save()
-            # pdb.set_trace()
             response = LikeSerializer(like).data
             return json_response(response, CODE_SUCCESS, MSG_POST_EVENT_SUCCESS)
         else:

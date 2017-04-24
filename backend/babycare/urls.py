@@ -65,7 +65,7 @@ urlpatterns = [
     url(r'^events/(?P<pk>[0-9]+)', event_detail, name='event-detail'),
     url(r'^event/like$', like_view, name='like'),
     url(r'^event/comments/$', comment_list, name='comment-list'),
-    url(r'^event/comments/(?P<pk>[0-9]+)$', comment_detail, name='comment-detail'),
+    url(r'^event/comments/(?P<pk>[0-9]+)', comment_detail, name='comment-detail'),
     url(r'^feedback/$', send_feedback, name='send-feedback'),
 ]
 

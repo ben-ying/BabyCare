@@ -38,7 +38,7 @@ public class EventTaskHandler extends BaseTaskHandler {
     public void getEvents(int userId, HttpResponseInterface<EventsResult> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
-            new HttpPostTask(context).startTask(URL_EVENTS + "?token=" + mToken + "&user_id=" + userId,
+            new HttpPostTask(context, false).startTask(URL_EVENTS + "?token=" + mToken + "&user_id=" + userId,
                     Request.Method.GET, bodyObject, EventsResult.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();
@@ -48,7 +48,7 @@ public class EventTaskHandler extends BaseTaskHandler {
     public void loadMoreEvents(String url, HttpResponseInterface<EventsResult> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
-            new HttpPostTask(context).startTask(url, Request.Method.GET, bodyObject,
+            new HttpPostTask(context, false).startTask(url, Request.Method.GET, bodyObject,
                     EventsResult.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,8 +140,18 @@ public class EventTaskHandler extends BaseTaskHandler {
                      HttpResponseInterface<CommentsResult> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
-            new HttpPostTask(context).startTask(URL_COMMENTS + "?token=" + mToken + "&event_id=" + eventId,
+            new HttpPostTask(context, false).startTask(URL_COMMENTS + "?token=" + mToken + "&event_id=" + eventId,
                     Request.Method.GET, bodyObject, CommentsResult.class, true, httpResponseInterface);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadMoreComments(String url, HttpResponseInterface<CommentsResult> httpResponseInterface) {
+        try {
+            JSONObject bodyObject = new JSONObject();
+            new HttpPostTask(context, false).startTask(url, Request.Method.GET, bodyObject,
+                    CommentsResult.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();
         }

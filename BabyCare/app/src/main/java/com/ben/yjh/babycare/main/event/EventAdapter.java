@@ -250,9 +250,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
                     @Override
                     public void onSuccess(Event classOfT) {
-                        mEvents.remove(event);
-                        notifyDataSetChanged();
-                        if (classOfT != null) {
+                        if (classOfT != null && event.getEventId() == classOfT.getEventId()) {
+                            mEvents.remove(event);
+                            notifyDataSetChanged();
                             Event.deleteAll(Event.class, "event_id = ?",
                                     String.valueOf(event.getEventId()));
                         }
