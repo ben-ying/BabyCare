@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -27,6 +28,7 @@ import com.ben.yjh.babycare.model.EventsResult;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.util.Constants;
+import com.ben.yjh.babycare.widget.share.ShareBottomSheetDialogFragment;
 import com.ben.yjh.babycare.widget.recyclerview.LoadMoreListener;
 import com.ben.yjh.babycare.widget.recyclerview.LoadMoreRecyclerView;
 import com.ben.yjh.babycare.widget.recyclerview.ProgressView;
@@ -64,7 +66,7 @@ public class EventListFragment extends BaseFragment
     public View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_list, container, false);
         mFab = (FloatingActionButton) activity.findViewById(R.id.fab);
-        mRecyclerView = (LoadMoreRecyclerView) view.findViewById(R.id.recycler_view);
+        mRecyclerView = (LoadMoreRecyclerView) view.findViewById(R.id.recyclerView);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
 
         return view;
@@ -242,6 +244,14 @@ public class EventListFragment extends BaseFragment
         Intent intent = new Intent(activity, CommentActivity.class);
         intent.putExtra(Constants.EVENT_ID, eventId);
         startActivityForResult(intent, Constants.COMMENT_REQUEST_CODE);
+    }
+
+    @Override
+    public void showShareSheet(Event event) {
+        BottomSheetDialogFragment bottomSheetDialogFragment =
+                ShareBottomSheetDialogFragment.newInstance(event);
+        bottomSheetDialogFragment.show(
+                activity.getSupportFragmentManager(), activity.getString(R.string.share_to));
     }
 
     @Override

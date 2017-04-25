@@ -14,7 +14,7 @@
             android:layout_height="match_parent">
 
             <com.ben.yjh.babycare.widget.recyclerview.LoadMoreRecyclerView
-                android:id="@+id/recycler_view"
+                android:id="@+id/recyclerView"
                 android:padding="@dimen/recycler_view_padding"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

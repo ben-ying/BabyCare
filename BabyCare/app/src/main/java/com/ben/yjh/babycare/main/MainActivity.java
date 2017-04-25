@@ -2,6 +2,7 @@ package com.ben.yjh.babycare.main;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -173,10 +174,15 @@ public class MainActivity extends BaseActivity
                                 .nonLocalizedLabel.toString() : getString(stringId);
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.setType("text/plain");
+//                        sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(
+//                                "android.resource://" + getPackageName() + "/mipmap/boy"));
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, appName);
                         sendIntent.putExtra(Intent.EXTRA_TEXT, String.format(
                                 getString(R.string.share_message), appName, getPackageName()));
-                        sendIntent.setType("text/plain");
-                        startActivityForResult(sendIntent, Constants.SHARE_APP_REQUEST_CODE);
+                        startActivityForResult(Intent.createChooser(sendIntent,
+                                getString(R.string.share_to)), Constants.SHARE_APP_REQUEST_CODE);
+
                         break;
                     case R.id.nav_setting:
                         intent = new Intent(MainActivity.this, SettingActivity.class);

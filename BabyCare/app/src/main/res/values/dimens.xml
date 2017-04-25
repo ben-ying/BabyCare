@@ -23,6 +23,7 @@
     <dimen name="text_padding">10dp</dimen>
     <dimen name="gallery_padding">2dp</dimen>
     <dimen name="item_height">60dp</dimen>
+    <dimen name="share_height">60dp</dimen>
     <dimen name="event_image_height">200dp</dimen>
 
     <dimen name="timeline_image_height">200dp</dimen>

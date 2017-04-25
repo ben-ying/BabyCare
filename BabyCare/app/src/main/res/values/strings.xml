@@ -107,6 +107,7 @@
     <string name="user_info">用户信息</string>
     <string name="basic_info">基本信息</string>
     <string name="share">分享</string>
+    <string name="share_to">分享到</string>
     <string name="message">消息</string>
     <string name="feedback">反馈信息</string>
     <string name="feedback_message">您的建议或意见</string>
