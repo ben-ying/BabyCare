@@ -198,25 +198,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 break;
             case R.id.rb_share:
                 mInterface.showShareSheet((Event) v.getTag());
-//                showShareDialog((Event) v.getTag());
-//                event = (Event) v.getTag();
-//                int stringId = mContext.getApplicationInfo().labelRes;
-//                String appName = stringId == 0 ? mContext.getApplicationInfo()
-//                        .nonLocalizedLabel.toString() : mContext.getString(stringId);
-//                intent = new Intent(Intent.ACTION_SEND);
-//                intent.setType("text/plain");
-////                if (event.getImage1().isEmpty()) {
-////                    intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("android.resource://"
-////                            + mContext.getPackageName() + "/mipmap/boy"));
-////                } else {
-////                    intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(event.getImage1()));
-////                }
-//                intent.putExtra(Intent.EXTRA_SUBJECT, appName);
-//                String text = event.getContent();
-//                text += "\nhttp://www.baidu.com";
-//                intent.putExtra(Intent.EXTRA_TEXT, text);
-//                mContext.startActivity(Intent.createChooser(
-//                        intent, mContext.getString(R.string.share_to)));
                 break;
             case R.id.rb_common:
                 event = (Event) v.getTag();
@@ -244,62 +225,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 }
                 break;
         }
-    }
-
-    private void showShareDialog(Event event) {
-        Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, event.getContent());
-        sendIntent.setType("text/plain");
-        List<ResolveInfo> infoList =
-                mContext.getPackageManager().queryIntentActivities(sendIntent, 0);
-        List<String> apps = new ArrayList<>();
-        final List<Drawable> mIcons = new ArrayList<>();
-        PackageManager pm = mContext.getPackageManager();
-
-        for (ResolveInfo info : infoList) {
-            String packageName = info.activityInfo.packageName.toLowerCase();
-            if (packageName.contains("com.tencent.mm") || packageName.contains("com.tencent.qq")) {
-                apps.add(info.activityInfo.applicationInfo
-                        .loadLabel(mContext.getPackageManager()).toString());
-                mIcons.add(ImageUtils.scaleImage(mContext,
-                        info.activityInfo.applicationInfo.loadIcon(mContext.getPackageManager()), 0.6f));
-            }
-        }
-
-        ListAdapter adapter = new ArrayAdapter<String>(
-                mContext,
-                android.R.layout.select_dialog_item,
-                android.R.id.text1,
-                apps) {
-            @NonNull
-            @Override
-            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-                TextView tv = (TextView) v.findViewById(android.R.id.text1);
-                tv.setTextSize(16);
-                tv.setCompoundDrawablesWithIntrinsicBounds(mIcons.get(position), null, null, null);
-                int dp5 = (int) (10 * mContext.getResources().getDisplayMetrics().density + 0.5f);
-                tv.setCompoundDrawablePadding(dp5);
-
-                return v;
-            }
-        };
-
-        new AlertDialog.Builder(mContext)
-                .setTitle(R.string.share_to)
-                .setAdapter(adapter, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                Log.d("", "");
-                                break;
-                        }
-                    }
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .show();
     }
 
     private void setLikeCount(RadioButton radioButton, Event event) {

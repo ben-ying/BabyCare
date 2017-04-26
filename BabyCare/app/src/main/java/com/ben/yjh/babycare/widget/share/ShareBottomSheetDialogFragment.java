@@ -1,6 +1,7 @@
 package com.ben.yjh.babycare.widget.share;
 
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -56,7 +57,6 @@ public class ShareBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     @Override
     public void setupDialog(Dialog dialog, int style) {
-        dialog.setTitle(R.string.share_to);
         Event event = (Event) getArguments().getSerializable(Constants.EVENT);
         View contentView = View.inflate(getContext(), R.layout.dialog_share_bottom_sheet, null);
         dialog.setContentView(contentView);
@@ -73,47 +73,6 @@ public class ShareBottomSheetDialogFragment extends BottomSheetDialogFragment {
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.addItemDecoration(new ShareDecoration
                 ((int) (20 * getActivity().getResources().getDisplayMetrics().density + 0.5f)));
-        showShareDialog(event, recyclerView);
-    }
-
-    private void showShareDialog(Event event, RecyclerView recyclerView) {
-        Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, event.getContent());
-        sendIntent.setType("text/plain");
-        List<ResolveInfo> infoList =
-                getActivity().getPackageManager().queryIntentActivities(sendIntent, 0);
-        List<String> apps = new ArrayList<>();
-        final List<Drawable> mIcons = new ArrayList<>();
-        PackageManager pm = getActivity().getPackageManager();
-
-        for (ResolveInfo info : infoList) {
-            String packageName = info.activityInfo.packageName.toLowerCase();
-            apps.add(info.activityInfo.applicationInfo
-                    .loadLabel(getActivity().getPackageManager()).toString());
-            mIcons.add(info.activityInfo.applicationInfo.loadIcon(getActivity().getPackageManager()));
-        }
-
-//        ListAdapter adapter = new ArrayAdapter<String>(
-//                getActivity(),
-//                android.R.layout.select_dialog_item,
-//                android.R.id.text1,
-//                apps) {
-//            @NonNull
-//            @Override
-//            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//                View v = super.getView(position, convertView, parent);
-//                TextView tv = (TextView) v.findViewById(android.R.id.text1);
-//                tv.setGravity(Gravity.CENTER);
-//                tv.setTextSize(14);
-//                tv.setCompoundDrawablesWithIntrinsicBounds(null, mIcons.get(position), null, null);
-//                int dp5 = (int) (10 * getActivity().getResources().getDisplayMetrics().density + 0.5f);
-//                tv.setCompoundDrawablePadding(dp5);
-//
-//                return v;
-//            }
-//        };
-
-        recyclerView.setAdapter(new ShareAdapter(getActivity(), event, infoList));
+        recyclerView.setAdapter(new ShareAdapter(getActivity(), event));
     }
 }

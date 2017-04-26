@@ -2,6 +2,7 @@ package com.ben.yjh.babycare.util;
 
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -172,6 +173,22 @@ public class ImageUtils {
         image = new BitmapDrawable(context.getResources(), bitmapResized);
 
         return image;
+    }
 
+    public static Drawable scale2IconSize(Context context, Drawable image) {
+        if ((image == null) || !(image instanceof BitmapDrawable)) {
+            return image;
+        }
+
+        int size = ((ActivityManager) context.getSystemService(
+                Context.ACTIVITY_SERVICE)).getLauncherLargeIconSize();
+        Bitmap b = ((BitmapDrawable) image).getBitmap();
+
+
+        Bitmap bitmapResized = Bitmap.createScaledBitmap(b, size, size, true);
+
+        image = new BitmapDrawable(context.getResources(), bitmapResized);
+
+        return image;
     }
 }

@@ -92,6 +92,7 @@
     <string name="loading">正在加载&#8230;</string>
     <string name="load_failed">加载失败，点击重试</string>
     <string name="load_finish">已全部加载完成</string>
+    <string name="share_to_babycare">分享到嘟嘟日记</string>
 
     <string name="title_activity_image_pager">ImagePagerActivity</string>
     <string name="dummy_button">Dummy Button</string>
