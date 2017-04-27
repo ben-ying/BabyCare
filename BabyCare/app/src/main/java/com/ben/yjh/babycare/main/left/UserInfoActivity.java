@@ -56,7 +56,6 @@ public class UserInfoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");

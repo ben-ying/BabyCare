@@ -36,6 +36,7 @@
                     android:id="@+id/et_username"
                     style="@style/default_edit_text"
                     android:completionThreshold="1"
+                    android:text="babycare"
                     android:hint="@string/username_or_email"
                     android:inputType="textEmailAddress" />
             </android.support.design.widget.TextInputLayout>
@@ -49,6 +50,7 @@
                     android:id="@+id/et_password"
                     style="@style/default_edit_text"
                     android:hint="@string/password"
+                    android:text="123456"
                     android:imeOptions="actionDone"
                     android:inputType="textPassword" />
             </android.support.design.widget.TextInputLayout>

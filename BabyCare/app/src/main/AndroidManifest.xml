@@ -102,7 +102,7 @@
         <activity android:name=".main.left.FeedbackActivity" />
         <activity
             android:name=".main.event.CommentActivity"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".main.event.AddEventActivity" />
         <activity android:name=".main.event.EventDetailActivity" />
     </application>

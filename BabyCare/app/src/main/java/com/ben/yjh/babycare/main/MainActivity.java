@@ -160,8 +160,8 @@ public class MainActivity extends BaseActivity
 //                        if (intent.resolveActivity(getPackageManager()) != null) {
 //                            startActivity(intent);
 //                        } else {
-                            intent = new Intent(MainActivity.this, FeedbackActivity.class);
-                            startActivity(intent);
+                        intent = new Intent(MainActivity.this, FeedbackActivity.class);
+                        startActivity(intent);
 //                        }
                         break;
                     case R.id.nav_message:
@@ -239,7 +239,12 @@ public class MainActivity extends BaseActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (getFragmentManager().getBackStackEntryCount() > 0) {
+                getFragmentManager().popBackStack();
+            } else {
+                // back like home button
+                moveTaskToBack(true);
+            }
         }
     }
 

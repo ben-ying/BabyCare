@@ -47,7 +47,6 @@ public class FeedbackActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.feedback);

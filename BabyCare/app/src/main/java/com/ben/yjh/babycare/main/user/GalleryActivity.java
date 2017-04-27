@@ -30,7 +30,6 @@ public class GalleryActivity extends BaseActivity implements GalleryAdapter.Gall
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.select_image);

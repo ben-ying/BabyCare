@@ -5,6 +5,13 @@
     <item
         android:id="@+id/title_cancel_reply"
         android:title="@string/cancel_reply"
-        app:showAsAction="always" />
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/title_add_comment"
+        android:title="@string/add_comment"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
 
 </menu>

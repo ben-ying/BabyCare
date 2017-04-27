@@ -2,7 +2,9 @@ package com.ben.yjh.babycare.main.event;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -11,9 +13,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -46,6 +51,8 @@ public class CommentActivity extends BaseActivity implements CommentAdapter.Comm
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private String mNextUrl;
     private ImageButton mSendButton;
+    private boolean mIsShowKeyboard;
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +65,12 @@ public class CommentActivity extends BaseActivity implements CommentAdapter.Comm
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         setStatusBarMargin(R.id.content_layout);
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(this);
         mSendButton = (ImageButton) findViewById(R.id.ib_send);
         mSendButton.setOnClickListener(this);
         mRootView = findViewById(R.id.content_layout);
-        mRootView.setFitsSystemWindows(true);
+//        mRootView.setFitsSystemWindows(true);
         mRecyclerView = (LoadMoreRecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setHasFixedSize(false);
@@ -77,11 +86,13 @@ public class CommentActivity extends BaseActivity implements CommentAdapter.Comm
 
         mCommentEditText = (EditText) findViewById(R.id.et_comment);
         mCommentEditText.setHint(R.string.add_comment);
-//        mCommentEditText.requestFocus();
         if (mCommentEditText.getText() == null ||
                 mCommentEditText.getText().toString().trim().isEmpty()) {
             mSendButton.setEnabled(false);
         }
+
+        showKeyboard();
+
         mCommentEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -120,8 +131,20 @@ public class CommentActivity extends BaseActivity implements CommentAdapter.Comm
         ((NestedScrollView) findViewById(R.id.scrollView))
                 .setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                     @Override
-                    public void onScrollChange(NestedScrollView v,
-                                               int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    public void onScrollChange(NestedScrollView v, int scrollX,
+                                               int scrollY, int oldScrollX, int oldScrollY) {
+                        if (scrollY > oldScrollY) {
+                            if (mFab != null) {
+                                mFab.hide();
+                            }
+                        }
+
+                        if (scrollY < oldScrollY) {
+                            if (mFab != null) {
+                                mFab.show();
+                            }
+                        }
+
                         if (mNextUrl != null && scrollY == (
                                 v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                             mRecyclerView.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
@@ -139,6 +162,47 @@ public class CommentActivity extends BaseActivity implements CommentAdapter.Comm
                 }
             }
         });
+
+        mCommentEditText.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        Rect r = new Rect();
+                        mCommentEditText.getWindowVisibleDisplayFrame(r);
+                        int[] location = new int[2];
+                        mCommentEditText.getLocationOnScreen(location);
+                        // (root height) - statusBar - mCommentEditText.YPosition
+                        // == height of mCommentEditText.YPosition from bottom
+                        int navigationBarHeight;
+                        int resourceId = getResources().getIdentifier(
+                                "navigation_bar_height", "dimen", "android");
+                        if (resourceId > 0) {
+                            navigationBarHeight = getResources().getDimensionPixelSize(resourceId);
+                        } else {
+                            navigationBarHeight = mCommentEditText.getRootView().getHeight() / 4;
+                        }
+                        if (mCommentEditText.getRootView().getHeight() -
+                                (r.bottom - r.top) - navigationBarHeight
+                                > Utils.dpToPixels(CommentActivity.this, 50)) {
+                            Log.d("", "");
+                            if (!mIsShowKeyboard) {
+                                mIsShowKeyboard = true;
+                                mFab.setVisibility(View.GONE);
+                                findViewById(R.id.rl_comment).setVisibility(View.VISIBLE);
+                                mCommentEditText.requestFocus();
+                                invalidateOptionsMenu();
+                            }
+                        } else {
+                            if (mIsShowKeyboard) {
+                                mIsShowKeyboard = false;
+                                mFab.setVisibility(View.VISIBLE);
+                                findViewById(R.id.rl_comment).setVisibility(View.GONE);
+                                invalidateOptionsMenu();
+                            }
+                            Log.d("", "");
+                        }
+                    }
+                });
 
         getCommentsTask(mEventId);
     }
@@ -275,23 +339,36 @@ public class CommentActivity extends BaseActivity implements CommentAdapter.Comm
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_comment, menu);
-        MenuItem item = menu.findItem(R.id.title_cancel_reply);
+        MenuItem itemReply = menu.findItem(R.id.title_cancel_reply);
+        MenuItem itemComment = menu.findItem(R.id.title_add_comment);
         if (mReplyComment == null) {
-            item.setVisible(false);
+            itemReply.setVisible(false);
         } else {
-            item.setVisible(true);
+            itemReply.setVisible(true);
+        }
+        if (mIsShowKeyboard) {
+            itemComment.setVisible(false);
+        } else {
+            if (findViewById(R.id.rl_comment).getVisibility() == View.GONE) {
+                itemReply.setVisible(false);
+                itemComment.setVisible(true);
+            }
         }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.title_cancel_reply) {
-            mReplyComment = null;
-            item.setVisible(false);
-            mCommentEditText.setHint(R.string.add_comment);
-            return true;
+        switch (item.getItemId()) {
+            case R.id.title_cancel_reply:
+                mReplyComment = null;
+                item.setVisible(false);
+                mCommentEditText.setText("");
+                mCommentEditText.setHint(R.string.add_comment);
+                return true;
+            case R.id.title_add_comment:
+                showKeyboard();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -312,7 +389,16 @@ public class CommentActivity extends BaseActivity implements CommentAdapter.Comm
                     addCommentTask(text);
                 }
                 break;
+            case R.id.fab:
+                showKeyboard();
+                break;
         }
+    }
+
+    private void showKeyboard() {
+        findViewById(R.id.rl_comment).setVisibility(View.VISIBLE);
+        mCommentEditText.requestFocus();
+        Utils.showKeyboard(this, mCommentEditText);
     }
 
     @Override
@@ -341,6 +427,8 @@ public class CommentActivity extends BaseActivity implements CommentAdapter.Comm
             mReplyComment = comment;
             mCommentEditText.setHint(String.format(
                     getString(R.string.reply_user), comment.getUsername(), ""));
+            mCommentEditText.setText("");
+            showKeyboard();
         }
     }
 }

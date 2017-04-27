@@ -16,6 +16,10 @@
         <!--<item name="android:fitsSystemWindows">true</item>-->
     </style>
 
+    <!--<style name="TranslucentTheme.Launcher">-->
+        <!--<item name="android:windowBackground">@drawable/splash</item>-->
+    <!--</style>-->
+
     <style name="AviaryBaseTheme.Dark.Dialog" parent="Base.Theme.AppCompat.Dialog.FixedSize">
         <item name="aviaryFontRegular">fonts/Roboto-Bold.ttf</item>
         <item name="aviaryFontLight">fonts/Roboto-Light.ttf</item>

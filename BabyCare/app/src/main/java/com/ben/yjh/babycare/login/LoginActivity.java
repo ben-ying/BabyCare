@@ -43,6 +43,7 @@ public class LoginActivity extends BaseAllActivity {
     private String mUsername;
     private String mPassword;
     private ImageView mGenderImageView;
+    private int mUserIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,43 +61,28 @@ public class LoginActivity extends BaseAllActivity {
         mGenderImageView = (ImageView) findViewById(R.id.img_profile);
         mGenderImageView.setOnClickListener(this);
         List<User> users = User.find(User.class, "is_login = ?", "1");
+        List<UserHistory> userHistories = UserHistory.listAll(UserHistory.class);
         if (users.size() > 0) {
+            user = users.get(0);
+            for (int i = 0; i < userHistories.size(); i++) {
+                if (userHistories.get(i).getUsername().equals(user.getUsername())) {
+                    mUserIndex = i;
+                }
+            }
             if (users.get(0).getToken().isEmpty()) {
-                mGenderImageView.setClickable(false);
-                mGenderImageView.setEnabled(false);
-                MyApplication.displayImage(users.get(0).getProfile(), mGenderImageView,
-                        ImageUtils.getProfileImageOptions(this), false, new ImageLoadingListener() {
-                            @Override
-                            public void onLoadingStarted(String s, View view) {
-
-                            }
-
-                            @Override
-                            public void onLoadingFailed(String s, View view, FailReason failReason) {
-                                mGenderImageView.setClickable(true);
-                                mGenderImageView.setEnabled(true);
-                            }
-
-                            @Override
-                            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-                                mGenderImageView.setClickable(false);
-                                mGenderImageView.setEnabled(false);
-                            }
-
-                            @Override
-                            public void onLoadingCancelled(String s, View view) {
-                                mGenderImageView.setClickable(true);
-                                mGenderImageView.setEnabled(true);
-                            }
-                        });
+                if (users.get(0).getProfile() != null) {
+                    MyApplication.displayImage(users.get(0).getProfile(), mGenderImageView,
+                            ImageUtils.getProfileImageOptions(this), false);
+                } else {
+                    mGenderImageView.setImageResource(
+                            SharedPreferenceUtils.isGirl(this) ? R.mipmap.girl : R.mipmap.boy);
+                }
             } else {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
         } else {
-            mGenderImageView.setClickable(true);
-            mGenderImageView.setEnabled(true);
             mGenderImageView.setImageResource(
                     SharedPreferenceUtils.isGirl(this) ? R.mipmap.girl : R.mipmap.boy);
         }
@@ -110,7 +96,6 @@ public class LoginActivity extends BaseAllActivity {
             mPasswordEditText.setText(mPassword);
         }
         List<String> autoStrings = new ArrayList<>();
-        List<UserHistory> userHistories = UserHistory.listAll(UserHistory.class);
         for (int i = 0; i < userHistories.size() && i < 5; i++) {
             autoStrings.add(userHistories.get(i).getUsername());
         }
@@ -225,12 +210,48 @@ public class LoginActivity extends BaseAllActivity {
                 startActivityForResult(intent, Constants.SIGN_UP_REQUEST_CODE);
                 break;
             case R.id.img_profile:
-                if (SharedPreferenceUtils.isGirl(this)) {
-                    mGenderImageView.setImageResource(R.mipmap.boy);
-                    SharedPreferenceUtils.saveGender(this, false);
+                List<UserHistory> userHistories = UserHistory.listAll(UserHistory.class);
+                if (user == null || userHistories.size() == 0) {
+                    if (SharedPreferenceUtils.isGirl(this)) {
+                        mGenderImageView.setImageResource(R.mipmap.boy);
+                        SharedPreferenceUtils.saveGender(this, false);
+                    } else {
+                        mGenderImageView.setImageResource(R.mipmap.girl);
+                        SharedPreferenceUtils.saveGender(this, true);
+                    }
                 } else {
-                    mGenderImageView.setImageResource(R.mipmap.girl);
-                    SharedPreferenceUtils.saveGender(this, true);
+                    if (userHistories.size() == 1) {
+                        if (userHistories.get(0).getProfile() == null) {
+                            if (SharedPreferenceUtils.isGirl(this)) {
+                                mGenderImageView.setImageResource(R.mipmap.boy);
+                                SharedPreferenceUtils.saveGender(this, false);
+                            } else {
+                                mGenderImageView.setImageResource(R.mipmap.girl);
+                                SharedPreferenceUtils.saveGender(this, true);
+                            }
+                        } else {
+                            mGenderImageView.setClickable(true);
+                            mGenderImageView.setEnabled(true);
+                        }
+                    } else {
+                        if (mUserIndex + 1 < userHistories.size()) {
+                            mUserIndex++;
+                        } else {
+                            mUserIndex = 0;
+                        }
+                        String profile = userHistories.get(mUserIndex).getProfile();
+                        if (profile != null) {
+                            MyApplication.displayImage(profile, mGenderImageView,
+                                    ImageUtils.getProfileImageOptions(this), false);
+                        } else {
+                            mGenderImageView.setImageResource(userHistories.get(
+                                    mUserIndex).getGender() == 0 ? R.mipmap.boy : R.mipmap.girl);
+                        }
+                        mUsernameEditText.setText(userHistories.get(mUserIndex).getUsername());
+                        mUsernameEditText.clearFocus();
+                        mPasswordEditText.setText("");
+                        mPasswordEditText.requestFocus();
+                    }
                 }
                 break;
             case R.id.tv_forgot_password:

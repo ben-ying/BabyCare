@@ -88,7 +88,7 @@ public class ImageUtils {
         return new DisplayImageOptions.Builder()
                 .displayer(new RoundedBitmapDisplayer(
                         (int) context.getResources().getDimension(R.dimen.image_radius)))
-                .showImageOnLoading(R.drawable.ic_profile)
+                .showImageOnLoading(0)
                 .showImageOnFail(R.drawable.ic_profile)
                 .showImageForEmptyUri(R.drawable.ic_profile)
                 .cacheInMemory(true)
@@ -121,7 +121,7 @@ public class ImageUtils {
     public static DisplayImageOptions getProfileImageOptions(int defaultIconId) {
         return new DisplayImageOptions.Builder()
                 .displayer(new RoundedBitmapDisplayer(180))
-                .showImageOnLoading(defaultIconId)
+                .showImageOnLoading(0)
                 .showImageOnFail(defaultIconId)
                 .showImageForEmptyUri(defaultIconId)
                 .cacheInMemory(true)

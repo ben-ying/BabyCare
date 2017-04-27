@@ -40,7 +40,7 @@ public class Utils {
         }
     }
 
-    public static float dpToPixels(int dp, Context context) {
+    public static float dpToPixels(Context context, int dp) {
         return dp * (context.getResources().getDisplayMetrics().density);
     }
 

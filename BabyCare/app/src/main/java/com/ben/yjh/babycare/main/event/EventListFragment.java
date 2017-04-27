@@ -79,7 +79,7 @@ public class EventListFragment extends BaseFragment
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setNestedScrollingEnabled(false);
-        mSwipeRefreshLayout.setEnabled(true);
+        mSwipeRefreshLayout.setEnabled(mIsHomeEvents);
         mEvents = getEvents();
         mAdapter = new EventAdapter(activity, user, mEvents, mIsHomeEvents, this);
         mRecyclerView.setAdapter(mAdapter);
