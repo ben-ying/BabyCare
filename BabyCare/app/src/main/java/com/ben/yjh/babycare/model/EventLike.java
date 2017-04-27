@@ -5,7 +5,6 @@ import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
 import java.io.Serializable;
-import java.util.List;
 
 
 public class EventLike extends SugarRecord implements Serializable {

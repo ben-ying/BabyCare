@@ -25,7 +25,6 @@ import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.model.UserHistory;
 import com.ben.yjh.babycare.util.Constants;
-import com.ben.yjh.babycare.widget.ItemDetail;
 import com.ben.yjh.babycare.widget.ItemInfo;
 
 import java.util.Calendar;

@@ -3,8 +3,6 @@ package com.ben.yjh.babycare.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.w3c.dom.Comment;
-
 import java.util.List;
 
 public class CommentsResult {

@@ -24,12 +24,8 @@ import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.base.BaseFragment;
-import com.ben.yjh.babycare.http.HttpResponseInterface;
-import com.ben.yjh.babycare.http.UserTaskHandler;
 import com.ben.yjh.babycare.main.event.EventListFragment;
 import com.ben.yjh.babycare.main.user.HomeViewPagerAdapter;
-import com.ben.yjh.babycare.model.User;
-import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
 

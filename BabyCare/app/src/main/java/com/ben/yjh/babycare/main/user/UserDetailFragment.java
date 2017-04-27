@@ -1,33 +1,18 @@
 package com.ben.yjh.babycare.main.user;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.text.InputType;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
-import android.widget.EditText;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseFragment;
-import com.ben.yjh.babycare.http.HttpResponseInterface;
-import com.ben.yjh.babycare.http.UserTaskHandler;
-import com.ben.yjh.babycare.main.left.UserInfoActivity;
-import com.ben.yjh.babycare.model.HttpBaseResult;
-import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.widget.ItemDetail;
-import com.ben.yjh.babycare.widget.ItemInfo;
-
-import java.util.Calendar;
 
 
 public class UserDetailFragment extends BaseFragment {

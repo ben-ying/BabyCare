@@ -18,13 +18,12 @@ import android.widget.ImageView;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
-import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.base.BaseAllActivity;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.UserTaskHandler;
 import com.ben.yjh.babycare.main.MainActivity;
-import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.model.HttpBaseResult;
+import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.model.UserHistory;
 import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;

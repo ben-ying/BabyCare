@@ -1,11 +1,6 @@
 package com.ben.yjh.babycare.widget.share;
 
 import android.app.Dialog;
-import android.content.ComponentName;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,9 +15,6 @@ import android.view.View;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.model.Event;
 import com.ben.yjh.babycare.util.Constants;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ShareBottomSheetDialogFragment extends BottomSheetDialogFragment {
 

@@ -20,8 +20,6 @@ import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
 import com.ben.yjh.babycare.util.Utils;
 
-import org.w3c.dom.Comment;
-
 import java.util.List;
 
 public class CommentAdapter extends RecyclerView.Adapter<

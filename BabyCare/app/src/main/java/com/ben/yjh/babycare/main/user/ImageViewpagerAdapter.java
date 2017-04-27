@@ -1,7 +1,6 @@
 package com.ben.yjh.babycare.main.user;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.util.ImageUtils;
 import com.ben.yjh.babycare.widget.ScaleImageView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 

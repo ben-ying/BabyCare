@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ben.yjh.babycare.R;
-import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.base.BaseAllActivity;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.UserTaskHandler;

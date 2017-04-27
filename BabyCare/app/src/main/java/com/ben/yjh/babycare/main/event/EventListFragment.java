@@ -28,10 +28,10 @@ import com.ben.yjh.babycare.model.EventsResult;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.util.Constants;
-import com.ben.yjh.babycare.widget.share.ShareBottomSheetDialogFragment;
 import com.ben.yjh.babycare.widget.recyclerview.LoadMoreListener;
 import com.ben.yjh.babycare.widget.recyclerview.LoadMoreRecyclerView;
 import com.ben.yjh.babycare.widget.recyclerview.ProgressView;
+import com.ben.yjh.babycare.widget.share.ShareBottomSheetDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;

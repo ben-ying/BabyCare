@@ -1,7 +1,6 @@
 package com.ben.yjh.babycare.main.user;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
