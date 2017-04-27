@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -91,7 +92,7 @@ public class CommentActivity extends BaseActivity implements CommentAdapter.Comm
             mSendButton.setEnabled(false);
         }
 
-        showKeyboard();
+       showKeyboard();
 
         mCommentEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -188,14 +189,19 @@ public class CommentActivity extends BaseActivity implements CommentAdapter.Comm
                             if (!mIsShowKeyboard) {
                                 mIsShowKeyboard = true;
                                 mFab.setVisibility(View.GONE);
-                                findViewById(R.id.rl_comment).setVisibility(View.VISIBLE);
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        findViewById(R.id.rl_comment).setVisibility(View.VISIBLE);
+                                    }
+                                }, 10);
                                 mCommentEditText.requestFocus();
                                 invalidateOptionsMenu();
                             }
                         } else {
                             if (mIsShowKeyboard) {
                                 mIsShowKeyboard = false;
-                                mFab.setVisibility(View.VISIBLE);
+                                mFab.show();
                                 findViewById(R.id.rl_comment).setVisibility(View.GONE);
                                 invalidateOptionsMenu();
                             }
@@ -396,7 +402,6 @@ public class CommentActivity extends BaseActivity implements CommentAdapter.Comm
     }
 
     private void showKeyboard() {
-        findViewById(R.id.rl_comment).setVisibility(View.VISIBLE);
         mCommentEditText.requestFocus();
         Utils.showKeyboard(this, mCommentEditText);
     }

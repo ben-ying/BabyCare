@@ -40,9 +40,9 @@ public abstract class BaseAllActivity extends AppCompatActivity implements OnCli
     }
 
     public void setStatusBarMargin(int resId) {
-        View view = findViewById(resId);
-        view.setPadding(view.getPaddingLeft(), getStatusBarHeight(),
-                view.getPaddingRight(), view.getPaddingBottom());
+//        View view = findViewById(resId);
+//        view.setPadding(view.getPaddingLeft(), getStatusBarHeight(),
+//                view.getPaddingRight(), view.getPaddingBottom());
     }
 
     public boolean verifyStoragePermissions() {

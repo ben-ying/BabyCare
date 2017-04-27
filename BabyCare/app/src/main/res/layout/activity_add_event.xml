@@ -52,7 +52,7 @@
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_add"
-            style="@style/default_bottom_button.style2"
+            style="@style/default_bottom_button"
             android:layout_alignParentBottom="true"
             android:text="@string/post" />
     </RelativeLayout>

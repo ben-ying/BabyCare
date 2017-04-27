@@ -3,4 +3,5 @@
     <integer name="profile_size">300</integer>
     <integer name="event_width">1080</integer>
     <integer name="event_height">720</integer>
+    <integer name="comment_max_lines">4</integer>
 </resources>

@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,6 +53,7 @@ public class MainActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setStatusBarMargin(R.id.cl_layout);
@@ -69,19 +71,19 @@ public class MainActivity extends BaseActivity
         mTabLayout.setupWithViewPager(mViewPager);
 
         mFab = (FloatingActionButton) findViewById(R.id.fab);
-        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mFab.getLayoutParams();
-        if (hasSoftNavBar()) {
-            // has navigation bar in bottom
-            layoutParams.setMargins((int) getResources().getDimension(R.dimen.fab_margin),
-                    (int) getResources().getDimension(R.dimen.fab_margin),
-                    (int) getResources().getDimension(R.dimen.fab_margin),
-                    (int) getResources().getDimension(R.dimen.fab_margin_with_navigation));
-        } else {
-            layoutParams.setMargins((int) getResources().getDimension(R.dimen.fab_margin),
-                    (int) getResources().getDimension(R.dimen.fab_margin),
-                    (int) getResources().getDimension(R.dimen.fab_margin),
-                    (int) getResources().getDimension(R.dimen.fab_margin));
-        }
+//        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mFab.getLayoutParams();
+//        if (hasSoftNavBar()) {
+//            // has navigation bar in bottom
+//            layoutParams.setMargins((int) getResources().getDimension(R.dimen.fab_margin),
+//                    (int) getResources().getDimension(R.dimen.fab_margin),
+//                    (int) getResources().getDimension(R.dimen.fab_margin),
+//                    (int) getResources().getDimension(R.dimen.fab_margin_with_navigation));
+//        } else {
+//            layoutParams.setMargins((int) getResources().getDimension(R.dimen.fab_margin),
+//                    (int) getResources().getDimension(R.dimen.fab_margin),
+//                    (int) getResources().getDimension(R.dimen.fab_margin),
+//                    (int) getResources().getDimension(R.dimen.fab_margin));
+//        }
 //        mFab.setLayoutParams(layoutParams );
 
         mFab.setOnClickListener(this);

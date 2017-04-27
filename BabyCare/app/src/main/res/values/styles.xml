@@ -10,8 +10,8 @@
 
     <style name="TranslucentTheme" parent="AppTheme">
         <!--<item name="android:windowTranslucentStatus">true</item>-->
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <!--<item name="android:windowTranslucentNavigation">true</item>-->
+        <!--<item name="android:navigationBarColor">@android:color/transparent</item>-->
         <!--<item name="android:actionMenuTextColor">@color/white</item>-->
         <!--<item name="android:fitsSystemWindows">true</item>-->
     </style>
@@ -268,10 +268,6 @@
         <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="default_bottom_button.style2">
-        <item name="android:layout_marginBottom">@dimen/button_margin_vertical2</item>
-    </style>
-
     <style name="default_input_layout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -328,7 +324,7 @@
         <item name="android:background">?android:selectableItemBackground</item>
     </style>
 
-    <style name="FullscreenTheme" parent="TranslucentTheme">
+    <style name="AppTheme.FullscreenTheme" >
         <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowBackground">@null</item>
