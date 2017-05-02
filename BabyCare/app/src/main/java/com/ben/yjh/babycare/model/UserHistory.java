@@ -15,8 +15,17 @@ public class UserHistory extends SugarRecord {
     @SerializedName("baby_name") String babyName;
     @SerializedName("profile") String profile;
     @SerializedName("gender") int gender;
+    @SerializedName("type") int type;
     @SerializedName("is_email_activate") boolean isEmailActivate;
     @SerializedName("is_phone_activate") boolean isPhoneActive;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public String getUsername() {
         return username;

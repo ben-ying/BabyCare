@@ -15,6 +15,7 @@ public class Event extends SugarRecord implements Serializable {
     @Unique
     @SerializedName("event_id") int eventId;
     @SerializedName("user_id") int userId;
+    @SerializedName("type") int type;
     @SerializedName("title") String title;
     @SerializedName("content") String content;
     @SerializedName("image1") String image1;
@@ -30,6 +31,14 @@ public class Event extends SugarRecord implements Serializable {
     @SerializedName("likes") List<EventLike> eventLikes;
     @Ignore
     @SerializedName("comments") List<EventComment> eventComments;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public int getEventId() {
         return eventId;
