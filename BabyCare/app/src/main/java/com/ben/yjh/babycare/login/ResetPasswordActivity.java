@@ -40,6 +40,28 @@ public class ResetPasswordActivity extends BaseAllActivity {
     private String mVerifyCode;
     private String mPassword;
 
+    Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    if (mCount > 0) {
+                        mVerifyCodeTextView.setText(String.format(
+                                getString(R.string.countdown_resend_message), mCount));
+                        mCount--;
+                    } else {
+                        mVerifyCodeTextView.setText(
+                                getResources().getString(R.string.click_resend_verify_code));
+                        mVerifyCodeTextView.setEnabled(true);
+                        stopTimer();
+                        mCount = COUNTDOWN_SECONDS;
+                    }
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,28 +84,6 @@ public class ResetPasswordActivity extends BaseAllActivity {
 
         startTimer();
     }
-
-    Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    if (mCount > 0) {
-                        mVerifyCodeTextView.setText(String.format(
-                                getString(R.string.countdown_resend_message), mCount));
-                        mCount--;
-                    } else {
-                        mVerifyCodeTextView.setText(
-                                getResources().getString(R.string.click_resend_verify_code));
-                        mVerifyCodeTextView.setEnabled(true);
-                        stopTimer();
-                        mCount = COUNTDOWN_SECONDS;
-                    }
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-
-    };
 
     private void startTimer() {
         stopTimer();
@@ -139,29 +139,31 @@ public class ResetPasswordActivity extends BaseAllActivity {
     }
 
     private void resetPassword() {
-        new UserTaskHandler(this).resetPassword(mEmail, mVerifyCode, mPassword,
-                new HttpResponseInterface<HttpBaseResult>() {
-                    @Override
-                    public void onStart() {
-                    }
+        if (isValid()) {
+            new UserTaskHandler(this).resetPassword(mEmail, mVerifyCode, mPassword,
+                    new HttpResponseInterface<HttpBaseResult>() {
+                        @Override
+                        public void onStart() {
+                        }
 
-                    @Override
-                    public void onSuccess(HttpBaseResult classOfT) {
-                        Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra(Constants.USERNAME, mEmail);
-                        intent.putExtra(Constants.PASSWORD, mPassword);
-                        startActivity(intent);
-                    }
+                        @Override
+                        public void onSuccess(HttpBaseResult classOfT) {
+                            Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra(Constants.USERNAME, mEmail);
+                            intent.putExtra(Constants.PASSWORD, mPassword);
+                            startActivity(intent);
+                        }
 
-                    @Override
-                    public void onFailure(HttpBaseResult result) {
-                    }
+                        @Override
+                        public void onFailure(HttpBaseResult result) {
+                        }
 
-                    @Override
-                    public void onHttpError(String error) {
-                    }
-                });
+                        @Override
+                        public void onHttpError(String error) {
+                        }
+                    });
+        }
     }
 
     private boolean isValid() {
@@ -202,9 +204,7 @@ public class ResetPasswordActivity extends BaseAllActivity {
                 sendVerifyCodeTask();
                 break;
             case R.id.btn_change_password:
-                if (isValid()) {
-                    resetPassword();
-                }
+                resetPassword();
                 break;
         }
     }

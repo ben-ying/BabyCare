@@ -2,11 +2,11 @@ package com.ben.yjh.babycare.http;
 
 import android.content.Context;
 
-public class BaseTaskHandler {
+class BaseTaskHandler {
 
     protected Context context;
 
-    protected BaseTaskHandler(Context context) {
+    BaseTaskHandler(Context context) {
         this.context = context;
     }
 }

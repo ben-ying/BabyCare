@@ -182,6 +182,93 @@ public class PersonalInfoFragment extends BaseFragment {
         }
     }
 
+    private void editUserInfo(final int id, ItemInfo itemInfo) {
+        final View view = LayoutInflater.from(activity).inflate(R.layout.dialog_edit_text, null);
+        final EditText editText = (EditText) view.findViewById(R.id.et_value);
+        editText.setText(itemInfo.getValue());
+        if (id == R.id.item_email) {
+            editText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        } else if (id == R.id.item_phone) {
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        }
+        editText.setSelection(editText.getText().length());
+        final AlertDialog dialog = new AlertDialog.Builder(activity, R.style.MyDialogTheme)
+                .setTitle(itemInfo.getTitle())
+                .setView(view)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .create();
+        dialog.setCancelable(true);
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String value = editText.getText().toString().trim();
+                if (id == R.id.item_email || id == R.id.item_baby_name) {
+                    if (value.isEmpty()) {
+                        editText.setError(getString(R.string.empty_email));
+                    } else if (id == R.id.item_email &&
+                            !Patterns.EMAIL_ADDRESS.matcher(value).matches()) {
+                        editText.setError(getString(R.string.invalid_email));
+                    } else {
+                        dialog.dismiss();
+                        editPersonalInfoTask(id, value);
+                    }
+                } else {
+                    dialog.dismiss();
+                    editPersonalInfoTask(id, value);
+                }
+            }
+        });
+    }
+
+    private void setGender(final int id) {
+        String[] array = getResources().getStringArray(R.array.gender_choices);
+        new AlertDialog.Builder(activity)
+                .setTitle(R.string.gender)
+                .setItems(array, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = null;
+                        switch (which) {
+                            case 0:
+                                editPersonalInfoTask(id, "0");
+                                break;
+                            case 1:
+                                editPersonalInfoTask(id, "1");
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private void setBirth(final int id) {
+        Calendar c = Calendar.getInstance();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(activity,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+                        editPersonalInfoTask(id, year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                    }
+                }
+                , c.get(Calendar.YEAR), c.get(Calendar.MONTH), c
+                .get(Calendar.DAY_OF_MONTH));
+        c.add(Calendar.YEAR, -30);
+        datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
+        c.add(Calendar.YEAR, 31);
+        datePickerDialog.getDatePicker().setMaxDate(c.getTimeInMillis());
+        datePickerDialog.show();
+    }
 
     @Override
     public void onClick(final View v) {
@@ -192,90 +279,13 @@ public class PersonalInfoFragment extends BaseFragment {
             case R.id.item_email:
             case R.id.item_phone:
             case R.id.item_hobbies:
-                ItemInfo itemInfo = (ItemInfo) v;
-                final View view = LayoutInflater.from(activity).inflate(R.layout.dialog_edit_text, null);
-                final EditText editText = (EditText) view.findViewById(R.id.et_value);
-                editText.setText(itemInfo.getValue());
-                if (id == R.id.item_email) {
-                    editText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-                } else if (id == R.id.item_phone) {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                }
-                editText.setSelection(editText.getText().length());
-                final AlertDialog dialog = new AlertDialog.Builder(activity, R.style.MyDialogTheme)
-                        .setTitle(itemInfo.getTitle())
-                        .setView(view)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, null)
-                        .create();
-                dialog.setCancelable(true);
-                dialog.show();
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String value = editText.getText().toString().trim();
-                        if (id == R.id.item_email || id == R.id.item_baby_name) {
-                            if (value.isEmpty()) {
-                                editText.setError(getString(R.string.empty_email));
-                            } else if (id == R.id.item_email &&
-                                    !Patterns.EMAIL_ADDRESS.matcher(value).matches()) {
-                                editText.setError(getString(R.string.invalid_email));
-                            } else {
-                                dialog.dismiss();
-                                editPersonalInfoTask(id, value);
-                            }
-                        } else {
-                            dialog.dismiss();
-                            editPersonalInfoTask(id, value);
-                        }
-                    }
-                });
+                editUserInfo(id, (ItemInfo) v);
                 break;
             case R.id.item_gender:
-                String[] array = getResources().getStringArray(R.array.gender_choices);
-                new AlertDialog.Builder(activity)
-                        .setTitle(R.string.gender)
-                        .setItems(array, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = null;
-                                switch (which) {
-                                    case 0:
-                                        editPersonalInfoTask(id, "0");
-                                        break;
-                                    case 1:
-                                        editPersonalInfoTask(id, "1");
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, null)
-                        .show();
+                setGender(id);
                 break;
             case R.id.item_birth:
-                Calendar c = Calendar.getInstance();
-                DatePickerDialog datePickerDialog = new DatePickerDialog(activity,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-                                editPersonalInfoTask(id, year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                            }
-                        }
-                        , c.get(Calendar.YEAR), c.get(Calendar.MONTH), c
-                        .get(Calendar.DAY_OF_MONTH));
-                c.add(Calendar.YEAR, -30);
-                datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
-                c.add(Calendar.YEAR, 31);
-                datePickerDialog.getDatePicker().setMaxDate(c.getTimeInMillis());
-                datePickerDialog.show();
+                setBirth(id);
                 break;
         }
     }

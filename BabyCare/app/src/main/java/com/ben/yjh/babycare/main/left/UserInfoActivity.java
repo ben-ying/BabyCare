@@ -16,7 +16,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -76,7 +75,7 @@ public class UserInfoActivity extends BaseActivity {
         mTabLayout.setupWithViewPager(mViewPager);
         mProfileImageView = (ImageView) findViewById(R.id.img_profile);
         mProfileImageView.setOnClickListener(this);
-        MyApplication.displayImage(user.getProfile(),
+        MyApplication.getInstance(this).displayImage(user.getProfile(),
                 mProfileImageView, ImageUtils.getProfileImageOptions(this), false);
         mNameTextView = ((TextView) findViewById(R.id.tv_name));
         mNameTextView.setText(user.getBabyName());
@@ -151,7 +150,7 @@ public class UserInfoActivity extends BaseActivity {
                             Bitmap bitmap = BitmapFactory.decodeStream(
                                     getContentResolver().openInputStream(uri));
                             mProfileBase64 = ImageUtils.getBase64FromBitmap(bitmap);
-                            MyApplication.displayImage(uri.toString(),
+                            MyApplication.getInstance(this).displayImage(uri.toString(),
                                     mProfileImageView, ImageUtils.getProfileImageOptions(this), true);
                             mPersonalInfoFragment.editPersonalInfoTask(R.id.img_profile, mProfileBase64);
                         } catch (FileNotFoundException e) {

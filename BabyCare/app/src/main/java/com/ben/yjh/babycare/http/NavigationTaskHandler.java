@@ -42,6 +42,4 @@ public class NavigationTaskHandler extends BaseTaskHandler {
             e.printStackTrace();
         }
     }
-
-
 }

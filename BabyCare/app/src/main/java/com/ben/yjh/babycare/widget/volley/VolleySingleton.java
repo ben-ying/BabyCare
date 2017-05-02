@@ -1,21 +1,22 @@
 package com.ben.yjh.babycare.widget.volley;
 
+import android.content.Context;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.ben.yjh.babycare.application.MyApplication;
 
 public class VolleySingleton {
     private static VolleySingleton mInstance = null;
     private RequestQueue mRequestQueue;
 
-    private VolleySingleton() {
+    private VolleySingleton(Context context) {
         CustomHurlStack customHurlStack = new CustomHurlStack();
-        mRequestQueue = Volley.newRequestQueue(MyApplication.getAppContext(), customHurlStack);
+        mRequestQueue = Volley.newRequestQueue(context, customHurlStack);
     }
 
-    public static VolleySingleton getInstance() {
+    public static VolleySingleton getInstance(Context context) {
         if (mInstance == null) {
-            mInstance = new VolleySingleton();
+            mInstance = new VolleySingleton(context);
         }
         return mInstance;
     }

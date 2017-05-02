@@ -21,14 +21,14 @@ public class FeedbackImageAdapter extends BaseAdapter {
     private ArrayList<String> mImageUrls;
     private int mImageSize;
 
-    public FeedbackImageAdapter(Context context, ArrayList<String> imageUrls) {
+    FeedbackImageAdapter(Context context, ArrayList<String> imageUrls) {
         this.mContext = context;
         this.mImageUrls = imageUrls;
         this.mInflater = LayoutInflater.from(mContext);
         this.mImageSize = context.getResources().getDisplayMetrics().widthPixels / 4;
     }
 
-    public void setImageUrls(ArrayList<String> urls) {
+    void setImageUrls(ArrayList<String> urls) {
         this.mImageUrls = urls;
         notifyDataSetChanged();
     }
@@ -64,13 +64,13 @@ public class FeedbackImageAdapter extends BaseAdapter {
         if (mImageUrls.get(position).equals(FeedbackActivity.DEFAULT_ADD_IMAGE)) {
             viewHolder.imageView.setImageResource(R.drawable.ic_add_off);
         }
-        MyApplication.displayThumbnailImage(mImageUrls.get(position),
+        MyApplication.getInstance(mContext).displayThumbnailImage(mImageUrls.get(position),
                 viewHolder.imageView, ImageUtils.getEventImageOptions(mContext));
 
         return convertView;
     }
 
-    class ViewHolder {
+    private class ViewHolder {
         ImageView imageView;
     }
 }

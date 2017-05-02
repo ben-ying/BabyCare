@@ -33,7 +33,7 @@ public class ImageViewpagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_image, null);
         ScaleImageView imageView = (ScaleImageView) view.findViewById(R.id.img_event);
-        MyApplication.displayImage(mImages.get(position),
+        MyApplication.getInstance(mContext).displayImage(mImages.get(position),
                 imageView, ImageUtils.getGalleryOptions(), false);
 
         container.addView(view);

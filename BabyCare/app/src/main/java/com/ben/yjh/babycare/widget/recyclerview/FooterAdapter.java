@@ -17,8 +17,10 @@ public class FooterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private RecyclerView.Adapter mAdapter;
     private LoadMoreRecyclerView mRecyclerView;
     private LoadingMoreFooter mLoadingMoreFooter;
+    private AdapterView.OnItemLongClickListener onItemLongClickListener;
+    private AdapterView.OnItemClickListener onItemClickListener;
 
-    public FooterAdapter(LoadMoreRecyclerView loadMoreRecyclerView,
+    FooterAdapter(LoadMoreRecyclerView loadMoreRecyclerView,
                          LoadingMoreFooter loadingMoreFooter, RecyclerView.Adapter adapter) {
         this.mRecyclerView = loadMoreRecyclerView;
         this.mAdapter = adapter;
@@ -60,13 +62,7 @@ public class FooterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    /**
-     * 当前布局是否为Footer
-     *
-     * @param position
-     * @return
-     */
-    public boolean isFooter(int position) {
+    private boolean isFooter(int position) {
         return position < getItemCount() && position >= getItemCount() - 1;
     }
 
@@ -87,7 +83,6 @@ public class FooterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             int count = mAdapter.getItemCount();
             if (position < count) {
                 mAdapter.onBindViewHolder(holder, position);
-                return;
             }
         }
     }
@@ -143,23 +138,18 @@ public class FooterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return true;
     }
 
-    //点击
-    AdapterView.OnItemClickListener onItemClickListener;
-
-    public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
+    void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
-    //长按
-    AdapterView.OnItemLongClickListener onItemLongClickListener;
 
-    public void setOnItemLongClickListener(
+    void setOnItemLongClickListener(
             AdapterView.OnItemLongClickListener onItemLongClickListener) {
         this.onItemLongClickListener = onItemLongClickListener;
     }
 
     private class SimpleViewHolder extends RecyclerView.ViewHolder {
-        public SimpleViewHolder(View itemView) {
+        SimpleViewHolder(View itemView) {
             super(itemView);
         }
     }

@@ -30,11 +30,11 @@ public class CommentAdapter extends RecyclerView.Adapter<
     private User mUser;
     private CommentInterface mInterface;
 
-    public interface CommentInterface {
+    interface CommentInterface {
         void onItemSelected(EventComment comment);
     }
 
-    public CommentAdapter(Context context, List<EventComment> comments,
+    CommentAdapter(Context context, List<EventComment> comments,
                           User user, CommentInterface commentInterface) {
         this.mContext = context;
         this.mComments = comments;
@@ -47,7 +47,7 @@ public class CommentAdapter extends RecyclerView.Adapter<
         notifyDataSetChanged();
     }
 
-    public void addData(EventComment comment) {
+    void addData(EventComment comment) {
         this.mComments.add(comment);
         notifyDataSetChanged();
     }
@@ -62,7 +62,7 @@ public class CommentAdapter extends RecyclerView.Adapter<
     @Override
     public void onBindViewHolder(CommentViewHolder holder, int position) {
         final EventComment comment = mComments.get(position);
-        MyApplication.displayImage(comment.getUserProfile(),
+        MyApplication.getInstance(mContext).displayImage(comment.getUserProfile(),
                 holder.imageView, ImageUtils.getProfileImageOptions(mContext), false);
         holder.nameTextView.setText(comment.getUsername());
         holder.dateTextView.setText(Utils.getFormatDate(mContext, comment.getDatetime()));

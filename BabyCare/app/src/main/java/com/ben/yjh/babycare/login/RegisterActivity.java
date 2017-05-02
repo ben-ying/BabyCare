@@ -119,47 +119,10 @@ public class RegisterActivity extends BaseAllActivity {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case Constants.CAMERA_PICTURE_REQUEST_CODE:
-                    ImageUtils.cropPicture(this, mCameraUri);
-                    break;
-                case Constants.GALLERY_PICTURE_REQUEST_CODE:
-                    ImageUtils.cropPicture(this, data.getData());
-                    break;
-                case Constants.AVIARY_PICTURE_REQUEST_CODE:
-                    Uri uri = data.getData() == null ? ImageUtils.getTempUri() : data.getData();
-                    if (uri != null) {
-                        try {
-                            Bitmap bitmap = BitmapFactory.decodeStream(
-                                    getContentResolver().openInputStream(uri));
-                            mProfileBase64 = ImageUtils.getBase64FromBitmap(bitmap);
-                            MyApplication.displayImage(uri.toString(),
-                                    mProfileButton, ImageUtils.getProfileImageOptions(RegisterActivity.this), true);
-                            findViewById(R.id.tv_add_profile).setVisibility(View.GONE);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                            mProfileBase64 = "";
-                        }
-                    }
-                    break;
-            }
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_link_login:
-                onBackPressed();
-                break;
-            case R.id.btn_register:
-                if (isValid()) {
-                    new UserTaskHandler(this).register(mUsername, mBabyName, mPassword, mEmail,
-                            mProfileBase64, new HttpResponseInterface<User>() {
+    private void register() {
+        if (isValid()) {
+            new UserTaskHandler(this).register(mUsername, mBabyName, mPassword, mEmail,
+                    mProfileBase64, new HttpResponseInterface<User>() {
                         @Override
                         public void onStart() {
 
@@ -182,7 +145,48 @@ public class RegisterActivity extends BaseAllActivity {
                         public void onHttpError(String error) {
                         }
                     });
-                }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case Constants.CAMERA_PICTURE_REQUEST_CODE:
+                    ImageUtils.cropPicture(this, mCameraUri);
+                    break;
+                case Constants.GALLERY_PICTURE_REQUEST_CODE:
+                    ImageUtils.cropPicture(this, data.getData());
+                    break;
+                case Constants.AVIARY_PICTURE_REQUEST_CODE:
+                    Uri uri = data.getData() == null ? ImageUtils.getTempUri() : data.getData();
+                    if (uri != null) {
+                        try {
+                            Bitmap bitmap = BitmapFactory.decodeStream(
+                                    getContentResolver().openInputStream(uri));
+                            mProfileBase64 = ImageUtils.getBase64FromBitmap(bitmap);
+                            MyApplication.getInstance(this).displayImage(uri.toString(),
+                                    mProfileButton, ImageUtils.getProfileImageOptions(this), true);
+                            findViewById(R.id.tv_add_profile).setVisibility(View.GONE);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                            mProfileBase64 = "";
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_link_login:
+                onBackPressed();
+                break;
+            case R.id.btn_register:
+                register();
                 break;
             case R.id.ib_profile:
                 mCameraUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),

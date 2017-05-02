@@ -9,7 +9,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -86,9 +85,9 @@ public class UserDetailActivity extends BaseActivity {
                     @Override
                     public void onSuccess(User classOfT) {
                         user = classOfT;
-                        MyApplication.displayImage(user.getProfile(),
-                                mProfileImageView, ImageUtils.getProfileImageOptions(
-                                        UserDetailActivity.this), false);
+                        MyApplication.getInstance(UserDetailActivity.this).displayImage(
+                                user.getProfile(), mProfileImageView, ImageUtils
+                                        .getProfileImageOptions(UserDetailActivity.this), false);
                         mNameTextView.setText(user.getBabyName());
                         ((AppBarLayout) findViewById(R.id.app_bar_scrolling))
                                 .addOnOffsetChangedListener(

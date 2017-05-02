@@ -3,7 +3,6 @@ package com.ben.yjh.babycare.login;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -30,8 +29,6 @@ import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
 import com.ben.yjh.babycare.util.SharedPreferenceUtils;
 import com.ben.yjh.babycare.util.SystemUtils;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,8 +68,8 @@ public class LoginActivity extends BaseAllActivity {
             }
             if (users.get(0).getToken().isEmpty()) {
                 if (users.get(0).getProfile() != null) {
-                    MyApplication.displayImage(users.get(0).getProfile(), mGenderImageView,
-                            ImageUtils.getProfileImageOptions(this), false);
+                    MyApplication.getInstance(LoginActivity.this).displayImage(users.get(0).getProfile(),
+                            mGenderImageView, ImageUtils.getProfileImageOptions(this), false);
                 } else {
                     mGenderImageView.setImageResource(
                             SharedPreferenceUtils.isGirl(this) ? R.mipmap.girl : R.mipmap.boy);
@@ -114,9 +111,9 @@ public class LoginActivity extends BaseAllActivity {
                 if (userHistories.size() > 0) {
                     mGenderImageView.setClickable(false);
                     mGenderImageView.setEnabled(false);
-                    MyApplication.displayImage(userHistories.get(0).getProfile(), mGenderImageView,
-                            ImageUtils.getProfileImageOptions(userHistories.get(0).getGender() == 1
-                                            ? R.mipmap.girl : R.mipmap.boy), false);
+                    MyApplication.getInstance(LoginActivity.this).displayImage(
+                            userHistories.get(0).getProfile(), mGenderImageView, ImageUtils.getProfileImageOptions(
+                                    userHistories.get(0).getGender() == 1 ? R.mipmap.girl : R.mipmap.boy), false);
                 }
             }
         });
@@ -210,83 +207,45 @@ public class LoginActivity extends BaseAllActivity {
                 startActivityForResult(intent, Constants.SIGN_UP_REQUEST_CODE);
                 break;
             case R.id.img_profile:
-                List<UserHistory> userHistories = UserHistory.listAll(UserHistory.class);
-                if (user == null || userHistories.size() == 0) {
-                    if (SharedPreferenceUtils.isGirl(this)) {
-                        mGenderImageView.setImageResource(R.mipmap.boy);
-                        SharedPreferenceUtils.saveGender(this, false);
-                    } else {
-                        mGenderImageView.setImageResource(R.mipmap.girl);
-                        SharedPreferenceUtils.saveGender(this, true);
-                    }
-                } else {
-                    if (userHistories.size() == 1) {
-                        if (userHistories.get(0).getProfile() == null) {
-                            if (SharedPreferenceUtils.isGirl(this)) {
-                                mGenderImageView.setImageResource(R.mipmap.boy);
-                                SharedPreferenceUtils.saveGender(this, false);
-                            } else {
-                                mGenderImageView.setImageResource(R.mipmap.girl);
-                                SharedPreferenceUtils.saveGender(this, true);
-                            }
-                        } else {
-                            mGenderImageView.setClickable(true);
-                            mGenderImageView.setEnabled(true);
-                        }
-                    } else {
-                        if (mUserIndex + 1 < userHistories.size()) {
-                            mUserIndex++;
-                        } else {
-                            mUserIndex = 0;
-                        }
-                        String profile = userHistories.get(mUserIndex).getProfile();
-                        if (profile != null) {
-                            MyApplication.displayImage(profile, mGenderImageView,
-                                    ImageUtils.getProfileImageOptions(this), false);
-                        } else {
-                            mGenderImageView.setImageResource(userHistories.get(
-                                    mUserIndex).getGender() == 0 ? R.mipmap.boy : R.mipmap.girl);
-                        }
-                        mUsernameEditText.setText(userHistories.get(mUserIndex).getUsername());
-                        mUsernameEditText.clearFocus();
-                        mPasswordEditText.setText("");
-                        mPasswordEditText.requestFocus();
-                    }
-                }
+                onClickProfile();
                 break;
             case R.id.tv_forgot_password:
-                final View view = LayoutInflater.from(this).inflate(R.layout.dialog_edit_text, null);
-                final EditText emailEditText = (EditText) view.findViewById(R.id.et_value);
-                emailEditText.setHint(R.string.email);
-                emailEditText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-                final AlertDialog dialog = new AlertDialog.Builder(this, R.style.MyDialogTheme)
-                        .setMessage(R.string.dialog_forgot_password)
-                        .setView(view)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, null)
-                        .create();
-                dialog.setCancelable(true);
-                dialog.show();
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String sentEmail = emailEditText.getText().toString();
-                        if (sentEmail.isEmpty()) {
-                            emailEditText.setError(getString(R.string.empty_email));
-                        } else if (!Patterns.EMAIL_ADDRESS.matcher(sentEmail).matches()) {
-                            emailEditText.setError(getString(R.string.invalid_email));
-                        } else {
-                            sendVerifyCodeTask(sentEmail, dialog);
-                        }
-                    }
-                });
+                onForgotPassword();
                 break;
         }
+    }
+
+    private void onForgotPassword() {
+        final View view = LayoutInflater.from(this).inflate(R.layout.dialog_edit_text, null);
+        final EditText emailEditText = (EditText) view.findViewById(R.id.et_value);
+        emailEditText.setHint(R.string.email);
+        emailEditText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        final AlertDialog dialog = new AlertDialog.Builder(this, R.style.MyDialogTheme)
+                .setMessage(R.string.dialog_forgot_password)
+                .setView(view)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .create();
+        dialog.setCancelable(true);
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String sentEmail = emailEditText.getText().toString();
+                if (sentEmail.isEmpty()) {
+                    emailEditText.setError(getString(R.string.empty_email));
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(sentEmail).matches()) {
+                    emailEditText.setError(getString(R.string.invalid_email));
+                } else {
+                    sendVerifyCodeTask(sentEmail, dialog);
+                }
+            }
+        });
     }
 
     @Override
@@ -302,6 +261,52 @@ public class LoginActivity extends BaseAllActivity {
                     mUsernameEditText.setText(data.getStringExtra(Constants.EMAIL));
                     mPasswordEditText.setText(data.getStringExtra(Constants.PASSWORD));
                     break;
+            }
+        }
+    }
+
+    private void onClickProfile() {
+        List<UserHistory> userHistories = UserHistory.listAll(UserHistory.class);
+        if (user == null || userHistories.size() == 0) {
+            if (SharedPreferenceUtils.isGirl(this)) {
+                mGenderImageView.setImageResource(R.mipmap.boy);
+                SharedPreferenceUtils.saveGender(this, false);
+            } else {
+                mGenderImageView.setImageResource(R.mipmap.girl);
+                SharedPreferenceUtils.saveGender(this, true);
+            }
+        } else {
+            if (userHistories.size() == 1) {
+                if (userHistories.get(0).getProfile() == null) {
+                    if (SharedPreferenceUtils.isGirl(this)) {
+                        mGenderImageView.setImageResource(R.mipmap.boy);
+                        SharedPreferenceUtils.saveGender(this, false);
+                    } else {
+                        mGenderImageView.setImageResource(R.mipmap.girl);
+                        SharedPreferenceUtils.saveGender(this, true);
+                    }
+                } else {
+                    mGenderImageView.setClickable(true);
+                    mGenderImageView.setEnabled(true);
+                }
+            } else {
+                if (mUserIndex + 1 < userHistories.size()) {
+                    mUserIndex++;
+                } else {
+                    mUserIndex = 0;
+                }
+                String profile = userHistories.get(mUserIndex).getProfile();
+                if (profile != null) {
+                    MyApplication.getInstance(LoginActivity.this).displayImage(profile,
+                            mGenderImageView, ImageUtils.getProfileImageOptions(this), false);
+                } else {
+                    mGenderImageView.setImageResource(userHistories.get(
+                            mUserIndex).getGender() == 0 ? R.mipmap.boy : R.mipmap.girl);
+                }
+                mUsernameEditText.setText(userHistories.get(mUserIndex).getUsername());
+                mUsernameEditText.clearFocus();
+                mPasswordEditText.setText("");
+                mPasswordEditText.requestFocus();
             }
         }
     }

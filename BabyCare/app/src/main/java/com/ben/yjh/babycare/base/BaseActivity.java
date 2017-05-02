@@ -2,7 +2,6 @@ package com.ben.yjh.babycare.base;
 
 import android.os.Bundle;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 
 import com.ben.yjh.babycare.model.User;
 

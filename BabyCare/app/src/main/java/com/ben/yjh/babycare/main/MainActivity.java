@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -17,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -138,7 +136,7 @@ public class MainActivity extends BaseActivity
         TextView emailTextView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_email);
         emailTextView.setText(user.getEmail());
         ImageView profileImageView = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.img_profile);
-        MyApplication.displayImage(user.getProfile(),
+        MyApplication.getInstance(this).displayImage(user.getProfile(),
                 profileImageView, ImageUtils.getProfileImageOptions(this), false);
     }
 
@@ -155,34 +153,13 @@ public class MainActivity extends BaseActivity
                         startActivityForResult(intent, Constants.USER_INFO_REQUEST_CODE);
                         break;
                     case R.id.nav_feedback:
-//                        intent = new Intent(Intent.ACTION_SENDTO);
-//                        intent.setData(Uri.parse("mailto:bensbabycare@163.com"));
-//                        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedback));
-//                        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.feedback_message));
-//                        if (intent.resolveActivity(getPackageManager()) != null) {
-//                            startActivity(intent);
-//                        } else {
                         intent = new Intent(MainActivity.this, FeedbackActivity.class);
                         startActivity(intent);
-//                        }
                         break;
                     case R.id.nav_message:
                         break;
                     case R.id.nav_share:
-                        int stringId = getApplicationInfo().labelRes;
-                        String appName = stringId == 0 ? getApplicationInfo()
-                                .nonLocalizedLabel.toString() : getString(stringId);
-                        Intent sendIntent = new Intent();
-                        sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.setType("text/plain");
-//                        sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(
-//                                "android.resource://" + getPackageName() + "/mipmap/boy"));
-                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, appName);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, String.format(
-                                getString(R.string.share_message), appName, getPackageName()));
-                        startActivityForResult(Intent.createChooser(sendIntent,
-                                getString(R.string.share_to)), Constants.SHARE_APP_REQUEST_CODE);
-
+                        share();
                         break;
                     case R.id.nav_setting:
                         intent = new Intent(MainActivity.this, SettingActivity.class);
@@ -195,6 +172,22 @@ public class MainActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void share() {
+        int stringId = getApplicationInfo().labelRes;
+        String appName = stringId == 0 ? getApplicationInfo()
+                .nonLocalizedLabel.toString() : getString(stringId);
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.setType("text/plain");
+//                        sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(
+//                                "android.resource://" + getPackageName() + "/mipmap/boy"));
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, appName);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, String.format(
+                getString(R.string.share_message), appName, getPackageName()));
+        startActivityForResult(Intent.createChooser(sendIntent,
+                getString(R.string.share_to)), Constants.SHARE_APP_REQUEST_CODE);
     }
 
     @Override

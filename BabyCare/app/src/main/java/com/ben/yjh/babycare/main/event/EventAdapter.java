@@ -46,17 +46,17 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         mInterface.showImageDetail(position);
     }
 
-    public void intent2CommentList(int eventId) {
+    private void intent2CommentList(int eventId) {
         mInterface.intent2CommentList(eventId);
     }
 
-    public interface EventRecyclerViewInterface {
+    interface EventRecyclerViewInterface {
         void showImageDetail(int position);
         void intent2CommentList(int eventId);
         void showShareSheet(Event event);
     }
 
-    public EventAdapter(Context context, User user, List<Event> events, boolean isHomeEvent,
+    EventAdapter(Context context, User user, List<Event> events, boolean isHomeEvent,
                         EventRecyclerViewInterface recyclerViewInterface) {
         this.mContext = context;
         this.mUser = user;
@@ -70,7 +70,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         notifyDataSetChanged();
     }
 
-    public List<Event> getEvents() {
+    List<Event> getEvents() {
         return mEvents;
     }
 
@@ -135,7 +135,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             holder.contentTextView.setText(event.getContent());
         }
 
-        MyApplication.displayTinyImage(event.getUserProfile(),
+        MyApplication.getInstance(mContext).displayTinyImage(event.getUserProfile(),
                 holder.profileButton, ImageUtils.getTinyProfileImageOptions(mContext));
         holder.nameTextView.setText(event.getUsername());
         holder.dateTextView.setText(Utils.getFormatDate(mContext, event.getCreated()));

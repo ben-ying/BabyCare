@@ -4,14 +4,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.ImageView;
 
-public class ScaleImageView extends ImageView implements OnTouchListener {
+public class ScaleImageView extends AppCompatImageView implements OnTouchListener {
     private Context mContext;
     private float MAX_SCALE = 2f;
 

@@ -30,37 +30,40 @@ import java.io.File;
 public class MyApplication extends SugarApp {
 
     private static MyApplication sInstance;
-    private static Context sAppContext;
-    private static ImageLoader sImageLoader;
-    private static ImageLoader sThumbnailImageLoader;
-    private static ImageLoader sTinyImageLoader;
+
+    private Context mContext;
+    private ImageLoader mImageLoader;
+    private ImageLoader mThumbnailImageLoader;
+    private ImageLoader mTinyImageLoader;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        sInstance = this;
-        sAppContext = getApplicationContext();
-
         // aviary
         Intent cdsIntent = AviaryIntent.createCdsInitIntent(
                 getBaseContext(), Constants.AVIARY_API_KEY_SECRET, null);
         startService(cdsIntent);
     }
 
-    public static MyApplication getInstance() {
+    public MyApplication() {
+    }
+
+    public MyApplication(Context context) {
+        this.mContext = context.getApplicationContext();
+    }
+
+    public static MyApplication getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new MyApplication(context);
+        }
         return sInstance;
     }
 
-    public static Context getAppContext() {
-        return sAppContext;
-    }
-
-
-    private static ImageLoader getImageLoader(Context context) {
-        if (sImageLoader == null) {
-            sImageLoader = ImageLoader.getInstance();
-            File cacheDir = StorageUtils.getCacheDirectory(context);
-            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
+    private ImageLoader getImageLoader() {
+        if (mImageLoader == null) {
+            mImageLoader = ImageLoader.getInstance();
+            File cacheDir = StorageUtils.getCacheDirectory(mContext);
+            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(mContext)
 //                    .memoryCacheExtraOptions(480, 800) // default = device screen dimensions
 //                    .diskCacheExtraOptions(480, 800, null)
                     .threadPoolSize(3) // default
@@ -74,22 +77,22 @@ public class MyApplication extends SugarApp {
                     .diskCacheSize(200 * 1024 * 1024)
                     .diskCacheFileCount(300)
                     .diskCacheFileNameGenerator(new HashCodeFileNameGenerator()) // default
-                    .imageDownloader(new BaseImageDownloader(context)) // default
+                    .imageDownloader(new BaseImageDownloader(mContext)) // default
                     .imageDecoder(new BaseImageDecoder(false)) // default
                     .defaultDisplayImageOptions(DisplayImageOptions.createSimple()) // default
 //                    .writeDebugLogs()
                     .build();
-            sImageLoader.init(config);
+            mImageLoader.init(config);
         }
 
-        return sImageLoader;
+        return mImageLoader;
     }
 
-    private static ImageLoader getThumbnailImageLoader(Context context) {
-        if (sThumbnailImageLoader == null) {
-            sThumbnailImageLoader = ImageLoader.getInstance();
-            File cacheDir = StorageUtils.getCacheDirectory(context);
-            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
+    private ImageLoader getThumbnailImageLoader() {
+        if (mThumbnailImageLoader == null) {
+            mThumbnailImageLoader = ImageLoader.getInstance();
+            File cacheDir = StorageUtils.getCacheDirectory(mContext);
+            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(mContext)
                     .memoryCacheExtraOptions(200, 200)
                     .diskCacheExtraOptions(200, 200, null)
                     .threadPoolSize(3) // default
@@ -103,22 +106,22 @@ public class MyApplication extends SugarApp {
                     .diskCacheSize(200 * 1024 * 1024)
                     .diskCacheFileCount(300)
                     .diskCacheFileNameGenerator(new HashCodeFileNameGenerator()) // default
-                    .imageDownloader(new BaseImageDownloader(context)) // default
+                    .imageDownloader(new BaseImageDownloader(mContext)) // default
                     .imageDecoder(new BaseImageDecoder(false)) // default
                     .defaultDisplayImageOptions(DisplayImageOptions.createSimple()) // default
 //                    .writeDebugLogs()
                     .build();
-            sThumbnailImageLoader.init(config);
+            mThumbnailImageLoader.init(config);
         }
 
-        return sThumbnailImageLoader;
+        return mThumbnailImageLoader;
     }
 
-    private static ImageLoader getTinyImageLoader(Context context) {
-        if (sTinyImageLoader == null) {
-            sTinyImageLoader = ImageLoader.getInstance();
-            File cacheDir = StorageUtils.getCacheDirectory(context);
-            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
+    private ImageLoader getTinyImageLoader() {
+        if (mTinyImageLoader == null) {
+            mTinyImageLoader = ImageLoader.getInstance();
+            File cacheDir = StorageUtils.getCacheDirectory(mContext);
+            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(mContext)
                     .memoryCacheExtraOptions(50, 50)
                     .diskCacheExtraOptions(50, 50, null)
                     .threadPoolSize(3) // default
@@ -132,49 +135,49 @@ public class MyApplication extends SugarApp {
                     .diskCacheSize(100 * 1024 * 1024)
                     .diskCacheFileCount(100)
                     .diskCacheFileNameGenerator(new HashCodeFileNameGenerator()) // default
-                    .imageDownloader(new BaseImageDownloader(context)) // default
+                    .imageDownloader(new BaseImageDownloader(mContext)) // default
                     .imageDecoder(new BaseImageDecoder(false)) // default
                     .defaultDisplayImageOptions(DisplayImageOptions.createSimple()) // default
 //                    .writeDebugLogs()
                     .build();
-            sTinyImageLoader.init(config);
+            mTinyImageLoader.init(config);
         }
 
-        return sTinyImageLoader;
+        return mTinyImageLoader;
     }
 
-    public static void displayImage(String uri, ImageView imageView,
+    public void displayImage(String uri, ImageView imageView,
                                     DisplayImageOptions options, boolean removeCache) {
         displayImage(uri, imageView, options, removeCache, null);
     }
 
-    public static void displayImage(String uri, ImageView imageView,
+    public void displayImage(String uri, ImageView imageView,
                                     DisplayImageOptions options, boolean removeCache,
                                     ImageLoadingListener listener) {
         if (removeCache) {
-            DiskCacheUtils.removeFromCache(uri, MyApplication.getImageLoader(sAppContext).getDiskCache());
-            MemoryCacheUtils.removeFromCache(uri, MyApplication.getImageLoader(sAppContext).getMemoryCache());
+            DiskCacheUtils.removeFromCache(uri, ImageLoader.getInstance().getDiskCache());
+            MemoryCacheUtils.removeFromCache(uri, ImageLoader.getInstance().getMemoryCache());
         }
 
-        getImageLoader(sAppContext).displayImage(uri, imageView, options, listener);
+        getImageLoader().displayImage(uri, imageView, options, listener);
     }
 
-    public static void displayThumbnailImage(String uri,
+    public void displayThumbnailImage(String uri,
                                              ImageView imageView, DisplayImageOptions options) {
-        getThumbnailImageLoader(sAppContext).displayImage(uri, imageView, options);
+        getThumbnailImageLoader().displayImage(uri, imageView, options);
     }
 
-    public static void displayTinyImage(String uri,
+    public void displayTinyImage(String uri,
                                         ImageView imageView, DisplayImageOptions options) {
-        getTinyImageLoader(sAppContext).displayImage(uri, imageView, options);
+        getTinyImageLoader().displayImage(uri, imageView, options);
     }
 
     public <T> void addToRequestQueue(Request<T> req) {
-        VolleySingleton.getInstance().getRequestQueue().add(req);
+        VolleySingleton.getInstance(mContext).getRequestQueue().add(req);
     }
 
     public <T> void addToRequestQueue(Request<T> req, String tag) {
         req.setTag(TextUtils.isEmpty(tag) ? "MyApplication" : tag);
-        VolleySingleton.getInstance().getRequestQueue().add(req);
+        VolleySingleton.getInstance(mContext).getRequestQueue().add(req);
     }
 }

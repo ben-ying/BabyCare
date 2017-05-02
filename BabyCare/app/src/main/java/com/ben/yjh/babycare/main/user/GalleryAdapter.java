@@ -18,6 +18,7 @@ public class GalleryAdapter extends BaseAdapter {
     private static final int TYPE_CAMERA = 0;
     private static final int TYPE_IMAGE = 1;
 
+    private Context mContext;
     private List<String> mUrls;
     private LayoutInflater mInflater;
     private GalleryInterface mInterface;
@@ -28,6 +29,7 @@ public class GalleryAdapter extends BaseAdapter {
     }
 
     GalleryAdapter(Context context, List<String> urls, GalleryInterface galleryInterface) {
+        this.mContext = mContext;
         this.mUrls = urls;
         this.mInterface = galleryInterface;
         this.mInflater = LayoutInflater.from(context);
@@ -81,7 +83,7 @@ public class GalleryAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
             final ImageView imageView = viewHolder.imageView;
             imageView.setImageResource(0);
-            MyApplication.displayThumbnailImage(mUrls.get(position - 1),
+            MyApplication.getInstance(mContext).displayThumbnailImage(mUrls.get(position - 1),
                     imageView, ImageUtils.getGalleryOptions());
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override

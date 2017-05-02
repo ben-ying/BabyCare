@@ -100,7 +100,7 @@ public class AddEventActivity extends BaseActivity {
                     if (data != null) {
                         mImageUrl = data.getStringExtra(Constants.IMAGE_URL);
                         if (mImageUrl != null) {
-                            MyApplication.displayImage(Uri.fromFile(new File(mImageUrl)).toString(),
+                            MyApplication.getInstance(this).displayImage(Uri.fromFile(new File(mImageUrl)).toString(),
                                     mImageView, ImageUtils.getEventImageOptions(
                                             AddEventActivity.this), true, new ImageLoadingListener() {
                                         @Override
