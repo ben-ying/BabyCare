@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import time
-import pdb
 
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
@@ -15,8 +14,6 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from validate_email import validate_email
 
-from babycare.serializers.baby import BabyUserSerializer
-from babycare.serializers.event import EventSerializer
 from babycare.constants import CODE_DUPLICATE_EMAIL, MSG_SEND_VERIFY_CODE_SUCCESS, MSG_NO_SUCH_EMAIL, MSG_EMPTY_VERIFY_CODE, \
     CODE_EMPTY_VERIFY_CODE, MSG_INCORRECT_VERIFY_CODE, CODE_INCORRECT_VERIFY_CODE, CODE_EXPIRED_VERIFY_CODE, \
     MSG_EXPIRED_VERIFY_CODE, \
@@ -44,6 +41,8 @@ from babycare.constants import MSG_EMPTY_USERNAME
 from babycare.constants import MSG_INVALID_EMAIL
 from babycare.constants import MSG_INVALID_PASSWORD
 from babycare.models import BabyUser, Verify, Event
+from babycare.serializers.baby import BabyUserSerializer
+from babycare.serializers.event import EventSerializer
 from babycare.utils import json_response, invalid_token_response, upload_image_to_oss, send_email, get_user_by_token, get_user, \
     CustomModelViewSet, save_error_log
 from babycare.utils import simple_json_response

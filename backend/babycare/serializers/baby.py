@@ -10,5 +10,5 @@ class BabyUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BabyUser
-        fields = ['user_id', 'username', 'baby_name', 'profile', 'email', 'phone', 'gender', 'region',
+        fields = ['user_id', 'username', 'baby_name', 'profile', 'email', 'phone', 'gender', 'type', 'region',
                   'zone', 'whats_up', 'birth', 'hobbies', 'highlighted', 'is_email_activate', 'is_phone_activate']

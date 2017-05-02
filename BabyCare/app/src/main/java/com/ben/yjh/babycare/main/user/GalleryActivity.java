@@ -41,17 +41,19 @@ public class GalleryActivity extends BaseActivity implements GalleryAdapter.Gall
         String orderBy = MediaStore.Images.Media._ID;
         Cursor cursor = getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns1, null, null, orderBy + " DESC");
-        int count = cursor.getCount();
-        mUrls = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            cursor.moveToPosition(i);
-            int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-            mUrls.add(Uri.fromFile(new File(cursor.getString(dataColumnIndex))).toString());
-        }
+        if (cursor != null) {
+            int count = cursor.getCount();
+            mUrls = new ArrayList<>();
+            for (int i = 0; i < count; i++) {
+                cursor.moveToPosition(i);
+                int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+                mUrls.add(Uri.fromFile(new File(cursor.getString(dataColumnIndex))).toString());
+            }
 
-        mAdapter = new GalleryAdapter(this, mUrls, this);
-        gridView.setAdapter(mAdapter);
-        cursor.close();
+            mAdapter = new GalleryAdapter(this, mUrls, this);
+            gridView.setAdapter(mAdapter);
+            cursor.close();
+        }
     }
 
     @Override

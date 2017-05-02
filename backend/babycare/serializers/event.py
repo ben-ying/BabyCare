@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from babycare.models import BabyUser, Event
+
+from babycare.models import Event
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -10,4 +11,5 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ['event_id', 'user_id', 'username', 'user_profile', 'title', 'content', 'image1', 'modified', 'created']
+        fields = ['event_id', 'user_id', 'username', 'type', 'user_profile',
+                  'title', 'content', 'image1', 'modified', 'created']

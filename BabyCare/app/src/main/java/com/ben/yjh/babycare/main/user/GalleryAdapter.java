@@ -29,7 +29,7 @@ public class GalleryAdapter extends BaseAdapter {
     }
 
     GalleryAdapter(Context context, List<String> urls, GalleryInterface galleryInterface) {
-        this.mContext = mContext;
+        this.mContext = context;
         this.mUrls = urls;
         this.mInterface = galleryInterface;
         this.mInflater = LayoutInflater.from(context);
@@ -103,7 +103,7 @@ public class GalleryAdapter extends BaseAdapter {
         return convertView;
     }
 
-    class ViewHolder {
+    private class ViewHolder {
         ImageView imageView;
     }
 }

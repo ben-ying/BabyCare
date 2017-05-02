@@ -11,6 +11,7 @@ class BabyUser(models.Model):
     phone = models.CharField(max_length=30, blank=True, null=True)
     gender = models.IntegerField(default=2) #0 for boy, 1 for girl, 2 for others
     profile = models.CharField(max_length=200, blank=True, null=True)
+    type = models.IntegerField(default=0)
     region = models.CharField(max_length=100, blank=True, null=True)
     whats_up = models.CharField(max_length=200, blank=True, null=True)
     zone = models.CharField(max_length=50, blank=True, null=True)
@@ -32,6 +33,7 @@ class BabyUser(models.Model):
 class Event(models.Model):
     id = IntegerField(label='ID')
     baby = models.ForeignKey(BabyUser, on_delete=models.CASCADE)
+    type = models.IntegerField(default=0)
     title = models.CharField(max_length=100, blank=True, null=True)
     content = models.TextField(blank=True, null=True)
     image1 = models.CharField(max_length=200, blank=True, null=True)

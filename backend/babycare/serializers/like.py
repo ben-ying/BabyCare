@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
-from babycare.constants import DATE_TIME_FORMAT
-from babycare.models import BabyUser, Event, Like
+from babycare.models import Like
 
 
 class LikeSerializer(serializers.ModelSerializer):

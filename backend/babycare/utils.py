@@ -3,27 +3,21 @@
 import json
 import os
 import random
+import smtplib
 import string
-import pdb
-from shutil import copyfile
 
 import oss2
-import time
-
 from django.contrib.auth.models import User
+from django.core.mail import EmailMessage
 from django.http import HttpResponse
 from rest_framework import viewsets
+from rest_framework.authtoken.models import Token
 
 from babycare.models import Verify
-from backend.settings import OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET_NAME, OSS_ENDPOINT, EMAIL_HOST_USER
-from constants import CODE_SUCCESS, CODE_INVALID_TOKEN, MSG_401, TEMP_IMAGE, PROFILE_FOOTER_IMAGE, \
-    PASSWORD_VERIFY_CODE_EMAIL_SUBJECT, PASSWORD_VERIFY_CODE_EMAIL_CONTENT, MSG_402, CODE_EXCEPTION, CODE_DUPLICATE, \
+from backend.settings import OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET_NAME, OSS_ENDPOINT
+from constants import CODE_SUCCESS, CODE_INVALID_TOKEN, MSG_401, TEMP_IMAGE, PASSWORD_VERIFY_CODE_EMAIL_SUBJECT, PASSWORD_VERIFY_CODE_EMAIL_CONTENT, MSG_402, CODE_EXCEPTION, CODE_DUPLICATE, \
     MSG_403
 from constants import MIN_PASSWORD_LEN
-import smtplib
-from email.mime.text import MIMEText
-from rest_framework.authtoken.models import Token
-from django.core.mail import EmailMessage
 
 
 class CustomModelViewSet(viewsets.ModelViewSet):

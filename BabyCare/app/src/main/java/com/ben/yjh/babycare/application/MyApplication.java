@@ -93,8 +93,8 @@ public class MyApplication extends SugarApp {
             mThumbnailImageLoader = ImageLoader.getInstance();
             File cacheDir = StorageUtils.getCacheDirectory(mContext);
             ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(mContext)
-                    .memoryCacheExtraOptions(200, 200)
-                    .diskCacheExtraOptions(200, 200, null)
+                    .memoryCacheExtraOptions(150, 150)
+                    .diskCacheExtraOptions(150, 150, null)
                     .threadPoolSize(3) // default
                     .threadPriority(Thread.NORM_PRIORITY - 2) // default
                     .tasksProcessingOrder(QueueProcessingType.FIFO) // default
