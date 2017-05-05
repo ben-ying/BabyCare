@@ -2,6 +2,7 @@ package com.ben.yjh.babycare.application;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
@@ -26,6 +27,8 @@ import com.orm.SugarApp;
 
 import java.io.File;
 
+import mabeijianxi.camera.VCamera;
+
 
 public class MyApplication extends SugarApp {
 
@@ -43,6 +46,9 @@ public class MyApplication extends SugarApp {
         Intent cdsIntent = AviaryIntent.createCdsInitIntent(
                 getBaseContext(), Constants.AVIARY_API_KEY_SECRET, null);
         startService(cdsIntent);
+
+//        small-video-recorder
+        initSmallVideo(this);
     }
 
     public MyApplication() {
@@ -179,5 +185,21 @@ public class MyApplication extends SugarApp {
     public <T> void addToRequestQueue(Request<T> req, String tag) {
         req.setTag(TextUtils.isEmpty(tag) ? "MyApplication" : tag);
         VolleySingleton.getInstance(mContext).getRequestQueue().add(req);
+    }
+
+    public static void initSmallVideo(Context context) {
+        File dcim = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+//        if (DeviceUtils.isZte()) {
+//            if (dcim.exists()) {
+//                VCamera.setVideoCachePath(dcim + Constants.VIDEO_DIR);
+//            } else {
+//                VCamera.setVideoCachePath(dcim.getPath().replace(
+//                        "/sdcard/", "/sdcard-ext/") + Constants.VIDEO_DIR);
+//            }
+//        } else {
+            VCamera.setVideoCachePath(dcim + Constants.VIDEO_DIR);
+//        }
+        VCamera.setDebugMode(true);
+        VCamera.initialize(context);
     }
 }

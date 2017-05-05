@@ -103,6 +103,12 @@
         <activity android:name=".main.event.CommentActivity" />
         <activity android:name=".main.event.AddEventActivity" />
         <activity android:name=".main.event.EventDetailActivity" />
+        <activity android:name=".main.event.MediaRecorderActivity" />
+        <activity android:name=".main.event.VideoPlayerActivity" />
+        <activity android:name=".main.event.PostVideoActivity" />
+
+        <!--small-video-recorder-->
+        <!--<activity android:name="mabeijianxi.camera.MediaRecorderActivity"/>-->
     </application>
 
 </manifest>

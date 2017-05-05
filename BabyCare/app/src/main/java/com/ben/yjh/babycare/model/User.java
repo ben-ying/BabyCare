@@ -17,6 +17,7 @@ public class User extends UserHistory implements Serializable {
     @SerializedName("whats_up") String whatsUp;
     @SerializedName("birth") String birth;
     @SerializedName("zone") String zone;
+    @SerializedName("locale") String locale;
     @SerializedName("hobbies") String hobbies;
     @SerializedName("highlighted") String highlighted;
     @SerializedName("token") String token;
@@ -39,6 +40,14 @@ public class User extends UserHistory implements Serializable {
         } else {
             return null;
         }
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 
     public String getZone() {

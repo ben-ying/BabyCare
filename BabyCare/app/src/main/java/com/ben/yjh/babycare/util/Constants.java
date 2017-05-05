@@ -19,6 +19,11 @@ public class Constants {
     public static final String PROFILE_IMAGE_PREFIX = "profile_image_prefix";
     public static final String EVENT_IMAGE_PREFIX = "event_image_prefix";
     public static final String AVIARY_API_KEY_SECRET = "a9a692d4-2bf2-4927-9dc3-2cef97ac8a42";
+    public static final String VIDEO_DIR = "/small-video-recorder/";
+    public static final String VIDEO_URL = "video_url";
+    public static final String VIDEO_CONFIG = "video_config";
+    public static final String VIDEO_TEMP_DIR = "video_temp_dir";
+    public static final String VIDEO_THUMBNAIL = "video_thumbnail";
 
     public static final int INVALID_VALUE = -1;
     public static final int MIN_PASSWORD_LENGTH = 6;
@@ -33,9 +38,16 @@ public class Constants {
     public static final int SETTING_REQUEST_CODE = 108;
     public static final int COMMENT_REQUEST_CODE = 109;
     public static final int GALLERY_REQUEST_CODE = 110;
-    public static final int GALLERY_PAGER_REQUEST_CODE = 111;
+    public static final int VIDEO_REQUEST_CODE = 111;
     public static final int SHARE_APP_REQUEST_CODE = 112;
 
+
+    public static final int VIDEO_DEFAULT_WIDTH = 480;
+    public static final int VIDEO_DEFAULT_HEIGHT = 320;
+    public static final int VIDEO_MAX_DEFAULT_TIME = 10 * 1000;
+    public static final int VIDEO_MIN_DEFAULT_TIME = 3 * 1000;
+    public static final int VIDEO_MAX_FRAME_RATE = 25;
+    public static final int VIDEO_THUMBNAILS_TIME = 1;
 
     public static final int INVALID_ACCESS_TOKEN = 401;
 

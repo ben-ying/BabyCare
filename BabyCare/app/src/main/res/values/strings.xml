@@ -93,6 +93,12 @@
     <string name="load_failed">加载失败，点击重试</string>
     <string name="load_finish">已全部加载完成</string>
     <string name="share_to_babycare">分享到嘟嘟日记</string>
+    <string name="hold_to_record">按住拍</string>
+    <string name="video_what_you_think">此时的想法&#8230;</string>
+    <string name="alert">提示</string>
+    <string name="exit_video_message">是否放弃这段视频？</string>
+    <string name="video_preparing">准备中&#8230;</string>
+    <string name="record_video_encode_failed">视频转码失败</string>
 
     <string name="title_activity_image_pager">ImagePagerActivity</string>
     <string name="dummy_button">Dummy Button</string>
@@ -125,6 +131,7 @@
     <string name="the_day_before_yesterday">前天</string>
     <string name="days_ago">天前</string>
     <string name="send">发送</string>
+    <string name="media_type">发布类型</string>
 
     <string name="title_activity_fullscreen">FullscreenActivity</string>
 

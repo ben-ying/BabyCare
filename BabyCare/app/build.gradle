@@ -17,8 +17,8 @@ android {
     defaultConfig {
         applicationId "com.ben.yjh.babycare"
         minSdkVersion 21
-        // aviary above 23 not working
-        targetSdkVersion 23
+        // aviary above 23 not working and small-video-record above 22 not working
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -53,5 +53,6 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
     compile 'com.aviary.android.feather.sdk:aviary-sdk:3.6.3'
     compile 'com.wang.avi:library:1.0.1'
+    compile 'com.mabeijianxi:small-video-record:1.2.0'
     testCompile 'junit:junit:4.12'
 }

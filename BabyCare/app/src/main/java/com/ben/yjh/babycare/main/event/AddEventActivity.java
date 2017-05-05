@@ -91,42 +91,46 @@ public class AddEventActivity extends BaseActivity {
                 });
     }
 
+    private void setImage(Intent intent) {
+        if (intent != null) {
+            mImageUrl = intent.getStringExtra(Constants.IMAGE_URL);
+            if (mImageUrl != null) {
+                MyApplication.getInstance(this).displayImage(Uri.fromFile(new File(mImageUrl)).toString(),
+                        mImageView, ImageUtils.getEventImageOptions(
+                                AddEventActivity.this), true, new ImageLoadingListener() {
+                            @Override
+                            public void onLoadingStarted(String s, View view) {
+
+                            }
+
+                            @Override
+                            public void onLoadingFailed(String s, View view, FailReason failReason) {
+
+                            }
+
+                            @Override
+                            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                                mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                mImageView.setImageBitmap(bitmap);
+                                mBase64Image = ImageUtils.getBase64FromBitmap(bitmap);
+                            }
+
+                            @Override
+                            public void onLoadingCancelled(String s, View view) {
+
+                            }
+                        });
+            }
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case Constants.GALLERY_REQUEST_CODE:
-                    if (data != null) {
-                        mImageUrl = data.getStringExtra(Constants.IMAGE_URL);
-                        if (mImageUrl != null) {
-                            MyApplication.getInstance(this).displayImage(Uri.fromFile(new File(mImageUrl)).toString(),
-                                    mImageView, ImageUtils.getEventImageOptions(
-                                            AddEventActivity.this), true, new ImageLoadingListener() {
-                                        @Override
-                                        public void onLoadingStarted(String s, View view) {
-
-                                        }
-
-                                        @Override
-                                        public void onLoadingFailed(String s, View view, FailReason failReason) {
-
-                                        }
-
-                                        @Override
-                                        public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-                                            mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                                            mImageView.setImageBitmap(bitmap);
-                                            mBase64Image = ImageUtils.getBase64FromBitmap(bitmap);
-                                        }
-
-                                        @Override
-                                        public void onLoadingCancelled(String s, View view) {
-
-                                        }
-                                    });
-                        }
-                    }
+                    setImage(data);
                     break;
             }
         }
@@ -143,10 +147,8 @@ public class AddEventActivity extends BaseActivity {
                 }
                 break;
             case R.id.img_event:
-                if (verifyStoragePermissions()) {
-                    Intent intent = new Intent(this, GalleryActivity.class);
-                    startActivityForResult(intent, Constants.GALLERY_REQUEST_CODE);
-                }
+                Intent intent = new Intent(AddEventActivity.this, GalleryActivity.class);
+                startActivityForResult(intent, Constants.GALLERY_REQUEST_CODE);
                 break;
         }
     }

@@ -1,5 +1,6 @@
 package com.ben.yjh.babycare.main;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,16 +27,21 @@ import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.base.BaseFragment;
 import com.ben.yjh.babycare.main.event.AddEventActivity;
 import com.ben.yjh.babycare.main.event.EventListFragment;
+import com.ben.yjh.babycare.main.event.MediaRecorderActivity;
 import com.ben.yjh.babycare.main.left.FeedbackActivity;
 import com.ben.yjh.babycare.main.left.SettingActivity;
 import com.ben.yjh.babycare.main.left.UserInfoActivity;
 import com.ben.yjh.babycare.main.user.HomeViewPagerAdapter;
 import com.ben.yjh.babycare.model.User;
+import com.ben.yjh.babycare.model.VideoConfig;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
+import com.ben.yjh.babycare.util.VideoUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import mabeijianxi.camera.model.MediaRecorderConfig;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -208,12 +215,53 @@ public class MainActivity extends BaseActivity
         }
     }
 
+    public void showTypeOptions() {
+        if (verifyStoragePermissions()) {
+            String[] array = getResources().getStringArray(R.array.event_type_choices);
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.media_type)
+                    .setItems(array, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent;
+                            switch (which) {
+                                case 0:
+                                    intent = new Intent(MainActivity.this, AddEventActivity.class);
+                                    startActivityForResult(intent, Constants.ADD_EVENT_REQUEST_CODE);
+                                    break;
+                                case 1:
+                                    VideoConfig videoConfig = VideoUtils.getVideoConfig(
+                                            MainActivity.this, user.getUsername());
+                                    MediaRecorderConfig config = new MediaRecorderConfig.Buidler()
+//                                            .doH264Compress(compressMode)
+//                                            .setMediaBitrateConfig(recordMode)
+                                            .smallVideoWidth(videoConfig.getWidth())
+                                            .smallVideoHeight(videoConfig.getWidth())
+                                            .recordTimeMax(videoConfig.getMaxTime())
+                                            .recordTimeMin(videoConfig.getMinTime())
+                                            .maxFrameRate(videoConfig.getMaxFrameRate())
+                                            .captureThumbnailsTime(videoConfig.getCaptureThumbnailsTime())
+                                            .build();
+                                    intent = new Intent(MainActivity.this, MediaRecorderActivity.class);
+                                    intent.putExtra(Constants.VIDEO_CONFIG, config);
+                                    startActivityForResult(intent, Constants.VIDEO_REQUEST_CODE);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+        }
+    }
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
-                Intent intent = new Intent(this, AddEventActivity.class);
-                startActivityForResult(intent, Constants.ADD_EVENT_REQUEST_CODE);
+                showTypeOptions();
                 break;
         }
     }

@@ -121,6 +121,7 @@ class UserViewSet(CustomModelViewSet):
                     response_data['profile'] = upload_image_to_oss(image_name, base64)
                     baby_user = BabyUser.objects.get(user=user)
                     baby_user.profile = response_data['profile']
+                    baby_user.locale = response_data['locale']
                     baby_user.created = timezone.now()
                     baby_user.save()
                 return json_response(response_data, CODE_SUCCESS, MSG_CREATE_USER_SUCCESS)

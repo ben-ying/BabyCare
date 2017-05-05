@@ -5,7 +5,7 @@ from models import Event
 
 
 class BabyAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone', 'baby_name', 'profile', 'created', 'modified')
+    list_display = ('user', 'phone', 'baby_name', 'zone', 'locale', 'profile', 'created', 'modified')
     search_fields = ('user', 'phone', 'baby_name')
     #fields = ('email', 'name', 'baby_name')
 

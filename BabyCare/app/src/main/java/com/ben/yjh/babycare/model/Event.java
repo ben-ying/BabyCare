@@ -19,6 +19,8 @@ public class Event extends SugarRecord implements Serializable {
     @SerializedName("title") String title;
     @SerializedName("content") String content;
     @SerializedName("image1") String image1;
+    @SerializedName("video") String video;
+    @SerializedName("video_thumbnail") String videoThumbnail;
     @SerializedName("like_count") int likeCount;
     @SerializedName("comment_count") int commentCount;
     @SerializedName("created") String created;
@@ -142,5 +144,21 @@ public class Event extends SugarRecord implements Serializable {
 
     public void setEventComments(List<EventComment> eventComments) {
         this.eventComments = eventComments;
+    }
+
+    public String getVideo() {
+        return video;
+    }
+
+    public void setVideo(String video) {
+        this.video = video;
+    }
+
+    public String getVideoThumbnail() {
+        return videoThumbnail;
+    }
+
+    public void setVideoThumbnail(String videoThumbnail) {
+        this.videoThumbnail = videoThumbnail;
     }
 }

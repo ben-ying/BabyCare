@@ -13,6 +13,7 @@ class BabyUser(models.Model):
     profile = models.CharField(max_length=200, blank=True, null=True)
     type = models.IntegerField(default=0)
     region = models.CharField(max_length=100, blank=True, null=True)
+    locale = models.CharField(max_length=10, blank=True, null=True)
     whats_up = models.CharField(max_length=200, blank=True, null=True)
     zone = models.CharField(max_length=50, blank=True, null=True)
     birth = models.DateField(blank=True, null=True)
@@ -45,6 +46,8 @@ class Event(models.Model):
     image7 = models.CharField(max_length=200, blank=True, null=True)
     image8 = models.CharField(max_length=200, blank=True, null=True)
     image9 = models.CharField(max_length=200, blank=True, null=True)
+    video = models.CharField(max_length=200, blank=True, null=True)
+    video_thumbnail = models.CharField(max_length=200, blank=True, null=True)
     created = models.DateTimeField(editable=False, blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
