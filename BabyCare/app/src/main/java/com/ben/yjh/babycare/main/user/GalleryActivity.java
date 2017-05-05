@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 
@@ -47,7 +48,10 @@ public class GalleryActivity extends BaseActivity implements GalleryAdapter.Gall
             for (int i = 0; i < count; i++) {
                 cursor.moveToPosition(i);
                 int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-                mUrls.add(Uri.fromFile(new File(cursor.getString(dataColumnIndex))).toString());
+                File file = new File(cursor.getString(dataColumnIndex));
+                if (file.length() != 0) {
+                    mUrls.add(Uri.fromFile(file).toString());
+                }
             }
 
             mAdapter = new GalleryAdapter(this, mUrls, this);
