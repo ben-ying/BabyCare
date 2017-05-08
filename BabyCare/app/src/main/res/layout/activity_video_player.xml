@@ -5,16 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/video_player_bg_color" >
 
-    <TextView
-        android:id="@+id/tv_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:layout_margin="10dp"
-        android:layout_alignParentRight="true"
-        android:textColor="@color/colorPrimaryDark"
-        android:visibility="gone"
-        android:text="@string/post"  />
+    <include layout="@layout/toolbar_video"  />
     
     <mabeijianxi.camera.views.SurfaceVideoView
         android:id="@+id/videoView"
@@ -26,8 +17,8 @@
 
     <ImageView
         android:id="@+id/iv_pause"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/pause_large"
+        android:layout_height="@dimen/pause_large"
         android:layout_centerInParent="true"
         android:contentDescription="@string/imageview_content_description"
         android:src="@mipmap/ic_play_circle_outline_white_48dp"

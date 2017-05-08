@@ -12,6 +12,9 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -28,8 +31,6 @@ public class PostVideoActivity extends BaseActivity implements View.OnClickListe
         OnPreparedListener, OnCompletionListener, OnInfoListener {
 
     private String mVideoUrl;
-    private TextView mSendTextView;
-    private TextView mCancelTextView;
     private String mVideoThumbnailUrl;
     private EditText mContentEditText;
     private SurfaceVideoView mVideoView;
@@ -41,8 +42,10 @@ public class PostVideoActivity extends BaseActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_text_edit_activity);
 
-        mCancelTextView = (TextView) findViewById(R.id.tv_cancel);
-        mSendTextView = (TextView) findViewById(R.id.tv_send);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         mContentEditText = (EditText) findViewById(R.id.et_send_content);
         mVideoView = (SurfaceVideoView) findViewById(R.id.videoView);
         mVideoView.requestLayout();
@@ -59,9 +62,29 @@ public class PostVideoActivity extends BaseActivity implements View.OnClickListe
         Bitmap bitmap = BitmapFactory.decodeFile(mVideoThumbnailUrl);
         mContentEditText.setHint(R.string.video_what_you_think);
 
-        mCancelTextView.setOnClickListener(this);
-        mSendTextView.setOnClickListener(this);
         mContentEditText.setOnClickListener(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_video, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                cancelEvent();
+                break;
+            case R.id.title_post:
+                // TODO: 5/8/17
+                setResult(RESULT_OK);
+                finish();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -143,11 +166,6 @@ public class PostVideoActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_cancel:
-                cancelEvent();
-                break;
-            case R.id.tv_send:
-                break;
             case R.id.videoView:
                 Intent intent = new Intent(this, VideoPlayerActivity.class);
                 intent.putExtra(Constants.VIDEO_URL, mVideoUrl);

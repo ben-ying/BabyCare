@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -14,10 +17,8 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -48,10 +49,7 @@ public class MediaRecorderActivity extends BaseActivity implements
 
     private static final int HANDLE_INVALIDATE_PROGRESS = 0;
     private static final int HANDLE_STOP_RECORD = 1;
-    private ImageView mTitleNext;
-    private CheckBox mCameraSwitch;
     private CheckedTextView mRecordDelete;
-    private CheckBox mRecordLed;
     private Button mRecordController;
     private RelativeLayout mBottomLayout;
     private SurfaceView mSurfaceView;
@@ -60,46 +58,125 @@ public class MediaRecorderActivity extends BaseActivity implements
     private MediaObject mMediaObject;
     private volatile boolean mPressedStatus;
     private volatile boolean mReleased;
+    private volatile boolean mIsFlashMode;
     private MediaRecorderConfig mConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_media_recorder);
+        setContentView(R.layout.activity_video_recorder);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_clear_white_24dp);
+
         Intent intent = getIntent();
         mConfig = intent.getParcelableExtra(Constants.VIDEO_CONFIG);
         if (mConfig == null) {
             finish();
         }
         mSurfaceView = (SurfaceView) findViewById(R.id.recordPreview);
-        mCameraSwitch = (CheckBox) findViewById(R.id.record_camera_switcher);
-        mTitleNext = (ImageView) findViewById(R.id.title_next);
         mProgressView = (ProgressView) findViewById(R.id.recordProgress);
         mRecordDelete = (CheckedTextView) findViewById(R.id.tv_delete);
         mRecordController = (Button) findViewById(R.id.btn_controller);
         mBottomLayout = (RelativeLayout) findViewById(R.id.rl_bottom);
-        mRecordLed = (CheckBox) findViewById(R.id.record_camera_led);
 
-        mTitleNext.setOnClickListener(this);
-        findViewById(R.id.title_back).setOnClickListener(this);
         mRecordDelete.setOnClickListener(this);
         mRecordController.setOnTouchListener(mOnVideoControllerTouchListener);
 
-        if (MediaRecorderBase.isSupportFrontCamera()) {
-            mCameraSwitch.setOnClickListener(this);
-        } else {
-            mCameraSwitch.setVisibility(View.GONE);
-        }
-        if (DeviceUtils.isSupportCameraLedFlash(getPackageManager())) {
-            mRecordLed.setOnClickListener(this);
-        } else {
-            mRecordLed.setVisibility(View.GONE);
-        }
-
         mProgressView.setMaxDuration(mConfig.getRecordTimeMax());
         mProgressView.setMinTime(mConfig.getRecordTimeMin());
+
+        initMediaRecorder();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_video_recorder, menu);
+        MenuItem itemFlash = menu.findItem(R.id.title_flash);
+        MenuItem itemCameraSwitch = menu.findItem(R.id.title_camera_swith);
+        MenuItem itemNextStep = menu.findItem(R.id.title_next_step);
+        if (DeviceUtils.isSupportCameraLedFlash(getPackageManager())) {
+            itemCameraSwitch.setVisible(true);
+        } else {
+            itemCameraSwitch.setVisible(false);
+        }
+        if (DeviceUtils.isSupportCameraLedFlash(getPackageManager())) {
+            itemFlash.setVisible(true);
+        } else {
+            itemFlash.setVisible(false);
+        }
+        if (!isFinishing() && mMediaObject != null) {
+            int duration = mMediaObject.getDuration();
+            if (duration < mConfig.getRecordTimeMin()) {
+                if (duration == 0) {
+                    mRecordDelete.setVisibility(View.GONE);
+                }
+                itemNextStep.setVisible(false);
+            } else {
+                itemNextStep.setVisible(true);
+            }
+        }
+
+        if (mPressedStatus) {
+            itemFlash.setEnabled(false);
+            itemCameraSwitch.setEnabled(false);
+            if (mMediaRecorder != null && mMediaRecorder instanceof MediaRecorderSystem) {
+                itemCameraSwitch.setVisible(false);
+            }
+        } else {
+            if (mMediaRecorder != null && mMediaRecorder.isFrontCamera()) {
+                itemFlash.setEnabled(false);
+            } else {
+                itemFlash.setEnabled(true);
+            }
+            itemCameraSwitch.setEnabled(true);
+        }
+
+        if (mIsFlashMode) {
+            itemFlash.setIcon(R.drawable.record_camera_flash_on);
+        } else {
+            itemFlash.setIcon(R.drawable.record_camera_flash_off);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+            case R.id.title_camera_swith:
+                if (mIsFlashMode) {
+                    if (mMediaRecorder != null) {
+                        mMediaRecorder.toggleFlashMode();
+                    }
+                    mIsFlashMode = false;
+                }
+
+                if (mMediaRecorder != null) {
+                    mMediaRecorder.switchCamera();
+                }
+                invalidateOptionsMenu();
+                break;
+            case R.id.title_flash:
+                if (mMediaRecorder != null) {
+                    mMediaRecorder.toggleFlashMode();
+                    mIsFlashMode = !mIsFlashMode;
+                }
+                invalidateOptionsMenu();
+                break;
+            case R.id.title_next_step:
+                mMediaRecorder.startEncoding();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void initSurfaceView() {
@@ -137,10 +214,6 @@ public class MediaRecorderActivity extends BaseActivity implements
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            if (mMediaRecorder == null) {
-                return false;
-            }
-
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     if (mMediaObject.getDuration() >= mConfig.getRecordTimeMax()) {
@@ -156,7 +229,7 @@ public class MediaRecorderActivity extends BaseActivity implements
                     if (mPressedStatus) {
                         stopRecord();
                         if (mMediaObject.getDuration() >= mConfig.getRecordTimeMax()) {
-                            mTitleNext.performClick();
+                            mMediaRecorder.startEncoding();
                         }
                     }
                     break;
@@ -172,13 +245,8 @@ public class MediaRecorderActivity extends BaseActivity implements
         UtilityAdapter.freeFilterParser();
         UtilityAdapter.initFilterParser();
 
-        if (mMediaRecorder == null) {
-            initMediaRecorder();
-        } else {
-            mRecordLed.setChecked(false);
-            mMediaRecorder.prepare();
-            mProgressView.setData(mMediaObject);
-        }
+        mMediaRecorder.prepare();
+        mProgressView.setData(mMediaObject);
     }
 
     @Override
@@ -187,24 +255,18 @@ public class MediaRecorderActivity extends BaseActivity implements
         stopRecord();
         UtilityAdapter.freeFilterParser();
         if (!mReleased) {
-            if (mMediaRecorder != null)
-                mMediaRecorder.release();
+            mMediaRecorder.release();
         }
         mReleased = false;
     }
 
 
     private void startRecord() {
-        if (mMediaRecorder != null) {
-            MediaObject.MediaPart part = mMediaRecorder.startRecord();
-            if (part == null) {
-                return;
-            }
-            if (mMediaRecorder instanceof MediaRecorderSystem) {
-                mCameraSwitch.setVisibility(View.GONE);
-            }
-            mProgressView.setData(mMediaObject);
+        MediaObject.MediaPart part = mMediaRecorder.startRecord();
+        if (part == null) {
+            return;
         }
+        mProgressView.setData(mMediaObject);
 
         mPressedStatus = true;
         mRecordController.animate().scaleX(0.8f).scaleY(0.8f).setDuration(500).start();
@@ -217,8 +279,7 @@ public class MediaRecorderActivity extends BaseActivity implements
                     mConfig.getRecordTimeMax() - mMediaObject.getDuration());
         }
         mRecordDelete.setVisibility(View.GONE);
-        mCameraSwitch.setEnabled(false);
-        mRecordLed.setEnabled(false);
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -232,7 +293,7 @@ public class MediaRecorderActivity extends BaseActivity implements
             new AlertDialog.Builder(this)
                     .setTitle(R.string.alert)
                     .setMessage(R.string.exit_video_message)
-                    .setNegativeButton(
+                    .setPositiveButton(
                             R.string.ok,
                             new DialogInterface.OnClickListener() {
 
@@ -244,7 +305,7 @@ public class MediaRecorderActivity extends BaseActivity implements
                                 }
 
                             })
-                    .setPositiveButton(R.string.cancel,
+                    .setNegativeButton(R.string.cancel,
                             null).setCancelable(false).show();
             return;
         }
@@ -258,15 +319,8 @@ public class MediaRecorderActivity extends BaseActivity implements
     private void stopRecord() {
         mPressedStatus = false;
         mRecordController.animate().scaleX(1).scaleY(1).setDuration(500).start();
-
-        if (mMediaRecorder != null) {
-            mMediaRecorder.stopRecord();
-        }
-
+        mMediaRecorder.stopRecord();
         mRecordDelete.setVisibility(View.VISIBLE);
-        mCameraSwitch.setEnabled(true);
-        mRecordLed.setEnabled(true);
-
         mHandler.removeMessages(HANDLE_STOP_RECORD);
         checkStatus();
     }
@@ -278,69 +332,39 @@ public class MediaRecorderActivity extends BaseActivity implements
             mHandler.removeMessages(HANDLE_STOP_RECORD);
         }
 
-        if (id != R.id.tv_delete) {
-            if (mMediaObject != null) {
-                MediaObject.MediaPart part = mMediaObject.getCurrentPart();
-                if (part != null) {
-                    if (part.remove) {
-                        part.remove = false;
-                        mRecordDelete.setChecked(false);
-                        if (mProgressView != null)
-                            mProgressView.invalidate();
+        switch (v.getId()) {
+            case R.id.tv_delete:
+                if (mMediaObject != null) {
+                    MediaObject.MediaPart part = mMediaObject.getCurrentPart();
+                    if (part != null) {
+                        if (part.remove) {
+                            part.remove = false;
+                            mMediaObject.removePart(part, true);
+                            mRecordDelete.setChecked(false);
+                        } else {
+                            part.remove = true;
+                            mRecordDelete.setChecked(true);
+                        }
+                    }
+                    if (mProgressView != null)
+                        mProgressView.invalidate();
+
+                    checkStatus();
+                }
+                break;
+            default:
+                if (mMediaObject != null) {
+                    MediaObject.MediaPart part = mMediaObject.getCurrentPart();
+                    if (part != null) {
+                        if (part.remove) {
+                            part.remove = false;
+                            mRecordDelete.setChecked(false);
+                            if (mProgressView != null)
+                                mProgressView.invalidate();
+                        }
                     }
                 }
-            }
-        }
-
-        if (id == R.id.title_back) {
-            onBackPressed();
-        } else if (id == R.id.record_camera_switcher) {
-            if (mRecordLed.isChecked()) {
-                if (mMediaRecorder != null) {
-                    mMediaRecorder.toggleFlashMode();
-                }
-                mRecordLed.setChecked(false);
-            }
-
-            if (mMediaRecorder != null) {
-                mMediaRecorder.switchCamera();
-            }
-
-            if (mMediaRecorder.isFrontCamera()) {
-                mRecordLed.setEnabled(false);
-            } else {
-                mRecordLed.setEnabled(true);
-            }
-        } else if (id == R.id.record_camera_led) {
-            if (mMediaRecorder != null) {
-                if (mMediaRecorder.isFrontCamera()) {
-                    return;
-                }
-            }
-
-            if (mMediaRecorder != null) {
-                mMediaRecorder.toggleFlashMode();
-            }
-        } else if (id == R.id.title_next) {
-            mMediaRecorder.startEncoding();
-        } else if (id == R.id.tv_delete) {
-            if (mMediaObject != null) {
-                MediaObject.MediaPart part = mMediaObject.getCurrentPart();
-                if (part != null) {
-                    if (part.remove) {
-                        part.remove = false;
-                        mMediaObject.removePart(part, true);
-                        mRecordDelete.setChecked(false);
-                    } else {
-                        part.remove = true;
-                        mRecordDelete.setChecked(true);
-                    }
-                }
-                if (mProgressView != null)
-                    mProgressView.invalidate();
-
-                checkStatus();
-            }
+                break;
         }
     }
 
@@ -361,23 +385,12 @@ public class MediaRecorderActivity extends BaseActivity implements
     }
 
     private int checkStatus() {
-        int duration = 0;
+        invalidateOptionsMenu();
+
         if (!isFinishing() && mMediaObject != null) {
-            duration = mMediaObject.getDuration();
-            if (duration < mConfig.getRecordTimeMin()) {
-                if (duration == 0) {
-                    mCameraSwitch.setVisibility(View.VISIBLE);
-                    mRecordDelete.setVisibility(View.GONE);
-                }
-                if (mTitleNext.getVisibility() != View.INVISIBLE)
-                    mTitleNext.setVisibility(View.INVISIBLE);
-            } else {
-                if (mTitleNext.getVisibility() != View.VISIBLE) {
-                    mTitleNext.setVisibility(View.VISIBLE);
-                }
-            }
+            return mMediaObject.getDuration();
         }
-        return duration;
+        return 0;
     }
 
     private Handler mHandler = new Handler() {
@@ -385,11 +398,11 @@ public class MediaRecorderActivity extends BaseActivity implements
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case HANDLE_INVALIDATE_PROGRESS:
-                    if (mMediaRecorder != null && !isFinishing()) {
+                    if (!isFinishing()) {
                         if (mMediaObject != null && mMediaObject.getMedaParts() != null
                                 && mMediaObject.getDuration() >= mConfig.getRecordTimeMax()) {
                             stopRecord();
-                            mTitleNext.performClick();
+                            mMediaRecorder.startEncoding();
                             return;
                         }
                         if (mProgressView != null) {

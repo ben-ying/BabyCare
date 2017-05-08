@@ -38,11 +38,11 @@ public abstract class BaseAllActivity extends AppCompatActivity implements OnCli
         super.onCreate(savedInstanceState);
     }
 
-    public void setStatusBarMargin(int resId) {
+//    public void setStatusBarMargin(int resId) {
 //        View view = findViewById(resId);
 //        view.setPadding(view.getPaddingLeft(), getStatusBarHeight(),
 //                view.getPaddingRight(), view.getPaddingBottom());
-    }
+//    }
 
     public boolean verifyStoragePermissions() {
         int permission = ActivityCompat.checkSelfPermission(

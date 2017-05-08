@@ -36,7 +36,6 @@ public class GalleryActivity extends BaseActivity implements GalleryAdapter.Gall
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        setStatusBarMargin(R.id.content_layout);
         GridView gridView = (GridView) findViewById(R.id.gridView);
         String[] columns1 = {MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA};
         String orderBy = MediaStore.Images.Media._ID;

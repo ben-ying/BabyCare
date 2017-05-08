@@ -25,6 +25,7 @@
     <dimen name="item_height">60dp</dimen>
     <dimen name="share_height">60dp</dimen>
     <dimen name="event_image_height">200dp</dimen>
+    <dimen name="pause_large">60dp</dimen>
 
     <dimen name="timeline_image_height">200dp</dimen>
     <dimen name="actions_padding">16dp</dimen>

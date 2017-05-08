@@ -61,7 +61,6 @@ public class MainActivity extends BaseActivity
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setStatusBarMargin(R.id.cl_layout);
 
         List<BaseFragment> fragments = new ArrayList<>();
         mEventListFragment = EventListFragment.newInstance(user.getUserId());

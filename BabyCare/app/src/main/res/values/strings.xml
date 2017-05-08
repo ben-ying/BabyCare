@@ -99,6 +99,9 @@
     <string name="exit_video_message">是否放弃这段视频？</string>
     <string name="video_preparing">准备中&#8230;</string>
     <string name="record_video_encode_failed">视频转码失败</string>
+    <string name="flashlight">闪光灯</string>
+    <string name="switch_camera">切换相机</string>
+    <string name="next_step">下一步</string>
 
     <string name="title_activity_image_pager">ImagePagerActivity</string>
     <string name="dummy_button">Dummy Button</string>

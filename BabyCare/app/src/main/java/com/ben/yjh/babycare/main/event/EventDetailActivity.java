@@ -20,7 +20,6 @@ public class EventDetailActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        setStatusBarMargin(R.id.cl_layout);
 
     }
 

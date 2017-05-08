@@ -49,7 +49,6 @@ public class AddEventActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        setStatusBarMargin(R.id.content_layout);
         mTitleEditText = (EditText) findViewById(R.id.et_title);
         mContentEditText = (EditText) findViewById(R.id.et_content);
         mImageView = (ImageView) findViewById(R.id.img_event);

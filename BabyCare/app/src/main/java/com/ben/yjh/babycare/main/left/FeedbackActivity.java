@@ -52,7 +52,6 @@ public class FeedbackActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        setStatusBarMargin(R.id.content_layout);
 
         findViewById(R.id.btn_send).setOnClickListener(this);
         mDescriptionEditText = (EditText) findViewById(R.id.et_feedback);

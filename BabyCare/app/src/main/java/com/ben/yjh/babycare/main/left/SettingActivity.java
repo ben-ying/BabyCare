@@ -21,7 +21,6 @@ public class SettingActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        setStatusBarMargin(R.id.content_layout);
 
         findViewById(R.id.btn_logout).setOnClickListener(this);
     }

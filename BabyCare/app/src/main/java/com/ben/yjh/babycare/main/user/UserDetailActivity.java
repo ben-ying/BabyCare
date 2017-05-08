@@ -54,7 +54,6 @@ public class UserDetailActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        setStatusBarMargin(R.id.content_layout);
         mUserId = getIntent().getIntExtra(Constants.USER_ID, Constants.INVALID_VALUE);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         List<BaseFragment> fragments = new ArrayList<>();

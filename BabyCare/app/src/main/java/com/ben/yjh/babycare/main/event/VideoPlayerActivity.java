@@ -10,6 +10,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -61,6 +63,25 @@ public class VideoPlayerActivity extends BaseActivity implements
         mVideoView.setOnCompletionListener(this);
         findViewById(R.id.root).setOnClickListener(this);
         mVideoView.setVideoPath(mVideoUrl);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_video, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.title_post:
+                // TODO: 5/8/17
+                setResult(RESULT_OK);
+                finish();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

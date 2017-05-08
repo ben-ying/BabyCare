@@ -61,7 +61,6 @@ public class UserInfoActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        setStatusBarMargin(R.id.content_layout);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         List<BaseFragment> fragments = new ArrayList<>();
         mPersonalInfoFragment = PersonalInfoFragment.newInstance();

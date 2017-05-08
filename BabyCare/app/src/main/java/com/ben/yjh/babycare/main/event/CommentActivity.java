@@ -64,7 +64,6 @@ public class CommentActivity extends BaseActivity implements CommentAdapter.Comm
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        setStatusBarMargin(R.id.content_layout);
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mFab.setOnClickListener(this);
         mSendButton = (ImageButton) findViewById(R.id.ib_send);
