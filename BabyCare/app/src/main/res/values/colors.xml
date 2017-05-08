@@ -22,7 +22,6 @@
     <color name="camera_background_color">#c6c6c6</color>
     <color name="unchecked_icon_color">#888888</color>
     <color name="checked_icon_color">#FF0000</color>
-    <color name="video_player_bg_color">#DA000000</color>
     <color name="video_recorder_bg_color">#222222</color>
     <color name="video_text_color">#888888</color>
 

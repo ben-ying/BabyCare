@@ -3,7 +3,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/video_player_bg_color" >
+    android:background="@color/video_recorder_bg_color" >
 
     <include layout="@layout/toolbar_video"  />
     
