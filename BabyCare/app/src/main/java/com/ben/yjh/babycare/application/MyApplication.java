@@ -168,9 +168,9 @@ public class MyApplication extends SugarApp {
         getImageLoader().displayImage(uri, imageView, options, listener);
     }
 
-    public void displayThumbnailImage(String uri,
-                                             ImageView imageView, DisplayImageOptions options) {
-        getThumbnailImageLoader().displayImage(uri, imageView, options);
+    public void displayThumbnailImage(String uri, ImageView imageView,
+                                      DisplayImageOptions options, ImageLoadingListener listener) {
+        getThumbnailImageLoader().displayImage(uri, imageView, options, listener);
     }
 
     public void displayTinyImage(String uri,

@@ -9,14 +9,4 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/timeline_image_height"
         android:scaleType="centerCrop"  />
-
-    <!--<TextView-->
-        <!--android:id="@+id/title"-->
-        <!--style="@style/TextAppearance.AppCompat.Title"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignBottom="@+id/view_pager"-->
-        <!--android:padding="10dp"-->
-        <!--android:text="Card title"-->
-        <!--android:textColor="@color/white" />-->
 </RelativeLayout>

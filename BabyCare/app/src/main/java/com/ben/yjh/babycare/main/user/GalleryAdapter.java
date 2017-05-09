@@ -84,7 +84,7 @@ public class GalleryAdapter extends BaseAdapter {
             final ImageView imageView = viewHolder.imageView;
             imageView.setImageResource(0);
             MyApplication.getInstance(mContext).displayThumbnailImage(mUrls.get(position - 1),
-                    imageView, ImageUtils.getGalleryOptions());
+                    imageView, ImageUtils.getGalleryOptions(), null);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

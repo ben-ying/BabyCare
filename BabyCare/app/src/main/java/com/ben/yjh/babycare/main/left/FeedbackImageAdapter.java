@@ -1,6 +1,7 @@
 package com.ben.yjh.babycare.main.left;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.LinearLayout;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.util.ImageUtils;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.ArrayList;
 
@@ -64,8 +67,29 @@ public class FeedbackImageAdapter extends BaseAdapter {
         if (mImageUrls.get(position).equals(FeedbackActivity.DEFAULT_ADD_IMAGE)) {
             viewHolder.imageView.setImageResource(R.drawable.ic_add_off);
         }
+        final ImageView imageView = viewHolder.imageView;
         MyApplication.getInstance(mContext).displayThumbnailImage(mImageUrls.get(position),
-                viewHolder.imageView, ImageUtils.getEventImageOptions(mContext));
+                viewHolder.imageView, ImageUtils.getEventImageOptions(mContext), new ImageLoadingListener() {
+                    @Override
+                    public void onLoadingStarted(String s, View view) {
+
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String s, View view, FailReason failReason) {
+
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                        imageView.setImageBitmap(bitmap);
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String s, View view) {
+
+                    }
+                });
 
         return convertView;
     }
