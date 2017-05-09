@@ -68,7 +68,7 @@ public class AddEventActivity extends BaseActivity {
                     @Override
                     public void onSuccess(Event classOfT) {
                         Log.d("", "");
-                        classOfT.setImage1(mImageUrl);
+//                        classOfT.setImage1(mImageUrl);
                         classOfT.save();
                         Intent intent = getIntent();
                         intent.putExtra(Constants.EVENT, classOfT);

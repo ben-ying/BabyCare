@@ -10,6 +10,7 @@ import com.ben.yjh.babycare.model.EventComment;
 import com.ben.yjh.babycare.model.EventLike;
 import com.ben.yjh.babycare.model.EventsResult;
 import com.ben.yjh.babycare.model.HttpBaseResult;
+import com.ben.yjh.babycare.util.Constants;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -70,7 +71,8 @@ public class EventTaskHandler extends BaseTaskHandler {
                 }
                 bodyObject.put("base64s", jsonArray);
             }
-            new HttpPostTask(context).startTask(URL_EVENTS, Request.Method.POST,
+            boolean showProgress = type == Event.TYPE_IMAGE;
+            new HttpPostTask(context, showProgress).startTask(URL_EVENTS, Request.Method.POST,
                     bodyObject, Event.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();

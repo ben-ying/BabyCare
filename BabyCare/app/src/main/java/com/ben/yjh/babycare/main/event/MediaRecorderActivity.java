@@ -62,6 +62,7 @@ public class MediaRecorderActivity extends BaseActivity implements
     private volatile boolean mReleased;
     private volatile boolean mIsFlashMode;
     private MediaRecorderConfig mConfig;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -415,7 +416,7 @@ public class MediaRecorderActivity extends BaseActivity implements
 
     @Override
     public void onEncodeStart() {
-        showProgress("", getString(R.string.video_preparing));
+        showProgress(getString(R.string.video_preparing));
     }
 
     @Override
@@ -459,13 +460,11 @@ public class MediaRecorderActivity extends BaseActivity implements
         initSurfaceView();
     }
 
-    protected ProgressDialog mProgressDialog;
-
-    public ProgressDialog showProgress(String title, String message) {
-        return showProgress(title, message, -1);
+    public ProgressDialog showProgress(String message) {
+        return showProgress(message, -1);
     }
 
-    public ProgressDialog showProgress(String title, String message, int theme) {
+    public ProgressDialog showProgress(String message, int theme) {
         if (mProgressDialog == null) {
             if (theme > 0)
                 mProgressDialog = new ProgressDialog(this, theme);
@@ -478,9 +477,6 @@ public class MediaRecorderActivity extends BaseActivity implements
             mProgressDialog.setIndeterminate(true);
         }
 
-        if (!StringUtils.isEmpty(title)) {
-            mProgressDialog.setTitle(title);
-        }
         mProgressDialog.setMessage(message);
         mProgressDialog.show();
         return mProgressDialog;

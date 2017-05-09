@@ -1,6 +1,7 @@
 package com.ben.yjh.babycare.main.event;
 
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -19,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
 
 import com.ben.yjh.babycare.R;
@@ -48,6 +50,7 @@ public class VideoPlayerActivity extends BaseActivity implements
     private View mLoading;
     private String mVideoUrl;
     private boolean mNeedResume;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,12 +66,12 @@ public class VideoPlayerActivity extends BaseActivity implements
             return;
         }
 
+        mPlayerStatus = findViewById(R.id.iv_pause);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         mVideoView = (SurfaceVideoView) findViewById(R.id.videoView);
         mVideoView.requestLayout();
-
-        mPlayerStatus = findViewById(R.id.iv_pause);
+        mVideoView.setOnClickListener(this);
         mLoading = findViewById(R.id.progressBar);
         mVideoView.setOnPreparedListener(this);
         mVideoView.setOnPlayStateListener(this);
@@ -107,12 +110,13 @@ public class VideoPlayerActivity extends BaseActivity implements
                 base64Images, new HttpResponseInterface<Event>() {
                     @Override
                     public void onStart() {
-
+                        showProgress(getString(R.string.posting), -1);
                     }
 
                     @Override
                     public void onSuccess(Event classOfT) {
                         Log.d("", "");
+                        hideProgress();
                         classOfT.save();
                         Intent intent = getIntent();
                         intent.putExtra(Constants.EVENT, classOfT);
@@ -122,43 +126,73 @@ public class VideoPlayerActivity extends BaseActivity implements
 
                     @Override
                     public void onFailure(HttpBaseResult result) {
+                        hideProgress();
                     }
 
                     @Override
                     public void onHttpError(String error) {
+                        hideProgress();
                     }
                 });
+    }
+
+    public ProgressDialog showProgress(String message, int theme) {
+        if (mProgressDialog == null) {
+            if (theme > 0)
+                mProgressDialog = new ProgressDialog(this, theme);
+            else
+                mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            mProgressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            mProgressDialog.setCanceledOnTouchOutside(false);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.setMessage(message);
+        mProgressDialog.show();
+        return mProgressDialog;
+    }
+
+    public void hideProgress() {
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        hideProgress();
+        mProgressDialog = null;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (mVideoView != null && mNeedResume) {
+        if (mNeedResume) {
             mNeedResume = false;
-            if (mVideoView.isRelease())
+            if (mVideoView.isRelease()) {
                 mVideoView.reOpen();
-            else
+            } else {
                 mVideoView.start();
+            }
         }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (mVideoView != null) {
-            if (mVideoView.isPlaying()) {
-                mNeedResume = true;
-                mVideoView.pause();
-            }
+        if (mVideoView.isPlaying()) {
+            mNeedResume = true;
+            mVideoView.pause();
         }
     }
 
     @Override
     protected void onDestroy() {
-        if (mVideoView != null) {
-            mVideoView.release();
-            mVideoView = null;
-        }
+        mVideoView.release();
+        mVideoView = null;
         super.onDestroy();
     }
 
@@ -200,9 +234,17 @@ public class VideoPlayerActivity extends BaseActivity implements
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.iv_pause:
             case R.id.root:
                 finish();
+                break;
+            case R.id.iv_pause:
+            case R.id.videoView:
+                if (mVideoView.isPlaying()) {
+                    mNeedResume = true;
+                    mVideoView.pause();
+                } else {
+                    mVideoView.start();
+                }
                 break;
         }
     }
