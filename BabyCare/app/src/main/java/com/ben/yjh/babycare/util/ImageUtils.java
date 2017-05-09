@@ -160,40 +160,6 @@ public class ImageUtils {
         }
     }
 
-    public static String getBase64FromBitmap(Context context, String url) {
-        Bitmap bitmap;
-        try {
-            bitmap = BitmapFactory.decodeStream(
-                    context.getContentResolver().openInputStream(Uri.parse(url)));
-        } catch (Exception e) {
-            return null;
-        }
-        if (bitmap != null) {
-            ByteArrayOutputStream out = null;
-            try {
-                out = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
-                out.flush();
-                out.close();
-                byte[] imgBytes = out.toByteArray();
-                return Base64.encodeToString(imgBytes, Base64.DEFAULT);
-            } catch (Exception e) {
-                return null;
-            } finally {
-                try {
-                    if (out != null) {
-                        out.flush();
-                        out.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            return "";
-        }
-    }
-
     public static String getBase64FromFile(String path) {
         File tempFile = new File(path);
 

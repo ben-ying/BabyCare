@@ -68,7 +68,7 @@ public class AddEventActivity extends BaseActivity {
                     @Override
                     public void onSuccess(Event classOfT) {
                         Log.d("", "");
-//                        classOfT.setImage1(mImageUrl);
+                        classOfT.setImage1(mImageUrl);
                         classOfT.save();
                         Intent intent = getIntent();
                         intent.putExtra(Constants.EVENT, classOfT);
@@ -90,7 +90,8 @@ public class AddEventActivity extends BaseActivity {
         if (intent != null) {
             mImageUrl = intent.getStringExtra(Constants.IMAGE_URL);
             if (mImageUrl != null) {
-                MyApplication.getInstance(this).displayImage(Uri.fromFile(new File(mImageUrl)).toString(),
+                MyApplication.getInstance(this).displayImage(
+                        Uri.fromFile(new File(mImageUrl)).toString(),
                         mImageView, ImageUtils.getEventImageOptions(
                                 AddEventActivity.this), true, new ImageLoadingListener() {
                             @Override
