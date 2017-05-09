@@ -22,7 +22,13 @@
     <color name="camera_background_color">#c6c6c6</color>
     <color name="unchecked_icon_color">#888888</color>
     <color name="checked_icon_color">#FF0000</color>
+
+    <!--video-->
     <color name="video_recorder_bg_color">#222222</color>
     <color name="video_text_color">#888888</color>
-
+    <color name="video_bg">#2c2c2c</color>
+    <color name="video_progress_split">#005084</color>
+    <color name="video_progress_delete">#f68b2b</color>
+    <color name="video_progress_overflow">#1b5d89</color>
+    <color name="video_progress_three">@color/colorPrimaryDark</color>
 </resources>

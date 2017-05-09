@@ -41,5 +41,6 @@
     <dimen name="status_bar_height">24dp</dimen>
     <dimen name="drawable_padding">3dp</dimen>
     <dimen name="action_padding">5dp</dimen>
+    <dimen name="video_progress_size">5dp</dimen>
 
 </resources>

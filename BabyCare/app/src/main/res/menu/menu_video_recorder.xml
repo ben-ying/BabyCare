@@ -15,6 +15,6 @@
     <item
         android:id="@+id/title_next_step"
         android:title="@string/next_step"
-        android:icon="@mipmap/ic_done_white_24dp"
+        android:icon="@drawable/ic_done_24dp"
         app:showAsAction="ifRoom" />
 </menu>

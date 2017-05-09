@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.util.Constants;
+import com.ben.yjh.babycare.widget.VideoProgressView;
 import com.yixia.videoeditor.adapter.UtilityAdapter;
 
 import java.io.File;
@@ -39,7 +40,6 @@ import mabeijianxi.camera.model.MediaRecorderConfig;
 import mabeijianxi.camera.util.DeviceUtils;
 import mabeijianxi.camera.util.FileUtils;
 import mabeijianxi.camera.util.StringUtils;
-import mabeijianxi.camera.views.ProgressView;
 
 import static mabeijianxi.camera.MediaRecorderBase.SMALL_VIDEO_WIDTH;
 import static mabeijianxi.camera.MediaRecorderBase.compressConfig;
@@ -54,7 +54,7 @@ public class MediaRecorderActivity extends BaseActivity implements
     private Button mRecordController;
     private RelativeLayout mBottomLayout;
     private SurfaceView mSurfaceView;
-    private ProgressView mProgressView;
+    private VideoProgressView mProgressView;
     private MediaRecorderBase mMediaRecorder;
     private MediaObject mMediaObject;
     private volatile boolean mPressedStatus;
@@ -76,7 +76,7 @@ public class MediaRecorderActivity extends BaseActivity implements
             finish();
         }
         mSurfaceView = (SurfaceView) findViewById(R.id.recordPreview);
-        mProgressView = (ProgressView) findViewById(R.id.recordProgress);
+        mProgressView = (VideoProgressView) findViewById(R.id.recordProgress);
         mRecordDelete = (CheckedTextView) findViewById(R.id.tv_delete);
         mRecordController = (Button) findViewById(R.id.btn_controller);
         mBottomLayout = (RelativeLayout) findViewById(R.id.rl_bottom);

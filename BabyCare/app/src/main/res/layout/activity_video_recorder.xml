@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     android:background="@color/video_recorder_bg_color">
 
-    <include layout="@layout/toolbar_video" />
+    <include layout="@layout/app_bar_voide_layout" />
 
-    <mabeijianxi.camera.views.ProgressView
+    <com.ben.yjh.babycare.widget.VideoProgressView
         android:id="@+id/recordProgress"
         android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:layout_below="@+id/toolbar" />
+        android:layout_height="@dimen/video_progress_size"
+        android:layout_below="@+id/app_bar_layout" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -46,10 +46,10 @@
             android:layout_width="108dp"
             android:layout_height="108dp"
             android:layout_centerInParent="true"
-            android:background="@drawable/small_video_shoot"
+            android:background="@drawable/video_shoot"
             android:gravity="center"
             android:text="@string/hold_to_record"
-            android:textColor="@color/camera_progress_three"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="16sp" />
     </RelativeLayout>
 
