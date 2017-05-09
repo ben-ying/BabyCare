@@ -43,7 +43,7 @@ from babycare.constants import MSG_INVALID_PASSWORD
 from babycare.models import BabyUser, Verify, Event
 from babycare.serializers.baby import BabyUserSerializer
 from babycare.serializers.event import EventSerializer
-from babycare.utils import json_response, invalid_token_response, upload_image_to_oss, send_email, get_user_by_token, get_user, \
+from babycare.utils import json_response, invalid_token_response, upload_file_to_oss, send_email, get_user_by_token, get_user, \
     CustomModelViewSet, save_error_log
 from babycare.utils import simple_json_response
 
@@ -118,7 +118,7 @@ class UserViewSet(CustomModelViewSet):
                 response_data['token'] = Token.objects.create(user=user).key
                 if base64:
                     image_name = username + time.strftime('%Y%m%d%H%M%S') + PROFILE_FOOTER_IMAGE
-                    response_data['profile'] = upload_image_to_oss(image_name, base64)
+                    response_data['profile'] = upload_file_to_oss(image_name, base64)
                     baby_user = BabyUser.objects.get(user=user)
                     baby_user.profile = response_data['profile']
                     baby_user.locale = response_data['locale']
@@ -191,7 +191,7 @@ class UserViewSet(CustomModelViewSet):
                         baby.hobbies = hobbies
                     if base64:
                         image_name = user.username + time.strftime('%Y%m%d%H%M%S') + PROFILE_FOOTER_IMAGE
-                        profile = upload_image_to_oss(image_name, base64)
+                        profile = upload_file_to_oss(image_name, base64)
                         baby.profile = profile
                     baby.save()
 

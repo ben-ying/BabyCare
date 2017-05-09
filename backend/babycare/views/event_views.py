@@ -9,13 +9,14 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 
 from babycare.constants import CODE_EMPTY_EVENT, MSG_EMPTY_EVENT, EVENT_FOOTER_IMAGE, \
-    MSG_GET_EVENTS_SUCCESS, MSG_DELETE_EVENT_SUCCESS, CODE_NO_CONTENT, MSG_204
+    MSG_GET_EVENTS_SUCCESS, MSG_DELETE_EVENT_SUCCESS, CODE_NO_CONTENT, MSG_204, TYPE_IMAGE, TYPE_VIDEO, \
+    EVENT_FOOTER_VIDEO, EVENT_FOOTER_VIDEO_THUMBNAIL
 from babycare.constants import CODE_SUCCESS, MSG_POST_EVENT_SUCCESS
 from babycare.models import BabyUser, Like
 from babycare.models import Event
 from babycare.serializers.event import EventSerializer
 from babycare.serializers.like import LikeSerializer
-from babycare.utils import json_response, invalid_token_response, get_user_by_token, CustomModelViewSet, upload_image_to_oss, \
+from babycare.utils import json_response, invalid_token_response, get_user_by_token, CustomModelViewSet, upload_file_to_oss, \
     save_error_log
 from babycare.utils import simple_json_response
 
@@ -56,10 +57,11 @@ class EventViewSet(CustomModelViewSet):
             token = request.data.get('token')
             title = request.data.get('title')
             content = request.data.get('content')
-            base64_images = request.data.get('base64_images')
+            base64s = request.data.get('base64s')
+            type = request.data.get('type', 0)
             user = get_user_by_token(token)
 
-            if not title and not content and not base64_images:
+            if not title and not content and not base64s:
                 return simple_json_response(CODE_EMPTY_EVENT, MSG_EMPTY_EVENT)
             if user:
                 event = Event()
@@ -69,12 +71,21 @@ class EventViewSet(CustomModelViewSet):
                     event.title = title
                 if content:
                     event.content = content
-                if base64_images:
+                if base64s:
                     # only one image for now
-                    for image in base64_images:
-                        image_name = user.username + time.strftime('%Y%m%d%H%M%S') + EVENT_FOOTER_IMAGE
-                        image = upload_image_to_oss(image_name, image)
-                        event.image1 = image
+                    if type == TYPE_IMAGE:
+                        for image in base64s:
+                            image_name = user.username + time.strftime('%Y%m%d%H%M%S') + EVENT_FOOTER_IMAGE
+                            image = upload_file_to_oss(image_name, image, type)
+                            event.image1 = image
+                    elif type == TYPE_VIDEO:
+                        for video in base64s:
+                            video_name = user.username + time.strftime('%Y%m%d%H%M%S') + EVENT_FOOTER_VIDEO
+                            video = upload_file_to_oss(video_name, video, type)
+                            event.video = video
+                            image_name = user.username + time.strftime('%Y%m%d%H%M%S') + EVENT_FOOTER_VIDEO_THUMBNAIL
+                            image = upload_file_to_oss(image_name, request.data.get('video_thumbnail'), TYPE_IMAGE)
+                            event.video_thumbnail = image
                 event.save()
                 response = EventSerializer(event).data
                 return json_response(response, CODE_SUCCESS, MSG_POST_EVENT_SUCCESS)

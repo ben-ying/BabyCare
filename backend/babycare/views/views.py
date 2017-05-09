@@ -9,7 +9,7 @@ from rest_framework.decorators import api_view
 from babycare.constants import CODE_SUCCESS, FEEDBACK_FOOTER_IMAGE
 from babycare.constants import MSG_SEND_FEEDBACK_SUCCESS
 from babycare.models import Feedback, BabyUser
-from babycare.utils import invalid_token_response, get_user_by_token, save_error_log, upload_image_to_oss
+from babycare.utils import invalid_token_response, get_user_by_token, save_error_log, upload_file_to_oss
 from babycare.utils import simple_json_response
 
 
@@ -31,7 +31,7 @@ def send_feedback(request):
                 for image in base64_images:
                     i += 1
                     image_name = user.username + time.strftime('%Y%m%d%H%M%S') + FEEDBACK_FOOTER_IMAGE
-                    image = upload_image_to_oss(image_name, image)
+                    image = upload_file_to_oss(image_name, image)
                     if i == 1:
                         feedback.image1 = image
                     if i == 2:

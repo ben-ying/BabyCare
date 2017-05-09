@@ -7,6 +7,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -25,7 +26,10 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class ImageUtils {
 
@@ -154,6 +158,64 @@ public class ImageUtils {
         } else {
             return "";
         }
+    }
+
+    public static String getBase64FromBitmap(Context context, String url) {
+        Bitmap bitmap;
+        try {
+            bitmap = BitmapFactory.decodeStream(
+                    context.getContentResolver().openInputStream(Uri.parse(url)));
+        } catch (Exception e) {
+            return null;
+        }
+        if (bitmap != null) {
+            ByteArrayOutputStream out = null;
+            try {
+                out = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+                out.flush();
+                out.close();
+                byte[] imgBytes = out.toByteArray();
+                return Base64.encodeToString(imgBytes, Base64.DEFAULT);
+            } catch (Exception e) {
+                return null;
+            } finally {
+                try {
+                    if (out != null) {
+                        out.flush();
+                        out.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            return "";
+        }
+    }
+
+    public static String getBase64FromFile(String path) {
+        File tempFile = new File(path);
+
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(tempFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        byte[] buffer = new byte[10240];
+        int bytesRead;
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        try {
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                output.write(buffer, 0, bytesRead);
+            }
+        } catch (IOException|NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        return Base64.encodeToString(output.toByteArray(), Base64.DEFAULT);
     }
 
     public static Drawable scaleImage(Context context, Drawable image, float scaleFactor) {

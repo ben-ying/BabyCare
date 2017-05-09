@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +24,16 @@ import android.widget.TextView;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
+import com.ben.yjh.babycare.http.EventTaskHandler;
+import com.ben.yjh.babycare.http.HttpResponseInterface;
+import com.ben.yjh.babycare.model.Event;
+import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.Constants;
+import com.ben.yjh.babycare.util.ImageUtils;
+import com.ben.yjh.babycare.util.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import mabeijianxi.camera.views.SurfaceVideoView;
 
@@ -44,6 +54,7 @@ public class PostVideoActivity extends BaseActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_text_edit_activity);
 
+        Utils.changeStatusBarColor(this, R.color.black);
         initToolbar(0);
         mContentEditText = (EditText) findViewById(R.id.et_send_content);
         mVideoView = (SurfaceVideoView) findViewById(R.id.videoView);
@@ -60,7 +71,7 @@ public class PostVideoActivity extends BaseActivity implements View.OnClickListe
         mVideoThumbnailUrl = intent.getStringExtra(Constants.VIDEO_THUMBNAIL);
         Bitmap bitmap = BitmapFactory.decodeFile(mVideoThumbnailUrl);
         mContentEditText.setHint(R.string.video_what_you_think);
-
+        mContentEditText.requestFocus();
         mContentEditText.setOnClickListener(this);
     }
 
@@ -77,14 +88,45 @@ public class PostVideoActivity extends BaseActivity implements View.OnClickListe
                 cancelEvent();
                 break;
             case R.id.title_post:
-                // TODO: 5/8/17
-                setResult(RESULT_OK);
-                finish();
+                postEventTask();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void postEventTask() {
+        List<String> base64Images = new ArrayList<>();
+        String thumbnail = ImageUtils.getBase64FromFile(mVideoThumbnailUrl);
+        base64Images.add(ImageUtils.getBase64FromFile(mVideoUrl));
+        new EventTaskHandler(this, user.getToken()).addEvent(user.getUserId(),
+                "", mContentEditText.getText().toString(), thumbnail,
+                Event.TYPE_VIDEO, base64Images, new HttpResponseInterface<Event>() {
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Event classOfT) {
+                        Log.d("", "");
+                        classOfT.save();
+                        Intent intent = getIntent();
+                        intent.putExtra(Constants.EVENT, classOfT);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(HttpBaseResult result) {
+                    }
+
+                    @Override
+                    public void onHttpError(String error) {
+                    }
+                });
+    }
+
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
@@ -168,11 +210,25 @@ public class PostVideoActivity extends BaseActivity implements View.OnClickListe
             case R.id.videoView:
                 Intent intent = new Intent(this, VideoPlayerActivity.class);
                 intent.putExtra(Constants.VIDEO_URL, mVideoUrl);
-                startActivity(intent);
+                intent.putExtra(Constants.VIDEO_THUMBNAIL, mVideoThumbnailUrl);
+                intent.putExtra(Constants.VIDEO_CONTENT, mContentEditText.getText().toString());
+                startActivityForResult(intent, Constants.SHOW_VIDEO_REQUEST_CODE);
                 break;
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == Constants.SHOW_VIDEO_REQUEST_CODE) {
+                Intent intent = getIntent();
+                intent.putExtra(Constants.EVENT, data.getSerializableExtra(Constants.EVENT));
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        }
+    }
 
     @Override
     public void onBackPressed() {

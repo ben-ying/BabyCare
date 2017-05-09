@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.util.Constants;
+import com.ben.yjh.babycare.util.Utils;
 import com.ben.yjh.babycare.widget.VideoProgressView;
 import com.yixia.videoeditor.adapter.UtilityAdapter;
 
@@ -68,6 +69,7 @@ public class MediaRecorderActivity extends BaseActivity implements
         setContentView(R.layout.activity_video_recorder);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        Utils.changeStatusBarColor(this, R.color.black);
         initToolbar(0);
 
         Intent intent = getIntent();

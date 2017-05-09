@@ -1,6 +1,7 @@
 package com.ben.yjh.babycare.main.event;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +23,16 @@ import android.view.WindowManager;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
+import com.ben.yjh.babycare.http.EventTaskHandler;
+import com.ben.yjh.babycare.http.HttpResponseInterface;
+import com.ben.yjh.babycare.model.Event;
+import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.Constants;
+import com.ben.yjh.babycare.util.ImageUtils;
+import com.ben.yjh.babycare.util.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import mabeijianxi.camera.util.StringUtils;
 import mabeijianxi.camera.views.SurfaceVideoView;
@@ -44,6 +55,7 @@ public class VideoPlayerActivity extends BaseActivity implements
         setContentView(R.layout.activity_video_player);
         // keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        Utils.changeStatusBarColor(this, R.color.black);
         initToolbar(0);
         mVideoUrl = getIntent().getStringExtra(Constants.VIDEO_URL);
         if (StringUtils.isEmpty(mVideoUrl)) {
@@ -78,13 +90,44 @@ public class VideoPlayerActivity extends BaseActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.title_post:
-                // TODO: 5/8/17
-                setResult(RESULT_OK);
-                finish();
+                postEventTask();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void postEventTask() {
+        List<String> base64Images = new ArrayList<>();
+        base64Images.add(ImageUtils.getBase64FromFile(mVideoUrl));
+        String thumbnail = ImageUtils.getBase64FromFile(
+                getIntent().getStringExtra(Constants.VIDEO_THUMBNAIL));
+        new EventTaskHandler(this, user.getToken()).addEvent(user.getUserId(), "",
+                getIntent().getStringExtra(Constants.VIDEO_CONTENT), thumbnail, Event.TYPE_VIDEO,
+                base64Images, new HttpResponseInterface<Event>() {
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Event classOfT) {
+                        Log.d("", "");
+                        classOfT.save();
+                        Intent intent = getIntent();
+                        intent.putExtra(Constants.EVENT, classOfT);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(HttpBaseResult result) {
+                    }
+
+                    @Override
+                    public void onHttpError(String error) {
+                    }
+                });
     }
 
     @Override

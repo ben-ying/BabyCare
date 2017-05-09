@@ -21,6 +21,7 @@ public class Constants {
     public static final String AVIARY_API_KEY_SECRET = "a9a692d4-2bf2-4927-9dc3-2cef97ac8a42";
     public static final String VIDEO_DIR = "/small-video-recorder/";
     public static final String VIDEO_URL = "video_url";
+    public static final String VIDEO_CONTENT = "video_content";
     public static final String VIDEO_CONFIG = "video_config";
     public static final String VIDEO_TEMP_DIR = "video_temp_dir";
     public static final String VIDEO_THUMBNAIL = "video_thumbnail";
@@ -40,6 +41,7 @@ public class Constants {
     public static final int GALLERY_REQUEST_CODE = 110;
     public static final int VIDEO_REQUEST_CODE = 111;
     public static final int SHARE_APP_REQUEST_CODE = 112;
+    public static final int SHOW_VIDEO_REQUEST_CODE = 113;
 
 
     public static final int VIDEO_DEFAULT_WIDTH = 480;

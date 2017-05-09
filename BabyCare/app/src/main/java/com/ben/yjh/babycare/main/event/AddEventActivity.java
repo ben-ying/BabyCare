@@ -58,8 +58,8 @@ public class AddEventActivity extends BaseActivity {
         if (mBase64Image != null) {
             base64Images.add(mBase64Image);
         }
-        new EventTaskHandler(this, user.getToken()).addEvent(user.getUserId(),
-                mTitle, mContent, base64Images, new HttpResponseInterface<Event>() {
+        new EventTaskHandler(this, user.getToken()).addEvent(user.getUserId(), mTitle, mContent,
+                null, Event.TYPE_IMAGE, base64Images, new HttpResponseInterface<Event>() {
                     @Override
                     public void onStart() {
 

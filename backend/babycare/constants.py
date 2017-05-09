@@ -7,8 +7,11 @@ from django.utils.translation import ugettext_lazy as _
 MIN_PASSWORD_LEN = 6
 VERIFY_CODE_EXPIRED_TIME = 5 * 60 # 5 minutes
 TEMP_IMAGE = os.path.join(os.path.dirname(__file__), 'temp.jpg')
+TEMP_VIDEO = os.path.join(os.path.dirname(__file__), 'temp.mp4')
 PROFILE_FOOTER_IMAGE = '_profile.jpg'
 EVENT_FOOTER_IMAGE = '_event.jpg'
+EVENT_FOOTER_VIDEO = '_event.mp4'
+EVENT_FOOTER_VIDEO_THUMBNAIL = '_event_video_thumbnail.jpg'
 FEEDBACK_FOOTER_IMAGE = '_feedback.jpg'
 
 # register & user
@@ -32,6 +35,8 @@ CODE_USER_NOT_EXISTS = 1216
 
 # event
 CODE_EMPTY_EVENT = 1301
+TYPE_IMAGE = 0
+TYPE_VIDEO = 1
 # comment
 CODE_EMPTY_COMMENT = 1401
 

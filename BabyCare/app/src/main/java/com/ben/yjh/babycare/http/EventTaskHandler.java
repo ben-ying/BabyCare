@@ -53,20 +53,22 @@ public class EventTaskHandler extends BaseTaskHandler {
         }
     }
 
-    public void addEvent(int userId, String title, String content,
-                         List<String> base64Images, HttpResponseInterface<Event> httpResponseInterface) {
+    public void addEvent(int userId, String title, String content, String videoThumbnail, int type,
+                         List<String> base64s, HttpResponseInterface<Event> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
             bodyObject.put("user_id", userId);
             bodyObject.put("title", title);
             bodyObject.put("content", content);
+            bodyObject.put("video_thumbnail", videoThumbnail);
             bodyObject.put("token", mToken);
-            if (base64Images.size() > 0) {
+            bodyObject.put("type", type);
+            if (base64s.size() > 0) {
                 JSONArray jsonArray = new JSONArray();
-                for (String base64 : base64Images) {
+                for (String base64 : base64s) {
                     jsonArray.put(base64);
                 }
-                bodyObject.put("base64_images", jsonArray);
+                bodyObject.put("base64s", jsonArray);
             }
             new HttpPostTask(context).startTask(URL_EVENTS, Request.Method.POST,
                     bodyObject, Event.class, true, httpResponseInterface);

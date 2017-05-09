@@ -16,7 +16,7 @@ from rest_framework.authtoken.models import Token
 from babycare.models import Verify
 from backend.settings import OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET_NAME, OSS_ENDPOINT
 from constants import CODE_SUCCESS, CODE_INVALID_TOKEN, MSG_401, TEMP_IMAGE, PASSWORD_VERIFY_CODE_EMAIL_SUBJECT, PASSWORD_VERIFY_CODE_EMAIL_CONTENT, MSG_402, CODE_EXCEPTION, CODE_DUPLICATE, \
-    MSG_403
+    MSG_403, TYPE_IMAGE, TEMP_VIDEO
 from constants import MIN_PASSWORD_LEN
 
 
@@ -60,8 +60,9 @@ def get_user(email):
         return None
 
 
-def upload_image_to_oss(name, base64):
-    with open(TEMP_IMAGE, "wb") as fh:
+def upload_file_to_oss(name, base64, file_type=TYPE_IMAGE):
+    temp_file = TEMP_IMAGE if file_type == TYPE_IMAGE else TEMP_VIDEO
+    with open(temp_file, "wb") as fh:
         fh.write(base64.decode('base64'))
         fh.close()
 
@@ -70,8 +71,8 @@ def upload_image_to_oss(name, base64):
 
         bucket = oss2.Bucket(oss2.Auth(OSS_ACCESS_KEY_ID,
                                        OSS_ACCESS_KEY_SECRET), OSS_ENDPOINT, OSS_BUCKET_NAME)
-        bucket.put_object_from_file(name, TEMP_IMAGE)
-        os.remove(TEMP_IMAGE)
+        bucket.put_object_from_file(name, temp_file)
+        os.remove(temp_file)
         return "https://" + OSS_BUCKET_NAME + "." + OSS_ENDPOINT + "/" + name
 
 

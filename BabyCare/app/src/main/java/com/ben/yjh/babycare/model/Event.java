@@ -34,6 +34,9 @@ public class Event extends SugarRecord implements Serializable {
     @Ignore
     @SerializedName("comments") List<EventComment> eventComments;
 
+    public static final int TYPE_IMAGE = 0;
+    public static final int TYPE_VIDEO = 1;
+
     public int getType() {
         return type;
     }
