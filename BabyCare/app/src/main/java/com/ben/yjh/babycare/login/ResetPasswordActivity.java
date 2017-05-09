@@ -67,10 +67,7 @@ public class ResetPasswordActivity extends BaseAllActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        initToolbar(0);
         mIsResetPassword = getIntent().getBooleanExtra(RESET_PASSWORD, false);
         mEmail = getIntent().getStringExtra(Constants.EMAIL);
         setTitle(mIsResetPassword ? R.string.reset_password : R.string.forgot_password_title);

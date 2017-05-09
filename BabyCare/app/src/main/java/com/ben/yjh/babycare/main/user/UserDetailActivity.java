@@ -49,11 +49,7 @@ public class UserDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        initToolbar(0);
         mUserId = getIntent().getIntExtra(Constants.USER_ID, Constants.INVALID_VALUE);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         List<BaseFragment> fragments = new ArrayList<>();
@@ -107,7 +103,8 @@ public class UserDetailActivity extends BaseActivity {
                                                     .setVisibility(View.GONE);
                                         } else {
                                             ((CollapsingToolbarLayout) findViewById(
-                                                    R.id.toolbar_layout)).setTitle("");
+                                                    R.id.toolbar_layout)).setTitle(
+                                                            getString(R.string.empty));
                                             findViewById(R.id.profile_layout)
                                                     .setVisibility(View.VISIBLE);
                                             findViewById(R.id.profile_layout).setAlpha(

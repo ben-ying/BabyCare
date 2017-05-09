@@ -47,9 +47,7 @@ public class LoginActivity extends BaseAllActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        setTitle(R.string.login);
+        initToolbar(0, R.string.login);
         mUsername = getIntent().getStringExtra(Constants.USERNAME);
         mPassword = getIntent().getStringExtra(Constants.PASSWORD);
         findViewById(R.id.btn_login).setOnClickListener(this);
@@ -102,7 +100,7 @@ public class LoginActivity extends BaseAllActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mUsernameEditText.clearFocus();
-                mPasswordEditText.setText("");
+                mPasswordEditText.setText(R.string.empty);
                 mPasswordEditText.requestFocus();
                 SystemUtils.showKeyboard(LoginActivity.this, mPasswordEditText);
 
@@ -305,7 +303,7 @@ public class LoginActivity extends BaseAllActivity {
                 }
                 mUsernameEditText.setText(userHistories.get(mUserIndex).getUsername());
                 mUsernameEditText.clearFocus();
-                mPasswordEditText.setText("");
+                mPasswordEditText.setText(R.string.empty);
                 mPasswordEditText.requestFocus();
             }
         }

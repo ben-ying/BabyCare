@@ -136,6 +136,8 @@
     <string name="send">发送</string>
     <string name="media_type">发布类型</string>
 
+    <string name="empty"></string>
+
     <string name="title_activity_fullscreen">FullscreenActivity</string>
 
 </resources>

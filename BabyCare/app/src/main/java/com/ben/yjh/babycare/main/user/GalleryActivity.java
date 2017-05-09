@@ -31,11 +31,7 @@ public class GalleryActivity extends BaseActivity implements GalleryAdapter.Gall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.select_image);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        initToolbar(R.string.select_image);
         GridView gridView = (GridView) findViewById(R.id.gridView);
         String[] columns1 = {MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA};
         String orderBy = MediaStore.Images.Media._ID;

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/video_recorder_bg_color" >
 
-    <include layout="@layout/toolbar_video"  />
+    <include layout="@layout/app_bar_voide_layout"  />
     
     <mabeijianxi.camera.views.SurfaceVideoView
         android:id="@+id/videoView"

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -67,12 +68,7 @@ public class MediaRecorderActivity extends BaseActivity implements
         setContentView(R.layout.activity_video_recorder);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_clear_white_24dp);
+        initToolbar(0);
 
         Intent intent = getIntent();
         mConfig = intent.getParcelableExtra(Constants.VIDEO_CONFIG);
@@ -149,9 +145,6 @@ public class MediaRecorderActivity extends BaseActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                break;
             case R.id.title_camera_swith:
                 if (mIsFlashMode) {
                     if (mMediaRecorder != null) {

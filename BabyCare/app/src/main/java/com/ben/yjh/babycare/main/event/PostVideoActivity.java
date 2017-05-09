@@ -42,11 +42,7 @@ public class PostVideoActivity extends BaseActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_text_edit_activity);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        initToolbar(0);
         mContentEditText = (EditText) findViewById(R.id.et_send_content);
         mVideoView = (SurfaceVideoView) findViewById(R.id.videoView);
         mVideoView.requestLayout();

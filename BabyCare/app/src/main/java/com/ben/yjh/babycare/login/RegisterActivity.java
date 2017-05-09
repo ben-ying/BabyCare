@@ -52,11 +52,7 @@ public class RegisterActivity extends BaseAllActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        setTitle(R.string.register);
+        initToolbar(R.string.register);
         mUsernameEditText = (EditText) findViewById(R.id.et_username);
         mBabyNameEditText = (EditText) findViewById(R.id.et_baby_name);
         mEmailEditText = (EditText) findViewById(R.id.et_email);

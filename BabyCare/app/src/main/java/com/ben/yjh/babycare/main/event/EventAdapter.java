@@ -98,7 +98,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         if (event.getUserId() == mUser.getUserId()) {
             holder.commonRadioButton.setCompoundDrawablesWithIntrinsicBounds(
                     mContext.getResources().getDrawable(R.drawable.btn_delete), null, null, null);
-            holder.commonRadioButton.setText("");
+            holder.commonRadioButton.setText(R.string.empty);
         } else {
             holder.commonRadioButton.setCompoundDrawablesWithIntrinsicBounds(
                     mContext.getResources().getDrawable(R.drawable.btn_like), null, null, null);
@@ -228,7 +228,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         if (likes.size() > 0) {
             radioButton.setText(String.valueOf(likes.size()));
         } else {
-            radioButton.setText("");
+            radioButton.setText(R.string.empty);
         }
     }
 

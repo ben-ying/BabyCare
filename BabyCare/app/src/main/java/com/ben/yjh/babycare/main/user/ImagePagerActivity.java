@@ -55,8 +55,7 @@ public class ImagePagerActivity extends BaseActivity {
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 
         mRootView = findViewById(R.id.content_layout);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        initToolbar(0, 0);
 
         mCurrentUrl = getIntent().getStringExtra(Constants.IMAGE_URL);
         mUrls = getIntent().getStringArrayListExtra(Constants.IMAGE_URLS);

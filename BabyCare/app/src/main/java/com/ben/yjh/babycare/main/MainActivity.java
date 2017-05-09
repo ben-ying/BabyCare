@@ -59,9 +59,7 @@ public class MainActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+        initToolbar(0, 0);
         List<BaseFragment> fragments = new ArrayList<>();
         mEventListFragment = EventListFragment.newInstance(user.getUserId());
         fragments.add(mEventListFragment);

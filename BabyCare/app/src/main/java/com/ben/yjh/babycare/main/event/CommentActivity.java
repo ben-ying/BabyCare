@@ -59,11 +59,7 @@ public class CommentActivity extends BaseActivity implements CommentAdapter.Comm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.comment);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        initToolbar(R.string.comment);
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mFab.setOnClickListener(this);
         mSendButton = (ImageButton) findViewById(R.id.ib_send);
@@ -294,7 +290,7 @@ public class CommentActivity extends BaseActivity implements CommentAdapter.Comm
                     public void onSuccess(EventComment classOfT) {
                         classOfT.save();
                         mCommentAdapter.addData(classOfT);
-                        mCommentEditText.setText("");
+                        mCommentEditText.setText(R.string.empty);
                         Utils.hideSoftKeyboard(CommentActivity.this);
                     }
 
@@ -367,7 +363,7 @@ public class CommentActivity extends BaseActivity implements CommentAdapter.Comm
             case R.id.title_cancel_reply:
                 mReplyComment = null;
                 item.setVisible(false);
-                mCommentEditText.setText("");
+                mCommentEditText.setText(R.string.empty);
                 mCommentEditText.setHint(R.string.add_comment);
                 return true;
             case R.id.title_add_comment:
@@ -430,7 +426,7 @@ public class CommentActivity extends BaseActivity implements CommentAdapter.Comm
             mReplyComment = comment;
             mCommentEditText.setHint(String.format(
                     getString(R.string.reply_user), comment.getUsername(), ""));
-            mCommentEditText.setText("");
+            mCommentEditText.setText(R.string.empty);
             showKeyboard();
         }
     }

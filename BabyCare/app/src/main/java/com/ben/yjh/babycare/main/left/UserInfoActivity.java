@@ -56,11 +56,7 @@ public class UserInfoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        initToolbar(0);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         List<BaseFragment> fragments = new ArrayList<>();
         mPersonalInfoFragment = PersonalInfoFragment.newInstance();
@@ -92,7 +88,8 @@ public class UserInfoActivity extends BaseActivity {
                             R.id.toolbar_layout)).setTitle(user.getBabyName());
                     findViewById(R.id.profile_layout).setVisibility(View.GONE);
                 } else {
-                    ((CollapsingToolbarLayout) findViewById(R.id.toolbar_layout)).setTitle("");
+                    ((CollapsingToolbarLayout) findViewById(
+                            R.id.toolbar_layout)).setTitle(getString(R.string.empty));
                     findViewById(R.id.profile_layout).setVisibility(View.VISIBLE);
                     findViewById(R.id.profile_layout).setAlpha(
                             (scrollRange - Math.abs(verticalOffset) - toolbar.getHeight())

@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewConfiguration;
 
@@ -38,11 +39,32 @@ public abstract class BaseAllActivity extends AppCompatActivity implements OnCli
         super.onCreate(savedInstanceState);
     }
 
-//    public void setStatusBarMargin(int resId) {
-//        View view = findViewById(resId);
-//        view.setPadding(view.getPaddingLeft(), getStatusBarHeight(),
-//                view.getPaddingRight(), view.getPaddingBottom());
-//    }
+    public void initToolbar(int navigationId, int title) {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            if (title != 0) {
+                getSupportActionBar().setTitle(title);
+            } else {
+                getSupportActionBar().setTitle(R.string.empty);
+            }
+        }
+
+        if (navigationId != 0) {
+            toolbar.setNavigationOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+            toolbar.setNavigationIcon(navigationId);
+        }
+    }
+
+    public void initToolbar(int title) {
+        initToolbar(R.mipmap.ic_arrow_back_white_24dp, title);
+    }
 
     public boolean verifyStoragePermissions() {
         int permission = ActivityCompat.checkSelfPermission(

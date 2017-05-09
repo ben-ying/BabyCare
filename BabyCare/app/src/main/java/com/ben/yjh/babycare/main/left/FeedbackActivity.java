@@ -47,12 +47,7 @@ public class FeedbackActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.feedback);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+        initToolbar(R.string.feedback);
         findViewById(R.id.btn_send).setOnClickListener(this);
         mDescriptionEditText = (EditText) findViewById(R.id.et_feedback);
         mImageUrls = new ArrayList<>();

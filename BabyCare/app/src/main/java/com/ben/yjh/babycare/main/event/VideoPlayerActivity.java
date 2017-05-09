@@ -42,12 +42,7 @@ public class VideoPlayerActivity extends BaseActivity implements
         setContentView(R.layout.activity_video_player);
         // keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        initToolbar(0);
         mVideoUrl = getIntent().getStringExtra(Constants.VIDEO_URL);
         if (StringUtils.isEmpty(mVideoUrl)) {
             finish();

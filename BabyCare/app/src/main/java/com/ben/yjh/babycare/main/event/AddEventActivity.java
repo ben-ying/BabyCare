@@ -44,11 +44,7 @@ public class AddEventActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.add_event);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        initToolbar(R.string.add_event);
         mTitleEditText = (EditText) findViewById(R.id.et_title);
         mContentEditText = (EditText) findViewById(R.id.et_content);
         mImageView = (ImageView) findViewById(R.id.img_event);
