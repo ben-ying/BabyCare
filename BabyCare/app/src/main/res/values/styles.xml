@@ -15,18 +15,6 @@
         <item name="android:actionMenuTextColor">@color/colorPrimaryDark</item>
     </style>
 
-    <style name="TranslucentTheme" parent="AppTheme">
-        <!--<item name="android:windowTranslucentStatus">true</item>-->
-        <!--<item name="android:windowTranslucentNavigation">true</item>-->
-        <!--<item name="android:navigationBarColor">@android:color/transparent</item>-->
-        <!--<item name="android:actionMenuTextColor">@color/white</item>-->
-        <!--<item name="android:fitsSystemWindows">true</item>-->
-    </style>
-
-    <!--<style name="TranslucentTheme.Launcher">-->
-        <!--<item name="android:windowBackground">@drawable/splash</item>-->
-    <!--</style>-->
-
     <style name="AviaryBaseTheme.Dark.Dialog" parent="Base.Theme.AppCompat.Dialog.FixedSize">
         <item name="aviaryFontRegular">fonts/Roboto-Bold.ttf</item>
         <item name="aviaryFontLight">fonts/Roboto-Light.ttf</item>
@@ -332,11 +320,7 @@
     </style>
 
     <style name="AppTheme.FullscreenTheme" >
-        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="android:windowBackground">@null</item>
-        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
-        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">

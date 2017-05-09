@@ -2,6 +2,7 @@ package com.ben.yjh.babycare.main.user;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,6 @@ public class ImageViewpagerAdapter extends PagerAdapter {
         ScaleImageView imageView = (ScaleImageView) view.findViewById(R.id.img_event);
         MyApplication.getInstance(mContext).displayImage(mImages.get(position),
                 imageView, ImageUtils.getGalleryOptions(), false);
-
         container.addView(view);
 
         return view;

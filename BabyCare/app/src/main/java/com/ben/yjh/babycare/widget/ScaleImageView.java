@@ -1,5 +1,6 @@
 package com.ben.yjh.babycare.widget;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -76,6 +77,17 @@ public class ScaleImageView extends AppCompatImageView implements OnTouchListene
                 maxZoomTo((int) e.getX(), (int) e.getY());
                 cutting();
                 return super.onDoubleTap(e);
+            }
+
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                ((Activity) mContext).finish();
+                return super.onSingleTapConfirmed(e);
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+                super.onLongPress(e);
             }
         });
 
@@ -203,8 +215,7 @@ public class ScaleImageView extends AppCompatImageView implements OnTouchListene
         case MotionEvent.ACTION_POINTER_1_DOWN:
         case MotionEvent.ACTION_POINTER_2_DOWN:
             if (touchCount >= 2) {
-                float distance = distance(event.getX(0), event.getX(1), event.getY(0), event.getY(1));
-                mPrevDistance = distance;
+                mPrevDistance = distance(event.getX(0), event.getX(1), event.getY(0), event.getY(1));
                 isScaling = true;
             } else {
                 mPrevMoveX = (int) event.getX();

@@ -94,7 +94,7 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name=".main.user.ImagePagerActivity" />
+        <activity android:name=".main.user.ImagePagerActivity" android:theme="@style/AppTheme.FullscreenTheme"/>
         <activity android:name=".main.user.GalleryActivity" />
         <activity android:name=".main.user.UserDetailActivity" />
         <activity android:name=".main.left.UserInfoActivity" />
