@@ -2,6 +2,7 @@ package com.ben.yjh.babycare.application;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.widget.ImageView;
@@ -10,6 +11,8 @@ import com.android.volley.Request;
 import com.aviary.android.feather.common.AviaryIntent;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.widget.volley.VolleySingleton;
+import com.danikula.videocache.HttpProxyCacheServer;
+import com.danikula.videocache.file.FileNameGenerator;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
@@ -34,6 +37,7 @@ public class MyApplication extends SugarApp {
 
     private static MyApplication sInstance;
 
+    private HttpProxyCacheServer proxy;
     private Context mContext;
     private ImageLoader mImageLoader;
     private ImageLoader mThumbnailImageLoader;
@@ -63,6 +67,30 @@ public class MyApplication extends SugarApp {
             sInstance = new MyApplication(context);
         }
         return sInstance;
+    }
+
+
+    public static HttpProxyCacheServer getProxy(Context context) {
+        MyApplication app = (MyApplication) context.getApplicationContext();
+        return app.proxy == null ? (app.proxy = app.newProxy()) : app.proxy;
+    }
+
+    private HttpProxyCacheServer newProxy() {
+        return new HttpProxyCacheServer.Builder(this)
+                .fileNameGenerator(new MyFileNameGenerator())
+                .maxCacheSize(1024 * 1024 * 1024)       // 1 Gb for cache
+                .build();
+    }
+
+    public class MyFileNameGenerator implements FileNameGenerator {
+
+        // Urls contain mutable parts (parameter 'sessionToken') and stable video's id (parameter 'videoId').
+        // e. g. http://example.com?videoId=abcqaz&sessionToken=xyz987
+        public String generate(String url) {
+            Uri uri = Uri.parse(url);
+            String videoId = uri.getQueryParameter("videoId");
+            return videoId + ".mp4";
+        }
     }
 
     private ImageLoader getImageLoader() {

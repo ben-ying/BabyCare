@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/recordProgress"
-        android:layout_marginTop="300dip"
+        android:layout_marginTop="260dp"
         android:background="@color/video_recorder_bg_color" >
 
         <CheckedTextView

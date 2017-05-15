@@ -105,7 +105,9 @@
         <activity android:name=".main.event.EventDetailActivity" />
         <activity android:name=".main.event.MediaRecorderActivity" />
         <activity android:name=".main.event.VideoPlayerActivity" android:theme="@style/AppTheme.Video" />
-        <activity android:name=".main.event.PostVideoActivity" android:theme="@style/AppTheme.Video" />
+        <activity android:name=".main.event.PostVideoActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan"
+            android:theme="@style/AppTheme.Video" />
 
         <!--small-video-recorder-->
         <!--<activity android:name="mabeijianxi.camera.MediaRecorderActivity"/>-->

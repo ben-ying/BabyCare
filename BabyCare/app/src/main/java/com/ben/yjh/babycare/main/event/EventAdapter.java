@@ -5,14 +5,19 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
@@ -28,13 +33,16 @@ import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
 import com.ben.yjh.babycare.util.Utils;
+import com.danikula.videocache.CacheListener;
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.viewpagerindicator.CirclePageIndicator;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder>
-        implements EventViewpagerAdapter.EventAdapterInterface, View.OnClickListener {
+        implements EventViewpagerAdapter.EventAdapterInterface, View.OnClickListener, CacheListener {
 
     private Context mContext;
     private User mUser;
@@ -50,14 +58,22 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         mInterface.intent2CommentList(eventId);
     }
 
+    @Override
+    public void onCacheAvailable(File cacheFile, String url, int percentsAvailable) {
+        Log.d("VIDEO", "cache file: " + cacheFile.getAbsolutePath()
+                + ", url: " + url + "percentage: " + percentsAvailable);
+    }
+
     interface EventRecyclerViewInterface {
         void showImageDetail(int position);
+
         void intent2CommentList(int eventId);
+
         void showShareSheet(Event event);
     }
 
     EventAdapter(Context context, User user, List<Event> events, boolean isHomeEvent,
-                        EventRecyclerViewInterface recyclerViewInterface) {
+                 EventRecyclerViewInterface recyclerViewInterface) {
         this.mContext = context;
         this.mUser = user;
         this.mEvents = events;
@@ -94,6 +110,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.profileButton.setTag(event.getUserId());
         holder.nameTextView.setTag(event.getUserId());
         holder.commentRadioButton.setTag(event.getEventId());
+        holder.frameLayout.setTag(null);
 
         if (event.getUserId() == mUser.getUserId()) {
             holder.commonRadioButton.setCompoundDrawablesWithIntrinsicBounds(
@@ -105,12 +122,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             setLikeCount(holder.commonRadioButton, event);
         }
 
-        if (event.getImage1().isEmpty()) {
-            holder.viewPager.setVisibility(View.GONE);
-            holder.pageIndicator.setVisibility(View.GONE);
-        } else {
+        if (!event.getImage1().isEmpty()) {
             holder.viewPager.setVisibility(View.VISIBLE);
             holder.pageIndicator.setVisibility(View.GONE);
+            holder.videoView.setVisibility(View.GONE);
+            holder.pauseImageView.setVisibility(View.GONE);
             List<String> images = new ArrayList<>();
             images.add(event.getImage1());
             holder.viewPager.setAdapter(new EventViewpagerAdapter(mContext, images, position, this));
@@ -119,6 +135,30 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             holder.pageIndicator.setFillColor(mContext.getResources().getColor(R.color.colorPrimary));
             holder.pageIndicator.setPageColor(mContext.getResources().getColor(R.color.white));
             holder.pageIndicator.setStrokeColor(mContext.getResources().getColor(R.color.hint_color));
+        } else if (event.getType() == Event.TYPE_VIDEO && event.getVideo() != null) {
+            holder.videoView.setVisibility(View.VISIBLE);
+            holder.pauseImageView.setVisibility(View.VISIBLE);
+            holder.pauseImageView.setOnClickListener(this);
+            holder.pauseImageView.setTag(holder);
+            holder.frameLayout.setTag(holder);
+            holder.viewPager.setVisibility(View.GONE);
+            holder.pageIndicator.setVisibility(View.GONE);
+            HttpProxyCacheServer proxy = MyApplication.getProxy(mContext);
+            proxy.registerCacheListener(this, event.getVideo());
+            String proxyUrl = proxy.getProxyUrl(event.getVideo());
+            holder.videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.setLooping(true);
+                }
+            });
+            holder.videoView.setVideoPath(proxyUrl);
+            holder.videoView.seekTo(10);
+        } else {
+            holder.videoView.setVisibility(View.GONE);
+            holder.pauseImageView.setVisibility(View.GONE);
+            holder.viewPager.setVisibility(View.GONE);
+            holder.pageIndicator.setVisibility(View.GONE);
         }
 
         if (event.getTitle().isEmpty()) {
@@ -157,6 +197,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         TextView dateTextView;
         TextView titleTextView;
         TextView contentTextView;
+        VideoView videoView;
+        ImageView pauseImageView;
+        FrameLayout frameLayout;
 
         EventViewHolder(View itemView) {
             super(itemView);
@@ -170,6 +213,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             this.dateTextView = (TextView) itemView.findViewById(R.id.tv_datetime);
             this.titleTextView = (TextView) itemView.findViewById(R.id.tv_title);
             this.contentTextView = (TextView) itemView.findViewById(R.id.tv_content);
+            this.videoView = (VideoView) itemView.findViewById(R.id.videoView);
+            this.pauseImageView = (ImageView) itemView.findViewById(R.id.iv_pause);
+            this.frameLayout = (FrameLayout) itemView.findViewById(R.id.media_layout);
         }
     }
 
@@ -207,6 +253,18 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                         intent.putExtra(Constants.USER_ID, userId);
                         mContext.startActivity(intent);
                     }
+                }
+                break;
+            case R.id.iv_pause:
+            case R.id.media_layout:
+                VideoView videoView = ((EventViewHolder) v.getTag()).videoView;
+                ImageView pauseImageView = ((EventViewHolder) v.getTag()).pauseImageView;
+                if (videoView.isPlaying()) {
+                    videoView.pause();
+                    pauseImageView.setVisibility(View.VISIBLE);
+                } else {
+                    videoView.start();
+                    pauseImageView.setVisibility(View.GONE);
                 }
                 break;
         }

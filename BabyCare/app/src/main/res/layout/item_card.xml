@@ -10,100 +10,122 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/text_padding"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/text_padding">
 
         <RelativeLayout
             android:id="@+id/name_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
             <ImageButton
                 android:id="@+id/ib_profile"
-                android:layout_centerVertical="true"
-                android:background="@android:color/transparent"
                 android:layout_width="20dp"
-                android:layout_height="20dp" />
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:background="@android:color/transparent" />
 
             <TextView
                 android:id="@+id/tv_name"
-                android:layout_toEndOf="@+id/ib_profile"
-                android:layout_centerVertical="true"
-                android:paddingStart="@dimen/text_padding"
-                android:paddingEnd="@dimen/text_padding"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:layout_toStartOf="@+id/tv_datetime"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/ib_profile"
+                android:layout_toStartOf="@+id/tv_datetime"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingEnd="@dimen/text_padding"
+                android:paddingStart="@dimen/text_padding" />
 
             <TextView
                 android:id="@+id/tv_datetime"
-                android:layout_centerVertical="true"
-                android:paddingEnd="@dimen/text_padding"
-                android:maxLines="1"
-                android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:maxLines="1"
+                android:paddingEnd="@dimen/text_padding" />
 
         </RelativeLayout>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/view_pager"
-            android:layout_below="@+id/name_layout"
-            android:paddingTop="@dimen/text_padding"
+        <FrameLayout
+            android:id="@+id/media_layout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/timeline_image_height" />
+            android:layout_height="@dimen/timeline_image_height"
+            android:layout_below="@+id/name_layout"
+            android:paddingTop="@dimen/text_padding">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/view_pager"
+                android:background="@color/camera_background_color"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent" />
+
+            <VideoView
+                android:id="@+id/videoView"
+                android:fitsSystemWindows="true"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <ImageView
+                android:id="@+id/iv_pause"
+                android:layout_gravity="center"
+                android:src="@mipmap/ic_play_circle_outline_white_48dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
 
         <com.viewpagerindicator.CirclePageIndicator
             android:id="@+id/indicator"
-            android:layout_alignBottom="@+id/view_pager"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/media_layout"
             android:layout_centerHorizontal="true"
             android:padding="@dimen/text_padding" />
 
         <TextView
             android:id="@+id/tv_title"
             style="@style/TextAppearance.AppCompat.Title"
-            android:paddingTop="@dimen/text_padding"
-            android:layout_below="@+id/view_pager"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/media_layout"
+            android:paddingTop="@dimen/text_padding" />
 
         <com.ben.yjh.babycare.widget.ExpandableTextView
             android:id="@+id/tv_content"
             style="@style/TextAppearance.AppCompat.Body1"
-            android:ellipsize="end"
-            android:paddingTop="@dimen/text_padding"
-            android:layout_below="@+id/tv_title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title"
+            android:ellipsize="end"
+            android:paddingTop="@dimen/text_padding" />
 
         <RelativeLayout
             android:id="@+id/title_layout"
-            android:paddingTop="@dimen/text_padding"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/text_padding">
 
             <RadioButton
                 android:id="@+id/rb_common"
-                android:layout_toStartOf="@+id/rb_comment"
                 style="@style/action_button"
+                android:layout_toStartOf="@+id/rb_comment"
                 android:drawableStart="@drawable/btn_like" />
 
             <RadioButton
                 android:id="@+id/rb_comment"
-                android:layout_toStartOf="@+id/rb_share"
                 style="@style/action_button"
+                android:layout_toStartOf="@+id/rb_share"
                 android:drawableStart="@drawable/btn_comment" />
 
             <RadioButton
                 android:id="@+id/rb_share"
-                android:layout_alignParentEnd="true"
                 style="@style/action_button"
+                android:layout_alignParentEnd="true"
                 android:drawableStart="@drawable/btn_share" />
 
         </RelativeLayout>

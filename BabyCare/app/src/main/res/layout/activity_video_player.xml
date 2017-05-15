@@ -10,7 +10,7 @@
     <mabeijianxi.camera.views.SurfaceVideoView
         android:id="@+id/videoView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/timeline_image_height"
         android:layout_centerInParent="true"
         android:fitsSystemWindows="true"
         android:saveEnabled="true" />
