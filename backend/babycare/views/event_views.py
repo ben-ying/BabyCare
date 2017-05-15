@@ -80,10 +80,11 @@ class EventViewSet(CustomModelViewSet):
                             image = upload_file_to_oss(image_name, image, type)
                             event.image1 = image
                     elif type == TYPE_VIDEO:
+                        import pdb;
                         for video in base64s:
                             video_name = user.username + time.strftime('%Y%m%d%H%M%S') + EVENT_FOOTER_VIDEO
                             video = upload_file_to_oss(video_name, video, type)
-                            event.video = video
+                            event.video_url = video
                             event.video_width = request.data.get('video_width')
                             event.video_height = request.data.get('video_height')
                             image_name = user.username + time.strftime('%Y%m%d%H%M%S') + EVENT_FOOTER_VIDEO_THUMBNAIL

@@ -13,7 +13,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
@@ -51,6 +53,7 @@ public class EventListFragment extends BaseFragment
     private String mNextUrl;
     private int mUserId;
     private boolean mIsHomeEvents;
+    private View mOldFocusLayout;
 
     public static EventListFragment newInstance(int userId) {
         Bundle args = new Bundle();
@@ -107,6 +110,13 @@ public class EventListFragment extends BaseFragment
             }
         });
 
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
+
         mSwipeRefreshLayout.setColorSchemeResources(R.color.google_blue,
                 R.color.google_green, R.color.google_red, R.color.google_yellow);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -131,9 +141,33 @@ public class EventListFragment extends BaseFragment
                             }
                         }
 
-                        if (mNextUrl != null && scrollY == (
+                        if (scrollY == (
                                 v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
-                            mRecyclerView.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
+                            if (mNextUrl != null) {
+                                mRecyclerView.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
+                            }
+                            //get the recyclerview position which is completely visible and first
+//                            int positionView = ((LinearLayoutManager) mRecyclerView
+//                                    .getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+//                            if (positionView >= 0) {
+//                                if (mOldFocusLayout != null) {
+//                                    //Stop the previous video playback after new scroll
+//                                    VideoView videoView = (VideoView)
+//                                            mOldFocusLayout.findViewById(R.id.videoView);
+//                                    ImageView imageView = (ImageView)
+//                                            mOldFocusLayout.findViewById(R.id.iv_pause);
+//                                    mAdapter.handleVideo(videoView, imageView);
+//                                }
+//
+//                                View currentFocusedLayout = (mRecyclerView
+//                                        .getLayoutManager()).findViewByPosition(positionView);
+//                                VideoView videoView = (VideoView)
+//                                        currentFocusedLayout.findViewById(R.id.videoView);
+//                                ImageView imageView = (ImageView)
+//                                        currentFocusedLayout.findViewById(R.id.iv_pause);
+//                                mAdapter.handleVideo(videoView, imageView);
+//                                mOldFocusLayout = currentFocusedLayout;
+//                            }
                         }
                     }
                 });

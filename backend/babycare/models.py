@@ -46,7 +46,7 @@ class Event(models.Model):
     image7 = models.CharField(max_length=200, blank=True, null=True)
     image8 = models.CharField(max_length=200, blank=True, null=True)
     image9 = models.CharField(max_length=200, blank=True, null=True)
-    video = models.CharField(max_length=200, blank=True, null=True)
+    video_url = models.CharField(max_length=200, blank=True, null=True)
     video_width = models.IntegerField(blank=True, null=True)
     video_height = models.IntegerField(blank=True, null=True)
     video_thumbnail = models.CharField(max_length=200, blank=True, null=True)

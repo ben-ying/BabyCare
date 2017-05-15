@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +54,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     private EventRecyclerViewInterface mInterface;
     private List<Event> mEvents;
     private boolean mIsHomeEvent;
+    private int mScreenWidth;
 
     public void showImageDetail(int position) {
         mInterface.showImageDetail(position);
@@ -82,6 +85,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         this.mEvents = events;
         this.mIsHomeEvent = isHomeEvent;
         this.mInterface = recyclerViewInterface;
+        Display display = ((Activity) mContext).getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        mScreenWidth = size.x;
     }
 
     public void setData(List<Event> events) {
@@ -139,7 +146,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             holder.pageIndicator.setFillColor(mContext.getResources().getColor(R.color.colorPrimary));
             holder.pageIndicator.setPageColor(mContext.getResources().getColor(R.color.white));
             holder.pageIndicator.setStrokeColor(mContext.getResources().getColor(R.color.hint_color));
-        } else if (event.getType() == Event.TYPE_VIDEO && event.getVideo() != null) {
+        } else if (event.getType() == Event.TYPE_VIDEO && event.getVideoUrl() != null) {
             holder.videoView.setVisibility(View.VISIBLE);
             holder.pauseImageView.setVisibility(View.VISIBLE);
             holder.pauseImageView.setOnClickListener(this);
@@ -171,8 +178,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             holder.viewPager.setVisibility(View.GONE);
             holder.pageIndicator.setVisibility(View.GONE);
             HttpProxyCacheServer proxy = MyApplication.getProxy(mContext);
-            proxy.registerCacheListener(this, event.getVideo());
-            String proxyUrl = proxy.getProxyUrl(event.getVideo());
+            proxy.registerCacheListener(this, event.getVideoUrl());
+            String proxyUrl = proxy.getProxyUrl(event.getVideoUrl());
 //            holder.videoView.setVideoPath(event.getVideo());
             holder.videoView.setVideoPath(proxyUrl);
             holder.videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -182,11 +189,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 }
             });
             holder.videoView.seekTo(10);
-            if (proxy.isCached(event.getVideo())) {
-                handleVideo(holder.videoView, holder.pauseImageView);
-            }
-            holder.videoView.getLayoutParams().height = (int)
-                    mContext.getResources().getDimension(R.dimen.timeline_image_height);
+//            if (proxy.isCached(event.getVideoUrl())) {
+//                handleVideo(holder.videoView, holder.pauseImageView);
+//            }
+            holder.videoView.getLayoutParams().height =  (int) (mScreenWidth
+                            - 2 * mContext.getResources().getDimension(R.dimen.recycler_view_padding)
+                            - 2 * mContext.getResources().getDimension(R.dimen.text_padding))
+                            * event.getVideoWidth() / event.getVideoHeight();
         } else {
             holder.videoView.setVisibility(View.GONE);
             holder.pauseImageView.setVisibility(View.GONE);
@@ -294,11 +303,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         }
     }
 
-    private void handleVideo(VideoView videoView, final ImageView imageView) {
+    public void handleVideo(VideoView videoView, final ImageView imageView) {
         if (videoView.isPlaying()) {
             videoView.pause();
             imageView.setImageResource(R.mipmap.ic_play_circle_outline_white_48dp);
         } else {
+            videoView.pause();
             videoView.start();
             if (videoView.getBufferPercentage() > 0) {
                 imageView.setBackgroundColor(

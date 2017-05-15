@@ -1,5 +1,6 @@
 package com.ben.yjh.babycare.model;
 
+import com.ben.yjh.babycare.util.Constants;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
@@ -20,8 +21,8 @@ public class Event extends SugarRecord implements Serializable {
     @SerializedName("content") String content;
     @SerializedName("image1") String image1;
     @SerializedName("video_url") String videoUrl;
-    @SerializedName("video_width") String videoWidth;
-    @SerializedName("video_height") String videoHeight;
+    @SerializedName("video_width") int videoWidth;
+    @SerializedName("video_height") int videoHeight;
     @SerializedName("video_thumbnail") String videoThumbnail;
     @SerializedName("like_count") int likeCount;
     @SerializedName("comment_count") int commentCount;
@@ -159,19 +160,19 @@ public class Event extends SugarRecord implements Serializable {
         this.videoUrl = videoUrl;
     }
 
-    public String getVideoWidth() {
-        return videoWidth;
+    public int getVideoWidth() {
+        return videoWidth == 0 ? Constants.VIDEO_DEFAULT_HEIGHT : videoWidth;
     }
 
-    public void setVideoWidth(String videoWidth) {
+    public void setVideoWidth(int videoWidth) {
         this.videoWidth = videoWidth;
     }
 
-    public String getVideoHeight() {
-        return videoHeight;
+    public int getVideoHeight() {
+        return videoHeight == 0 ? Constants.VIDEO_DEFAULT_WIDTH : videoHeight;
     }
 
-    public void setVideoHeight(String videoHeight) {
+    public void setVideoHeight(int videoHeight) {
         this.videoHeight = videoHeight;
     }
 
