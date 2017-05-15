@@ -131,6 +131,12 @@ public class MainActivity extends BaseActivity
         initNavigationView();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFab.show();
+    }
+
     private void initNavigationView() {
         user = User.getUser();
         NavigationView navigationView = (NavigationView) findViewById(R.id.design_navigation_view);

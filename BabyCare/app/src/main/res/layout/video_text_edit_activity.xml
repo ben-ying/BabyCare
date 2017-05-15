@@ -36,7 +36,7 @@
         <mabeijianxi.camera.views.SurfaceVideoView
             android:id="@+id/videoView"
             android:layout_width="120dp"
-            android:layout_height="80dp"
+            android:layout_height="90dp"
             android:saveEnabled="true" />
     </LinearLayout>
 </RelativeLayout>

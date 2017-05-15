@@ -8,11 +8,10 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnInfoListener;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.media.ThumbnailUtils;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -103,11 +102,11 @@ public class VideoPlayerActivity extends BaseActivity implements
     private void postEventTask() {
         List<String> base64Images = new ArrayList<>();
         base64Images.add(ImageUtils.getBase64FromFile(mVideoUrl));
-        String thumbnail = ImageUtils.getBase64FromFile(
-                getIntent().getStringExtra(Constants.VIDEO_THUMBNAIL));
-        new EventTaskHandler(this, user.getToken()).addEvent(user.getUserId(), "",
-                getIntent().getStringExtra(Constants.VIDEO_CONTENT), thumbnail, Event.TYPE_VIDEO,
-                base64Images, new HttpResponseInterface<Event>() {
+        String thumbnail = ImageUtils.getBase64FromBitmap(ThumbnailUtils.createVideoThumbnail(
+                mVideoUrl, MediaStore.Images.Thumbnails.FULL_SCREEN_KIND));
+        new EventTaskHandler(this, user.getToken()).addVideoEvent(user.getUserId(),
+                getIntent().getStringExtra(Constants.VIDEO_CONTENT), thumbnail, mVideoView.getVideoWidth(),
+                mVideoView.getVideoHeight(), base64Images, new HttpResponseInterface<Event>() {
                     @Override
                     public void onStart() {
                         showProgress(getString(R.string.posting), -1);

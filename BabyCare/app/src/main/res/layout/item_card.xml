@@ -51,14 +51,14 @@
         <FrameLayout
             android:id="@+id/media_layout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/timeline_image_height"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/name_layout"
             android:paddingTop="@dimen/text_padding">
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/view_pager"
                 android:background="@color/camera_background_color"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/timeline_image_height"
                 android:layout_width="match_parent" />
 
             <VideoView
@@ -66,14 +66,16 @@
                 android:fitsSystemWindows="true"
                 android:layout_gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="@dimen/timeline_image_height"/>
 
             <ImageView
                 android:id="@+id/iv_pause"
                 android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:background="@color/camera_background_color"
                 android:src="@mipmap/ic_play_circle_outline_white_48dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </FrameLayout>
 
         <com.viewpagerindicator.CirclePageIndicator

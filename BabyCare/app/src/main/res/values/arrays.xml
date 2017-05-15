@@ -23,4 +23,9 @@
     <string-array name="self_comment_choices">
         <item>删除</item>
     </string-array>
+
+    <string-array name="setting_choices">
+        <item>清楚图片缓存</item>
+        <item>清楚视频缓存</item>
+    </string-array>
 </resources>

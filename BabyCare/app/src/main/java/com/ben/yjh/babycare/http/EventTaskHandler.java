@@ -54,16 +54,15 @@ public class EventTaskHandler extends BaseTaskHandler {
         }
     }
 
-    public void addEvent(int userId, String title, String content, String videoThumbnail, int type,
-                         List<String> base64s, HttpResponseInterface<Event> httpResponseInterface) {
+    public void addImageEvent(int userId, String title, String content,
+                              List<String> base64s, HttpResponseInterface<Event> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
             bodyObject.put("user_id", userId);
             bodyObject.put("title", title);
             bodyObject.put("content", content);
-            bodyObject.put("video_thumbnail", videoThumbnail);
             bodyObject.put("token", mToken);
-            bodyObject.put("type", type);
+            bodyObject.put("type", Event.TYPE_IMAGE);
             if (base64s.size() > 0) {
                 JSONArray jsonArray = new JSONArray();
                 for (String base64 : base64s) {
@@ -71,8 +70,32 @@ public class EventTaskHandler extends BaseTaskHandler {
                 }
                 bodyObject.put("base64s", jsonArray);
             }
-            boolean showProgress = type == Event.TYPE_IMAGE;
-            new HttpPostTask(context, showProgress).startTask(URL_EVENTS, Request.Method.POST,
+            new HttpPostTask(context, true).startTask(URL_EVENTS, Request.Method.POST,
+                    bodyObject, Event.class, true, httpResponseInterface);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addVideoEvent(int userId, String content, String videoThumbnail, int width, int height,
+                              List<String> base64s, HttpResponseInterface<Event> httpResponseInterface) {
+        try {
+            JSONObject bodyObject = new JSONObject();
+            bodyObject.put("user_id", userId);
+            bodyObject.put("content", content);
+            bodyObject.put("video_width", width);
+            bodyObject.put("video_height", height);
+            bodyObject.put("video_thumbnail", videoThumbnail);
+            bodyObject.put("token", mToken);
+            bodyObject.put("type", Event.TYPE_VIDEO);
+            if (base64s.size() > 0) {
+                JSONArray jsonArray = new JSONArray();
+                for (String base64 : base64s) {
+                    jsonArray.put(base64);
+                }
+                bodyObject.put("base64s", jsonArray);
+            }
+            new HttpPostTask(context, false).startTask(URL_EVENTS, Request.Method.POST,
                     bodyObject, Event.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();

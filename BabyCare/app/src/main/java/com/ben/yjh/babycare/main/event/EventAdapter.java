@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -35,6 +36,8 @@ import com.ben.yjh.babycare.util.ImageUtils;
 import com.ben.yjh.babycare.util.Utils;
 import com.danikula.videocache.CacheListener;
 import com.danikula.videocache.HttpProxyCacheServer;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.io.File;
@@ -110,7 +113,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.profileButton.setTag(event.getUserId());
         holder.nameTextView.setTag(event.getUserId());
         holder.commentRadioButton.setTag(event.getEventId());
-        holder.frameLayout.setTag(null);
+        holder.videoView.getLayoutParams().height = (int)
+                mContext.getResources().getDimension(R.dimen.timeline_image_height);
 
         if (event.getUserId() == mUser.getUserId()) {
             holder.commonRadioButton.setCompoundDrawablesWithIntrinsicBounds(
@@ -139,21 +143,50 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             holder.videoView.setVisibility(View.VISIBLE);
             holder.pauseImageView.setVisibility(View.VISIBLE);
             holder.pauseImageView.setOnClickListener(this);
-            holder.pauseImageView.setTag(holder);
-            holder.frameLayout.setTag(holder);
+            holder.pauseImageView.setTag(holder.videoView);
+            MyApplication.getInstance(mContext).displayImage(event.getVideoThumbnail(),
+                    holder.pauseImageView, ImageUtils.getGalleryOptions(), false, new ImageLoadingListener() {
+                        @Override
+                        public void onLoadingStarted(String s, View view) {
+
+                        }
+
+                        @Override
+                        public void onLoadingFailed(String s, View view, FailReason failReason) {
+
+                        }
+
+                        @Override
+                        public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                            view.setBackground(new BitmapDrawable(mContext.getResources(), bitmap));
+                            ((ImageView) view).setImageResource(R.mipmap.ic_play_circle_outline_white_48dp);
+                        }
+
+                        @Override
+                        public void onLoadingCancelled(String s, View view) {
+
+                        }
+                    });
+            holder.videoView.setOnClickListener(this);
             holder.viewPager.setVisibility(View.GONE);
             holder.pageIndicator.setVisibility(View.GONE);
             HttpProxyCacheServer proxy = MyApplication.getProxy(mContext);
             proxy.registerCacheListener(this, event.getVideo());
             String proxyUrl = proxy.getProxyUrl(event.getVideo());
+//            holder.videoView.setVideoPath(event.getVideo());
+            holder.videoView.setVideoPath(proxyUrl);
             holder.videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     mp.setLooping(true);
                 }
             });
-            holder.videoView.setVideoPath(proxyUrl);
             holder.videoView.seekTo(10);
+            if (proxy.isCached(event.getVideo())) {
+                handleVideo(holder.videoView, holder.pauseImageView);
+            }
+            holder.videoView.getLayoutParams().height = (int)
+                    mContext.getResources().getDimension(R.dimen.timeline_image_height);
         } else {
             holder.videoView.setVisibility(View.GONE);
             holder.pauseImageView.setVisibility(View.GONE);
@@ -199,7 +232,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         TextView contentTextView;
         VideoView videoView;
         ImageView pauseImageView;
-        FrameLayout frameLayout;
 
         EventViewHolder(View itemView) {
             super(itemView);
@@ -215,7 +247,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             this.contentTextView = (TextView) itemView.findViewById(R.id.tv_content);
             this.videoView = (VideoView) itemView.findViewById(R.id.videoView);
             this.pauseImageView = (ImageView) itemView.findViewById(R.id.iv_pause);
-            this.frameLayout = (FrameLayout) itemView.findViewById(R.id.media_layout);
         }
     }
 
@@ -256,17 +287,33 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 }
                 break;
             case R.id.iv_pause:
-            case R.id.media_layout:
-                VideoView videoView = ((EventViewHolder) v.getTag()).videoView;
-                ImageView pauseImageView = ((EventViewHolder) v.getTag()).pauseImageView;
-                if (videoView.isPlaying()) {
-                    videoView.pause();
-                    pauseImageView.setVisibility(View.VISIBLE);
-                } else {
-                    videoView.start();
-                    pauseImageView.setVisibility(View.GONE);
-                }
+                VideoView videoView = (VideoView) v.getTag();
+                final ImageView imageView = (ImageView) v;
+                handleVideo(videoView, imageView);
                 break;
+        }
+    }
+
+    private void handleVideo(VideoView videoView, final ImageView imageView) {
+        if (videoView.isPlaying()) {
+            videoView.pause();
+            imageView.setImageResource(R.mipmap.ic_play_circle_outline_white_48dp);
+        } else {
+            videoView.start();
+            if (videoView.getBufferPercentage() > 0) {
+                imageView.setBackgroundColor(
+                        mContext.getResources().getColor(android.R.color.transparent));
+                imageView.setImageResource(0);
+            } else {
+                imageView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView.setBackgroundColor(
+                                mContext.getResources().getColor(android.R.color.transparent));
+                        imageView.setImageResource(0);
+                    }
+                }, 200);
+            }
         }
     }
 

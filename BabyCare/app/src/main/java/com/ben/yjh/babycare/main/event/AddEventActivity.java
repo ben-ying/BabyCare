@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -58,8 +57,8 @@ public class AddEventActivity extends BaseActivity {
         if (mBase64Image != null) {
             base64Images.add(mBase64Image);
         }
-        new EventTaskHandler(this, user.getToken()).addEvent(user.getUserId(), mTitle, mContent,
-                null, Event.TYPE_IMAGE, base64Images, new HttpResponseInterface<Event>() {
+        new EventTaskHandler(this, user.getToken()).addImageEvent(user.getUserId(), mTitle,
+                mContent, base64Images, new HttpResponseInterface<Event>() {
                     @Override
                     public void onStart() {
 

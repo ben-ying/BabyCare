@@ -13,6 +13,8 @@ import android.widget.EditText;
 
 import com.ben.yjh.babycare.R;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -135,5 +137,44 @@ public class Utils {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(activity.getResources().getColor(color));
+    }
+
+    public static File getVideoCacheDir(Context context) {
+        return new File(context.getExternalCacheDir(), "video-cache");
+    }
+
+    public static void cleanVideoCacheDir(Context context) throws IOException {
+        File videoCacheDir = getVideoCacheDir(context);
+        cleanDirectory(videoCacheDir);
+    }
+
+    private static void cleanDirectory(File file) throws IOException {
+        if (!file.exists()) {
+            return;
+        }
+        File[] contentFiles = file.listFiles();
+        if (contentFiles != null) {
+            for (File contentFile : contentFiles) {
+                delete(contentFile);
+            }
+        }
+    }
+
+    private static void delete(File file) throws IOException {
+        if (file.isFile() && file.exists()) {
+            deleteOrThrow(file);
+        } else {
+            cleanDirectory(file);
+            deleteOrThrow(file);
+        }
+    }
+
+    private static void deleteOrThrow(File file) throws IOException {
+        if (file.exists()) {
+            boolean isDeleted = file.delete();
+            if (!isDeleted) {
+                throw new IOException(String.format("File %s can't be deleted", file.getAbsolutePath()));
+            }
+        }
     }
 }

@@ -84,6 +84,8 @@ class EventViewSet(CustomModelViewSet):
                             video_name = user.username + time.strftime('%Y%m%d%H%M%S') + EVENT_FOOTER_VIDEO
                             video = upload_file_to_oss(video_name, video, type)
                             event.video = video
+                            event.video_width = request.data.get('video_width')
+                            event.video_height = request.data.get('video_height')
                             image_name = user.username + time.strftime('%Y%m%d%H%M%S') + EVENT_FOOTER_VIDEO_THUMBNAIL
                             image = upload_file_to_oss(image_name, request.data.get('video_thumbnail'), TYPE_IMAGE)
                             event.video_thumbnail = image

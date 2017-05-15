@@ -45,7 +45,7 @@ public class Constants {
 
 
     public static final int VIDEO_DEFAULT_WIDTH = 480;
-    public static final int VIDEO_DEFAULT_HEIGHT = 320;
+    public static final int VIDEO_DEFAULT_HEIGHT = 360;
     public static final int VIDEO_MAX_DEFAULT_TIME = 10 * 1000;
     public static final int VIDEO_MIN_DEFAULT_TIME = 3 * 1000;
     public static final int VIDEO_MAX_FRAME_RATE = 25;

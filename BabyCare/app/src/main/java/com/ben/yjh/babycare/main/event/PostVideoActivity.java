@@ -4,25 +4,22 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnInfoListener;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
@@ -37,7 +34,6 @@ import com.ben.yjh.babycare.util.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import mabeijianxi.camera.util.StringUtils;
 import mabeijianxi.camera.views.SurfaceVideoView;
 
 
@@ -46,7 +42,7 @@ public class PostVideoActivity extends BaseActivity implements View.OnClickListe
         OnPreparedListener, OnCompletionListener, OnInfoListener {
 
     private String mVideoUrl;
-    private String mVideoThumbnailUrl;
+    private Bitmap mVideoThumbnailBitmap;
     private EditText mContentEditText;
     private SurfaceVideoView mVideoView;
     private AlertDialog mDialog;
@@ -72,8 +68,10 @@ public class PostVideoActivity extends BaseActivity implements View.OnClickListe
         mVideoView.setOnInfoListener(this);
         mVideoView.setOnCompletionListener(this);
         mVideoView.setVideoPath(mVideoUrl);
-        mVideoThumbnailUrl = intent.getStringExtra(Constants.VIDEO_THUMBNAIL);
-        Bitmap bitmap = BitmapFactory.decodeFile(mVideoThumbnailUrl);
+//        mVideoThumbnailBitmap = intent.getStringExtra(Constants.VIDEO_THUMBNAIL);
+//        Bitmap bitmap = BitmapFactory.decodeFile(mVideoThumbnailBitmap);
+        mVideoThumbnailBitmap = ThumbnailUtils.createVideoThumbnail(
+                mVideoUrl, MediaStore.Images.Thumbnails.FULL_SCREEN_KIND);
         mContentEditText.setHint(R.string.video_what_you_think);
         mContentEditText.requestFocus();
         mContentEditText.setOnClickListener(this);
@@ -101,11 +99,11 @@ public class PostVideoActivity extends BaseActivity implements View.OnClickListe
 
     private void postEventTask() {
         List<String> base64Images = new ArrayList<>();
-        String thumbnail = ImageUtils.getBase64FromFile(mVideoThumbnailUrl);
+        String thumbnail = ImageUtils.getBase64FromBitmap(mVideoThumbnailBitmap);
         base64Images.add(ImageUtils.getBase64FromFile(mVideoUrl));
-        new EventTaskHandler(this, user.getToken()).addEvent(user.getUserId(),
-                "", mContentEditText.getText().toString(), thumbnail,
-                Event.TYPE_VIDEO, base64Images, new HttpResponseInterface<Event>() {
+        new EventTaskHandler(this, user.getToken()).addVideoEvent(user.getUserId(),
+                mContentEditText.getText().toString(), thumbnail, mVideoView.getVideoWidth(),
+                mVideoView.getVideoHeight(), base64Images, new HttpResponseInterface<Event>() {
                     @Override
                     public void onStart() {
                         showProgress(getString(R.string.posting), -1);
@@ -247,7 +245,6 @@ public class PostVideoActivity extends BaseActivity implements View.OnClickListe
             case R.id.videoView:
                 Intent intent = new Intent(this, VideoPlayerActivity.class);
                 intent.putExtra(Constants.VIDEO_URL, mVideoUrl);
-                intent.putExtra(Constants.VIDEO_THUMBNAIL, mVideoThumbnailUrl);
                 intent.putExtra(Constants.VIDEO_CONTENT, mContentEditText.getText().toString());
                 startActivityForResult(intent, Constants.SHOW_VIDEO_REQUEST_CODE);
                 break;

@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.webkit.URLUtil;
 import android.widget.ImageView;
 
 import com.android.volley.Request;
 import com.aviary.android.feather.common.AviaryIntent;
 import com.ben.yjh.babycare.util.Constants;
+import com.ben.yjh.babycare.util.Utils;
 import com.ben.yjh.babycare.widget.volley.VolleySingleton;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.danikula.videocache.file.FileNameGenerator;
@@ -77,6 +79,7 @@ public class MyApplication extends SugarApp {
 
     private HttpProxyCacheServer newProxy() {
         return new HttpProxyCacheServer.Builder(this)
+                .cacheDirectory(Utils.getVideoCacheDir(this))
                 .fileNameGenerator(new MyFileNameGenerator())
                 .maxCacheSize(1024 * 1024 * 1024)       // 1 Gb for cache
                 .build();
@@ -88,8 +91,26 @@ public class MyApplication extends SugarApp {
         // e. g. http://example.com?videoId=abcqaz&sessionToken=xyz987
         public String generate(String url) {
             Uri uri = Uri.parse(url);
-            String videoId = uri.getQueryParameter("videoId");
-            return videoId + ".mp4";
+            String name = URLUtil.guessFileName(url, null, null);
+            if (name == null || name.trim().isEmpty()) {
+                name = url.substring(url.lastIndexOf('/') + 1);
+            }
+            return name;
+        }
+    }
+
+    public void clearImageCache() {
+        if (mImageLoader != null) {
+            mImageLoader.clearDiskCache();
+            mImageLoader.clearMemoryCache();
+        }
+        if (mThumbnailImageLoader != null) {
+            mThumbnailImageLoader.clearDiskCache();
+            mThumbnailImageLoader.clearMemoryCache();
+        }
+        if (mTinyImageLoader != null) {
+            mTinyImageLoader.clearDiskCache();
+            mTinyImageLoader.clearMemoryCache();
         }
     }
 

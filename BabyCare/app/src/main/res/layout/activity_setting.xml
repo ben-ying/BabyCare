@@ -6,6 +6,12 @@
 
     <include layout="@layout/app_bar_layout" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_below="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_logout"
         style="@style/default_bottom_button"

@@ -19,7 +19,9 @@ public class Event extends SugarRecord implements Serializable {
     @SerializedName("title") String title;
     @SerializedName("content") String content;
     @SerializedName("image1") String image1;
-    @SerializedName("video") String video;
+    @SerializedName("video_url") String videoUrl;
+    @SerializedName("video_width") String videoWidth;
+    @SerializedName("video_height") String videoHeight;
     @SerializedName("video_thumbnail") String videoThumbnail;
     @SerializedName("like_count") int likeCount;
     @SerializedName("comment_count") int commentCount;
@@ -149,12 +151,28 @@ public class Event extends SugarRecord implements Serializable {
         this.eventComments = eventComments;
     }
 
-    public String getVideo() {
-        return video;
+    public String getVideoUrl() {
+        return videoUrl;
     }
 
-    public void setVideo(String video) {
-        this.video = video;
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public String getVideoWidth() {
+        return videoWidth;
+    }
+
+    public void setVideoWidth(String videoWidth) {
+        this.videoWidth = videoWidth;
+    }
+
+    public String getVideoHeight() {
+        return videoHeight;
+    }
+
+    public void setVideoHeight(String videoHeight) {
+        this.videoHeight = videoHeight;
     }
 
     public String getVideoThumbnail() {
