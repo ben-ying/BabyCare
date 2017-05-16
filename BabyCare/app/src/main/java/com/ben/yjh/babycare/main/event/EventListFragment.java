@@ -35,15 +35,13 @@ import com.ben.yjh.babycare.widget.recyclerview.LoadMoreListener;
 import com.ben.yjh.babycare.widget.recyclerview.LoadMoreRecyclerView;
 import com.ben.yjh.babycare.widget.recyclerview.ProgressView;
 import com.ben.yjh.babycare.widget.share.ShareBottomSheetDialogFragment;
-import com.danikula.videocache.CacheListener;
-import com.danikula.videocache.HttpProxyCacheServer;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EventListFragment extends BaseFragment
-        implements EventAdapter.EventRecyclerViewInterface, CacheListener {
+        implements EventAdapter.EventRecyclerViewInterface {
 
     private LoadMoreRecyclerView mRecyclerView;
     private EventAdapter mAdapter;
@@ -235,7 +233,6 @@ public class EventListFragment extends BaseFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        MyApplication.getProxy(getActivity()).unregisterCacheListener(this);
 
     }
 
@@ -388,11 +385,6 @@ public class EventListFragment extends BaseFragment
 
     @Override
     public void onClick(View v) {
-
-    }
-
-    @Override
-    public void onCacheAvailable(File cacheFile, String url, int percentsAvailable) {
 
     }
 }

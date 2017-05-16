@@ -5,17 +5,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.MediaPlayer;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -36,18 +33,18 @@ import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
 import com.ben.yjh.babycare.util.Utils;
-import com.danikula.videocache.CacheListener;
-import com.danikula.videocache.HttpProxyCacheServer;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.viewpagerindicator.CirclePageIndicator;
+import com.waynell.videolist.widget.TextureVideoView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder>
-        implements EventViewpagerAdapter.EventAdapterInterface, View.OnClickListener, CacheListener {
+public class EventAdapter extends RecyclerView.Adapter<EventAdapter.BaseViewHolder>
+        implements EventViewpagerAdapter.EventAdapterInterface, View.OnClickListener {
+
+    private static final int TYPE_TEXT = 0;
+    private static final int TYPE_IMAGE = 1;
+    private static final int TYPE_VIDEO = 2;
 
     private Context mContext;
     private User mUser;
@@ -65,9 +62,17 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     }
 
     @Override
-    public void onCacheAvailable(File cacheFile, String url, int percentsAvailable) {
-        Log.d("VIDEO", "cache file: " + cacheFile.getAbsolutePath()
-                + ", url: " + url + "percentage: " + percentsAvailable);
+    public int getItemViewType(int position) {
+        Event event = mEvents.get(position);
+        if (event.getType() == Event.TYPE_VIDEO) {
+            return TYPE_VIDEO;
+        } else {
+            if (!event.getImage1().isEmpty()) {
+                return TYPE_IMAGE;
+            } else {
+                return TYPE_TEXT;
+            }
+        }
     }
 
     interface EventRecyclerViewInterface {
@@ -101,126 +106,28 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     }
 
     @Override
-    public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new EventViewHolder(LayoutInflater.from(
-                mContext).inflate(R.layout.item_card, parent, false));
+    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_card, parent, false);
+        FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.media_layout);
+        switch (viewType) {
+            case TYPE_VIDEO:
+                frameLayout.addView(LayoutInflater.from(
+                        mContext).inflate(R.layout.item_card_video, parent, false));
+                return new VideoViewHolder(view);
+            case TYPE_IMAGE:
+                frameLayout.addView(LayoutInflater.from(
+                        mContext).inflate(R.layout.item_card_image, parent, false));
+                return new ImageViewHolder(view);
+        }
+
+        return new BaseViewHolder(view);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void onBindViewHolder(EventViewHolder holder, int position) {
+    public void onBindViewHolder(BaseViewHolder holder, int position) {
         Event event = mEvents.get(position);
-
-        holder.commonRadioButton.setOnClickListener(this);
-        holder.commonRadioButton.setTag(event);
-        holder.commentRadioButton.setOnClickListener(this);
-        holder.shareRadioButton.setOnClickListener(this);
-        holder.shareRadioButton.setTag(event);
-        holder.profileButton.setOnClickListener(this);
-        holder.nameTextView.setOnClickListener(this);
-        holder.profileButton.setTag(event.getUserId());
-        holder.nameTextView.setTag(event.getUserId());
-        holder.commentRadioButton.setTag(event.getEventId());
-        holder.videoView.getLayoutParams().height = (int)
-                mContext.getResources().getDimension(R.dimen.timeline_image_height);
-
-        if (event.getUserId() == mUser.getUserId()) {
-            holder.commonRadioButton.setCompoundDrawablesWithIntrinsicBounds(
-                    mContext.getResources().getDrawable(R.drawable.btn_delete), null, null, null);
-            holder.commonRadioButton.setText(R.string.empty);
-        } else {
-            holder.commonRadioButton.setCompoundDrawablesWithIntrinsicBounds(
-                    mContext.getResources().getDrawable(R.drawable.btn_like), null, null, null);
-            setLikeCount(holder.commonRadioButton, event);
-        }
-
-        if (!event.getImage1().isEmpty()) {
-            holder.viewPager.setVisibility(View.VISIBLE);
-            holder.pageIndicator.setVisibility(View.GONE);
-            holder.videoView.setVisibility(View.GONE);
-            holder.pauseImageView.setVisibility(View.GONE);
-            List<String> images = new ArrayList<>();
-            images.add(event.getImage1());
-            holder.viewPager.setAdapter(new EventViewpagerAdapter(mContext, images, position, this));
-            holder.pageIndicator.setViewPager(holder.viewPager);
-            holder.pageIndicator.setSnap(true);
-            holder.pageIndicator.setFillColor(mContext.getResources().getColor(R.color.colorPrimary));
-            holder.pageIndicator.setPageColor(mContext.getResources().getColor(R.color.white));
-            holder.pageIndicator.setStrokeColor(mContext.getResources().getColor(R.color.hint_color));
-        } else if (event.getType() == Event.TYPE_VIDEO && event.getVideoUrl() != null) {
-            holder.videoView.setVisibility(View.VISIBLE);
-            holder.pauseImageView.setVisibility(View.VISIBLE);
-            holder.pauseImageView.setOnClickListener(this);
-            holder.pauseImageView.setTag(holder.videoView);
-            MyApplication.getInstance(mContext).displayImage(event.getVideoThumbnail(),
-                    holder.pauseImageView, ImageUtils.getGalleryOptions(), false, new ImageLoadingListener() {
-                        @Override
-                        public void onLoadingStarted(String s, View view) {
-
-                        }
-
-                        @Override
-                        public void onLoadingFailed(String s, View view, FailReason failReason) {
-
-                        }
-
-                        @Override
-                        public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-                            view.setBackground(new BitmapDrawable(mContext.getResources(), bitmap));
-                            ((ImageView) view).setImageResource(R.mipmap.ic_play_circle_outline_white_48dp);
-                        }
-
-                        @Override
-                        public void onLoadingCancelled(String s, View view) {
-
-                        }
-                    });
-            holder.viewPager.setVisibility(View.GONE);
-            holder.pageIndicator.setVisibility(View.GONE);
-//            HttpProxyCacheServer proxy = MyApplication.getProxy(mContext);
-//            proxy.registerCacheListener(this, event.getVideoUrl());
-//            String proxyUrl = proxy.getProxyUrl(event.getVideoUrl());
-////            holder.videoView.setVideoPath(event.getVideo());
-//            holder.videoView.setVideoPath(proxyUrl);
-//            holder.videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//                @Override
-//                public void onPrepared(MediaPlayer mp) {
-//                    mp.setLooping(true);
-//                    mp.setVolume(0, 0);
-//                }
-//            });
-//            holder.videoView.seekTo(10);
-//            if (proxy.isCached(event.getVideoUrl())) {
-//                handleVideo(holder.videoView, holder.pauseImageView);
-//            }
-//            holder.videoView.getLayoutParams().height =  (int) (mScreenWidth
-//                            - 2 * mContext.getResources().getDimension(R.dimen.recycler_view_padding)
-//                            - 2 * mContext.getResources().getDimension(R.dimen.text_padding))
-//                            * event.getVideoWidth() / event.getVideoHeight();
-        } else {
-            holder.videoView.setVisibility(View.GONE);
-            holder.pauseImageView.setVisibility(View.GONE);
-            holder.viewPager.setVisibility(View.GONE);
-            holder.pageIndicator.setVisibility(View.GONE);
-        }
-
-        if (event.getTitle().isEmpty()) {
-            holder.titleTextView.setVisibility(View.GONE);
-        } else {
-            holder.titleTextView.setVisibility(View.VISIBLE);
-            holder.titleTextView.setText(event.getTitle());
-        }
-
-        if (event.getContent().isEmpty()) {
-            holder.contentTextView.setVisibility(View.GONE);
-        } else {
-            holder.contentTextView.setVisibility(View.VISIBLE);
-            holder.contentTextView.setText(event.getContent());
-        }
-
-        MyApplication.getInstance(mContext).displayTinyImage(event.getUserProfile(),
-                holder.profileButton, ImageUtils.getTinyProfileImageOptions(mContext));
-        holder.nameTextView.setText(event.getUsername());
-        holder.dateTextView.setText(Utils.getFormatDate(mContext, event.getCreated()));
+        holder.onBind(position, event);
     }
 
     @Override
@@ -228,9 +135,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         return mEvents.size();
     }
 
-    class EventViewHolder extends RecyclerView.ViewHolder {
-        ViewPager viewPager;
-        CirclePageIndicator pageIndicator;
+    class BaseViewHolder extends RecyclerView.ViewHolder {
         RadioButton commonRadioButton;
         RadioButton commentRadioButton;
         RadioButton shareRadioButton;
@@ -239,13 +144,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         TextView dateTextView;
         TextView titleTextView;
         TextView contentTextView;
-        VideoView videoView;
-        ImageView pauseImageView;
 
-        EventViewHolder(View itemView) {
+        BaseViewHolder(View itemView) {
             super(itemView);
-            this.viewPager = (ViewPager) itemView.findViewById(R.id.view_pager);
-            this.pageIndicator = (CirclePageIndicator) itemView.findViewById(R.id.indicator);
             this.commonRadioButton = (RadioButton) itemView.findViewById(R.id.rb_common);
             this.commentRadioButton = (RadioButton) itemView.findViewById(R.id.rb_comment);
             this.shareRadioButton = (RadioButton) itemView.findViewById(R.id.rb_share);
@@ -254,8 +155,87 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             this.dateTextView = (TextView) itemView.findViewById(R.id.tv_datetime);
             this.titleTextView = (TextView) itemView.findViewById(R.id.tv_title);
             this.contentTextView = (TextView) itemView.findViewById(R.id.tv_content);
-            this.videoView = (VideoView) itemView.findViewById(R.id.videoView);
+        }
+
+        public void onBind(int position, Event event) {
+            commonRadioButton.setOnClickListener(EventAdapter.this);
+            commonRadioButton.setTag(event);
+            commentRadioButton.setOnClickListener(EventAdapter.this);
+            shareRadioButton.setOnClickListener(EventAdapter.this);
+            shareRadioButton.setTag(event);
+            profileButton.setOnClickListener(EventAdapter.this);
+            nameTextView.setOnClickListener(EventAdapter.this);
+            profileButton.setTag(event.getUserId());
+            nameTextView.setTag(event.getUserId());
+            commentRadioButton.setTag(event.getEventId());
+            if (event.getUserId() == mUser.getUserId()) {
+                commonRadioButton.setCompoundDrawablesWithIntrinsicBounds(
+                        mContext.getResources().getDrawable(R.drawable.btn_delete), null, null, null);
+                commonRadioButton.setText(R.string.empty);
+            } else {
+                commonRadioButton.setCompoundDrawablesWithIntrinsicBounds(
+                        mContext.getResources().getDrawable(R.drawable.btn_like), null, null, null);
+                setLikeCount(commonRadioButton, event);
+            }
+
+            if (event.getTitle().isEmpty()) {
+                titleTextView.setVisibility(View.GONE);
+            } else {
+                titleTextView.setVisibility(View.VISIBLE);
+                titleTextView.setText(event.getTitle());
+            }
+
+            if (event.getContent().isEmpty()) {
+                contentTextView.setVisibility(View.GONE);
+            } else {
+                contentTextView.setVisibility(View.VISIBLE);
+                contentTextView.setText(event.getContent());
+            }
+
+            MyApplication.getInstance(mContext).displayTinyImage(event.getUserProfile(),
+                    profileButton, ImageUtils.getTinyProfileImageOptions(mContext));
+            nameTextView.setText(event.getUsername());
+            dateTextView.setText(Utils.getFormatDate(mContext, event.getCreated()));
+        }
+    }
+
+    private class ImageViewHolder extends BaseViewHolder {
+        ViewPager viewPager;
+        CirclePageIndicator pageIndicator;
+
+        ImageViewHolder(View itemView) {
+            super(itemView);
+            this.viewPager = (ViewPager) itemView.findViewById(R.id.view_pager);
+            this.pageIndicator = (CirclePageIndicator) itemView.findViewById(R.id.indicator);
+        }
+
+        @Override
+        public void onBind(int position, Event event) {
+            List<String> images = new ArrayList<>();
+            images.add(event.getImage1());
+            viewPager.setAdapter(new EventViewpagerAdapter(
+                    mContext, images, position, EventAdapter.this));
+            pageIndicator.setViewPager(viewPager);
+            pageIndicator.setSnap(true);
+            pageIndicator.setFillColor(mContext.getResources().getColor(R.color.colorPrimary));
+            pageIndicator.setPageColor(mContext.getResources().getColor(R.color.white));
+            pageIndicator.setStrokeColor(mContext.getResources().getColor(R.color.hint_color));
+        }
+    }
+
+    private class VideoViewHolder extends BaseViewHolder {
+        TextureVideoView videoView;
+        ImageView pauseImageView;
+
+        VideoViewHolder(View itemView) {
+            super(itemView);
+            this.videoView = (TextureVideoView) itemView.findViewById(R.id.videoView);
             this.pauseImageView = (ImageView) itemView.findViewById(R.id.iv_pause);
+        }
+
+        @Override
+        public void onBind(int position, Event event) {
+
         }
     }
 
@@ -296,34 +276,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 }
                 break;
             case R.id.iv_pause:
-                VideoView videoView = (VideoView) v.getTag();
-                final ImageView imageView = (ImageView) v;
-                handleVideo(videoView, imageView);
+//                VideoView videoView = (VideoView) v.getTag();
+//                final ImageView imageView = (ImageView) v;
+//                handleVideo(videoView, imageView);
                 break;
-        }
-    }
-
-    public void handleVideo(VideoView videoView, final ImageView imageView) {
-        if (videoView.isPlaying()) {
-            videoView.pause();
-            imageView.setImageResource(R.mipmap.ic_play_circle_outline_white_48dp);
-        } else {
-            videoView.pause();
-            videoView.start();
-            if (videoView.getBufferPercentage() > 0) {
-                imageView.setBackgroundColor(
-                        mContext.getResources().getColor(android.R.color.transparent));
-                imageView.setImageResource(0);
-            } else {
-                imageView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        imageView.setBackgroundColor(
-                                mContext.getResources().getColor(android.R.color.transparent));
-                        imageView.setImageResource(0);
-                    }
-                }, 200);
-            }
         }
     }
 
