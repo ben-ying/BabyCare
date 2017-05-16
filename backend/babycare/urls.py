@@ -3,7 +3,7 @@ from rest_framework import renderers
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from babycare.views.comment_views import CommentViewSet
-from babycare.views.event_views import EventViewSet, like_view
+from babycare.views.event_views import EventViewSet, like_view, multiply_events_view, delete_all_events_view
 from babycare.views.views import send_feedback
 from views.user_views import UserViewSet, login_view, send_verify_code_view, reset_password_with_verify_code_view
 from views.user_views import api_root
@@ -66,6 +66,10 @@ urlpatterns = [
     url(r'^event/comments/$', comment_list, name='comment-list'),
     url(r'^event/comments/(?P<pk>[0-9]+)', comment_detail, name='comment-detail'),
     url(r'^feedback/$', send_feedback, name='send-feedback'),
+
+    # for test
+    url(r'^event/multiply_x2$', multiply_events_view, name='send-feedback'),
+    url(r'^event/delete_all$', delete_all_events_view, name='send-feedback'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

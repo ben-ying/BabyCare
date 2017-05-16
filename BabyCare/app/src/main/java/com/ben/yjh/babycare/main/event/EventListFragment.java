@@ -125,52 +125,109 @@ public class EventListFragment extends BaseFragment
                 getEventsTask();
             }
         });
-        ((NestedScrollView) rootView.findViewById(R.id.scrollView))
-                .setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-                    @Override
-                    public void onScrollChange(NestedScrollView v,
-                                               int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                        if (scrollY > oldScrollY) {
-                            if (mFab != null) {
-                                mFab.hide();
-                            }
-                        }
-                        if (scrollY < oldScrollY) {
-                            if (mFab != null) {
-                                mFab.show();
-                            }
-                        }
 
-                        if (scrollY == (
-                                v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
-                            if (mNextUrl != null) {
-                                mRecyclerView.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
-                            }
-                            //get the recyclerview position which is completely visible and first
-//                            int positionView = ((LinearLayoutManager) mRecyclerView
-//                                    .getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-//                            if (positionView >= 0) {
-//                                if (mOldFocusLayout != null) {
-//                                    //Stop the previous video playback after new scroll
-//                                    VideoView videoView = (VideoView)
-//                                            mOldFocusLayout.findViewById(R.id.videoView);
-//                                    ImageView imageView = (ImageView)
-//                                            mOldFocusLayout.findViewById(R.id.iv_pause);
-//                                    mAdapter.handleVideo(videoView, imageView);
-//                                }
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+//                get the recyclerview position which is completely visible and first
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                    int positionView = ((LinearLayoutManager) mRecyclerView
+//                            .getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+//                    if (positionView >= 0) {
+//                        if (mOldFocusLayout != null) {
+//                            //Stop the previous video playback after new scroll
+//                            VideoView videoView = (VideoView)
+//                                    mOldFocusLayout.findViewById(R.id.videoView);
+//                            ImageView imageView = (ImageView)
+//                                    mOldFocusLayout.findViewById(R.id.iv_pause);
+//                            mAdapter.handleVideo(videoView, imageView);
+//                        }
 //
-//                                View currentFocusedLayout = (mRecyclerView
-//                                        .getLayoutManager()).findViewByPosition(positionView);
-//                                VideoView videoView = (VideoView)
-//                                        currentFocusedLayout.findViewById(R.id.videoView);
-//                                ImageView imageView = (ImageView)
-//                                        currentFocusedLayout.findViewById(R.id.iv_pause);
-//                                mAdapter.handleVideo(videoView, imageView);
-//                                mOldFocusLayout = currentFocusedLayout;
+//                        View currentFocusedLayout = (mRecyclerView
+//                                .getLayoutManager()).findViewByPosition(positionView);
+//                        VideoView videoView = (VideoView)
+//                                currentFocusedLayout.findViewById(R.id.videoView);
+//                        ImageView imageView = (ImageView)
+//                                currentFocusedLayout.findViewById(R.id.iv_pause);
+//                        mAdapter.handleVideo(videoView, imageView);
+//                        mOldFocusLayout = currentFocusedLayout;
+//                    }
+//                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+//                int positionView = ((LinearLayoutManager) mRecyclerView
+//                        .getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+//                if (positionView >= 0) {
+//                    if (mOldFocusLayout != null) {
+//                        //Stop the previous video playback after new scroll
+//                        VideoView videoView = (VideoView)
+//                                mOldFocusLayout.findViewById(R.id.videoView);
+//                        ImageView imageView = (ImageView)
+//                                mOldFocusLayout.findViewById(R.id.iv_pause);
+//                        mAdapter.handleVideo(videoView, imageView);
+//                    }
+//
+//                    View currentFocusedLayout = (mRecyclerView
+//                            .getLayoutManager()).findViewByPosition(positionView);
+//                    VideoView videoView = (VideoView)
+//                            currentFocusedLayout.findViewById(R.id.videoView);
+//                    ImageView imageView = (ImageView)
+//                            currentFocusedLayout.findViewById(R.id.iv_pause);
+//                    mAdapter.handleVideo(videoView, imageView);
+//                    mOldFocusLayout = currentFocusedLayout;
+//                }
+            }
+        });
+//        ((NestedScrollView) rootView.findViewById(R.id.scrollView))
+//                .setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+//                    @Override
+//                    public void onScrollChange(NestedScrollView v,
+//                                               int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//                        if (scrollY > oldScrollY) {
+//                            if (mFab != null) {
+//                                mFab.hide();
 //                            }
-                        }
-                    }
-                });
+//                        }
+//                        if (scrollY < oldScrollY) {
+//                            if (mFab != null) {
+//                                mFab.show();
+//                            }
+//                        }
+//
+//                        if (scrollY == (
+//                                v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+//                            if (mNextUrl != null) {
+//                                mRecyclerView.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
+//                            }
+//                            //get the recyclerview position which is completely visible and first
+////                            int positionView = ((LinearLayoutManager) mRecyclerView
+////                                    .getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+////                            if (positionView >= 0) {
+////                                if (mOldFocusLayout != null) {
+////                                    //Stop the previous video playback after new scroll
+////                                    VideoView videoView = (VideoView)
+////                                            mOldFocusLayout.findViewById(R.id.videoView);
+////                                    ImageView imageView = (ImageView)
+////                                            mOldFocusLayout.findViewById(R.id.iv_pause);
+////                                    mAdapter.handleVideo(videoView, imageView);
+////                                }
+////
+////                                View currentFocusedLayout = (mRecyclerView
+////                                        .getLayoutManager()).findViewByPosition(positionView);
+////                                VideoView videoView = (VideoView)
+////                                        currentFocusedLayout.findViewById(R.id.videoView);
+////                                ImageView imageView = (ImageView)
+////                                        currentFocusedLayout.findViewById(R.id.iv_pause);
+////                                mAdapter.handleVideo(videoView, imageView);
+////                                mOldFocusLayout = currentFocusedLayout;
+////                            }
+//                        }
+//                    }
+//                });
 
         getEventsTask();
     }

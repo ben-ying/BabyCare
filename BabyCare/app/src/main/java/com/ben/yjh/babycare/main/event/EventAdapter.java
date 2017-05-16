@@ -174,28 +174,28 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
                         }
                     });
-            holder.videoView.setOnClickListener(this);
             holder.viewPager.setVisibility(View.GONE);
             holder.pageIndicator.setVisibility(View.GONE);
-            HttpProxyCacheServer proxy = MyApplication.getProxy(mContext);
-            proxy.registerCacheListener(this, event.getVideoUrl());
-            String proxyUrl = proxy.getProxyUrl(event.getVideoUrl());
-//            holder.videoView.setVideoPath(event.getVideo());
-            holder.videoView.setVideoPath(proxyUrl);
-            holder.videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    mp.setLooping(true);
-                }
-            });
-            holder.videoView.seekTo(10);
+//            HttpProxyCacheServer proxy = MyApplication.getProxy(mContext);
+//            proxy.registerCacheListener(this, event.getVideoUrl());
+//            String proxyUrl = proxy.getProxyUrl(event.getVideoUrl());
+////            holder.videoView.setVideoPath(event.getVideo());
+//            holder.videoView.setVideoPath(proxyUrl);
+//            holder.videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//                @Override
+//                public void onPrepared(MediaPlayer mp) {
+//                    mp.setLooping(true);
+//                    mp.setVolume(0, 0);
+//                }
+//            });
+//            holder.videoView.seekTo(10);
 //            if (proxy.isCached(event.getVideoUrl())) {
 //                handleVideo(holder.videoView, holder.pauseImageView);
 //            }
-            holder.videoView.getLayoutParams().height =  (int) (mScreenWidth
-                            - 2 * mContext.getResources().getDimension(R.dimen.recycler_view_padding)
-                            - 2 * mContext.getResources().getDimension(R.dimen.text_padding))
-                            * event.getVideoWidth() / event.getVideoHeight();
+//            holder.videoView.getLayoutParams().height =  (int) (mScreenWidth
+//                            - 2 * mContext.getResources().getDimension(R.dimen.recycler_view_padding)
+//                            - 2 * mContext.getResources().getDimension(R.dimen.text_padding))
+//                            * event.getVideoWidth() / event.getVideoHeight();
         } else {
             holder.videoView.setVisibility(View.GONE);
             holder.pauseImageView.setVisibility(View.GONE);

@@ -147,3 +147,37 @@ def like_view(request):
             return invalid_token_response()
     except Exception as e:
         return save_error_log(request, e)
+
+
+def delete_all_events_view(request):
+    events = Event.objects.all()
+    for event in events:
+        event.delete()
+    return simple_json_response()
+
+
+def multiply_events_view(request):
+    events = Event.objects.all()
+    for event in events:
+        e = Event()
+        e.baby = event.baby
+        e.type = event.type
+        e.title = event.title
+        e.content = event.content
+        e.image1 = event.image1
+        e.image2 = event.image2
+        e.image3 = event.image3
+        e.image4 = event.image4
+        e.image5 = event.image5
+        e.image6 = event.image6
+        e.image7 = event.image7
+        e.image8 = event.image8
+        e.image9 = event.image9
+        e.video_url = event.video_url
+        e.video_width = event.video_width
+        e.video_height = event.video_height
+        e.video_thumbnail = event.video_thumbnail
+        e.created = event.created
+        e.modified = event.modified
+        e.save()
+    return simple_json_response()
