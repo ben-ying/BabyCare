@@ -5,7 +5,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from babycare.views.comment_views import CommentViewSet
 from babycare.views.event_views import EventViewSet, like_view, multiply_events_view, delete_all_events_view
 from babycare.views.views import send_feedback
-from views.user_views import UserViewSet, login_view, send_verify_code_view, reset_password_with_verify_code_view
+from views.user_views import UserViewSet, login_view, send_verify_code_view, reset_password_with_verify_code_view, \
+    get_app_info
 from views.user_views import api_root
 
 user_list = UserViewSet.as_view({
@@ -60,6 +61,7 @@ urlpatterns = [
     url(r'^user/login$', login_view, name='user-login'),
     url(r'^user/send_verify_code$', send_verify_code_view, name='send-verify-code'),
     url(r'^user/reset_password$', reset_password_with_verify_code_view, name='reset-password-with-verify-code'),
+    url(r'^user/get_app_info$', get_app_info, name='get-app-info'),
     url(r'^events/$', event_list, name='event-list'),
     url(r'^events/(?P<pk>[0-9]+)', event_detail, name='event-detail'),
     url(r'^event/like$', like_view, name='like'),

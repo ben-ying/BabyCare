@@ -31,7 +31,7 @@ public class SettingActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(false);
         recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setAdapter(new SettingAdapter(this, mProgressBar));
+        recyclerView.setAdapter(new SettingAdapter(this, mProgressBar, user));
         findViewById(R.id.btn_logout).setOnClickListener(this);
     }
 

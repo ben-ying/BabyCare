@@ -1,9 +1,11 @@
 from django.conf.urls import include, url
+from django.conf.urls.static import static
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from rest_framework.schemas import get_schema_view
 
 from babycare.views.user_views import UserViewSet
+from backend import settings
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -18,3 +20,5 @@ urlpatterns = [
     # api schema
     url('^schema/$', schema_view),
 ]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

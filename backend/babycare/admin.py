@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from models import BabyUser, Verify, Like, Feedback, Comment
+from models import BabyUser, Verify, Like, Feedback, Comment, AppInfo
 from models import Event
 
 
@@ -40,3 +40,9 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ('id', 'text', 'event', 'baby', 'source_comment', 'datetime')
     search_fields = ('text', 'event', 'baby')
 admin.site.register(Comment, CommentAdmin)
+
+
+class AppInfoAdmin(admin.ModelAdmin):
+    list_display = ('version_name', 'version_code', 'app_file', 'datetime')
+    search_fields = ('version_name', 'version_code', 'app_file', 'datetime')
+admin.site.register(AppInfo, AppInfoAdmin)

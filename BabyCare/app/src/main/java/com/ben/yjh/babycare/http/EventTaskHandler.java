@@ -165,14 +165,16 @@ public class EventTaskHandler extends BaseTaskHandler {
                      HttpResponseInterface<CommentsResult> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
-            new HttpPostTask(context, false).startTask(URL_COMMENTS + "?token=" + mToken + "&event_id=" + eventId,
-                    Request.Method.GET, bodyObject, CommentsResult.class, true, httpResponseInterface);
+            new HttpPostTask(context, false).startTask(URL_COMMENTS +
+                            "?token=" + mToken + "&event_id=" + eventId, Request.Method.GET,
+                    bodyObject, CommentsResult.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void loadMoreComments(String url, HttpResponseInterface<CommentsResult> httpResponseInterface) {
+    public void loadMoreComments(String url,
+                                 HttpResponseInterface<CommentsResult> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
             new HttpPostTask(context, false).startTask(url, Request.Method.GET, bodyObject,

@@ -141,8 +141,12 @@
     <string name="days_ago">天前</string>
     <string name="send">发送</string>
     <string name="media_type">发布类型</string>
+    <string name="in_development">开发中&#8230;</string>
 
     <string name="empty"></string>
+    <string name="latest_app_version">您的应用为最新版本</string>
+    <string name="new_version_found">发现新版本%1$d(%2$d)，是否更新？</string>
+    <string name="downloading">正在下载%s&#8230;</string>
 
     <string name="title_activity_fullscreen">FullscreenActivity</string>
 

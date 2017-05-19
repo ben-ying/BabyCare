@@ -4,7 +4,7 @@ SECRET_KEY = '!(poief@tj(fc*o3hifd6a2^$(1qk!m)hv-uug2eh)anp^9u5%'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'yjh.babycare.com', '192.168.1.132', '192.168.1.130', '192.168.43.177']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'yjh.babycare.com', '192.168.1.132', '192.168.1.130', '192.168.1.131', '192.168.43.177']
 DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',
@@ -18,7 +18,7 @@ DATABASES = {
 }
 
 # STATIC_ROOT = os.path.join(BASE_DIR, "babycare.com/static/")
-STATIC_ROOT = '/Users/ben/app/backend/backend/babycare.com/static/'
+# STATIC_ROOT = '/Users/ben/app/backend/backend/babycare.com/static/'
 
 # oss2
 OSS_ACCESS_KEY_ID = os.getenv('OSS_TEST_ACCESS_KEY_ID', 'LTAIh1547iWiXWoC')

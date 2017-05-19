@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.android.volley.Request;
 import com.ben.yjh.babycare.R;
+import com.ben.yjh.babycare.model.AppInfo;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.util.MD5Utils;
@@ -19,6 +20,7 @@ public class UserTaskHandler extends BaseTaskHandler {
     private static final String URL_USER_LOGIN = "user/login";
     private static final String URL_SEND_VERIFY_CODE = "user/send_verify_code";
     private static final String URL_RESET_PASSWORD = "user/reset_password";
+    private static final String URL_GET_APP_VERSION = "user/get_app_info";
 
     public UserTaskHandler(Context context) {
         super(context);
@@ -102,6 +104,18 @@ public class UserTaskHandler extends BaseTaskHandler {
             bodyObject.put("token", token);
             new HttpPostTask(context).startTask(URL_USERS + userId, Request.Method.PUT,
                     bodyObject, User.class, true, httpResponseInterface);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void checkUpdate(String token,
+                             HttpResponseInterface<AppInfo> httpResponseInterface) {
+        try {
+            JSONObject bodyObject = new JSONObject();
+            new HttpPostTask(context).startTask(URL_GET_APP_VERSION +
+                            "?token=" + token, Request.Method.GET,
+                    bodyObject, AppInfo.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -21,7 +21,7 @@ android {
         // aviary above 23 not working and small-video-record above 22 not working
         targetSdkVersion 22
         versionCode 1
-        versionName "1.0"
+        versionName "0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
     }
