@@ -28,7 +28,7 @@ public class EventViewpagerAdapter extends PagerAdapter {
         void showImageDetail(int position);
     }
 
-    EventViewpagerAdapter(Context context, List<String> images, int position,
+    public EventViewpagerAdapter(Context context, List<String> images, int position,
                           EventAdapterInterface adapterInterface) {
         this.mContext = context;
         this.mImages = images;

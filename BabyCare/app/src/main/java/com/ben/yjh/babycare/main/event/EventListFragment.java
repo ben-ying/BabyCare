@@ -35,6 +35,8 @@ import com.ben.yjh.babycare.widget.recyclerview.LoadMoreListener;
 import com.ben.yjh.babycare.widget.recyclerview.LoadMoreRecyclerView;
 import com.ben.yjh.babycare.widget.recyclerview.ProgressView;
 import com.ben.yjh.babycare.widget.share.ShareBottomSheetDialogFragment;
+import com.waynell.videolist.visibility.calculator.SingleListViewItemActiveCalculator;
+import com.waynell.videolist.visibility.scroll.RecyclerViewItemPositionGetter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,12 +48,14 @@ public class EventListFragment extends BaseFragment
     private LoadMoreRecyclerView mRecyclerView;
     private EventAdapter mAdapter;
     private FloatingActionButton mFab;
+    private boolean mShowFab = true;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private List<Event> mEvents;
     private String mNextUrl;
     private int mUserId;
     private boolean mIsHomeEvents;
-    private View mOldFocusLayout;
+    private SingleListViewItemActiveCalculator mCalculator;
+    private int mScrollState;
 
     public static EventListFragment newInstance(int userId) {
         Bundle args = new Bundle();
@@ -74,6 +78,7 @@ public class EventListFragment extends BaseFragment
         mRecyclerView = (LoadMoreRecyclerView) view.findViewById(R.id.recyclerView);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
 
+
         return view;
     }
 
@@ -81,12 +86,15 @@ public class EventListFragment extends BaseFragment
     public void init() {
         mIsHomeEvents = activity instanceof MainActivity;
         mUserId = getArguments().getInt(Constants.USER_ID, Constants.INVALID_VALUE);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setNestedScrollingEnabled(false);
         mSwipeRefreshLayout.setEnabled(mIsHomeEvents);
         mEvents = getEvents();
-        mAdapter = new EventAdapter(activity, user, mEvents, mIsHomeEvents, this);
+        mAdapter = new EventAdapter(activity, mRecyclerView, user, mEvents, mIsHomeEvents, this);
+        mCalculator = new SingleListViewItemActiveCalculator(mAdapter,
+                new RecyclerViewItemPositionGetter(layoutManager, mRecyclerView));
         mRecyclerView.setAdapter(mAdapter);
         ProgressView progressView = new ProgressView(activity);
         progressView.setIndicatorId(ProgressView.BallPulse);
@@ -108,13 +116,6 @@ public class EventListFragment extends BaseFragment
             }
         });
 
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
-
         mSwipeRefreshLayout.setColorSchemeResources(R.color.google_blue,
                 R.color.google_green, R.color.google_red, R.color.google_yellow);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -128,104 +129,27 @@ public class EventListFragment extends BaseFragment
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-//                get the recyclerview position which is completely visible and first
-//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-//                    int positionView = ((LinearLayoutManager) mRecyclerView
-//                            .getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-//                    if (positionView >= 0) {
-//                        if (mOldFocusLayout != null) {
-//                            //Stop the previous video playback after new scroll
-//                            VideoView videoView = (VideoView)
-//                                    mOldFocusLayout.findViewById(R.id.videoView);
-//                            ImageView imageView = (ImageView)
-//                                    mOldFocusLayout.findViewById(R.id.iv_pause);
-//                            mAdapter.handleVideo(videoView, imageView);
-//                        }
-//
-//                        View currentFocusedLayout = (mRecyclerView
-//                                .getLayoutManager()).findViewByPosition(positionView);
-//                        VideoView videoView = (VideoView)
-//                                currentFocusedLayout.findViewById(R.id.videoView);
-//                        ImageView imageView = (ImageView)
-//                                currentFocusedLayout.findViewById(R.id.iv_pause);
-//                        mAdapter.handleVideo(videoView, imageView);
-//                        mOldFocusLayout = currentFocusedLayout;
-//                    }
-//                }
+                mScrollState = newState;
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mAdapter.getItemCount() > 0) {
+                    mCalculator.onScrollStateIdle();
+                    if (mShowFab) {
+                        mFab.show();
+                    }
+                }
             }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-//                int positionView = ((LinearLayoutManager) mRecyclerView
-//                        .getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-//                if (positionView >= 0) {
-//                    if (mOldFocusLayout != null) {
-//                        //Stop the previous video playback after new scroll
-//                        VideoView videoView = (VideoView)
-//                                mOldFocusLayout.findViewById(R.id.videoView);
-//                        ImageView imageView = (ImageView)
-//                                mOldFocusLayout.findViewById(R.id.iv_pause);
-//                        mAdapter.handleVideo(videoView, imageView);
-//                    }
-//
-//                    View currentFocusedLayout = (mRecyclerView
-//                            .getLayoutManager()).findViewByPosition(positionView);
-//                    VideoView videoView = (VideoView)
-//                            currentFocusedLayout.findViewById(R.id.videoView);
-//                    ImageView imageView = (ImageView)
-//                            currentFocusedLayout.findViewById(R.id.iv_pause);
-//                    mAdapter.handleVideo(videoView, imageView);
-//                    mOldFocusLayout = currentFocusedLayout;
-//                }
+                mCalculator.onScrolled(mScrollState);
+                if (dy > 0) {
+                    mShowFab = false;
+                    mFab.hide();
+                } else {
+                    mShowFab = true;
+                }
             }
         });
-//        ((NestedScrollView) rootView.findViewById(R.id.scrollView))
-//                .setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-//                    @Override
-//                    public void onScrollChange(NestedScrollView v,
-//                                               int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-//                        if (scrollY > oldScrollY) {
-//                            if (mFab != null) {
-//                                mFab.hide();
-//                            }
-//                        }
-//                        if (scrollY < oldScrollY) {
-//                            if (mFab != null) {
-//                                mFab.show();
-//                            }
-//                        }
-//
-//                        if (scrollY == (
-//                                v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
-//                            if (mNextUrl != null) {
-//                                mRecyclerView.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
-//                            }
-//                            //get the recyclerview position which is completely visible and first
-////                            int positionView = ((LinearLayoutManager) mRecyclerView
-////                                    .getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-////                            if (positionView >= 0) {
-////                                if (mOldFocusLayout != null) {
-////                                    //Stop the previous video playback after new scroll
-////                                    VideoView videoView = (VideoView)
-////                                            mOldFocusLayout.findViewById(R.id.videoView);
-////                                    ImageView imageView = (ImageView)
-////                                            mOldFocusLayout.findViewById(R.id.iv_pause);
-////                                    mAdapter.handleVideo(videoView, imageView);
-////                                }
-////
-////                                View currentFocusedLayout = (mRecyclerView
-////                                        .getLayoutManager()).findViewByPosition(positionView);
-////                                VideoView videoView = (VideoView)
-////                                        currentFocusedLayout.findViewById(R.id.videoView);
-////                                ImageView imageView = (ImageView)
-////                                        currentFocusedLayout.findViewById(R.id.iv_pause);
-////                                mAdapter.handleVideo(videoView, imageView);
-////                                mOldFocusLayout = currentFocusedLayout;
-////                            }
-//                        }
-//                    }
-//                });
 
         getEventsTask();
     }
@@ -365,7 +289,7 @@ public class EventListFragment extends BaseFragment
 //                case Constants.ADD_EVENT_REQUEST_CODE:
 //                    if (data != null && data.getSerializableExtra(Constants.EVENT) != null) {
 //                        mEvents.add((Event) data.getSerializableExtra(Constants.EVENT));
-//                        mAdapter.setData(mEvents);
+//                        adapter.setData(mEvents);
 //                        mRecyclerView.scrollToPosition(0);
 //                    }
 //                    break;

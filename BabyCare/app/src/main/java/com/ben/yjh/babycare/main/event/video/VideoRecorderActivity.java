@@ -1,4 +1,4 @@
-package com.ben.yjh.babycare.main.event;
+package com.ben.yjh.babycare.main.event.video;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -40,12 +38,9 @@ import mabeijianxi.camera.model.MediaObject;
 import mabeijianxi.camera.model.MediaRecorderConfig;
 import mabeijianxi.camera.util.DeviceUtils;
 import mabeijianxi.camera.util.FileUtils;
-import mabeijianxi.camera.util.StringUtils;
-
-import static mabeijianxi.camera.MediaRecorderBase.SMALL_VIDEO_WIDTH;
 import static mabeijianxi.camera.MediaRecorderBase.compressConfig;
 
-public class MediaRecorderActivity extends BaseActivity implements
+public class VideoRecorderActivity extends BaseActivity implements
         MediaRecorderBase.OnErrorListener, OnClickListener, MediaRecorderBase.OnPreparedListener,
         MediaRecorderBase.OnEncodeListener {
 
@@ -78,6 +73,10 @@ public class MediaRecorderActivity extends BaseActivity implements
         if (mConfig == null) {
             finish();
         }
+
+        MediaRecorderBase.SMALL_VIDEO_WIDTH = mConfig.getSmallVideoWidth();
+        MediaRecorderBase.SMALL_VIDEO_HEIGHT = mConfig.getSmallVideoHeight();
+
         mSurfaceView = (SurfaceView) findViewById(R.id.recordPreview);
         mProgressView = (VideoProgressView) findViewById(R.id.recordProgress);
         mRecordDelete = (CheckedTextView) findViewById(R.id.tv_delete);
@@ -179,9 +178,9 @@ public class MediaRecorderActivity extends BaseActivity implements
     private void initSurfaceView() {
         final int w = DeviceUtils.getScreenWidth(this);
         ((RelativeLayout.LayoutParams) mBottomLayout.getLayoutParams()).topMargin =
-                (int) (w / (SMALL_VIDEO_WIDTH / (MediaRecorderBase.SMALL_VIDEO_HEIGHT * 1.0f)));
+                (int) (w / (mConfig.getSmallVideoWidth() / (mConfig.getSmallVideoHeight() * 1.0f)));
         int height = (int) (w * ((MediaRecorderBase.mSupportedPreviewWidth * 1.0f)
-                / MediaRecorderBase.SMALL_VIDEO_WIDTH));
+                / mConfig.getSmallVideoWidth()));
         //
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mSurfaceView
                 .getLayoutParams();
@@ -426,7 +425,7 @@ public class MediaRecorderActivity extends BaseActivity implements
     @Override
     public void onEncodeComplete() {
         hideProgress();
-        Intent intent = new Intent(this, PostVideoActivity.class);
+        Intent intent = new Intent(this, VideoPostActivity.class);
         intent.putExtra(Constants.VIDEO_TEMP_DIR, mMediaObject.getOutputDirectory());
         if (compressConfig != null) {
             intent.putExtra(Constants.VIDEO_URL, mMediaObject.getOutputTempTranscodingVideoPath());

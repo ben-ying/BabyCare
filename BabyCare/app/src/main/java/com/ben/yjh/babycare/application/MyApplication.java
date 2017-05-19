@@ -13,6 +13,7 @@ import com.aviary.android.feather.common.AviaryIntent;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.Utils;
 import com.ben.yjh.babycare.widget.volley.VolleySingleton;
+import com.google.common.base.Splitter;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
@@ -206,7 +207,7 @@ public class MyApplication extends SugarApp {
     }
 
     public static void initSmallVideo(Context context) {
-        File dcim = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+//        File dcim = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
 //        if (DeviceUtils.isZte()) {
 //            if (dcim.exists()) {
 //                VCamera.setVideoCachePath(dcim + Constants.VIDEO_DIR);
@@ -215,7 +216,8 @@ public class MyApplication extends SugarApp {
 //                        "/sdcard/", "/sdcard-ext/") + Constants.VIDEO_DIR);
 //            }
 //        } else {
-            VCamera.setVideoCachePath(dcim + Constants.VIDEO_DIR);
+            String dir = Utils.getVideoCacheDir(context).getAbsolutePath();
+            VCamera.setVideoCachePath(dir.endsWith(",") ? dir : dir + "/");
 //        }
         VCamera.setDebugMode(true);
         VCamera.initialize(context);

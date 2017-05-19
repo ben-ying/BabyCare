@@ -123,6 +123,8 @@ public class HttpPostTask {
             protected Map<String, String> getParams() {
                 return null;
             }
+
+
         };
 
         int socketTimeout = 20000;// 20 seconds - change to what you want

@@ -10,6 +10,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import mabeijianxi.camera.MediaRecorderBase;
+
 
 public class Event extends SugarRecord implements Serializable {
 
@@ -161,7 +163,7 @@ public class Event extends SugarRecord implements Serializable {
     }
 
     public int getVideoWidth() {
-        return videoWidth == 0 ? Constants.VIDEO_DEFAULT_HEIGHT : videoWidth;
+        return videoWidth == 0 ? MediaRecorderBase.SMALL_VIDEO_HEIGHT : videoWidth;
     }
 
     public void setVideoWidth(int videoWidth) {
@@ -169,7 +171,7 @@ public class Event extends SugarRecord implements Serializable {
     }
 
     public int getVideoHeight() {
-        return videoHeight == 0 ? Constants.VIDEO_DEFAULT_WIDTH : videoHeight;
+        return videoHeight == 0 ? MediaRecorderBase.SMALL_VIDEO_WIDTH : videoHeight;
     }
 
     public void setVideoHeight(int videoHeight) {

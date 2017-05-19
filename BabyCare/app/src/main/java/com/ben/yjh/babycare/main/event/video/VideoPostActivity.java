@@ -1,4 +1,4 @@
-package com.ben.yjh.babycare.main.event;
+package com.ben.yjh.babycare.main.event.video;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -37,7 +37,7 @@ import java.util.List;
 import mabeijianxi.camera.views.SurfaceVideoView;
 
 
-public class PostVideoActivity extends BaseActivity implements View.OnClickListener,
+public class VideoPostActivity extends BaseActivity implements View.OnClickListener,
         SurfaceVideoView.OnPlayStateListener, OnErrorListener,
         OnPreparedListener, OnCompletionListener, OnInfoListener {
 
@@ -244,6 +244,7 @@ public class PostVideoActivity extends BaseActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.videoView:
                 Intent intent = new Intent(this, VideoPlayerActivity.class);
+                intent.putExtra(Constants.VIDEO_TYPE, VideoPlayerActivity.TYPE_VIDEO_PREVIEW);
                 intent.putExtra(Constants.VIDEO_URL, mVideoUrl);
                 intent.putExtra(Constants.VIDEO_CONTENT, mContentEditText.getText().toString());
                 startActivityForResult(intent, Constants.SHOW_VIDEO_REQUEST_CODE);

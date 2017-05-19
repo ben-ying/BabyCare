@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/media_layout"
+    android:id="@+id/image_layout"
     android:layout_width="match_parent"
     android:layout_height="@dimen/timeline_image_height"
-    android:layout_below="@+id/name_layout"
-    android:paddingTop="@dimen/text_padding">
+    android:layout_below="@+id/name_layout" >
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
@@ -16,7 +15,7 @@
         android:id="@+id/indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_gravity="bottom|center_horizontal"
         android:padding="@dimen/text_padding" />
 </FrameLayout>
 

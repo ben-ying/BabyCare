@@ -103,14 +103,14 @@
         <activity android:name=".main.event.CommentActivity" />
         <activity android:name=".main.event.AddEventActivity" />
         <activity android:name=".main.event.EventDetailActivity" />
-        <activity android:name=".main.event.MediaRecorderActivity" />
-        <activity android:name=".main.event.VideoPlayerActivity" android:theme="@style/AppTheme.Video" />
-        <activity android:name=".main.event.PostVideoActivity"
+        <activity android:name=".main.event.video.VideoRecorderActivity" />
+        <activity android:name=".main.event.video.VideoPlayerActivity" android:theme="@style/AppTheme.Video" />
+        <activity android:name=".main.event.video.VideoPostActivity"
             android:windowSoftInputMode="stateVisible|adjustPan"
             android:theme="@style/AppTheme.Video" />
 
         <!--small-video-recorder-->
-        <!--<activity android:name="mabeijianxi.camera.MediaRecorderActivity"/>-->
+        <!--<activity android:name="mabeijianxi.camera.VideoRecorderActivity"/>-->
     </application>
 
 </manifest>

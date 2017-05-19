@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.ben.yjh.babycare.R;
+import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.io.IOException;

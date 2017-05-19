@@ -92,12 +92,14 @@
                 android:id="@+id/rb_comment"
                 style="@style/action_button"
                 android:layout_toStartOf="@+id/rb_share"
+                android:layout_alignParentEnd="true"
                 android:drawableStart="@drawable/btn_comment" />
 
             <RadioButton
                 android:id="@+id/rb_share"
                 style="@style/action_button"
                 android:layout_alignParentEnd="true"
+                android:visibility="gone"
                 android:drawableStart="@drawable/btn_share" />
 
         </RelativeLayout>

@@ -9,11 +9,13 @@ import com.ben.yjh.babycare.model.VideoConfig;
 
 import java.util.List;
 
+import mabeijianxi.camera.MediaRecorderBase;
+
 public class VideoUtils {
 
     public static VideoConfig getVideoConfig(Context context, String username) {
-        String androidId = Settings.Secure.getString(
-                context.getContentResolver(), Settings.Secure.ANDROID_ID);
+//        String androidId = Settings.Secure.getString(
+//                context.getContentResolver(), Settings.Secure.ANDROID_ID);
 
 //        if (androidId != null) {
 //            List<VideoConfig> videoConfigs = VideoConfig.find(VideoConfig.class,
@@ -40,24 +42,25 @@ public class VideoUtils {
         Camera back = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
         List<Camera.Size> backSizeList = back.getParameters().getSupportedPreviewSizes();
         for (Camera.Size bSize : backSizeList) {
-            int decimal = Math.abs(Constants.VIDEO_DEFAULT_WIDTH - bSize.width);
-            if (decimal == 0) {
-                videoConfig.setWidth(bSize.width);
+            int difference = Math.abs(Constants.VIDEO_DEFAULT_WIDTH - bSize.height);
+            if (difference == 0) {
+                videoConfig.setWidth(bSize.height);
                 break;
             } else {
-                if (decimal < Constants.VIDEO_DEFAULT_WIDTH - videoConfig.getWidth()) {
-                    videoConfig.setWidth(bSize.width);
+                if (difference < Constants.VIDEO_DEFAULT_WIDTH - videoConfig.getWidth()) {
+                    videoConfig.setWidth(bSize.height);
                 }
             }
         }
         for (Camera.Size bSize : backSizeList) {
-            int decimal = Math.abs(Constants.VIDEO_DEFAULT_HEIGHT - bSize.height);
-            if (decimal == 0) {
-                videoConfig.setHeight(bSize.height);
+            int difference = Math.abs(Constants.VIDEO_DEFAULT_HEIGHT - bSize.width);
+            if (difference == 0) {
+                videoConfig.setHeight(bSize.width);
                 break;
             } else {
-                if (decimal < Constants.VIDEO_DEFAULT_HEIGHT - videoConfig.getHeight()) {
-                    videoConfig.setHeight(bSize.height);
+                if (difference < Constants.VIDEO_DEFAULT_HEIGHT
+                        - videoConfig.getHeight() && bSize.width < videoConfig.getWidth()) {
+                    videoConfig.setHeight(bSize.width);
                 }
             }
         }
@@ -65,29 +68,31 @@ public class VideoUtils {
         Camera front = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
         List<Camera.Size> frontSizeList = front.getParameters().getSupportedPreviewSizes();
         for (Camera.Size fSize : frontSizeList) {
-            int decimal = Math.abs(Constants.VIDEO_DEFAULT_WIDTH - fSize.width);
-            if (decimal == 0) {
-                videoConfig.setWidth(fSize.width);
+            int difference = Math.abs(Constants.VIDEO_DEFAULT_WIDTH - fSize.height);
+            if (difference == 0) {
+                videoConfig.setWidth(fSize.height);
                 break;
             } else {
-                if (decimal < Constants.VIDEO_DEFAULT_WIDTH - videoConfig.getWidth()) {
-                    videoConfig.setWidth(fSize.width);
+                if (difference < Constants.VIDEO_DEFAULT_WIDTH - videoConfig.getWidth()) {
+                    videoConfig.setWidth(fSize.height);
                 }
             }
         }
         for (Camera.Size fSize : frontSizeList) {
-            int decimal = Math.abs(Constants.VIDEO_DEFAULT_HEIGHT - fSize.height);
-            if (decimal == 0) {
-                videoConfig.setHeight(fSize.height);
+            int difference = Math.abs(Constants.VIDEO_DEFAULT_HEIGHT - fSize.width);
+            if (difference == 0) {
+                videoConfig.setHeight(fSize.width);
                 break;
             } else {
-                if (decimal < Constants.VIDEO_DEFAULT_HEIGHT - videoConfig.getHeight()) {
-                    videoConfig.setHeight(fSize.height);
+                if (difference < Constants.VIDEO_DEFAULT_HEIGHT
+                        - videoConfig.getHeight() && fSize.width < videoConfig.getWidth()) {
+                    videoConfig.setHeight(fSize.width);
                 }
             }
         }
         front.release();
 
+        VideoConfig.deleteAll(VideoConfig.class);
         videoConfig.save();
         return videoConfig;
     }

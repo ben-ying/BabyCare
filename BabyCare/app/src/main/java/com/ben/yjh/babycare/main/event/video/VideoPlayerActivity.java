@@ -1,4 +1,4 @@
-package com.ben.yjh.babycare.main.event;
+package com.ben.yjh.babycare.main.event.video;
 
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
@@ -44,12 +44,16 @@ public class VideoPlayerActivity extends BaseActivity implements
         OnPreparedListener, OnClickListener, OnCompletionListener,
         OnInfoListener {
 
+    public static final int TYPE_VIDEO_PREVIEW = 0;
+    public static final int TYPE_VIDEO_DETAIL = 1;
+
     private SurfaceVideoView mVideoView;
     private View mPlayerStatus;
     private View mLoading;
     private String mVideoUrl;
     private boolean mNeedResume;
     private ProgressDialog mProgressDialog;
+    private int mType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,7 @@ public class VideoPlayerActivity extends BaseActivity implements
         Utils.changeStatusBarColor(this, R.color.black);
         initToolbar(0);
         mVideoUrl = getIntent().getStringExtra(Constants.VIDEO_URL);
+        mType = getIntent().getIntExtra(Constants.VIDEO_TYPE, TYPE_VIDEO_PREVIEW);
         if (StringUtils.isEmpty(mVideoUrl)) {
             finish();
             return;
@@ -84,7 +89,9 @@ public class VideoPlayerActivity extends BaseActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_video, menu);
+        if (mType == TYPE_VIDEO_PREVIEW) {
+            getMenuInflater().inflate(R.menu.menu_video, menu);
+        }
         return true;
     }
 
@@ -265,8 +272,9 @@ public class VideoPlayerActivity extends BaseActivity implements
                     mVideoView.pause();
                 break;
             case MediaPlayer.MEDIA_INFO_BUFFERING_END:
-                if (!isFinishing())
+                if (!isFinishing()) {
                     mVideoView.start();
+                }
                 break;
             case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
                 mVideoView.setBackground(null);

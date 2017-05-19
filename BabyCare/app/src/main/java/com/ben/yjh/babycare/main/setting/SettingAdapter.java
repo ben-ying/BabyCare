@@ -3,8 +3,8 @@ package com.ben.yjh.babycare.main.setting;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +16,7 @@ import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Utils;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.utils.DiskCacheUtils;
-import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 
-import java.io.File;
 import java.io.IOException;
 
 public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.ShareViewHolder> {
@@ -64,11 +60,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.ShareVie
                 R.string.clear_image_cache_alert, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mProgressBar.setVisibility(View.VISIBLE);
-                        MyApplication.getInstance(mContext).clearImageCache();
-                        mProgressBar.setVisibility(View.GONE);
-                        Toast.makeText(mContext,
-                                R.string.clear_image_cache_successfully, Toast.LENGTH_SHORT).show();
+                        new ClearImageCache().execute();
                     }
                 });
     }
@@ -78,17 +70,58 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.ShareVie
                 R.string.clear_video_cache_alert, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            mProgressBar.setVisibility(View.VISIBLE);
-                            Utils.cleanVideoCacheDir(mContext);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        mProgressBar.setVisibility(View.GONE);
-                        Toast.makeText(mContext,
-                                R.string.clear_video_cache_successfully, Toast.LENGTH_SHORT).show();
+                        new ClearVideoCache().execute();
                     }
                 });
+    }
+
+    private class ClearImageCache extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            MyApplication.getInstance(mContext).clearImageCache();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            mProgressBar.setVisibility(View.GONE);
+            Toast.makeText(mContext,
+                    R.string.clear_image_cache_successfully, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class ClearVideoCache extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                Utils.cleanVideoCacheDir(mContext);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+//            Glide.get(mContext).clearDiskCache();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            mProgressBar.setVisibility(View.GONE);
+            Toast.makeText(mContext,
+                    R.string.clear_video_cache_successfully, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

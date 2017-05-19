@@ -21,6 +21,7 @@ public class Constants {
     public static final String AVIARY_API_KEY_SECRET = "a9a692d4-2bf2-4927-9dc3-2cef97ac8a42";
     public static final String VIDEO_DIR = "/small-video-recorder/";
     public static final String VIDEO_URL = "video_url";
+    public static final String VIDEO_TYPE = "video_type";
     public static final String VIDEO_CONTENT = "video_content";
     public static final String VIDEO_CONFIG = "video_config";
     public static final String VIDEO_TEMP_DIR = "video_temp_dir";
@@ -44,8 +45,10 @@ public class Constants {
     public static final int SHOW_VIDEO_REQUEST_CODE = 113;
 
 
+//    public static final int VIDEO_DEFAULT_WIDTH = 1080;
+//    public static final int VIDEO_DEFAULT_HEIGHT = 720;
     public static final int VIDEO_DEFAULT_WIDTH = 480;
-    public static final int VIDEO_DEFAULT_HEIGHT = 360;
+    public static final int VIDEO_DEFAULT_HEIGHT = 320;
     public static final int VIDEO_MAX_DEFAULT_TIME = 10 * 1000;
     public static final int VIDEO_MIN_DEFAULT_TIME = 3 * 1000;
     public static final int VIDEO_MAX_FRAME_RATE = 25;

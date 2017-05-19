@@ -6,6 +6,8 @@ import com.orm.SugarRecord;
 
 import java.io.Serializable;
 
+import mabeijianxi.camera.MediaRecorderBase;
+
 
 public class VideoConfig extends SugarRecord implements Serializable {
     @SerializedName("username") String username;
@@ -48,7 +50,7 @@ public class VideoConfig extends SugarRecord implements Serializable {
     }
 
     public int getWidth() {
-        return width == 0 ? Constants.VIDEO_DEFAULT_WIDTH : width;
+        return width;
     }
 
     public void setWidth(int width) {
@@ -56,7 +58,7 @@ public class VideoConfig extends SugarRecord implements Serializable {
     }
 
     public int getHeight() {
-        return height == 0 ? Constants.VIDEO_DEFAULT_HEIGHT : height;
+        return height;
     }
 
     public void setHeight(int height) {
