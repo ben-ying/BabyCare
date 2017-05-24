@@ -82,7 +82,7 @@ MSG_GET_USER_DETAIL_SUCCESS = _(u'获取用户信息成功')
 
 PASSWORD_VERIFY_CODE_EMAIL_SUBJECT = _(u'忘记密码验证码－嘟嘟手记')
 PASSWORD_VERIFY_CODE_EMAIL_CONTENT = _(u'您的验证码：%s。\n本邮件是系统自动发送的，请勿直接回复！感谢您的访问，祝您使用愉快！')
-
+MSG_GET_APP_INFO_SUCCESS = _(u'获取应用版本信息')
 
 # event message
 MSG_EMPTY_EVENT = _(u'数据不能全为空')

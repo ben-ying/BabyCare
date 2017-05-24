@@ -19,7 +19,7 @@ from babycare.constants import CODE_DUPLICATE_EMAIL, MSG_SEND_VERIFY_CODE_SUCCES
     CODE_EMPTY_VERIFY_CODE, MSG_INCORRECT_VERIFY_CODE, CODE_INCORRECT_VERIFY_CODE, CODE_EXPIRED_VERIFY_CODE, \
     MSG_EXPIRED_VERIFY_CODE, \
     VERIFY_CODE_EXPIRED_TIME, CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS, MSG_GET_USER_DETAIL_SUCCESS, \
-    MSG_DUPLICATE_PHONE, CODE_DUPLICATE_PHONE
+    MSG_DUPLICATE_PHONE, CODE_DUPLICATE_PHONE, MSG_GET_APP_INFO_SUCCESS
 from babycare.constants import CODE_DUPLICATE_USER
 from babycare.constants import CODE_EMPTY_EMAIL
 from babycare.constants import CODE_EMPTY_PASSWORD
@@ -309,10 +309,12 @@ def get_app_info(request):
     try:
         token = request.data.get('token')
         user = get_user_by_token(token)
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         if user:
             app_info = AppInfo.objects.filter()[0]
-            return json_response(AppInfoSerializer(app_info).data, CODE_SUCCESS, MSG_LOGIN_SUCCESS)
+            response_data = AppInfoSerializer(app_info).data
+            response_data['app_name'] = app_info.app_file.file.name.split("/")[-1]
+            return json_response(AppInfoSerializer(app_info).data, CODE_SUCCESS, MSG_GET_APP_INFO_SUCCESS)
         else:
             return invalid_token_response()
     except Exception as e:
