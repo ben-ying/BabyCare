@@ -138,7 +138,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.ShareVie
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setDescription(String.format(mContext.getString(R.string.downloading), fileName));
         request.setTitle(fileName);
-        request.setDestinationUri(Uri.parse(destination));
+        request.setDestinationUri(Uri.fromFile(new File(destination)));
         final DownloadManager manager = (DownloadManager)
                 mContext.getSystemService(Context.DOWNLOAD_SERVICE);
         final long downloadId = manager.enqueue(request);
