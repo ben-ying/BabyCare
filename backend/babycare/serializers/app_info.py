@@ -4,7 +4,7 @@ from babycare.models import Event, AppInfo
 
 
 class AppInfoSerializer(serializers.ModelSerializer):
-    app_link = serializers.CharField(read_only=True, source='app_file.file.name')
+    app_link = serializers.CharField(read_only=True, source='app_file.file.url')
 
     class Meta:
         model = AppInfo

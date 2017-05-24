@@ -23,6 +23,7 @@ import com.ben.yjh.babycare.BuildConfig;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.http.EventTaskHandler;
+import com.ben.yjh.babycare.http.HttpPostTask;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.UserTaskHandler;
 import com.ben.yjh.babycare.model.AppInfo;
@@ -89,8 +90,8 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.ShareVie
                         if (classOfT != null) {
                             if (classOfT.getVersionCode() > BuildConfig.VERSION_CODE) {
                                 AlertUtils.showAlertDialog(mContext,
-                                        String.format(mContext.getString(R.string.new_version_found),
-                                                classOfT.getVersionName(), classOfT.getVersionCode()),
+                                        String.format(mContext.getString(
+                                                R.string.new_version_found), classOfT.getAppName()),
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
@@ -133,7 +134,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.ShareVie
             }
         }
 
-        final String url = appInfo.getAppLink();
+        final String url = HttpPostTask.DOMAIN + appInfo.getAppLink();
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setDescription(String.format(mContext.getString(R.string.downloading), fileName));
         request.setTitle(fileName);

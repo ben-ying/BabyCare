@@ -309,7 +309,6 @@ def get_app_info(request):
     try:
         token = request.data.get('token')
         user = get_user_by_token(token)
-        # import pdb; pdb.set_trace()
         if user:
             app_info = AppInfo.objects.filter()[0]
             response_data = AppInfoSerializer(app_info).data
