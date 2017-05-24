@@ -3,8 +3,6 @@ from __future__ import unicode_literals
 from django.db import models
 from django.forms import IntegerField
 
-from backend.settings_common import STATIC_URL, STATIC_ROOT
-
 
 class BabyUser(models.Model):
     id = IntegerField(label='ID')
@@ -130,7 +128,7 @@ class AppInfo(models.Model):
     version_name = models.CharField(max_length=50)
     version_code = models.IntegerField()
     version_type = models.IntegerField(default=0)
-    app_file = models.FileField(upload_to=STATIC_ROOT+'/apks/%Y-%m-%d %H:%M/')
+    app_file = models.FileField(upload_to='apk/%Y-%m-%d %H:%M:%S/')
     datetime = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
