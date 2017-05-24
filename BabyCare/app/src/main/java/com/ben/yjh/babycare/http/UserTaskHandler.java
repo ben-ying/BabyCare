@@ -113,8 +113,8 @@ public class UserTaskHandler extends BaseTaskHandler {
                              HttpResponseInterface<AppInfo> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
-            new HttpPostTask(context).startTask(URL_GET_APP_VERSION +
-                            "?token=" + token, Request.Method.GET,
+            bodyObject.put("token", token);
+            new HttpPostTask(context).startTask(URL_GET_APP_VERSION, Request.Method.POST,
                     bodyObject, AppInfo.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();

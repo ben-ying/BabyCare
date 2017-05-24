@@ -304,16 +304,16 @@ def reset_password_with_verify_code_view(request):
         return save_error_log(request, e)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def get_app_info(request):
     try:
-        # token = request.data.get('token')
-        # user = get_user_by_token(token)
-        # if user:
-        app_info = AppInfo.objects.filter()[0]
+        token = request.data.get('token')
+        user = get_user_by_token(token)
         import pdb; pdb.set_trace()
-        return json_response(AppInfoSerializer(app_info).data, CODE_SUCCESS, MSG_LOGIN_SUCCESS)
-        # else:
-        #     return invalid_token_response()
+        if user:
+            app_info = AppInfo.objects.filter()[0]
+            return json_response(AppInfoSerializer(app_info).data, CODE_SUCCESS, MSG_LOGIN_SUCCESS)
+        else:
+            return invalid_token_response()
     except Exception as e:
         return save_error_log(request, e)
