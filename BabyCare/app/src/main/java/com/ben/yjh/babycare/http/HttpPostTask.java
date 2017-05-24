@@ -34,10 +34,11 @@ import java.util.TimeZone;
 
 public class HttpPostTask {
 
-    //    public static final String DOMAIN = "http://116.62.47.105/webservice/";
-    public static final String DOMAIN = "http://www.bensbabycare.com/webservice/";
-//    public static final String DOMAIN = "http://192.168.1.131:8000/webservice/";
-    //        public static final String DOMAIN = "http://192.168.43.177:8000/webservice/";
+    public static final String DOMAIN = "http://www.bensbabycare.com";
+    // public static final String DOMAIN = "http://192.168.1.131:8000";
+    // public static final String DOMAIN = "http://116.62.47.105";
+    // public static final String DOMAIN = "http://192.168.43.177:8000";
+    private static final String URL = DOMAIN + "/webservice/";
     private static final String TAG_JSON_OBJ = "tag_json_obj";
     private static final String VERSION = "1.0.0";
 
@@ -74,8 +75,8 @@ public class HttpPostTask {
     }
 
     <T> void startTask(final String url, final int method, final JSONObject jsonObject,
-                              final Class<T> classOfT, final boolean showErrorDialog,
-                              final HttpResponseInterface httpResponseInterface) {
+                       final Class<T> classOfT, final boolean showErrorDialog,
+                       final HttpResponseInterface httpResponseInterface) {
         try {
             jsonObject.put("zone", TimeZone.getDefault().getID());
             jsonObject.put("app_version", VERSION);
@@ -89,30 +90,30 @@ public class HttpPostTask {
             httpResponseInterface.onStart();
         }
         if (BuildConfig.DEBUG) {
-            Log.e("HTTP", "url: " + DOMAIN + url);
+            Log.e("HTTP", "url: " + URL + url);
             Log.e("HTTP", "params: " + jsonObject);
         }
 
-        JsonObjectRequest request = new JsonObjectRequest(method, DOMAIN +
-                url.replace(HttpPostTask.DOMAIN, ""), jsonObject, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        if (BuildConfig.DEBUG) {
-                            Log.e("HTTP", "response: " + response);
-                        }
-                        hideProgress();
-                        if (httpResponseInterface != null) {
-                            HttpBaseResult httpResponse = HttpUtils.getJsonData(
-                                    response.toString(), HttpBaseResult.class);
-                            if (httpResponse.isSuccess()) {
-                                onSuccess(response, httpResponse, classOfT, httpResponseInterface);
-                            } else {
-                                onFailure(url, method, showErrorDialog,
-                                        jsonObject, httpResponse, classOfT, httpResponseInterface);
-                            }
-                        }
+        JsonObjectRequest request = new JsonObjectRequest(method, URL +
+                url.replace(HttpPostTask.URL, ""), jsonObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                if (BuildConfig.DEBUG) {
+                    Log.e("HTTP", "response: " + response);
+                }
+                hideProgress();
+                if (httpResponseInterface != null) {
+                    HttpBaseResult httpResponse = HttpUtils.getJsonData(
+                            response.toString(), HttpBaseResult.class);
+                    if (httpResponse.isSuccess()) {
+                        onSuccess(response, httpResponse, classOfT, httpResponseInterface);
+                    } else {
+                        onFailure(url, method, showErrorDialog,
+                                jsonObject, httpResponse, classOfT, httpResponseInterface);
                     }
-                },
+                }
+            }
+        },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -151,7 +152,7 @@ public class HttpPostTask {
 
     private <T> void onFailure(final String url, final int method, final boolean showErrorDialog,
                                final JSONObject jsonObject, HttpBaseResult httpResponse,
-                           final Class<T> classOfT, final HttpResponseInterface httpResponseInterface) {
+                               final Class<T> classOfT, final HttpResponseInterface httpResponseInterface) {
         httpResponseInterface.onFailure(httpResponse);
         if (httpResponse.getCode() == Constants.INVALID_ACCESS_TOKEN) {
             if (!((Activity) mContext).isFinishing()) {
