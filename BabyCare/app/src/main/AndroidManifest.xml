@@ -109,6 +109,7 @@
             android:windowSoftInputMode="stateVisible|adjustPan"
             android:theme="@style/AppTheme.Video" />
 
+        <service android:name=".service.DownloadService"/>
         <!--small-video-recorder-->
         <!--<activity android:name="mabeijianxi.camera.VideoRecorderActivity"/>-->
     </application>

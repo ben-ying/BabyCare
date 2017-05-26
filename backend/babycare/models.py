@@ -128,6 +128,7 @@ class AppInfo(models.Model):
     version_name = models.CharField(max_length=50)
     version_code = models.IntegerField()
     version_type = models.IntegerField(default=0)
+    update_info = models.TextField()
     app_file = models.FileField(upload_to='apk/%Y-%m-%d %H:%M:%S/')
     datetime = models.DateTimeField(auto_now=True, blank=True, null=True)
 

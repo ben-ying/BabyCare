@@ -26,6 +26,9 @@ public class Constants {
     public static final String VIDEO_CONFIG = "video_config";
     public static final String VIDEO_TEMP_DIR = "video_temp_dir";
     public static final String VIDEO_THUMBNAIL = "video_thumbnail";
+    public static final String APP_INFO = "app_info";
+    public static final String RECEIVER = "receiver";
+    public static final String PROGRESS = "progress";
 
     public static final int INVALID_VALUE = -1;
     public static final int MIN_PASSWORD_LENGTH = 6;
@@ -43,6 +46,7 @@ public class Constants {
     public static final int VIDEO_REQUEST_CODE = 111;
     public static final int SHARE_APP_REQUEST_CODE = 112;
     public static final int SHOW_VIDEO_REQUEST_CODE = 113;
+    public static final int UPDATE_PROGRESS = 114;
 
 
 //    public static final int VIDEO_DEFAULT_WIDTH = 1080;

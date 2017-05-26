@@ -8,4 +8,4 @@ class AppInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AppInfo
-        fields = ['version_name', 'version_code', 'version_type', 'app_link', 'datetime']
+        fields = ['version_name', 'version_code', 'version_type', 'app_link', 'update_info', 'datetime']

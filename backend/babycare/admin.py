@@ -43,6 +43,6 @@ admin.site.register(Comment, CommentAdmin)
 
 
 class AppInfoAdmin(admin.ModelAdmin):
-    list_display = ('version_name', 'version_code', 'app_file', 'datetime')
-    search_fields = ('version_name', 'version_code', 'app_file', 'datetime')
+    list_display = ('version_name', 'version_code', 'app_file', 'update_info', 'datetime')
+    search_fields = ('version_name', 'version_code', 'app_file', 'update_info', 'datetime')
 admin.site.register(AppInfo, AppInfoAdmin)

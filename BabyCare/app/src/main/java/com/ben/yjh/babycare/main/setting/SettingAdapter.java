@@ -2,7 +2,9 @@ package com.ben.yjh.babycare.main.setting;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,7 +12,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +35,9 @@ import com.ben.yjh.babycare.model.AppInfo;
 import com.ben.yjh.babycare.model.Event;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.model.User;
+import com.ben.yjh.babycare.service.DownloadService;
 import com.ben.yjh.babycare.util.AlertUtils;
+import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.Utils;
 
 import java.io.File;
@@ -42,6 +49,8 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.ShareVie
     private String[] mList;
     private ProgressBar mProgressBar;
     private User mUser;
+    private ProgressDialog mProgressDialog;
+    private AppInfo mAppInfo;
 
     public SettingAdapter(Context context, ProgressBar progressBar, User user) {
         this.mContext = context;
@@ -87,24 +96,55 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.ShareVie
 
                     @Override
                     public void onSuccess(final AppInfo classOfT) {
+                        mAppInfo = classOfT;
                         if (classOfT != null) {
                             if (classOfT.getVersionCode() > BuildConfig.VERSION_CODE) {
-                                AlertUtils.showAlertDialog(mContext,
-                                        String.format(mContext.getString(
-                                                R.string.new_version_found), classOfT.getAppName()),
-                                        new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                downloadApk(classOfT);
-                                            }
-                                        });
+                                if (!((Activity) mContext).isFinishing()) {
+                                    AlertDialog dialog = new AlertDialog.Builder(mContext)
+                                            .setTitle(String.format(mContext.getString(
+                                                    R.string.new_version_found), classOfT.getAppName()))
+                                            .setMessage(classOfT.getUpdateInfo())
+                                            .setPositiveButton(R.string.update, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                    String destination = Environment.getExternalStoragePublicDirectory(
+                                                            Environment.DIRECTORY_DOWNLOADS) + "/";
+                                                    destination += new File(mAppInfo.getAppLink()).getName();
+                                                    if (new File(destination).exists()) {
+                                                        new File(destination).delete();
+                                                    }
+                                                    mProgressDialog = new ProgressDialog(mContext);
+                                                    mProgressDialog.setIndeterminate(false);
+                                                    mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                                                    mProgressDialog.setCancelable(true);
+                                                    mProgressDialog.setMessage(String.format(
+                                                            mContext.getString(R.string.downloading),
+                                                            classOfT.getAppName()));
+                                                    mProgressDialog.show();
+                                                    Intent intent = new Intent(mContext,
+                                                            DownloadService.class);
+                                                    intent.putExtra(Constants.APP_INFO, classOfT);
+                                                    intent.putExtra(Constants.RECEIVER,
+                                                            new DownloadReceiver(new Handler()));
+                                                    mContext.startService(intent);
+                                                }
+                                            })
+                                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    dialogInterface.dismiss();
+                                                }
+                                            })
+                                            .create();
+                                    dialog.setCancelable(true);
+                                    dialog.show();
+                                }
                             } else {
-                                Toast.makeText(mContext,
-                                        R.string.latest_app_version, Toast.LENGTH_LONG).show();
+                                AlertUtils.showAlertDialog(mContext, R.string.latest_app_version);
                             }
                         } else {
-                            Toast.makeText(mContext,
-                                    R.string.latest_app_version, Toast.LENGTH_LONG).show();
+                            AlertUtils.showAlertDialog(mContext, R.string.latest_app_version);
                         }
                     }
 
@@ -118,45 +158,40 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.ShareVie
                 });
     }
 
-    private void downloadApk(AppInfo appInfo) {
-        String destination = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOWNLOADS) + "/";
-        String fileName = mContext.getString(R.string.app_name);
-        destination += appInfo.getAppName();
-//        final Uri uri = Uri.parse("file://" + destination);
+    private class DownloadReceiver extends ResultReceiver {
+        public DownloadReceiver(Handler handler) {
+            super(handler);
+        }
 
-        File file = new File(destination);
-        if (file.exists()) {
-            for (int i = 0; i < 5; i++) {
-                if (file.delete()) {
-                    break;
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            super.onReceiveResult(resultCode, resultData);
+            if (resultCode == Constants.UPDATE_PROGRESS) {
+                int progress = resultData.getInt(Constants.PROGRESS);
+                mProgressDialog.setProgress(progress);
+                if (progress == 100) {
+                    mProgressDialog.dismiss();
+                    if (mAppInfo != null) {
+                        openAPK(mAppInfo);
+                    }
+                } else if (progress > 100) {
+                    Intent intent = new Intent(mContext, DownloadService.class);
+                    mContext.stopService(intent);
                 }
             }
         }
+    }
 
-        final String url = HttpPostTask.DOMAIN + appInfo.getAppLink();
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-        request.setDescription(String.format(mContext.getString(R.string.downloading), fileName));
-        request.setTitle(fileName);
-        request.setDestinationUri(Uri.fromFile(new File(destination)));
-        final DownloadManager manager = (DownloadManager)
-                mContext.getSystemService(Context.DOWNLOAD_SERVICE);
-        final long downloadId = manager.enqueue(request);
-
-        BroadcastReceiver onComplete = new BroadcastReceiver() {
-            public void onReceive(Context context, Intent intent) {
-                Intent install = new Intent(Intent.ACTION_VIEW);
-                install.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                install.setDataAndType(Uri.parse(url),
-                        manager.getMimeTypeForDownloadedFile(downloadId));
-                mContext.startActivity(install);
-                mContext.unregisterReceiver(this);
-                ((Activity) mContext).finish();
-            }
-        };
-
-        mContext.registerReceiver(onComplete,
-                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+    private void openAPK(AppInfo appInfo) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        String destination = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOWNLOADS) + "/";
+        destination += new File(appInfo.getAppLink()).getName();
+        intent.setDataAndType(Uri.fromFile(
+                new File(destination)), "application/vnd.android.package-archive");
+        mContext.startActivity(intent);
+        new File(destination).delete();
     }
 
     private void clearImageCacheAlert() {

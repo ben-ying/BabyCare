@@ -13,10 +13,19 @@ public class AppInfo implements Serializable {
     @SerializedName("version_type") int versionType;
     @SerializedName("app_link") String appLink;
     @SerializedName("app_name") String appName;
+    @SerializedName("update_info") String updateInfo;
     @SerializedName("datetime") String datetime;
 
     private static final int TYPE_RELEASE = 0;
     private static final int TYPE_DEBUG = 1;
+
+    public String getUpdateInfo() {
+        return updateInfo;
+    }
+
+    public void setUpdateInfo(String updateInfo) {
+        this.updateInfo = updateInfo;
+    }
 
     public int getVersionName() {
         return versionName;
