@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 public class NavigationTaskHandler extends BaseTaskHandler {
 
+    public static final String URL_ABOUT_US = "about_us/";
     private static final String URL_SEND_FEEDBACK = "feedback/";
 
     private String mToken;

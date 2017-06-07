@@ -98,10 +98,14 @@
         <activity android:name=".main.user.GalleryActivity" />
         <activity android:name=".main.user.UserDetailActivity" />
         <activity android:name=".main.left.UserInfoActivity" />
+        <activity android:name=".main.left.AboutUsActivity" />
+        <activity android:name=".main.left.WebViewActivity" />
         <activity android:name=".main.left.SettingActivity" />
-        <activity android:name=".main.left.FeedbackActivity" />
+        <activity android:name=".main.left.FeedbackActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity android:name=".main.event.CommentActivity" />
-        <activity android:name=".main.event.AddEventActivity" />
+        <activity android:name=".main.event.AddEventActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity android:name=".main.event.EventDetailActivity" />
         <activity android:name=".main.event.video.VideoRecorderActivity" />
         <activity android:name=".main.event.video.VideoPlayerActivity" android:theme="@style/AppTheme.Video" />

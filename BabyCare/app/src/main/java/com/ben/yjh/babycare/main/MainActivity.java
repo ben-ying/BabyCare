@@ -28,6 +28,7 @@ import com.ben.yjh.babycare.base.BaseFragment;
 import com.ben.yjh.babycare.main.event.AddEventActivity;
 import com.ben.yjh.babycare.main.event.EventListFragment;
 import com.ben.yjh.babycare.main.event.video.VideoRecorderActivity;
+import com.ben.yjh.babycare.main.left.AboutUsActivity;
 import com.ben.yjh.babycare.main.left.FeedbackActivity;
 import com.ben.yjh.babycare.main.left.SettingActivity;
 import com.ben.yjh.babycare.main.left.UserInfoActivity;
@@ -157,6 +158,10 @@ public class MainActivity extends BaseActivity
                         break;
                     case R.id.nav_share:
                         share();
+                        break;
+                    case R.id.nav_about:
+                        intent = new Intent(MainActivity.this, AboutUsActivity.class);
+                        startActivityForResult(intent, Constants.SETTING_REQUEST_CODE);
                         break;
                     case R.id.nav_setting:
                         intent = new Intent(MainActivity.this, SettingActivity.class);

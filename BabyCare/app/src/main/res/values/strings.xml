@@ -132,6 +132,7 @@
     <string name="setting">设置</string>
     <string name="bookmark">收藏</string>
     <string name="mine">我的</string>
+    <string name="about">关于</string>
     <string name="share_message">一个记录宝宝生活点滴的应用程序，点击下载%1$s\nhttps://play.google.com/store/apps/details?id=%2$s</string>
     <string name="seconds_ago">刚刚</string>
     <string name="minutes_ago">分钟前</string>
@@ -142,6 +143,9 @@
     <string name="send">发送</string>
     <string name="media_type">发布类型</string>
     <string name="in_development">开发中&#8230;</string>
+    <string name="check_update">检查更新(当前版本%s)</string>
+    <string name="about_app">关于应用</string>
+    <string name="score_it">去评分</string>
 
     <string name="empty"></string>
     <string name="latest_app_version">您的应用为最新版本</string>

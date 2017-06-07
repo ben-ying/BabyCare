@@ -273,9 +273,9 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/default_text_color</item>
+        <item name="android:inputType">text</item>
         <item name="android:imeOptions">actionNext</item>
         <item name="android:maxLines">1</item>
-        <item name="android:inputType">text</item>
     </style>
 
     <style name="default_bottom_text">

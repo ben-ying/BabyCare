@@ -22,6 +22,7 @@ public class Constants {
     public static final String VIDEO_DIR = "/small-video-recorder/";
     public static final String VIDEO_URL = "video_url";
     public static final String VIDEO_TYPE = "video_type";
+    public static final String WEB_VIEW_TYPE = "web_view_type";
     public static final String VIDEO_CONTENT = "video_content";
     public static final String VIDEO_CONFIG = "video_config";
     public static final String VIDEO_TEMP_DIR = "video_temp_dir";
@@ -29,6 +30,7 @@ public class Constants {
     public static final String APP_INFO = "app_info";
     public static final String RECEIVER = "receiver";
     public static final String PROGRESS = "progress";
+    public static final String TITLE = "title";
 
     public static final int INVALID_VALUE = -1;
     public static final int MIN_PASSWORD_LENGTH = 6;

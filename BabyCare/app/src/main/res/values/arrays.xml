@@ -24,8 +24,10 @@
         <item>删除</item>
     </string-array>
 
-    <string-array name="setting_choices">
-        <item>检查更新</item>
+    <string-array name="about_us_choices">
+        <item>@string/check_update</item>
+        <item>@string/score_it</item>
+        <item>@string/about_app</item>
         <!--<item>清楚图片缓存</item>-->
         <!--<item>清楚视频缓存</item>-->
     </string-array>
