@@ -312,7 +312,7 @@ def get_app_info(request):
         if user:
             response_data = dict()
             if AppInfo.objects.all():
-                app_info = AppInfo.objects.all()[0]
+                app_info = AppInfo.objects.all().order_by('-id')[0]
                 response_data = AppInfoSerializer(app_info).data
                 # import pdb;pdb.set_trace()
                 response_data['app_name'] = app_info.app_file.file.name.split("/")[-1].replace('.apk', '')

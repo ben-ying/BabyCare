@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 
 public class AppInfo implements Serializable {
-    @SerializedName("version_name") int versionName;
+    @SerializedName("version_name") String versionName;
     @SerializedName("version_code") int versionCode;
     @SerializedName("version_type") int versionType;
     @SerializedName("app_link") String appLink;
@@ -27,11 +27,11 @@ public class AppInfo implements Serializable {
         this.updateInfo = updateInfo;
     }
 
-    public int getVersionName() {
+    public String getVersionName() {
         return versionName;
     }
 
-    public void setVersionName(int versionName) {
+    public void setVersionName(String versionName) {
         this.versionName = versionName;
     }
 
