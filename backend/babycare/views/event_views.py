@@ -17,7 +17,7 @@ from babycare.models import Event
 from babycare.serializers.event import EventSerializer
 from babycare.serializers.like import LikeSerializer
 from babycare.utils import json_response, invalid_token_response, get_user_by_token, CustomModelViewSet, upload_file_to_oss, \
-    save_error_log
+    save_error_log, delete_file_from_oss, delete_event_file
 from babycare.utils import simple_json_response
 
 
@@ -80,7 +80,6 @@ class EventViewSet(CustomModelViewSet):
                             image = upload_file_to_oss(image_name, image, type)
                             event.image1 = image
                     elif type == TYPE_VIDEO:
-                        import pdb;
                         for video in base64s:
                             video_name = user.username + time.strftime('%Y%m%d%H%M%S') + EVENT_FOOTER_VIDEO
                             video = upload_file_to_oss(video_name, video, type)
@@ -113,8 +112,11 @@ class EventViewSet(CustomModelViewSet):
                         response = super(EventViewSet, self).destroy(request, *args, **kwargs)
                         if response.status_code != status.HTTP_204_NO_CONTENT:
                             event.id = -1
+                        else:
+                            delete_event_file(event)
                     except Exception as e:
                         event.id = -1
+                        save_error_log(request, e)
                     event_json = EventSerializer(event).data
                     return json_response(event_json, CODE_SUCCESS, MSG_DELETE_EVENT_SUCCESS)
                 else:

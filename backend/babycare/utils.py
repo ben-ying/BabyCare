@@ -5,6 +5,7 @@ import os
 import random
 import smtplib
 import string
+import pdb
 
 import oss2
 from django.contrib.auth.models import User
@@ -74,6 +75,42 @@ def upload_file_to_oss(name, base64, file_type=TYPE_IMAGE):
         bucket.put_object_from_file(name, temp_file)
         os.remove(temp_file)
         return "https://" + OSS_BUCKET_NAME + "." + OSS_ENDPOINT + "/" + name
+
+
+def delete_file_from_oss(url):
+    for param in (OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET_NAME, OSS_ENDPOINT):
+        assert '<' not in param, '请设置参数：' + param
+
+    bucket = oss2.Bucket(oss2.Auth(OSS_ACCESS_KEY_ID,
+                                   OSS_ACCESS_KEY_SECRET), OSS_ENDPOINT, OSS_BUCKET_NAME)
+    if url:
+        bucket.delete_object(url.split('/')[-1])
+    return None
+
+
+def delete_event_file(event):
+    if event.image1:
+        delete_file_from_oss(event.image1)
+    if event.image2:
+        delete_file_from_oss(event.image2)
+    if event.image3:
+        delete_file_from_oss(event.image3)
+    if event.image4:
+        delete_file_from_oss(event.image4)
+    if event.image5:
+        delete_file_from_oss(event.image5)
+    if event.image6:
+        delete_file_from_oss(event.image6)
+    if event.image7:
+        delete_file_from_oss(event.image7)
+    if event.image8:
+        delete_file_from_oss(event.image8)
+    if event.image9:
+        delete_file_from_oss(event.image9)
+    if event.video_thumbnail:
+        delete_file_from_oss(event.video_thumbnail)
+    if event.video_url:
+        delete_file_from_oss(event.video_url)
 
 
 def send_email(baby, to_email, verify_code, is_email_verify=True):

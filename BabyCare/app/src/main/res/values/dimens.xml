@@ -34,7 +34,7 @@
     <dimen name="actions_padding_left">8dp</dimen>
     <dimen name="actions_icon_height">30dp</dimen>
     <dimen name="actions_icon_width">50dp</dimen>
-    <dimen name="actions_textsize">14sp</dimen>
+    <dimen name="actions_text_size">14sp</dimen>
     <dimen name="actions_padding_button">10dp</dimen>
     <dimen name="recycler_view_padding">15dp</dimen>
     <dimen name="setting_text_size">18sp</dimen>
