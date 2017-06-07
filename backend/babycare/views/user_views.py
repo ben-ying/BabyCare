@@ -310,10 +310,12 @@ def get_app_info(request):
         token = request.data.get('token')
         user = get_user_by_token(token)
         if user:
-            app_info = AppInfo.objects.filter()[0]
-            response_data = AppInfoSerializer(app_info).data
-            # import pdb;pdb.set_trace()
-            response_data['app_name'] = app_info.app_file.file.name.split("/")[-1].replace('.apk', '')
+            response_data = dict()
+            if AppInfo.objects.all():
+                app_info = AppInfo.objects.all()[0]
+                response_data = AppInfoSerializer(app_info).data
+                # import pdb;pdb.set_trace()
+                response_data['app_name'] = app_info.app_file.file.name.split("/")[-1].replace('.apk', '')
             return json_response(response_data, CODE_SUCCESS, MSG_GET_APP_INFO_SUCCESS)
         else:
             return invalid_token_response()
