@@ -10,7 +10,7 @@ from rest_framework.decorators import api_view
 
 from babycare.constants import CODE_EMPTY_EVENT, MSG_EMPTY_EVENT, EVENT_FOOTER_IMAGE, \
     MSG_GET_EVENTS_SUCCESS, MSG_DELETE_EVENT_SUCCESS, CODE_NO_CONTENT, MSG_204, TYPE_IMAGE, TYPE_VIDEO, \
-    EVENT_FOOTER_VIDEO, EVENT_FOOTER_VIDEO_THUMBNAIL
+    EVENT_FOOTER_VIDEO, EVENT_FOOTER_VIDEO_THUMBNAIL, DIR_EVENT_VIDEO, DIR_EVENT_IMAGE
 from babycare.constants import CODE_SUCCESS, MSG_POST_EVENT_SUCCESS
 from babycare.models import BabyUser, Like
 from babycare.models import Event
@@ -77,17 +77,17 @@ class EventViewSet(CustomModelViewSet):
                     if type == TYPE_IMAGE:
                         for image in base64s:
                             image_name = user.username + time.strftime('%Y%m%d%H%M%S') + EVENT_FOOTER_IMAGE
-                            image = upload_file_to_oss(image_name, image, type)
+                            image = upload_file_to_oss(user.username + DIR_EVENT_IMAGE + image_name, image, type)
                             event.image1 = image
                     elif type == TYPE_VIDEO:
                         for video in base64s:
                             video_name = user.username + time.strftime('%Y%m%d%H%M%S') + EVENT_FOOTER_VIDEO
-                            video = upload_file_to_oss(video_name, video, type)
+                            video = upload_file_to_oss(user.username + DIR_EVENT_VIDEO + video_name, video, type)
                             event.video_url = video
                             event.video_width = request.data.get('video_width')
                             event.video_height = request.data.get('video_height')
                             image_name = user.username + time.strftime('%Y%m%d%H%M%S') + EVENT_FOOTER_VIDEO_THUMBNAIL
-                            image = upload_file_to_oss(image_name, request.data.get('video_thumbnail'), TYPE_IMAGE)
+                            image = upload_file_to_oss(user.username + DIR_EVENT_VIDEO + image_name, request.data.get('video_thumbnail'), TYPE_IMAGE)
                             event.video_thumbnail = image
                 event.save()
                 response = EventSerializer(event).data
@@ -95,6 +95,9 @@ class EventViewSet(CustomModelViewSet):
             else:
                 return invalid_token_response()
         except Exception as e:
+            import pdb;
+            pdb.set_trace()
+
             return save_error_log(request, e)
 
     def retrieve(self, request, *args, **kwargs):

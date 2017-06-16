@@ -21,7 +21,7 @@ from babycare.constants import CODE_DUPLICATE_EMAIL, MSG_SEND_VERIFY_CODE_SUCCES
     MSG_EXPIRED_VERIFY_CODE, \
     VERIFY_CODE_EXPIRED_TIME, CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS, MSG_GET_USER_DETAIL_SUCCESS, \
     MSG_DUPLICATE_PHONE, CODE_DUPLICATE_PHONE, MSG_GET_APP_INFO_SUCCESS, PASSWORD_VERIFY_CODE_EMAIL_SUBJECT, \
-    PASSWORD_VERIFY_CODE_EMAIL_CONTENT
+    PASSWORD_VERIFY_CODE_EMAIL_CONTENT, DIR_USER_PROFILE
 from babycare.constants import CODE_DUPLICATE_USER
 from babycare.constants import CODE_EMPTY_EMAIL
 from babycare.constants import CODE_EMPTY_PASSWORD
@@ -123,7 +123,7 @@ class UserViewSet(CustomModelViewSet):
                 response_data['token'] = Token.objects.create(user=user).key
                 if base64:
                     image_name = username + time.strftime('%Y%m%d%H%M%S') + PROFILE_FOOTER_IMAGE
-                    response_data['profile'] = upload_file_to_oss(image_name, base64)
+                    response_data['profile'] = upload_file_to_oss(user.username + DIR_USER_PROFILE + image_name, base64)
                     baby_user = BabyUser.objects.get(user=user)
                     baby_user.profile = response_data['profile']
                     baby_user.locale = response_data['locale']
@@ -196,7 +196,7 @@ class UserViewSet(CustomModelViewSet):
                         baby.hobbies = hobbies
                     if base64:
                         image_name = user.username + time.strftime('%Y%m%d%H%M%S') + PROFILE_FOOTER_IMAGE
-                        profile = upload_file_to_oss(image_name, base64)
+                        profile = upload_file_to_oss(user.username + DIR_USER_PROFILE + image_name, base64)
                         baby.profile = profile
                     baby.save()
 

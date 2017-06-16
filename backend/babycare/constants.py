@@ -13,6 +13,10 @@ EVENT_FOOTER_IMAGE = '_event.jpg'
 EVENT_FOOTER_VIDEO = '_event.mp4'
 EVENT_FOOTER_VIDEO_THUMBNAIL = '_event_video_thumbnail.jpg'
 FEEDBACK_FOOTER_IMAGE = '_feedback.jpg'
+DIR_EVENT_IMAGE = '/image/'
+DIR_EVENT_VIDEO = '/video/'
+DIR_USER_PROFILE = '/profile/'
+DIR_FEEDBACK = '/feedback/'
 
 # register & user
 CODE_SUCCESS = 200
