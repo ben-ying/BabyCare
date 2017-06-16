@@ -8,6 +8,7 @@ import android.widget.ProgressBar;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseActivity;
+import com.ben.yjh.babycare.service.DownloadService;
 
 public class AboutUsActivity extends BaseActivity {
 
@@ -29,5 +30,11 @@ public class AboutUsActivity extends BaseActivity {
 
     @Override
     public void onClick(View v) {
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DownloadService.sRunning = false;
     }
 }

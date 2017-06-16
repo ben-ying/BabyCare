@@ -2,6 +2,7 @@ package com.ben.yjh.babycare.service;
 
 
 import android.app.IntentService;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,14 +23,24 @@ import java.net.URLConnection;
 
 public class DownloadService extends IntentService {
 
+    public static final String OSS_DOMAIN = "http://bensbabycare.oss-cn-hangzhou.aliyuncs.com/APKs/";
+
+    public static boolean sRunning;
+
     public DownloadService() {
         super("DownloadService");
+        sRunning = true;
+    }
+
+    @Override
+    public boolean stopService(Intent name) {
+        return super.stopService(name);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         AppInfo appInfo = (AppInfo) intent.getSerializableExtra(Constants.APP_INFO);
-        String urlToDownload = HttpPostTask.DOMAIN + appInfo.getAppLink();
+        String urlToDownload = OSS_DOMAIN + new File(appInfo.getAppLink()).getName();
         ResultReceiver receiver = intent.getParcelableExtra(Constants.RECEIVER);
         try {
             URL url = new URL(urlToDownload);
@@ -40,21 +51,33 @@ public class DownloadService extends IntentService {
 
             // download the file
             InputStream input = new BufferedInputStream(connection.getInputStream());
-            OutputStream output = new FileOutputStream(
-                    Environment.getExternalStoragePublicDirectory(
-                            Environment.DIRECTORY_DOWNLOADS) + "/" +
-                            new File(appInfo.getAppLink()).getName());
+            File file = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOWNLOADS) + "/" +
+                    new File(appInfo.getAppLink()).getName());
+            if (file.exists()) {
+                file.delete();
+            }
+            OutputStream output = new FileOutputStream(file);
 
             byte data[] = new byte[1024];
             long total = 0;
             int count;
             while ((count = input.read(data)) != -1) {
-                total += count;
-                // publishing the progress....
-                Bundle resultData = new Bundle();
-                resultData.putInt(Constants.PROGRESS ,(int) (total * 100 / fileLength));
-                receiver.send(Constants.UPDATE_PROGRESS, resultData);
-                output.write(data, 0, count);
+                if (sRunning) {
+                    total += count;
+                    // publishing the progress....
+                    Bundle resultData = new Bundle();
+                    resultData.putInt(Constants.PROGRESS, (int) (total * 100 / fileLength));
+                    receiver.send(Constants.UPDATE_PROGRESS, resultData);
+                    output.write(data, 0, count);
+                } else {
+                    Bundle resultData = new Bundle();
+                    resultData.putInt(Constants.PROGRESS, 0);
+                    receiver.send(Constants.UPDATE_PROGRESS, resultData);
+                    file.delete();
+                    stopSelf();
+                    break;
+                }
             }
 
             output.flush();
@@ -65,7 +88,7 @@ public class DownloadService extends IntentService {
         }
 
         Bundle resultData = new Bundle();
-        resultData.putInt(Constants.PROGRESS ,100);
+        resultData.putInt(Constants.PROGRESS, 100);
         receiver.send(Constants.UPDATE_PROGRESS, resultData);
     }
 }

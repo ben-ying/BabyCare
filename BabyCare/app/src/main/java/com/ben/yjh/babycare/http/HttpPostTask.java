@@ -34,7 +34,7 @@ import java.util.TimeZone;
 
 public class HttpPostTask {
 
-    public static final String DOMAIN = "http://www.bensbabycare.com";
+    private static final String DOMAIN = "http://www.bensbabycare.com";
 //     public static final String DOMAIN = "http://192.168.1.175:8000";
     // public static final String DOMAIN = "http://116.62.47.105";
     public static final String URL = DOMAIN + "/webservice/";

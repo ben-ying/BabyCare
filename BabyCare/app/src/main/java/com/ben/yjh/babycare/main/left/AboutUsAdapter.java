@@ -144,21 +144,30 @@ public class AboutUsAdapter extends RecyclerView.Adapter<AboutUsAdapter.AboutUsH
                                                     }
                                                     mProgressDialog = new ProgressDialog(mContext);
                                                     mProgressDialog.setIndeterminate(false);
-                                                    mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                                                    mProgressDialog.setProgressStyle(
+                                                            ProgressDialog.STYLE_HORIZONTAL);
                                                     mProgressDialog.setCancelable(true);
                                                     mProgressDialog.setMessage(String.format(
                                                             mContext.getString(R.string.downloading),
-                                                            classOfT.getAppName()));
+                                                            mContext.getString(R.string.app_name)));
                                                     mProgressDialog.show();
-                                                    Intent intent = new Intent(mContext,
+                                                    final Intent intent = new Intent(mContext,
                                                             DownloadService.class);
                                                     intent.putExtra(Constants.APP_INFO, classOfT);
                                                     intent.putExtra(Constants.RECEIVER,
                                                             new DownloadReceiver(new Handler()));
                                                     mContext.startService(intent);
+                                                    mProgressDialog.setOnDismissListener(
+                                                            new DialogInterface.OnDismissListener() {
+                                                        @Override
+                                                        public void onDismiss(DialogInterface dialog) {
+                                                            DownloadService.sRunning = false;
+                                                        }
+                                                    });
                                                 }
                                             })
-                                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                            .setNegativeButton(R.string.cancel,
+                                                    new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
                                                     dialogInterface.dismiss();
@@ -194,7 +203,7 @@ public class AboutUsAdapter extends RecyclerView.Adapter<AboutUsAdapter.AboutUsH
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             super.onReceiveResult(resultCode, resultData);
-            if (resultCode == Constants.UPDATE_PROGRESS) {
+            if (resultCode == Constants.UPDATE_PROGRESS && DownloadService.sRunning) {
                 int progress = resultData.getInt(Constants.PROGRESS);
                 mProgressDialog.setProgress(progress);
                 if (progress == 100) {
@@ -203,8 +212,7 @@ public class AboutUsAdapter extends RecyclerView.Adapter<AboutUsAdapter.AboutUsH
                         openAPK(mAppInfo);
                     }
                 } else if (progress > 100) {
-                    Intent intent = new Intent(mContext, DownloadService.class);
-                    mContext.stopService(intent);
+                    DownloadService.sRunning = false;
                 }
             }
         }
@@ -219,7 +227,6 @@ public class AboutUsAdapter extends RecyclerView.Adapter<AboutUsAdapter.AboutUsH
         intent.setDataAndType(Uri.fromFile(
                 new File(destination)), "application/vnd.android.package-archive");
         mContext.startActivity(intent);
-        new File(destination).delete();
     }
 
     @Override
