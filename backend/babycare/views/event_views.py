@@ -17,7 +17,7 @@ from babycare.models import Event
 from babycare.serializers.event import EventSerializer
 from babycare.serializers.like import LikeSerializer
 from babycare.utils import json_response, invalid_token_response, get_user_by_token, CustomModelViewSet, upload_file_to_oss, \
-    save_error_log, delete_file_from_oss, delete_event_file
+    save_error_log, delete_event_file
 from babycare.utils import simple_json_response
 
 

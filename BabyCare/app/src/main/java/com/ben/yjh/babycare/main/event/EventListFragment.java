@@ -155,6 +155,14 @@ public class EventListFragment extends BaseFragment
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (mFab != null) {
+            mFab.show();
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
 
