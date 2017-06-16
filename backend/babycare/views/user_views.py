@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+import smtplib
 import time
 
 from django.contrib.auth import authenticate
@@ -13,13 +13,15 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from validate_email import validate_email
+from django.core.mail import EmailMessage
 
 from babycare.constants import CODE_DUPLICATE_EMAIL, MSG_SEND_VERIFY_CODE_SUCCESS, MSG_NO_SUCH_EMAIL, \
     MSG_EMPTY_VERIFY_CODE, \
     CODE_EMPTY_VERIFY_CODE, MSG_INCORRECT_VERIFY_CODE, CODE_INCORRECT_VERIFY_CODE, CODE_EXPIRED_VERIFY_CODE, \
     MSG_EXPIRED_VERIFY_CODE, \
     VERIFY_CODE_EXPIRED_TIME, CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS, MSG_GET_USER_DETAIL_SUCCESS, \
-    MSG_DUPLICATE_PHONE, CODE_DUPLICATE_PHONE, MSG_GET_APP_INFO_SUCCESS
+    MSG_DUPLICATE_PHONE, CODE_DUPLICATE_PHONE, MSG_GET_APP_INFO_SUCCESS, PASSWORD_VERIFY_CODE_EMAIL_SUBJECT, \
+    PASSWORD_VERIFY_CODE_EMAIL_CONTENT
 from babycare.constants import CODE_DUPLICATE_USER
 from babycare.constants import CODE_EMPTY_EMAIL
 from babycare.constants import CODE_EMPTY_PASSWORD
@@ -45,7 +47,7 @@ from babycare.models import BabyUser, Verify, Event, AppInfo
 from babycare.serializers.app_info import AppInfoSerializer
 from babycare.serializers.baby import BabyUserSerializer
 from babycare.serializers.event import EventSerializer
-from babycare.utils import json_response, invalid_token_response, upload_file_to_oss, send_email, get_user_by_token, \
+from babycare.utils import json_response, invalid_token_response, upload_file_to_oss, get_user_by_token, \
     get_user, \
     CustomModelViewSet, save_error_log
 from babycare.utils import simple_json_response
@@ -265,6 +267,27 @@ def send_verify_code_view(request):
         return simple_json_response(CODE_SUCCESS, MSG_SEND_VERIFY_CODE_SUCCESS)
     except Exception as e:
         return save_error_log(request, e)
+
+
+def send_email(baby, to_email, verify_code, is_email_verify=True):
+    if Verify.objects.filter(baby=baby):
+        verify = Verify.objects.get(baby=baby)
+        if is_email_verify:
+            verify.email_verify_code = verify_code
+    else:
+        verify = Verify()
+        verify.baby = baby
+        if is_email_verify:
+            verify.email_verify_code = verify_code
+
+    email = EmailMessage(PASSWORD_VERIFY_CODE_EMAIL_SUBJECT,
+                         PASSWORD_VERIFY_CODE_EMAIL_CONTENT % verify_code, to=[to_email])
+    try:
+        email.send()
+        verify.save()
+    except smtplib.SMTPDataError:
+        # todo not send email
+        pass
 
 
 @api_view(['POST'])

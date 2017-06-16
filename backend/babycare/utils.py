@@ -3,20 +3,16 @@
 import json
 import os
 import random
-import smtplib
 import string
-import pdb
 
 import oss2
 from django.contrib.auth.models import User
-from django.core.mail import EmailMessage
 from django.http import HttpResponse
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
 
-from babycare.models import Verify
 from backend.settings import OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET_NAME, OSS_ENDPOINT
-from constants import CODE_SUCCESS, CODE_INVALID_TOKEN, MSG_401, TEMP_IMAGE, PASSWORD_VERIFY_CODE_EMAIL_SUBJECT, PASSWORD_VERIFY_CODE_EMAIL_CONTENT, MSG_402, CODE_EXCEPTION, CODE_DUPLICATE, \
+from constants import CODE_SUCCESS, CODE_INVALID_TOKEN, MSG_401, TEMP_IMAGE, MSG_402, CODE_EXCEPTION, CODE_DUPLICATE, \
     MSG_403, TYPE_IMAGE, TEMP_VIDEO
 from constants import MIN_PASSWORD_LEN
 
@@ -77,6 +73,15 @@ def upload_file_to_oss(name, base64, file_type=TYPE_IMAGE):
         return "https://" + OSS_BUCKET_NAME + "." + OSS_ENDPOINT + "/" + name
 
 
+def upload_file(file_path, filename):
+    for param in (OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET_NAME, OSS_ENDPOINT):
+        assert '<' not in param, '请设置参数：' + param
+
+    bucket = oss2.Bucket(oss2.Auth(OSS_ACCESS_KEY_ID,
+                                   OSS_ACCESS_KEY_SECRET), OSS_ENDPOINT, OSS_BUCKET_NAME)
+    bucket.put_object_from_file(filename, file_path)
+
+
 def delete_file_from_oss(url):
     for param in (OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET_NAME, OSS_ENDPOINT):
         assert '<' not in param, '请设置参数：' + param
@@ -111,27 +116,6 @@ def delete_event_file(event):
         delete_file_from_oss(event.video_thumbnail)
     if event.video_url:
         delete_file_from_oss(event.video_url)
-
-
-def send_email(baby, to_email, verify_code, is_email_verify=True):
-    if Verify.objects.filter(baby=baby):
-        verify = Verify.objects.get(baby=baby)
-        if is_email_verify:
-            verify.email_verify_code = verify_code
-    else:
-        verify = Verify()
-        verify.baby = baby
-        if is_email_verify:
-            verify.email_verify_code = verify_code
-
-    email = EmailMessage(PASSWORD_VERIFY_CODE_EMAIL_SUBJECT,
-                         PASSWORD_VERIFY_CODE_EMAIL_CONTENT % verify_code, to=[to_email])
-    try:
-        email.send()
-        verify.save()
-    except smtplib.SMTPDataError:
-        # todo not send email
-        pass
 
 
 def get_user_by_token(token):

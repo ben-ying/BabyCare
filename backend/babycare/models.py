@@ -1,7 +1,11 @@
 from __future__ import unicode_literals
 
+import os
+
 from django.db import models
 from django.forms import IntegerField
+
+from babycare.utils import upload_file
 
 
 class BabyUser(models.Model):
@@ -131,6 +135,10 @@ class AppInfo(models.Model):
     update_info = models.TextField()
     app_file = models.FileField(upload_to='apk/%Y-%m-%d %H:%M:%S/')
     datetime = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        super(AppInfo, self).save(force_insert, force_update, using, update_fields)
+        upload_file(self.app_file.file.name, 'APKs/' + os.path.basename(self.app_file.name))
 
     def __str__(self):
         return self.version_name + '(' + str(self.version_code) + ')'
