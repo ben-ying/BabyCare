@@ -5,10 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,13 +49,13 @@ public class EventAdapter extends RecyclerView.Adapter<TextViewHolder>
     private User mUser;
     private LoadMoreRecyclerView mRecyclerView;
     private boolean mIsHomeEvent;
-    private ArrayList<TextViewHolder> viewHoldersList;
-    private Handler handler = new Handler();
-    private Runnable updateRemainingTimeRunnable = new Runnable() {
+    private final ArrayList<TextViewHolder> mViewHolderList;
+    private Handler mHandler = new Handler();
+    private Runnable mUpdateRunnable = new Runnable() {
         @Override
         public void run() {
-            synchronized (viewHoldersList) {
-                for (TextViewHolder holder : viewHoldersList) {
+            synchronized (mViewHolderList) {
+                for (TextViewHolder holder : mViewHolderList) {
                     holder.updateTimer();
                 }
             }
@@ -118,7 +116,7 @@ public class EventAdapter extends RecyclerView.Adapter<TextViewHolder>
         this.mEvents = events;
         this.mIsHomeEvent = isHomeEvent;
         this.mInterface = recyclerViewInterface;
-        this.viewHoldersList = new ArrayList<>();
+        this.mViewHolderList = new ArrayList<>();
         startUpdateTimer();
     }
 
@@ -127,7 +125,7 @@ public class EventAdapter extends RecyclerView.Adapter<TextViewHolder>
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                handler.post(updateRemainingTimeRunnable);
+                mHandler.post(mUpdateRunnable);
             }
         }, 1000 * 60, 1000 * 60);
     }
@@ -168,10 +166,10 @@ public class EventAdapter extends RecyclerView.Adapter<TextViewHolder>
     @Override
     public void onBindViewHolder(TextViewHolder holder, int position) {
         Event event = mEvents.get(position);
-        synchronized (viewHoldersList) {
+        synchronized (mViewHolderList) {
             holder.onBind(position, event);
-            if (viewHoldersList.size() < mEvents.size()) {
-                viewHoldersList.add(holder);
+            if (mViewHolderList.size() < mEvents.size()) {
+                mViewHolderList.add(holder);
             }
         }
     }
