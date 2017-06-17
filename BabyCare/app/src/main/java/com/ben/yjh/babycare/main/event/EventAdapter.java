@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -32,7 +33,10 @@ import com.ben.yjh.babycare.widget.recyclerview.LoadMoreRecyclerView;
 import com.waynell.videolist.visibility.items.ListItem;
 import com.waynell.videolist.visibility.scroll.ItemsProvider;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class EventAdapter extends RecyclerView.Adapter<TextViewHolder>
         implements ItemsProvider, View.OnClickListener, EventViewpagerAdapter.EventAdapterInterface {
@@ -47,6 +51,18 @@ public class EventAdapter extends RecyclerView.Adapter<TextViewHolder>
     private User mUser;
     private LoadMoreRecyclerView mRecyclerView;
     private boolean mIsHomeEvent;
+    private ArrayList<TextViewHolder> viewHoldersList;
+    private Handler handler = new Handler();
+    private Runnable updateRemainingTimeRunnable = new Runnable() {
+        @Override
+        public void run() {
+            synchronized (viewHoldersList) {
+                for (TextViewHolder holder : viewHoldersList) {
+                    holder.updateTimer();
+                }
+            }
+        }
+    };
 
     @Override
     public void showImageDetail(int position) {
@@ -102,6 +118,18 @@ public class EventAdapter extends RecyclerView.Adapter<TextViewHolder>
         this.mEvents = events;
         this.mIsHomeEvent = isHomeEvent;
         this.mInterface = recyclerViewInterface;
+        this.viewHoldersList = new ArrayList<>();
+        startUpdateTimer();
+    }
+
+    private void startUpdateTimer() {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(updateRemainingTimeRunnable);
+            }
+        }, 1000 * 60, 1000 * 60);
     }
 
     public User getUser() {
@@ -140,7 +168,12 @@ public class EventAdapter extends RecyclerView.Adapter<TextViewHolder>
     @Override
     public void onBindViewHolder(TextViewHolder holder, int position) {
         Event event = mEvents.get(position);
-        holder.onBind(position, event);
+        synchronized (viewHoldersList) {
+            holder.onBind(position, event);
+            if (viewHoldersList.size() < mEvents.size()) {
+                viewHoldersList.add(holder);
+            }
+        }
     }
 
     @Override

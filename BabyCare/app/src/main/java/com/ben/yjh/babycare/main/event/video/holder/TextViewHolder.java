@@ -24,6 +24,7 @@ public class TextViewHolder extends RecyclerView.ViewHolder  {
     private TextView mDateTextView;
     private TextView mTitleTextView;
     private TextView mContentTextView;
+    private Event mEvent;
 
     public Context context;
     public EventAdapter adapter;
@@ -43,6 +44,7 @@ public class TextViewHolder extends RecyclerView.ViewHolder  {
     }
 
     public void onBind(int position, Event event) {
+        mEvent = event;
         mCommonRadioButton.setOnClickListener(adapter);
         mCommonRadioButton.setTag(event);
         mCommentRadioButton.setOnClickListener(adapter);
@@ -81,5 +83,9 @@ public class TextViewHolder extends RecyclerView.ViewHolder  {
                 mProfileButton, ImageUtils.getTinyProfileImageOptions(context));
         mNameTextView.setText(event.getUsername());
         mDateTextView.setText(Utils.getFormatDate(context, event.getCreated()));
+    }
+
+    public void updateTimer() {
+        mDateTextView.setText(Utils.getFormatDate(context, mEvent.getCreated()));
     }
 }
