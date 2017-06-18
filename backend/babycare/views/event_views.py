@@ -95,9 +95,6 @@ class EventViewSet(CustomModelViewSet):
             else:
                 return invalid_token_response()
         except Exception as e:
-            import pdb;
-            pdb.set_trace()
-
             return save_error_log(request, e)
 
     def retrieve(self, request, *args, **kwargs):

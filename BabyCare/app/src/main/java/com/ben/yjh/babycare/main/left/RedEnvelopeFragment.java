@@ -154,7 +154,6 @@ public class RedEnvelopeFragment extends BaseFragment {
                 new HttpResponseInterface<RedEnvelope>() {
                     @Override
                     public void onStart() {
-                        mSwipeRefreshLayout.setRefreshing(true);
                     }
 
                     @Override

@@ -245,7 +245,6 @@ def login_view(request):
 @api_view(['POST'])
 def send_verify_code_view(request):
     email = request.data.get('email')
-
     try:
         if not email:
             return simple_json_response(CODE_EMPTY_EMAIL, MSG_EMPTY_EMAIL)
@@ -337,7 +336,6 @@ def get_app_info(request):
             if AppInfo.objects.all():
                 app_info = AppInfo.objects.all().order_by('-id')[0]
                 response_data = AppInfoSerializer(app_info).data
-                # import pdb;pdb.set_trace()
                 response_data['app_name'] = app_info.app_file.file.name.split("/")[-1].replace('.apk', '')
             return json_response(response_data, CODE_SUCCESS, MSG_GET_APP_INFO_SUCCESS)
         else:

@@ -97,7 +97,6 @@ class RedEnvelopeViewSet(CustomModelViewSet):
 
     def create(self, request, *args, **kwargs):
         try:
-            pdb.set_trace()
             money_from = request.data.get('money_from')
             money = request.data.get('money')
             remark = request.data.get('remark')

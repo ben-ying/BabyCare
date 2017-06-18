@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -50,6 +51,10 @@ public class UserDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_user_detail);
 
         initToolbar(0);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        if (fab != null) {
+            fab.hide();
+        }
         mUserId = getIntent().getIntExtra(Constants.USER_ID, Constants.INVALID_VALUE);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         List<BaseFragment> fragments = new ArrayList<>();

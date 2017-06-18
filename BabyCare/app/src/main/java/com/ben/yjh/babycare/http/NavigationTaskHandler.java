@@ -52,8 +52,9 @@ public class NavigationTaskHandler extends BaseTaskHandler {
                                 HttpResponseInterface<RedEnvelopesResult> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
-            new HttpPostTask(context).startTask(URL_GET_RED_ENVELOPES + "?token=" + mToken + "&user_id=" + userId,
-                    Request.Method.GET, bodyObject, RedEnvelopesResult.class, false, httpResponseInterface);
+            new HttpPostTask(context, false).startTask(URL_GET_RED_ENVELOPES +
+                            "?token=" + mToken + "&user_id=" + userId, Request.Method.GET,
+                    bodyObject, RedEnvelopesResult.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -67,7 +68,7 @@ public class NavigationTaskHandler extends BaseTaskHandler {
             bodyObject.put("money", money);
             bodyObject.put("remark", remark);
             bodyObject.put("token", mToken);
-            new HttpPostTask(context).startTask(URL_GET_RED_ENVELOPES,
+            new HttpPostTask(context, false).startTask(URL_GET_RED_ENVELOPES,
                     Request.Method.POST, bodyObject, RedEnvelope.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();
