@@ -69,7 +69,7 @@
             android:value="babycare.db" />
         <meta-data
             android:name="VERSION"
-            android:value="1" />
+            android:value="2" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="false" />
@@ -101,6 +101,7 @@
         <activity android:name=".main.left.AboutUsActivity" />
         <activity android:name=".main.left.WebViewActivity" />
         <activity android:name=".main.left.SettingActivity" />
+        <activity android:name=".main.left.RedEnvelopeActivity" />
         <activity android:name=".main.left.FeedbackActivity"
             android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity android:name=".main.event.CommentActivity" />

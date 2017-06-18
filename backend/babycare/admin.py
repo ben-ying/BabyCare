@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from models import BabyUser, Verify, Like, Feedback, Comment, AppInfo
+from models import BabyUser, Verify, Like, Feedback, Comment, AppInfo, RedEnvelope
 from models import Event
 
 
@@ -46,3 +46,9 @@ class AppInfoAdmin(admin.ModelAdmin):
     list_display = ('version_name', 'version_code', 'app_file', 'update_info', 'datetime')
     search_fields = ('version_name', 'version_code', 'app_file', 'update_info', 'datetime')
 admin.site.register(AppInfo, AppInfoAdmin)
+
+
+class RedEnvelopeAdmin(admin.ModelAdmin):
+    list_display = ('baby', 'money', 'money_type', 'money_from', 'remark', 'created')
+    search_fields = ('baby', 'money', 'money_type', 'money_from', 'remark', 'created')
+admin.site.register(RedEnvelope, RedEnvelopeAdmin)

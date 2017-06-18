@@ -2,14 +2,22 @@
 # -*- coding: utf-8 -*-
 
 import time
+import json
+import pdb;
 
+from django.http import HttpResponse
 from django.utils import timezone
+from rest_framework import status
 from rest_framework.decorators import api_view
 
-from babycare.constants import CODE_SUCCESS, FEEDBACK_FOOTER_IMAGE, DIR_FEEDBACK
+from babycare.constants import CODE_SUCCESS, FEEDBACK_FOOTER_IMAGE, DIR_FEEDBACK, MSG_NO_CONTENT, \
+    MSG_GET_RED_ENVELOPES_SUCCESS, MSG_DELETE_RED_ENVELOPES_SUCCESS, CODE_NO_CONTENT, \
+    MSG_204, MSG_ADD_RED_ENVELOPE_SUCCESS
 from babycare.constants import MSG_SEND_FEEDBACK_SUCCESS
-from babycare.models import Feedback, BabyUser
-from babycare.utils import invalid_token_response, get_user_by_token, save_error_log, upload_file_to_oss
+from babycare.models import Feedback, BabyUser, RedEnvelope
+from babycare.serializers.red_envelope import RedEnvelopeSerializer
+from babycare.utils import invalid_token_response, get_user_by_token, save_error_log, upload_file_to_oss, \
+    CustomModelViewSet, json_response
 from babycare.utils import simple_json_response
 
 
@@ -56,3 +64,84 @@ def send_feedback(request):
             return invalid_token_response()
     except Exception as e:
         return save_error_log(request, e)
+
+
+def about_us_view(request):
+    return HttpResponse(MSG_NO_CONTENT)
+
+
+class RedEnvelopeViewSet(CustomModelViewSet):
+    queryset = RedEnvelope.objects.all()
+    serializer_class = RedEnvelopeSerializer
+
+    def list(self, request, *args, **kwargs):
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid()
+            token = request.query_params.get('token')
+            user = get_user_by_token(token)
+            if user:
+                return json_response(super(RedEnvelopeViewSet, self).list(request, *args, **kwargs).data,
+                                     CODE_SUCCESS, MSG_GET_RED_ENVELOPES_SUCCESS)
+            else:
+                return invalid_token_response()
+        except Exception as e:
+            return save_error_log(request, e)
+
+    def get_queryset(self):
+        user_id = self.request.query_params.get('user_id', -1)
+        if int(user_id) < 0:
+            return super(RedEnvelopeViewSet, self).get_queryset().order_by("-id")
+        else:
+            return super(RedEnvelopeViewSet, self).get_queryset().filter(baby_id=user_id).order_by("-id")
+
+    def create(self, request, *args, **kwargs):
+        try:
+            pdb.set_trace()
+            money_from = request.data.get('money_from')
+            money = request.data.get('money')
+            remark = request.data.get('remark')
+            token = request.data.get('token')
+            user = get_user_by_token(token)
+
+            if user:
+                red_envelope = RedEnvelope()
+                red_envelope.baby = BabyUser.objects.get(user=user)
+                red_envelope.money = money
+                red_envelope.money_from = money_from
+                red_envelope.remark = remark
+                red_envelope.created = timezone.now()
+                red_envelope.save()
+                response = RedEnvelopeSerializer(red_envelope).data
+                return json_response(response, CODE_SUCCESS, MSG_ADD_RED_ENVELOPE_SUCCESS)
+            else:
+                return invalid_token_response()
+        except Exception as e:
+            return save_error_log(request, e)
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            obj = json.loads(request.body)
+            token = obj.get('token')
+            user = get_user_by_token(token)
+            if user:
+                red_envelope = self.get_object()
+                if red_envelope:
+                    try:
+                        response = super(RedEnvelopeViewSet, self).destroy(request, *args, **kwargs)
+                        if response.status_code != status.HTTP_204_NO_CONTENT:
+                            red_envelope.id = -1
+                    except Exception as e:
+                        red_envelope.id = -1
+                        save_error_log(request, e)
+                    event_json = RedEnvelopeSerializer(red_envelope).data
+                    return json_response(event_json, CODE_SUCCESS, MSG_DELETE_RED_ENVELOPES_SUCCESS)
+                else:
+                    return simple_json_response(CODE_NO_CONTENT, MSG_204)
+            else:
+                return invalid_token_response()
+        except Exception as e:
+            return save_error_log(request, e)
+
+
+

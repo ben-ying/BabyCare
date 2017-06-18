@@ -142,3 +142,13 @@ class AppInfo(models.Model):
 
     def __str__(self):
         return self.version_name + '(' + str(self.version_code) + ')'
+
+
+class RedEnvelope(models.Model):
+    id = IntegerField(label='ID')
+    baby = models.ForeignKey(BabyUser, on_delete=models.CASCADE)
+    money = models.CharField(max_length=10, blank=True, null=True)
+    money_type = models.IntegerField(default=0) # 0 for rmb, 1 for dollar
+    money_from = models.CharField(max_length=100, blank=True, null=True)
+    remark = models.CharField(max_length=100, blank=True, null=True)
+    created = models.DateTimeField(editable=False, blank=True, null=True)

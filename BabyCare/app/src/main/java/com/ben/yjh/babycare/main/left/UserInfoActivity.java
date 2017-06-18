@@ -11,10 +11,10 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -46,10 +46,12 @@ public class UserInfoActivity extends BaseActivity {
     private HomeViewPagerAdapter mPagerAdapter;
     private EventListFragment mEventListFragment;
     private PersonalInfoFragment mPersonalInfoFragment;
+    private RedEnvelopeFragment mRedEnvelopeFragment;
     private ImageView mProfileImageView;
     private TextView mNameTextView;
     private String mProfileBase64;
     private Uri mCameraUri;
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +60,17 @@ public class UserInfoActivity extends BaseActivity {
 
         initToolbar(0);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.hide();
         List<BaseFragment> fragments = new ArrayList<>();
         mPersonalInfoFragment = PersonalInfoFragment.newInstance();
         mEventListFragment = EventListFragment.newInstance(user.getUserId());
+        mRedEnvelopeFragment = RedEnvelopeFragment.newInstance();
         fragments.add(mPersonalInfoFragment);
         fragments.add(mEventListFragment);
+        fragments.add(mRedEnvelopeFragment);
         mPagerAdapter = new HomeViewPagerAdapter(this, getSupportFragmentManager(), fragments);
-        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setOffscreenPageLimit(1);
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout_main);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -95,6 +101,26 @@ public class UserInfoActivity extends BaseActivity {
                             (scrollRange - Math.abs(verticalOffset) - toolbar.getHeight())
                                     / (float) (scrollRange - toolbar.getHeight()));
                 }
+            }
+        });
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 2) {
+                    mFab.show();
+                } else {
+                    mFab.hide();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
     }

@@ -49,6 +49,8 @@ public class Constants {
     public static final int SHARE_APP_REQUEST_CODE = 112;
     public static final int SHOW_VIDEO_REQUEST_CODE = 113;
     public static final int UPDATE_PROGRESS = 114;
+    public static final int RED_ENVELOPE_EDIT_REQUEST = 115;
+    public static final int RED_ENVELOPE_ADD_REQUEST = 116;
 
 
 //    public static final int VIDEO_DEFAULT_WIDTH = 1080;

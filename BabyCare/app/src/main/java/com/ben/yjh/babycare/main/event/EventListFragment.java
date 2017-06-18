@@ -125,31 +125,35 @@ public class EventListFragment extends BaseFragment
             }
         });
 
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                mScrollState = newState;
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && mAdapter.getItemCount() > 0) {
-                    mCalculator.onScrollStateIdle();
-                    if (mShowFab) {
-                        mFab.show();
+        if (mIsHomeEvents) {
+            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    mScrollState = newState;
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE && mAdapter.getItemCount() > 0) {
+                        mCalculator.onScrollStateIdle();
+                        if (mShowFab && mFab != null) {
+                            mFab.show();
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                mCalculator.onScrolled(mScrollState);
-                if (dy > 0) {
-                    mShowFab = false;
-                    mFab.hide();
-                } else {
-                    mShowFab = true;
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    mCalculator.onScrolled(mScrollState);
+                    if (dy > 0) {
+                        mShowFab = false;
+                        if (mFab != null) {
+                            mFab.hide();
+                        }
+                    } else {
+                        mShowFab = true;
+                    }
                 }
-            }
-        });
+            });
+        }
 
         getEventsTask();
     }
@@ -157,7 +161,7 @@ public class EventListFragment extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
-        if (mFab != null) {
+        if (mIsHomeEvents && mFab != null) {
             mFab.show();
         }
     }
