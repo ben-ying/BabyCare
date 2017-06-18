@@ -37,6 +37,14 @@ public class RedEnvelope extends SugarRecord implements Serializable {
         return money;
     }
 
+    public int getMoneyInt() {
+        try {
+            return Integer.valueOf(money);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
     public void setMoney(String money) {
         this.money = money;
     }

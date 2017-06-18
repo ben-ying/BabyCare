@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
+from rest_framework.pagination import PageNumberPagination
 
 from backend.settings import OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, OSS_BUCKET_NAME, OSS_ENDPOINT
 from constants import CODE_SUCCESS, CODE_INVALID_TOKEN, MSG_401, TEMP_IMAGE, MSG_402, CODE_EXCEPTION, CODE_DUPLICATE, \
@@ -130,6 +131,18 @@ def save_error_log(request, exception):
     view_name = request.resolver_match.view_name
     # todo
     return simple_json_response(CODE_EXCEPTION, MSG_402)
+
+
+class LargeResultsSetPagination(PageNumberPagination):
+    page_size = 1000
+    page_size_query_param = 'page_size'
+    max_page_size = 10000
+
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 100
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
 
 
 

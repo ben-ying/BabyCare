@@ -53,7 +53,8 @@ public class RedEnvelopeAdapter extends RecyclerView.Adapter<
         final RedEnvelope redEnvelope = mRedEnvelopes.get(position);
         holder.fromTextView.setText(redEnvelope.getMoneyFrom());
         holder.dateTextView.setText(redEnvelope.getCreatedDate());
-        holder.moneyTextView.setText(redEnvelope.getMoney() + ", " + redEnvelope.getRemark());
+        holder.moneyTextView.setText(String.format(mContext.getString(R.string.red_envelope_yuan),
+                redEnvelope.getMoneyInt()) + ", " + redEnvelope.getRemark());
         holder.rootView.setTag(redEnvelope);
         holder.rootView.setOnClickListener(this);
         holder.rootView.setOnLongClickListener(new View.OnLongClickListener() {

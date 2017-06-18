@@ -68,7 +68,7 @@ public class NavigationTaskHandler extends BaseTaskHandler {
             bodyObject.put("money", money);
             bodyObject.put("remark", remark);
             bodyObject.put("token", mToken);
-            new HttpPostTask(context, false).startTask(URL_GET_RED_ENVELOPES,
+            new HttpPostTask(context).startTask(URL_GET_RED_ENVELOPES,
                     Request.Method.POST, bodyObject, RedEnvelope.class, true, httpResponseInterface);
         } catch (Exception e) {
             e.printStackTrace();

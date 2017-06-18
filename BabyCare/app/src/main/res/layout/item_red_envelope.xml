@@ -33,10 +33,11 @@
 
     <TextView
         android:id="@+id/tv_money"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:layout_alignParentEnd="true"
         android:text="100"
         android:layout_centerVertical="true"
-        android:textSize="@dimen/setting_text_size"
+        android:textSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

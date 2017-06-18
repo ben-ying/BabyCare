@@ -17,7 +17,7 @@ from babycare.constants import MSG_SEND_FEEDBACK_SUCCESS
 from babycare.models import Feedback, BabyUser, RedEnvelope
 from babycare.serializers.red_envelope import RedEnvelopeSerializer
 from babycare.utils import invalid_token_response, get_user_by_token, save_error_log, upload_file_to_oss, \
-    CustomModelViewSet, json_response
+    CustomModelViewSet, json_response, LargeResultsSetPagination
 from babycare.utils import simple_json_response
 
 
@@ -73,6 +73,7 @@ def about_us_view(request):
 class RedEnvelopeViewSet(CustomModelViewSet):
     queryset = RedEnvelope.objects.all()
     serializer_class = RedEnvelopeSerializer
+    pagination_class = LargeResultsSetPagination
 
     def list(self, request, *args, **kwargs):
         try:
