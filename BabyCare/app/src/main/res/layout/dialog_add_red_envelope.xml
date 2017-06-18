@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <android.support.design.widget.TextInputLayout
+        style="@style/default_input_layout">
+
+        <EditText
+            android:id="@+id/et_from"
+            android:hint="@string/red_envelope_from"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:inputType="text"
+            android:gravity="bottom"
+            android:imeOptions="actionNext" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        style="@style/default_input_layout">
+
+        <EditText
+            android:id="@+id/et_money"
+            android:hint="@string/red_envelope_how_much"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:maxLines="1"
+            android:inputType="number"
+            android:imeOptions="actionNext" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        style="@style/default_input_layout">
+
+        <AutoCompleteTextView
+            android:id="@+id/et_remark"
+            android:hint="@string/red_envelope_remark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:inputType="text"
+            android:maxLines="1"
+            android:imeOptions="actionDone" />
+    </android.support.design.widget.TextInputLayout>
+</LinearLayout>
