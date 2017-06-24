@@ -3,15 +3,12 @@ package com.ben.yjh.babycare.main.left;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,19 +18,12 @@ import android.widget.TextView;
 
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.base.BaseFragment;
-import com.ben.yjh.babycare.http.EventTaskHandler;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.NavigationTaskHandler;
-import com.ben.yjh.babycare.main.event.EventAdapter;
-import com.ben.yjh.babycare.model.Event;
-import com.ben.yjh.babycare.model.EventsResult;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.model.RedEnvelope;
 import com.ben.yjh.babycare.model.RedEnvelopesResult;
-import com.ben.yjh.babycare.util.Constants;
-import com.ben.yjh.babycare.widget.recyclerview.LoadMoreRecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -46,7 +36,7 @@ public class RedEnvelopeFragment extends BaseFragment {
     private RedEnvelopeAdapter mAdapter;
     private boolean mShowFab = true;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private int total;
+    private int mTotalMoney;
 
     public static RedEnvelopeFragment newInstance() {
         Bundle args = new Bundle();
@@ -81,17 +71,16 @@ public class RedEnvelopeFragment extends BaseFragment {
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setNestedScrollingEnabled(false);
         user = activity.user;
-//        mRedEnvelopes = RedEnvelope.find(RedEnvelope.class, "user_id=?",
-//                new String[]{String.valueOf(user.getUserId())}, null, "-red_envelope_id", null);
-        mRedEnvelopes = RedEnvelope.find(RedEnvelope.class,
-                "user_id = ?", String.valueOf(user.getUserId()));
+        mRedEnvelopes = RedEnvelope.find(RedEnvelope.class, "user_id=?",
+                new String[]{String.valueOf(user.getUserId())}, null, "-red_envelope_id", null);
 
+        mTotalMoney = 0;
         for (RedEnvelope redEnvelope : mRedEnvelopes) {
-            total += redEnvelope.getMoneyInt();
+            mTotalMoney += redEnvelope.getMoneyInt();
         }
         mTotalTextView.setText(String.format(getString(
-                R.string.red_envelope_total), mRedEnvelopes.size(), total));
-        mAdapter = new RedEnvelopeAdapter(activity, user, mRedEnvelopes);
+                R.string.red_envelope_total), mRedEnvelopes.size(), mTotalMoney));
+        mAdapter = new RedEnvelopeAdapter(activity, user, mRedEnvelopes, mTotalTextView);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -142,12 +131,12 @@ public class RedEnvelopeFragment extends BaseFragment {
                             RedEnvelope.deleteAll(RedEnvelope.class,
                                     "user_id = ?", String.valueOf(user.getUserId()));
                             mRedEnvelopes = redEnvelopesResult.getRedEnvelopes();
-                            total = 0;
+                            mTotalMoney = 0;
                             for (RedEnvelope redEnvelope : mRedEnvelopes) {
-                                total += redEnvelope.getMoneyInt();
+                                mTotalMoney += redEnvelope.getMoneyInt();
                             }
                             mTotalTextView.setText(String.format(getString(
-                                    R.string.red_envelope_total), mRedEnvelopes.size(), total));
+                                    R.string.red_envelope_total), mRedEnvelopes.size(), mTotalMoney));
                             for (RedEnvelope redEnvelope : mRedEnvelopes) {
                                 redEnvelope.save();
                             }
@@ -177,10 +166,10 @@ public class RedEnvelopeFragment extends BaseFragment {
                     @Override
                     public void onSuccess(RedEnvelope redEnvelope) {
                         mSwipeRefreshLayout.setRefreshing(false);
-                        total += redEnvelope.getMoneyInt();
+                        mTotalMoney += redEnvelope.getMoneyInt();
                         mRedEnvelopes.add(0, redEnvelope);
                         mTotalTextView.setText(String.format(getString(
-                                R.string.red_envelope_total), mRedEnvelopes.size(), total));
+                                R.string.red_envelope_total), mRedEnvelopes.size(), mTotalMoney));
                         redEnvelope.save();
                         mAdapter.setData(mRedEnvelopes);
                     }

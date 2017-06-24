@@ -75,8 +75,8 @@ public class NavigationTaskHandler extends BaseTaskHandler {
         }
     }
 
-    public void deleteEvent(int redEnvelopeId,
-                            HttpResponseInterface<RedEnvelope> httpResponseInterface) {
+    public void deleteRedEnvelope(int redEnvelopeId,
+                                  HttpResponseInterface<RedEnvelope> httpResponseInterface) {
         try {
             JSONObject bodyObject = new JSONObject();
             bodyObject.put("token", mToken);

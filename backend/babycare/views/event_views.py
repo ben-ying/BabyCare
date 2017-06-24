@@ -10,7 +10,7 @@ from rest_framework.decorators import api_view
 
 from babycare.constants import CODE_EMPTY_EVENT, MSG_EMPTY_EVENT, EVENT_FOOTER_IMAGE, \
     MSG_GET_EVENTS_SUCCESS, MSG_DELETE_EVENT_SUCCESS, CODE_NO_CONTENT, MSG_204, TYPE_IMAGE, TYPE_VIDEO, \
-    EVENT_FOOTER_VIDEO, EVENT_FOOTER_VIDEO_THUMBNAIL, DIR_EVENT_VIDEO, DIR_EVENT_IMAGE
+    EVENT_FOOTER_VIDEO, EVENT_FOOTER_VIDEO_THUMBNAIL, DIR_EVENT_VIDEO, DIR_EVENT_IMAGE, MSG_ADD_LIKE_SUCCESS
 from babycare.constants import CODE_SUCCESS, MSG_POST_EVENT_SUCCESS
 from babycare.models import BabyUser, Like
 from babycare.models import Event
@@ -144,7 +144,7 @@ def like_view(request):
             like.event = event
             like.save()
             response = LikeSerializer(like).data
-            return json_response(response, CODE_SUCCESS, MSG_POST_EVENT_SUCCESS)
+            return json_response(response, CODE_SUCCESS, MSG_ADD_LIKE_SUCCESS)
         else:
             return invalid_token_response()
     except Exception as e:

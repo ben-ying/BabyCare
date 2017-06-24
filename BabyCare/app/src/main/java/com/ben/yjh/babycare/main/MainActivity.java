@@ -30,6 +30,7 @@ import com.ben.yjh.babycare.main.event.EventListFragment;
 import com.ben.yjh.babycare.main.event.video.VideoRecorderActivity;
 import com.ben.yjh.babycare.main.left.AboutUsActivity;
 import com.ben.yjh.babycare.main.left.FeedbackActivity;
+import com.ben.yjh.babycare.main.left.RedEnvelopeFragment;
 import com.ben.yjh.babycare.main.left.SettingActivity;
 import com.ben.yjh.babycare.main.left.UserInfoActivity;
 import com.ben.yjh.babycare.main.user.HomeViewPagerAdapter;
@@ -55,6 +56,7 @@ public class MainActivity extends BaseActivity
     private EventListFragment mEventListFragment;
     private Runnable mPendingRunnable;
     private Handler mHandler = new Handler();
+    private RedEnvelopeFragment mRedEnvelopeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +66,13 @@ public class MainActivity extends BaseActivity
         initToolbar(0, R.string.app_name);
         List<BaseFragment> fragments = new ArrayList<>();
         mEventListFragment = EventListFragment.newInstance(user.getUserId());
+//        mRedEnvelopeFragment = RedEnvelopeFragment.newInstance();
         fragments.add(mEventListFragment);
+//        fragments.add(mRedEnvelopeFragment);
 
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mPagerAdapter = new HomeViewPagerAdapter(this, getSupportFragmentManager(), fragments);
-        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setOffscreenPageLimit(1);
         mViewPager.setAdapter(mPagerAdapter);
 
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout_main);

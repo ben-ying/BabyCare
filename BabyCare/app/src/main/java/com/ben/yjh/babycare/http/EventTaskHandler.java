@@ -23,9 +23,7 @@ public class EventTaskHandler extends BaseTaskHandler {
     private static final String URL_EVENTS = "events/";
     private static final String URL_LIKES = "event/likes";
     private static final String URL_LIKE = "event/like";
-    private static final String URL_DELETE = "event/delete";
     private static final String URL_COMMENTS = "event/comments/";
-    private static final String URL_COMMENT = "event/comment";
 
     private String mToken;
 

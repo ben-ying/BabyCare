@@ -227,6 +227,7 @@ public class AboutUsAdapter extends RecyclerView.Adapter<AboutUsAdapter.AboutUsH
         intent.setDataAndType(Uri.fromFile(
                 new File(destination)), "application/vnd.android.package-archive");
         mContext.startActivity(intent);
+        ((Activity) mContext).finish();
     }
 
     @Override

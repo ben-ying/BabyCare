@@ -11,10 +11,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ben.yjh.babycare.R;
-import com.ben.yjh.babycare.http.EventTaskHandler;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.NavigationTaskHandler;
-import com.ben.yjh.babycare.model.Event;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.model.RedEnvelope;
 import com.ben.yjh.babycare.model.User;
@@ -29,11 +27,14 @@ public class RedEnvelopeAdapter extends RecyclerView.Adapter<
     private Context mContext;
     private List<RedEnvelope> mRedEnvelopes;
     private User mUser;
+    private TextView mTotalTextView;
 
-    RedEnvelopeAdapter(Context context, User user, List<RedEnvelope> redEnvelopes) {
+    RedEnvelopeAdapter(Context context, User user,
+                       List<RedEnvelope> redEnvelopes, TextView totalTextView) {
         this.mContext = context;
         this.mUser = user;
         this.mRedEnvelopes = redEnvelopes;
+        this.mTotalTextView = totalTextView;
     }
 
     public void setData(List<RedEnvelope> redEnvelopes) {
@@ -74,7 +75,7 @@ public class RedEnvelopeAdapter extends RecyclerView.Adapter<
 
     private void deleteTask(final RedEnvelope redEnvelope) {
         new NavigationTaskHandler(mContext, mUser.getToken())
-                .deleteEvent(redEnvelope.getRedEnvelopeId(), new HttpResponseInterface<RedEnvelope>() {
+                .deleteRedEnvelope(redEnvelope.getRedEnvelopeId(), new HttpResponseInterface<RedEnvelope>() {
                     @Override
                     public void onStart() {
 
@@ -84,6 +85,12 @@ public class RedEnvelopeAdapter extends RecyclerView.Adapter<
                     public void onSuccess(RedEnvelope classOfT) {
                         if (classOfT != null && redEnvelope.getRedEnvelopeId() == classOfT.getRedEnvelopeId()) {
                             mRedEnvelopes.remove(redEnvelope);
+                            int total = 0;
+                            for (RedEnvelope redEnvelope : mRedEnvelopes) {
+                                total += redEnvelope.getMoneyInt();
+                            }
+                            mTotalTextView.setText(String.format(mContext.getString(
+                                    R.string.red_envelope_total), mRedEnvelopes.size(), total));
                             notifyDataSetChanged();
                             RedEnvelope.deleteAll(RedEnvelope.class, "red_envelope_id = ?",
                                     String.valueOf(redEnvelope.getRedEnvelopeId()));
@@ -105,9 +112,9 @@ public class RedEnvelopeAdapter extends RecyclerView.Adapter<
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.content_layout:
-                Intent intent = new Intent(mContext, RedEnvelopeActivity.class);
-                ((Activity) mContext).startActivityForResult(
-                        intent, Constants.RED_ENVELOPE_EDIT_REQUEST);
+//                Intent intent = new Intent(mContext, RedEnvelopeActivity.class);
+//                ((Activity) mContext).startActivityForResult(
+//                        intent, Constants.RED_ENVELOPE_EDIT_REQUEST);
                 break;
         }
     }

@@ -21,7 +21,7 @@ from babycare.constants import CODE_DUPLICATE_EMAIL, MSG_SEND_VERIFY_CODE_SUCCES
     MSG_EXPIRED_VERIFY_CODE, \
     VERIFY_CODE_EXPIRED_TIME, CODE_USER_NOT_EXISTS, MSG_USER_NOT_EXISTS, MSG_GET_USER_DETAIL_SUCCESS, \
     MSG_DUPLICATE_PHONE, CODE_DUPLICATE_PHONE, MSG_GET_APP_INFO_SUCCESS, PASSWORD_VERIFY_CODE_EMAIL_SUBJECT, \
-    PASSWORD_VERIFY_CODE_EMAIL_CONTENT, DIR_USER_PROFILE
+    PASSWORD_VERIFY_CODE_EMAIL_CONTENT, DIR_USER_PROFILE, MSG_UPDATE_USER_INFO_SUCCESS
 from babycare.constants import CODE_DUPLICATE_USER
 from babycare.constants import CODE_EMPTY_EMAIL
 from babycare.constants import CODE_EMPTY_PASSWORD
@@ -203,7 +203,7 @@ class UserViewSet(CustomModelViewSet):
                     response_data = BabyUserSerializer(baby).data
                     response_data['token'] = Token.objects.get(user=user).key
 
-                    return json_response(response_data, CODE_SUCCESS, MSG_LOGIN_SUCCESS)
+                    return json_response(response_data, CODE_SUCCESS, MSG_UPDATE_USER_INFO_SUCCESS)
 
             return invalid_token_response()
         except Exception as e:
