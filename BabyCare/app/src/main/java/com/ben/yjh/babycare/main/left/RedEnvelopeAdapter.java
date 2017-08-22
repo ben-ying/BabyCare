@@ -61,7 +61,7 @@ public class RedEnvelopeAdapter extends RecyclerView.Adapter<
         holder.rootView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                AlertUtils.showConfirmDialog(mContext, R.string.delete_event_alert,
+                AlertUtils.showConfirmDialog(mContext, R.string.delete_red_envelope_alert,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
