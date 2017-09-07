@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.ben.yjh.babycare.BuildConfig;
 import com.ben.yjh.babycare.R;
 import com.ben.yjh.babycare.application.MyApplication;
+import com.ben.yjh.babycare.glide.GlideApp;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.UserTaskHandler;
 import com.ben.yjh.babycare.model.AppInfo;
@@ -217,7 +218,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.ShareVie
 
         @Override
         protected Void doInBackground(Void... params) {
-            MyApplication.getInstance(mContext).clearImageCache();
+            GlideApp.get(mContext).clearDiskCache();
             return null;
         }
 

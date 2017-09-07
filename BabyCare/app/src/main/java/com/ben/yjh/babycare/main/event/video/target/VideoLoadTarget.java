@@ -3,12 +3,11 @@ package com.ben.yjh.babycare.main.event.video.target;
 import android.media.MediaPlayer;
 import android.os.Build;
 
-import com.ben.yjh.babycare.main.event.EventAdapter;
 import com.ben.yjh.babycare.main.event.video.VideoLoadMvpView;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.target.ViewTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.waynell.videolist.widget.TextureVideoView;
 
 import java.io.File;
@@ -25,7 +24,7 @@ public class VideoLoadTarget extends ViewTarget<TextureVideoView, File> implemen
     }
 
     @Override
-    public void onResourceReady(File resource, GlideAnimation<? super File> glideAnimation) {
+    public void onResourceReady(File resource, Transition<? super File> transition) {
         mLoadMvpView.videoResourceReady(resource.getAbsolutePath());
     }
 

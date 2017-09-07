@@ -6,8 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 
@@ -67,13 +65,19 @@ public class GalleryActivity extends BaseActivity implements GalleryAdapter.Gall
 
     @Override
     public void intent2Gallery(String url) {
-        Intent newIntent = new Intent(this, FeatherActivity.class);
-//        high resolution
-//        newIntent.putExtra(com.aviary.android.feather.library
-//                .Constants.EXTRA_IN_HIRES_MEGAPIXELS, MegaPixels.Mp5.ordinal());
-        newIntent.setData(Uri.parse(url));
-        newIntent.putExtra(AviaryIntent.EXTRA_API_KEY_SECRET, Constants.AVIARY_PICTURE_REQUEST_CODE);
-        startActivityForResult(newIntent, Constants.AVIARY_PICTURE_REQUEST_CODE);
+//        Intent newIntent = new Intent(this, FeatherActivity.class);
+////        high resolution
+////        newIntent.putExtra(com.aviary.android.feather.library
+////                .Constants.EXTRA_IN_HIRES_MEGAPIXELS, MegaPixels.Mp5.ordinal());
+//        newIntent.setData(Uri.parse(url));
+//        newIntent.putExtra(AviaryIntent.EXTRA_API_KEY_SECRET, Constants.AVIARY_PICTURE_REQUEST_CODE);
+//        startActivityForResult(newIntent, Constants.AVIARY_PICTURE_REQUEST_CODE);
+
+        Uri uri = Uri.parse(url);
+        Intent intent = getIntent();
+        setResult(RESULT_OK, intent);
+        intent.putExtra(Constants.IMAGE_URL, uri.getPath());
+        finish();
     }
 
     @Override
@@ -91,26 +95,30 @@ public class GalleryActivity extends BaseActivity implements GalleryAdapter.Gall
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case Constants.CAMERA_PICTURE_REQUEST_CODE:
-                    Intent newIntent = new Intent(this, FeatherActivity.class);
-                    // high resolution
-                    // newIntent.putExtra(com.aviary.android.feather.library
-                    //       .Constants.EXTRA_IN_HIRES_MEGAPIXELS, MegaPixels.Mp5.ordinal());
-                    newIntent.setData(mCameraUri);
-                    newIntent.putExtra(AviaryIntent.EXTRA_API_KEY_SECRET, Constants.AVIARY_PICTURE_REQUEST_CODE);
-                    startActivityForResult(newIntent, Constants.AVIARY_PICTURE_REQUEST_CODE);
-                    break;
-                case Constants.AVIARY_PICTURE_REQUEST_CODE:
-                    Uri uri = data.getData();
-                    Bundle extra = data.getExtras();
-                    if (null != extra) {
-                        // image has been changed by the user?
-                        boolean changed = extra.getBoolean(com.aviary.android.feather.library
-                                .Constants.EXTRA_OUT_BITMAP_CHANGED);
-                    }
+//                    Intent newIntent = new Intent(this, FeatherActivity.class);
+//                    // high resolution
+//                    // newIntent.putExtra(com.aviary.android.feather.library
+//                    //       .Constants.EXTRA_IN_HIRES_MEGAPIXELS, MegaPixels.Mp5.ordinal());
+//                    newIntent.setData(mCameraUri);
+//                    newIntent.putExtra(AviaryIntent.EXTRA_API_KEY_SECRET, Constants.AVIARY_PICTURE_REQUEST_CODE);
+//                    startActivityForResult(newIntent, Constants.AVIARY_PICTURE_REQUEST_CODE);
                     Intent intent = getIntent();
                     setResult(RESULT_OK, intent);
-                    intent.putExtra(Constants.IMAGE_URL, uri.toString());
+                    intent.putExtra(Constants.IMAGE_URL, mCameraUri.getPath());
                     finish();
+                    break;
+                case Constants.AVIARY_PICTURE_REQUEST_CODE:
+//                    Uri uri = data.getData();
+//                    Bundle extra = data.getExtras();
+//                    if (null != extra) {
+//                        // image has been changed by the user?
+//                        boolean changed = extra.getBoolean(com.aviary.android.feather.library
+//                                .Constants.EXTRA_OUT_BITMAP_CHANGED);
+//                    }
+//                    Intent intent = getIntent();
+//                    setResult(RESULT_OK, intent);
+//                    intent.putExtra(Constants.IMAGE_URL, uri.toString());
+//                    finish();
                     break;
                 case Constants.ADD_EVENT_REQUEST_CODE:
                     break;

@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -20,14 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ben.yjh.babycare.BuildConfig;
 import com.ben.yjh.babycare.R;
-import com.ben.yjh.babycare.application.MyApplication;
-import com.ben.yjh.babycare.http.HttpPostTask;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
-import com.ben.yjh.babycare.http.NavigationTaskHandler;
 import com.ben.yjh.babycare.http.UserTaskHandler;
 import com.ben.yjh.babycare.model.AppInfo;
 import com.ben.yjh.babycare.model.HttpBaseResult;
@@ -35,10 +30,8 @@ import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.service.DownloadService;
 import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
-import com.ben.yjh.babycare.util.Utils;
 
 import java.io.File;
-import java.io.IOException;
 
 public class AboutUsAdapter extends RecyclerView.Adapter<AboutUsAdapter.AboutUsHolder> {
 

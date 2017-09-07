@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -16,8 +15,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.ben.yjh.babycare.R;
-import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseAllActivity;
+import com.ben.yjh.babycare.glide.GlideUtils;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.UserTaskHandler;
 import com.ben.yjh.babycare.main.MainActivity;
@@ -26,7 +25,6 @@ import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.model.UserHistory;
 import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
-import com.ben.yjh.babycare.util.ImageUtils;
 import com.ben.yjh.babycare.util.SharedPreferenceUtils;
 import com.ben.yjh.babycare.util.SystemUtils;
 
@@ -55,6 +53,7 @@ public class LoginActivity extends BaseAllActivity {
         findViewById(R.id.tv_forgot_password).setOnClickListener(this);
         mGenderImageView = (ImageView) findViewById(R.id.img_profile);
         mGenderImageView.setOnClickListener(this);
+        // if crash here, update sugar version and turn off instant run
         List<User> users = User.find(User.class, "is_login = ?", "1");
         List<UserHistory> userHistories = UserHistory.listAll(UserHistory.class);
         if (users.size() > 0) {
@@ -66,8 +65,8 @@ public class LoginActivity extends BaseAllActivity {
             }
             if (users.get(0).getToken().isEmpty()) {
                 if (users.get(0).getProfile() != null) {
-                    MyApplication.getInstance(LoginActivity.this).displayImage(users.get(0).getProfile(),
-                            mGenderImageView, ImageUtils.getProfileImageOptions(this), false);
+                    GlideUtils.displayCircleImage(this, mGenderImageView, users.get(0).getProfile(),
+                            SharedPreferenceUtils.isGirl(this) ? R.mipmap.girl : R.mipmap.boy);
                 } else {
                     mGenderImageView.setImageResource(
                             SharedPreferenceUtils.isGirl(this) ? R.mipmap.girl : R.mipmap.boy);
@@ -109,9 +108,9 @@ public class LoginActivity extends BaseAllActivity {
                 if (userHistories.size() > 0) {
                     mGenderImageView.setClickable(false);
                     mGenderImageView.setEnabled(false);
-                    MyApplication.getInstance(LoginActivity.this).displayImage(
-                            userHistories.get(0).getProfile(), mGenderImageView, ImageUtils.getProfileImageOptions(
-                                    userHistories.get(0).getGender() == 1 ? R.mipmap.girl : R.mipmap.boy), false);
+                    GlideUtils.displayCircleImage(LoginActivity.this,
+                            mGenderImageView, userHistories.get(0).getProfile(),
+                            userHistories.get(0).getGender() == 1 ? R.mipmap.girl : R.mipmap.boy);
                 }
             }
         });
@@ -295,8 +294,8 @@ public class LoginActivity extends BaseAllActivity {
                 }
                 String profile = userHistories.get(mUserIndex).getProfile();
                 if (profile != null) {
-                    MyApplication.getInstance(LoginActivity.this).displayImage(profile,
-                            mGenderImageView, ImageUtils.getProfileImageOptions(this), false);
+                    GlideUtils.displayCircleImage(this, mGenderImageView, profile,
+                            SharedPreferenceUtils.isGirl(this) ? R.mipmap.girl : R.mipmap.boy);
                 } else {
                     mGenderImageView.setImageResource(userHistories.get(
                             mUserIndex).getGender() == 0 ? R.mipmap.boy : R.mipmap.girl);

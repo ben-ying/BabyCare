@@ -20,13 +20,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ben.yjh.babycare.R;
-import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.base.BaseFragment;
+import com.ben.yjh.babycare.glide.GlideUtils;
 import com.ben.yjh.babycare.main.event.EventListFragment;
 import com.ben.yjh.babycare.main.user.HomeViewPagerAdapter;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
+import com.ben.yjh.babycare.util.SharedPreferenceUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -76,8 +77,8 @@ public class UserInfoActivity extends BaseActivity {
         mTabLayout.setupWithViewPager(mViewPager);
         mProfileImageView = (ImageView) findViewById(R.id.img_profile);
         mProfileImageView.setOnClickListener(this);
-        MyApplication.getInstance(this).displayImage(user.getProfile(),
-                mProfileImageView, ImageUtils.getProfileImageOptions(this), false);
+        GlideUtils.displayCircleImage(this, mProfileImageView, user.getProfile(),
+                SharedPreferenceUtils.isGirl(this) ? R.mipmap.girl : R.mipmap.boy);
         mNameTextView = ((TextView) findViewById(R.id.tv_name));
         mNameTextView.setText(user.getBabyName());
         ((AppBarLayout) findViewById(R.id.app_bar_scrolling))
@@ -172,8 +173,8 @@ public class UserInfoActivity extends BaseActivity {
                             Bitmap bitmap = BitmapFactory.decodeStream(
                                     getContentResolver().openInputStream(uri));
                             mProfileBase64 = ImageUtils.getBase64FromBitmap(bitmap);
-                            MyApplication.getInstance(this).displayImage(uri.toString(),
-                                    mProfileImageView, ImageUtils.getProfileImageOptions(this), true);
+                            GlideUtils.displayCircleImage(this, mProfileImageView, uri.toString(),
+                                    SharedPreferenceUtils.isGirl(this) ? R.mipmap.girl : R.mipmap.boy);
                             mPersonalInfoFragment.editPersonalInfoTask(R.id.img_profile, mProfileBase64);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();

@@ -38,6 +38,7 @@ import mabeijianxi.camera.model.MediaObject;
 import mabeijianxi.camera.model.MediaRecorderConfig;
 import mabeijianxi.camera.util.DeviceUtils;
 import mabeijianxi.camera.util.FileUtils;
+
 import static mabeijianxi.camera.MediaRecorderBase.compressConfig;
 
 public class VideoRecorderActivity extends BaseActivity implements

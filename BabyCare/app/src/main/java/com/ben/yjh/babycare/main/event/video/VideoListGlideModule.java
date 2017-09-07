@@ -7,6 +7,7 @@ import android.os.Looper;
 import com.ben.yjh.babycare.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.GlideBuilder;
+import com.bumptech.glide.Registry;
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader;
 import com.bumptech.glide.load.engine.cache.DiskCache;
 import com.bumptech.glide.load.engine.cache.DiskLruCacheFactory;
@@ -44,7 +45,6 @@ public class VideoListGlideModule implements GlideModule {
 
     @Override
     public void applyOptions(final Context context, GlideBuilder builder) {
-        ViewTarget.setTagId(R.id.glide_loader);
         builder.setDiskCache(new DiskLruCacheFactory(new DiskLruCacheFactory.CacheDirectoryGetter
                 () {
             @Override
@@ -55,8 +55,8 @@ public class VideoListGlideModule implements GlideModule {
     }
 
     @Override
-    public void registerComponents(Context context, Glide glide) {
-        glide.register(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory(sClient));
+    public void registerComponents(Context context, Glide glide, Registry registry) {
+        registry.replace(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory(sClient));
     }
 
     public static OkHttpUrlLoader getOkHttpUrlLoader() {

@@ -1,6 +1,5 @@
 package com.ben.yjh.babycare.model;
 
-import com.ben.yjh.babycare.util.Constants;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;

@@ -11,13 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ben.yjh.babycare.R;
-import com.ben.yjh.babycare.application.MyApplication;
+import com.ben.yjh.babycare.glide.GlideUtils;
 import com.ben.yjh.babycare.main.left.UserInfoActivity;
 import com.ben.yjh.babycare.main.user.UserDetailActivity;
 import com.ben.yjh.babycare.model.EventComment;
 import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.util.Constants;
-import com.ben.yjh.babycare.util.ImageUtils;
+import com.ben.yjh.babycare.util.SharedPreferenceUtils;
 import com.ben.yjh.babycare.util.Utils;
 
 import java.util.List;
@@ -62,8 +62,8 @@ public class CommentAdapter extends RecyclerView.Adapter<
     @Override
     public void onBindViewHolder(CommentViewHolder holder, int position) {
         final EventComment comment = mComments.get(position);
-        MyApplication.getInstance(mContext).displayImage(comment.getUserProfile(),
-                holder.imageView, ImageUtils.getProfileImageOptions(mContext), false);
+        GlideUtils.displayCircleImage(mContext, holder.imageView, comment.getUserProfile(),
+                SharedPreferenceUtils.isGirl(mContext) ? R.mipmap.girl : R.mipmap.boy);
         holder.nameTextView.setText(comment.getUsername());
         holder.dateTextView.setText(Utils.getFormatDate(mContext, comment.getDatetime()));
         if (comment.getIndirectUserName() != null) {

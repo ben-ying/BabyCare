@@ -2,8 +2,6 @@ package com.ben.yjh.babycare.main.event;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -12,8 +10,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.ben.yjh.babycare.R;
-import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
+import com.ben.yjh.babycare.glide.GlideUtils;
 import com.ben.yjh.babycare.http.EventTaskHandler;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.main.user.GalleryActivity;
@@ -21,8 +19,7 @@ import com.ben.yjh.babycare.model.Event;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.ben.yjh.babycare.util.SharedPreferenceUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -89,32 +86,9 @@ public class AddEventActivity extends BaseActivity {
         if (intent != null) {
             mImageUrl = intent.getStringExtra(Constants.IMAGE_URL);
             if (mImageUrl != null) {
-                MyApplication.getInstance(this).displayImage(
-                        Uri.fromFile(new File(mImageUrl)).toString(),
-                        mImageView, ImageUtils.getEventImageOptions(
-                                AddEventActivity.this), true, new ImageLoadingListener() {
-                            @Override
-                            public void onLoadingStarted(String s, View view) {
-
-                            }
-
-                            @Override
-                            public void onLoadingFailed(String s, View view, FailReason failReason) {
-
-                            }
-
-                            @Override
-                            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-                                mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                                mImageView.setImageBitmap(bitmap);
-                                mBase64Image = ImageUtils.getBase64FromBitmap(bitmap);
-                            }
-
-                            @Override
-                            public void onLoadingCancelled(String s, View view) {
-
-                            }
-                        });
+                GlideUtils.displayImage(
+                        this, mImageView, mImageUrl);
+                mBase64Image = ImageUtils.getBase64FromFile(mImageUrl);
             }
         }
     }

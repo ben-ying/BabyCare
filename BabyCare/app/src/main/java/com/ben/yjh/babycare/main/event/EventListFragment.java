@@ -6,19 +6,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import com.ben.yjh.babycare.R;
-import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseFragment;
 import com.ben.yjh.babycare.http.EventTaskHandler;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
@@ -38,7 +34,6 @@ import com.ben.yjh.babycare.widget.share.ShareBottomSheetDialogFragment;
 import com.waynell.videolist.visibility.calculator.SingleListViewItemActiveCalculator;
 import com.waynell.videolist.visibility.scroll.RecyclerViewItemPositionGetter;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -8,8 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.ben.yjh.babycare.R;
-import com.ben.yjh.babycare.application.MyApplication;
-import com.ben.yjh.babycare.util.ImageUtils;
+import com.ben.yjh.babycare.glide.GlideUtils;
+import com.ben.yjh.babycare.util.SharedPreferenceUtils;
 
 import java.util.List;
 
@@ -83,8 +83,7 @@ public class GalleryAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
             final ImageView imageView = viewHolder.imageView;
             imageView.setImageResource(0);
-            MyApplication.getInstance(mContext).displayThumbnailImage(mUrls.get(position - 1),
-                    imageView, ImageUtils.getGalleryOptions(), null);
+            GlideUtils.displayImage(mContext, imageView, mUrls.get(position - 1));
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

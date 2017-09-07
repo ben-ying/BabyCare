@@ -13,25 +13,20 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.ben.yjh.babycare.R;
+import com.ben.yjh.babycare.glide.GlideApp;
+import com.ben.yjh.babycare.glide.GlideUtils;
 import com.ben.yjh.babycare.main.event.EventAdapter;
-import com.ben.yjh.babycare.main.event.video.VideoListGlideModule;
 import com.ben.yjh.babycare.main.event.video.VideoLoadMvpView;
 import com.ben.yjh.babycare.main.event.video.VideoPlayerActivity;
 import com.ben.yjh.babycare.main.event.video.target.VideoLoadTarget;
 import com.ben.yjh.babycare.main.event.video.target.VideoProgressTarget;
 import com.ben.yjh.babycare.model.Event;
 import com.ben.yjh.babycare.util.Constants;
-import com.bumptech.glide.Glide;
+import com.ben.yjh.babycare.util.SharedPreferenceUtils;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.waynell.videolist.visibility.items.ListItem;
 import com.waynell.videolist.widget.TextureVideoView;
-
-import java.io.File;
-import java.io.InputStream;
 
 public class VideoViewHolder extends TextViewHolder implements
         ViewPropertyAnimatorListener, ListItem, View.OnClickListener, VideoLoadMvpView {
@@ -46,9 +41,11 @@ public class VideoViewHolder extends TextViewHolder implements
     private VideoProgressTarget mProgressTarget;
     private VideoLoadTarget mVideoTarget;
     private ProgressBar mProgressBar;
+    private Context mContext;
 
     public VideoViewHolder(Context context, View itemView, EventAdapter adapter) {
         super(context, itemView, adapter);
+        this.mContext = context;
         this.mVideoView = (TextureVideoView) itemView.findViewById(R.id.videoView);
         this.mCoverImageView = (ImageView) itemView.findViewById(R.id.iv_cover);
         this.mProgressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
@@ -64,31 +61,13 @@ public class VideoViewHolder extends TextViewHolder implements
         reset();
         mVideoView.setOnClickListener(this);
         mCoverImageView.setOnClickListener(this);
-        Glide.with(context)
-                .load(event.getVideoThumbnail()).centerCrop()
-                .placeholder(new ColorDrawable(0xffdcdcdc))
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model,
-                                               Target<GlideDrawable> target, boolean isFirstResource) {
-                        return false;
-                    }
+        GlideUtils.displayImage(mContext, mCoverImageView,
+                event.getVideoThumbnail(), new ColorDrawable(0xffdcdcdc));
 
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource,
-                                                   String model, Target<GlideDrawable> target,
-                                                   boolean isFromMemoryCache, boolean isFirstResource) {
-                        mCoverImageView.setBackgroundDrawable(resource);
-                        mCoverImageView.setImageResource(R.mipmap.ic_play_circle_outline_white_48dp);
-                        return true;
-                    }
-                }).into(mCoverImageView);
-        Glide.with(context)
-                .using(VideoListGlideModule.getOkHttpUrlLoader(), InputStream.class)
+        GlideApp.with(context)
+                .asFile()
                 .load(new GlideUrl(event.getVideoUrl()))
-                .as(File.class)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .into(mProgressTarget);
     }
 

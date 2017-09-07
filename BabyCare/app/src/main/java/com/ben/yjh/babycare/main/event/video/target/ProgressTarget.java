@@ -1,10 +1,11 @@
 package com.ben.yjh.babycare.main.event.video.target;
 
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
+import com.ben.yjh.babycare.glide.GlideApp;
 import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 
 public abstract class ProgressTarget<T, Z> extends WrappingTarget<Z> {
     private T model;
@@ -24,7 +25,7 @@ public abstract class ProgressTarget<T, Z> extends WrappingTarget<Z> {
     }
 
     public final void setModel(T model) {
-        Glide.clear(this); // indirectly calls cleanup
+//        GlideApp.clear(this); // indirectly calls cleanup
         this.model = model;
     }
 
@@ -114,15 +115,14 @@ public abstract class ProgressTarget<T, Z> extends WrappingTarget<Z> {
     }
 
     @Override
-    public void onResourceReady(Z resource, GlideAnimation<? super Z> animation) {
+    public void onResourceReady(Z resource, Transition<? super Z> animation) {
         cleanup();
-        super.onResourceReady(resource, animation);
     }
 
     @Override
-    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+    public void onLoadFailed(@Nullable Drawable errorDrawable) {
         cleanup();
-        super.onLoadFailed(e, errorDrawable);
+        super.onLoadFailed(errorDrawable);
     }
 
     @Override

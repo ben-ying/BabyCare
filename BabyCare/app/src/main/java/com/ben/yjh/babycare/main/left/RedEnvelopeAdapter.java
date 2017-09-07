@@ -1,9 +1,7 @@
 package com.ben.yjh.babycare.main.left;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +15,6 @@ import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.model.RedEnvelope;
 import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.util.AlertUtils;
-import com.ben.yjh.babycare.util.Constants;
 
 import java.util.List;
 

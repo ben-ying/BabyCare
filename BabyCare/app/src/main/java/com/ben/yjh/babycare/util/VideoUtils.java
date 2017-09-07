@@ -3,13 +3,10 @@ package com.ben.yjh.babycare.util;
 
 import android.content.Context;
 import android.hardware.Camera;
-import android.provider.Settings;
 
 import com.ben.yjh.babycare.model.VideoConfig;
 
 import java.util.List;
-
-import mabeijianxi.camera.MediaRecorderBase;
 
 public class VideoUtils {
 

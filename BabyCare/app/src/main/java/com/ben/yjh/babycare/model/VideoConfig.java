@@ -6,8 +6,6 @@ import com.orm.SugarRecord;
 
 import java.io.Serializable;
 
-import mabeijianxi.camera.MediaRecorderBase;
-
 
 public class VideoConfig extends SugarRecord implements Serializable {
     @SerializedName("username") String username;

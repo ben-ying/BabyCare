@@ -4,7 +4,6 @@ package com.ben.yjh.babycare.http;
 import android.content.Context;
 
 import com.android.volley.Request;
-import com.ben.yjh.babycare.model.Event;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.model.RedEnvelope;
 import com.ben.yjh.babycare.model.RedEnvelopesResult;

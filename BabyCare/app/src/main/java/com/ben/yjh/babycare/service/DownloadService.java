@@ -2,13 +2,11 @@ package com.ben.yjh.babycare.service;
 
 
 import android.app.IntentService;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ResultReceiver;
 
-import com.ben.yjh.babycare.http.HttpPostTask;
 import com.ben.yjh.babycare.model.AppInfo;
 import com.ben.yjh.babycare.util.Constants;
 

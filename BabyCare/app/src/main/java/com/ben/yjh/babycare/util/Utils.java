@@ -4,7 +4,6 @@ package com.ben.yjh.babycare.util;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.text.format.DateUtils;
 import android.view.Window;
 import android.view.WindowManager;
@@ -12,7 +11,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.ben.yjh.babycare.R;
-import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.io.IOException;

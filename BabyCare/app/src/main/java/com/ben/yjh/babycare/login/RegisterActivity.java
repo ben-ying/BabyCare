@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.Toolbar;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -16,8 +15,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.ben.yjh.babycare.R;
-import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseAllActivity;
+import com.ben.yjh.babycare.glide.GlideUtils;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.UserTaskHandler;
 import com.ben.yjh.babycare.main.MainActivity;
@@ -27,6 +26,7 @@ import com.ben.yjh.babycare.model.UserHistory;
 import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
+import com.ben.yjh.babycare.util.SharedPreferenceUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -162,8 +162,8 @@ public class RegisterActivity extends BaseAllActivity {
                             Bitmap bitmap = BitmapFactory.decodeStream(
                                     getContentResolver().openInputStream(uri));
                             mProfileBase64 = ImageUtils.getBase64FromBitmap(bitmap);
-                            MyApplication.getInstance(this).displayImage(uri.toString(),
-                                    mProfileButton, ImageUtils.getProfileImageOptions(this), true);
+                            GlideUtils.displayCircleImage(this, mProfileButton, uri.toString(),
+                                    SharedPreferenceUtils.isGirl(this) ? R.mipmap.girl : R.mipmap.boy);
                             findViewById(R.id.tv_add_profile).setVisibility(View.GONE);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();

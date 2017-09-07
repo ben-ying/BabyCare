@@ -8,11 +8,13 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.ben.yjh.babycare.R;
-import com.ben.yjh.babycare.application.MyApplication;
+import com.ben.yjh.babycare.glide.GlideUtils;
 import com.ben.yjh.babycare.main.event.EventAdapter;
 import com.ben.yjh.babycare.model.Event;
-import com.ben.yjh.babycare.util.ImageUtils;
+import com.ben.yjh.babycare.util.SharedPreferenceUtils;
 import com.ben.yjh.babycare.util.Utils;
+
+import javax.microedition.khronos.opengles.GL;
 
 public class TextViewHolder extends RecyclerView.ViewHolder  {
 
@@ -79,8 +81,8 @@ public class TextViewHolder extends RecyclerView.ViewHolder  {
             mContentTextView.setText(event.getContent());
         }
 
-        MyApplication.getInstance(context).displayTinyImage(event.getUserProfile(),
-                mProfileButton, ImageUtils.getTinyProfileImageOptions(context));
+        GlideUtils.displayRoundedImage(context, mProfileButton,
+                event.getUserProfile(), R.drawable.ic_profile, GlideUtils.CIRCLE_SMALL_PROFILE);
         mNameTextView.setText(event.getUsername());
         mDateTextView.setText(Utils.getFormatDate(context, event.getCreated()));
     }

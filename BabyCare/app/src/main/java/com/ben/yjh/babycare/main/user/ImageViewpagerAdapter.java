@@ -2,14 +2,13 @@ package com.ben.yjh.babycare.main.user;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ben.yjh.babycare.R;
-import com.ben.yjh.babycare.application.MyApplication;
-import com.ben.yjh.babycare.util.ImageUtils;
+import com.ben.yjh.babycare.glide.GlideUtils;
+import com.ben.yjh.babycare.util.SharedPreferenceUtils;
 import com.ben.yjh.babycare.widget.ScaleImageView;
 
 import java.util.List;
@@ -34,8 +33,7 @@ public class ImageViewpagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_image, null);
         ScaleImageView imageView = (ScaleImageView) view.findViewById(R.id.img_event);
-        MyApplication.getInstance(mContext).displayImage(mImages.get(position),
-                imageView, ImageUtils.getGalleryOptions(), false);
+        GlideUtils.displayImage(mContext, imageView, mImages.get(position));
         container.addView(view);
 
         return view;

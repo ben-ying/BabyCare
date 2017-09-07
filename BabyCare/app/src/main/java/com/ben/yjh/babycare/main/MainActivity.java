@@ -22,9 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ben.yjh.babycare.R;
-import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.base.BaseFragment;
+import com.ben.yjh.babycare.glide.GlideUtils;
 import com.ben.yjh.babycare.main.event.AddEventActivity;
 import com.ben.yjh.babycare.main.event.EventListFragment;
 import com.ben.yjh.babycare.main.event.video.VideoRecorderActivity;
@@ -39,6 +39,7 @@ import com.ben.yjh.babycare.model.VideoConfig;
 import com.ben.yjh.babycare.util.AlertUtils;
 import com.ben.yjh.babycare.util.Constants;
 import com.ben.yjh.babycare.util.ImageUtils;
+import com.ben.yjh.babycare.util.SharedPreferenceUtils;
 import com.ben.yjh.babycare.util.VideoUtils;
 
 import java.util.ArrayList;
@@ -136,8 +137,8 @@ public class MainActivity extends BaseActivity
         TextView emailTextView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_email);
         emailTextView.setText(user.getEmail());
         ImageView profileImageView = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.img_profile);
-        MyApplication.getInstance(this).displayImage(user.getProfile(),
-                profileImageView, ImageUtils.getProfileImageOptions(this), false);
+        GlideUtils.displayCircleImage(this, profileImageView, user.getProfile(),
+                SharedPreferenceUtils.isGirl(this) ? R.mipmap.girl : R.mipmap.boy);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

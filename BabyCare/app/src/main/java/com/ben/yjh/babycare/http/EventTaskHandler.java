@@ -10,7 +10,6 @@ import com.ben.yjh.babycare.model.EventComment;
 import com.ben.yjh.babycare.model.EventLike;
 import com.ben.yjh.babycare.model.EventsResult;
 import com.ben.yjh.babycare.model.HttpBaseResult;
-import com.ben.yjh.babycare.util.Constants;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

@@ -17,6 +17,7 @@
     <dimen name="card_padding">60dp</dimen>
     <dimen name="tab_height">48dp</dimen> <!--48dp when You have text or image, and 72dp when You have image and text-->
     <dimen name="profile_size">80dp</dimen>
+    <dimen name="small_profile_size">20dp</dimen>
     <dimen name="profile_large_size">120dp</dimen>
     <dimen name="profile_small_size">50dp</dimen>
     <dimen name="stroke_size">1dp</dimen>

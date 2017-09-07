@@ -8,23 +8,21 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ben.yjh.babycare.R;
-import com.ben.yjh.babycare.application.MyApplication;
 import com.ben.yjh.babycare.base.BaseActivity;
 import com.ben.yjh.babycare.base.BaseFragment;
+import com.ben.yjh.babycare.glide.GlideUtils;
 import com.ben.yjh.babycare.http.HttpResponseInterface;
 import com.ben.yjh.babycare.http.UserTaskHandler;
 import com.ben.yjh.babycare.main.event.EventListFragment;
-import com.ben.yjh.babycare.main.left.RedEnvelopeFragment;
 import com.ben.yjh.babycare.model.HttpBaseResult;
 import com.ben.yjh.babycare.model.User;
 import com.ben.yjh.babycare.util.Constants;
-import com.ben.yjh.babycare.util.ImageUtils;
+import com.ben.yjh.babycare.util.SharedPreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,9 +84,9 @@ public class UserDetailActivity extends BaseActivity {
                     @Override
                     public void onSuccess(User classOfT) {
                         user = classOfT;
-                        MyApplication.getInstance(UserDetailActivity.this).displayImage(
-                                user.getProfile(), mProfileImageView, ImageUtils
-                                        .getProfileImageOptions(UserDetailActivity.this), false);
+                        GlideUtils.displayCircleImage(UserDetailActivity.this,
+                                mProfileImageView, user.getProfile(), SharedPreferenceUtils.isGirl(
+                                        UserDetailActivity.this) ? R.mipmap.girl : R.mipmap.boy);
                         mNameTextView.setText(user.getBabyName());
                         ((AppBarLayout) findViewById(R.id.app_bar_scrolling))
                                 .addOnOffsetChangedListener(
