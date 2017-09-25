@@ -33,7 +33,7 @@ red_envelope_detail = RedEnvelopeViewSet.as_view({
 
 iaer_list = IaerViewSet.as_view({
     'get': 'list',
-    'post': 'creIaerate'
+    'post': 'create'
 })
 
 iaer_detail = IaerViewSet.as_view({
@@ -91,8 +91,8 @@ urlpatterns = [
     url(r'^about_us/$', about_us_view, name='about-us'),
     url(r'^envelopes/$', red_envelope_list, name='red-envelope-list'),
     url(r'^envelopes/(?P<pk>[0-9]+)$', red_envelope_detail, name='red-envelope-detail'),
-    url(r'^iaer/$', iaer_list, name='iaer-list'),
-    url(r'^iaer/(?P<pk>[0-9]+)$', iaer_detail, name='iaer-detail'),
+    url(r'^iaers/$', iaer_list, name='iaer-list'),
+    url(r'^iaers/(?P<pk>[0-9]+)$', iaer_detail, name='iaer-detail'),
 
     # for test
     url(r'^event/multiply_x2$', multiply_events_view, name='send-feedback'),
