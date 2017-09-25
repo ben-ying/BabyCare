@@ -1,8 +1,12 @@
+# !/usr/bin/python
+# coding:utf-8
+
 from __future__ import unicode_literals
 
 import os
 
 from django.db import models
+from django.db.models import TextField
 from django.forms import IntegerField
 
 from babycare.utils import upload_file
@@ -152,3 +156,28 @@ class RedEnvelope(models.Model):
     money_from = models.CharField(max_length=100, blank=True, null=True)
     remark = models.CharField(max_length=100, blank=True, null=True)
     created = models.DateTimeField(editable=False, blank=True, null=True)
+
+
+class Iaer(models.Model):
+    CATEGORY_CHOICES = (
+        (u'生活用品', u'生活用品'),
+        (u'服饰', u'服饰'),
+        (u'餐饮', u'餐饮'),
+        (u'孩子', u'孩子'),
+        (u'收入', u'收入'),
+        (u'其他', u'其他'),
+    )
+
+    id = IntegerField(label='ID')
+    user = models.ForeignKey(BabyUser, on_delete=models.CASCADE)
+    money = models.IntegerField()
+    category = models.CharField(max_length=30, choices=CATEGORY_CHOICES)
+    money_type = models.IntegerField(default=0)  # 0 for rmb, 1 for dollar
+    remark = models.CharField(max_length=100, blank=True, null=True)
+    created = models.DateTimeField(editable=False, blank=True, null=True)
+    type = models.IntegerField(default=0)
+    chart_type = models.IntegerField(default=0)
+    format = models.CharField(max_length=50, blank=True, null=True)
+    datetime = models.DateTimeField(auto_now=True, blank=True, null=True)
+    description = TextField(blank=True, null=True)
+    timing = models.CharField(max_length=100, blank=True, null=True) # for every week or every month input or consumption

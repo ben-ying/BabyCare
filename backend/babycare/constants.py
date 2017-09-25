@@ -102,6 +102,10 @@ MSG_POST_COMMENT_SUCCESS = _(u'评论发布成功')
 MSG_NO_CONTENT = _(u'<h1 align="center">暂无内容</h1>')
 # red envelopes
 MSG_GET_RED_ENVELOPES_SUCCESS = _(u'获取红包列表成功')
-MSG_DELETE_RED_ENVELOPES_SUCCESS = _(u'删除红包成功')
+MSG_DELETE_RED_ENVELOPE_SUCCESS = _(u'删除红包成功')
 MSG_ADD_RED_ENVELOPE_SUCCESS = _(u'添加红包成功')
+# iaer
+MSG_GET_IAERS_SUCCESS = _(u'获取收支列表成功')
+MSG_DELETE_IAER_SUCCESS = _(u'删除收支成功')
+MSG_ADD_IAER_SUCCESS = _(u'添加收支成功')
 

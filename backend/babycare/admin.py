@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from models import BabyUser, Verify, Like, Feedback, Comment, AppInfo, RedEnvelope
+from models import BabyUser, Verify, Like, Feedback, Comment, AppInfo, RedEnvelope, Iaer
 from models import Event
 
 
@@ -52,3 +52,10 @@ class RedEnvelopeAdmin(admin.ModelAdmin):
     list_display = ('baby', 'money', 'money_type', 'money_from', 'remark', 'created')
     search_fields = ('baby', 'money', 'money_type', 'money_from', 'remark', 'created')
 admin.site.register(RedEnvelope, RedEnvelopeAdmin)
+
+
+class IaerAdmin(admin.ModelAdmin):
+    list_display = ('user', 'money', 'category', 'datetime', 'remark', 'created')
+    search_fields = ('user', 'money', 'category', 'datetime', 'remark', 'created')
+    fields = ('user', 'money', 'category', 'remark')
+admin.site.register(Iaer, IaerAdmin)

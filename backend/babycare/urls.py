@@ -4,7 +4,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 from babycare.views.comment_views import CommentViewSet
 from babycare.views.event_views import EventViewSet, like_view, multiply_events_view, delete_all_events_view
-from babycare.views.views import send_feedback, about_us_view, RedEnvelopeViewSet
+from babycare.views.views import send_feedback, about_us_view, RedEnvelopeViewSet, IaerViewSet
 from views.user_views import UserViewSet, login_view, send_verify_code_view, reset_password_with_verify_code_view, \
     get_app_info
 from views.user_views import api_root
@@ -27,6 +27,16 @@ red_envelope_list = RedEnvelopeViewSet.as_view({
 })
 
 red_envelope_detail = RedEnvelopeViewSet.as_view({
+    'get': 'retrieve',
+    'delete': 'destroy'
+})
+
+iaer_list = IaerViewSet.as_view({
+    'get': 'list',
+    'post': 'creIaerate'
+})
+
+iaer_detail = IaerViewSet.as_view({
     'get': 'retrieve',
     'delete': 'destroy'
 })
@@ -81,6 +91,8 @@ urlpatterns = [
     url(r'^about_us/$', about_us_view, name='about-us'),
     url(r'^envelopes/$', red_envelope_list, name='red-envelope-list'),
     url(r'^envelopes/(?P<pk>[0-9]+)$', red_envelope_detail, name='red-envelope-detail'),
+    url(r'^iaer/$', iaer_list, name='iaer-list'),
+    url(r'^iaer/(?P<pk>[0-9]+)$', iaer_detail, name='iaer-detail'),
 
     # for test
     url(r'^event/multiply_x2$', multiply_events_view, name='send-feedback'),
