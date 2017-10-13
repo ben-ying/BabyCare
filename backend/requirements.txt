@@ -1,3 +1,4 @@
+Django==1.10.4
 Pillow # image
 validate_email # valid email
 pyDNS # http://pydns.sourceforge.net/
