@@ -18,7 +18,7 @@ python manage.py startapp babycare
 #crete babycate tables
 python manage.py makemigrations babycare
 #create tables
-python manage.py migrate
+python manage.py migrate babycare
 #pip install file
 sudo pip install -r requirements.txt
 #show migration sql
