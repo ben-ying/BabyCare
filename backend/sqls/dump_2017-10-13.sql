@@ -479,6 +479,50 @@ ALTER SEQUENCE babycare_feedback_id_seq OWNED BY babycare_feedback.id;
 
 
 --
+-- Name: babycare_iaer; Type: TABLE; Schema: public; Owner: ben
+--
+
+CREATE TABLE babycare_iaer (
+    id integer NOT NULL,
+    money integer NOT NULL,
+    category character varying(30) NOT NULL,
+    money_type integer NOT NULL,
+    remark character varying(100),
+    created timestamp with time zone,
+    type integer NOT NULL,
+    chart_type integer NOT NULL,
+    format character varying(50),
+    datetime timestamp with time zone,
+    description text,
+    timing character varying(100),
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE babycare_iaer OWNER TO ben;
+
+--
+-- Name: babycare_iaer_id_seq; Type: SEQUENCE; Schema: public; Owner: ben
+--
+
+CREATE SEQUENCE babycare_iaer_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE babycare_iaer_id_seq OWNER TO ben;
+
+--
+-- Name: babycare_iaer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: ben
+--
+
+ALTER SEQUENCE babycare_iaer_id_seq OWNED BY babycare_iaer.id;
+
+
+--
 -- Name: babycare_like; Type: TABLE; Schema: public; Owner: ben
 --
 
@@ -830,6 +874,13 @@ ALTER TABLE ONLY babycare_feedback ALTER COLUMN id SET DEFAULT nextval('babycare
 -- Name: id; Type: DEFAULT; Schema: public; Owner: ben
 --
 
+ALTER TABLE ONLY babycare_iaer ALTER COLUMN id SET DEFAULT nextval('babycare_iaer_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: ben
+--
+
 ALTER TABLE ONLY babycare_like ALTER COLUMN id SET DEFAULT nextval('babycare_like_id_seq'::regclass);
 
 
@@ -940,24 +991,27 @@ COPY auth_permission (id, name, content_type_id, codename) FROM stdin;
 28	Can add event	10	add_event
 29	Can change event	10	change_event
 30	Can delete event	10	delete_event
-31	Can add baby user	11	add_babyuser
-32	Can change baby user	11	change_babyuser
-33	Can delete baby user	11	delete_babyuser
-34	Can add login log	12	add_loginlog
-35	Can change login log	12	change_loginlog
-36	Can delete login log	12	delete_loginlog
-37	Can add verify	13	add_verify
-38	Can change verify	13	change_verify
-39	Can delete verify	13	delete_verify
-40	Can add feedback	14	add_feedback
-41	Can change feedback	14	change_feedback
-42	Can delete feedback	14	delete_feedback
-43	Can add comment	15	add_comment
-44	Can change comment	15	change_comment
-45	Can delete comment	15	delete_comment
-46	Can add red envelope	16	add_redenvelope
-47	Can change red envelope	16	change_redenvelope
-48	Can delete red envelope	16	delete_redenvelope
+31	Can add login log	11	add_loginlog
+32	Can change login log	11	change_loginlog
+33	Can delete login log	11	delete_loginlog
+34	Can add feedback	12	add_feedback
+35	Can change feedback	12	change_feedback
+36	Can delete feedback	12	delete_feedback
+37	Can add comment	13	add_comment
+38	Can change comment	13	change_comment
+39	Can delete comment	13	delete_comment
+40	Can add red envelope	14	add_redenvelope
+41	Can change red envelope	14	change_redenvelope
+42	Can delete red envelope	14	delete_redenvelope
+43	Can add iaer	15	add_iaer
+44	Can change iaer	15	change_iaer
+45	Can delete iaer	15	delete_iaer
+46	Can add verify	16	add_verify
+47	Can change verify	16	change_verify
+48	Can delete verify	16	delete_verify
+49	Can add baby user	17	add_babyuser
+50	Can change baby user	17	change_babyuser
+51	Can delete baby user	17	delete_babyuser
 \.
 
 
@@ -978,7 +1032,7 @@ COPY auth_user (id, password, last_login, is_superuser, username, first_name, la
 2	pbkdf2_sha256$30000$nzAqq8taQAaE$y9K4AWOxm2sEaWHmdfOjPjldhpx90H6oNNflUo3NGPk=	\N	f	babycare			babycare.ben@gmail.com	t	t	2017-05-26 16:29:52.490171+08
 5	pbkdf2_sha256$30000$eDvdYVfHriZq$RY0V8QCr7dfy2CFl68I4xmDc0Hzt3j4piRNB++6C9oM=	\N	f	lisq			455677560@qq.com	t	t	2017-08-04 15:56:20.326447+08
 6	pbkdf2_sha256$30000$o6JA9ukdtn12$s/rk74lLIwvGSaPa2aNKrvwp6gX7071UTfBFxTkcfUI=	\N	f	装修			zx1988@gmail.com	t	t	2017-09-05 17:41:09.109895+08
-1	pbkdf2_sha256$30000$2j8nisBGCA4o$HKfUAjblumCQYZ+li0fVoy3/MDRteQjG+oDojkVAHto=	2017-09-25 13:32:26.979247+08	t	ben			benying1988@gmail.com	t	t	2017-05-26 16:28:41.571397+08
+1	pbkdf2_sha256$30000$2j8nisBGCA4o$HKfUAjblumCQYZ+li0fVoy3/MDRteQjG+oDojkVAHto=	2017-10-12 21:42:42.565143+08	t	ben			benying1988@gmail.com	t	t	2017-05-26 16:28:41.571397+08
 \.
 
 
@@ -1123,6 +1177,21 @@ COPY babycare_feedback (id, description, image1, image2, image3, image4, image5,
 --
 
 SELECT pg_catalog.setval('babycare_feedback_id_seq', 3, true);
+
+
+--
+-- Data for Name: babycare_iaer; Type: TABLE DATA; Schema: public; Owner: ben
+--
+
+COPY babycare_iaer (id, money, category, money_type, remark, created, type, chart_type, format, datetime, description, timing, user_id) FROM stdin;
+\.
+
+
+--
+-- Name: babycare_iaer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ben
+--
+
+SELECT pg_catalog.setval('babycare_iaer_id_seq', 1, false);
 
 
 --
@@ -1373,12 +1442,13 @@ COPY django_content_type (id, app_label, model) FROM stdin;
 8	babycare	appinfo
 9	babycare	like
 10	babycare	event
-11	babycare	babyuser
-12	babycare	loginlog
-13	babycare	verify
-14	babycare	feedback
-15	babycare	comment
-16	babycare	redenvelope
+11	babycare	loginlog
+12	babycare	feedback
+13	babycare	comment
+14	babycare	redenvelope
+15	babycare	iaer
+16	babycare	verify
+17	babycare	babyuser
 \.
 
 
@@ -1394,23 +1464,22 @@ SELECT pg_catalog.setval('django_content_type_id_seq', 17, true);
 --
 
 COPY django_migrations (id, app, name, applied) FROM stdin;
-1	contenttypes	0001_initial	2017-05-26 16:28:33.264639+08
-2	auth	0001_initial	2017-05-26 16:28:33.372451+08
-3	admin	0001_initial	2017-05-26 16:28:33.440142+08
-4	admin	0002_logentry_remove_auto_add	2017-05-26 16:28:33.466668+08
-5	contenttypes	0002_remove_content_type_name	2017-05-26 16:28:33.511678+08
-6	auth	0002_alter_permission_name_max_length	2017-05-26 16:28:33.529278+08
-7	auth	0003_alter_user_email_max_length	2017-05-26 16:28:33.547924+08
-8	auth	0004_alter_user_username_opts	2017-05-26 16:28:33.561652+08
-9	auth	0005_alter_user_last_login_null	2017-05-26 16:28:33.577062+08
-10	auth	0006_require_contenttypes_0002	2017-05-26 16:28:33.579685+08
-11	auth	0007_alter_validators_add_error_messages	2017-05-26 16:28:33.593712+08
-12	auth	0008_alter_user_username_max_length	2017-05-26 16:28:33.624266+08
-13	authtoken	0001_initial	2017-05-26 16:28:33.658024+08
-14	authtoken	0002_auto_20160226_1747	2017-05-26 16:28:33.733906+08
-15	sessions	0001_initial	2017-05-26 16:28:33.75598+08
-16	babycare	0001_initial	2017-05-26 16:28:36.003975+08
-17	babycare	0002_redenvelope	2017-06-18 19:53:55.098877+08
+1	contenttypes	0001_initial	2017-10-12 21:42:28.959477+08
+2	auth	0001_initial	2017-10-12 21:42:29.098191+08
+3	admin	0001_initial	2017-10-12 21:42:29.134381+08
+4	admin	0002_logentry_remove_auto_add	2017-10-12 21:42:29.150582+08
+5	contenttypes	0002_remove_content_type_name	2017-10-12 21:42:29.187543+08
+6	auth	0002_alter_permission_name_max_length	2017-10-12 21:42:29.201788+08
+7	auth	0003_alter_user_email_max_length	2017-10-12 21:42:29.216586+08
+8	auth	0004_alter_user_username_opts	2017-10-12 21:42:29.230213+08
+9	auth	0005_alter_user_last_login_null	2017-10-12 21:42:29.245696+08
+10	auth	0006_require_contenttypes_0002	2017-10-12 21:42:29.248114+08
+11	auth	0007_alter_validators_add_error_messages	2017-10-12 21:42:29.2621+08
+12	auth	0008_alter_user_username_max_length	2017-10-12 21:42:29.297334+08
+13	authtoken	0001_initial	2017-10-12 21:42:29.324452+08
+14	authtoken	0002_auto_20160226_1747	2017-10-12 21:42:29.390634+08
+15	sessions	0001_initial	2017-10-12 21:42:29.411408+08
+16	babycare	0001_initial	2017-10-12 21:42:31.663382+08
 \.
 
 
@@ -1437,6 +1506,7 @@ v1t6buldu4a1ef0nopp5fxn4bbl3aiho	Zjg4NTE3MzlhNmMzNTJhNzYwZDEzZjZiNmRjN2Q4NjI1ZWR
 z8qc1p2dj5pdsy7e9hx8xpebesoi20lk	Zjg4NTE3MzlhNmMzNTJhNzYwZDEzZjZiNmRjN2Q4NjI1ZWRjMTMwNjp7Il9hdXRoX3VzZXJfaGFzaCI6ImFjZTNjZmYwNzY0NDA2NzdjNDdkODhjMDBhNTU1MzJjYjZiN2IwYzkiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxIn0=	2017-10-02 09:57:10.098971+08
 uaeafsod2n7upli016z6vcwbxhxemzq2	Zjg4NTE3MzlhNmMzNTJhNzYwZDEzZjZiNmRjN2Q4NjI1ZWRjMTMwNjp7Il9hdXRoX3VzZXJfaGFzaCI6ImFjZTNjZmYwNzY0NDA2NzdjNDdkODhjMDBhNTU1MzJjYjZiN2IwYzkiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxIn0=	2017-10-09 11:41:17.277341+08
 cogq40tq5k45mtzsrmm84qruab6li2jh	Zjg4NTE3MzlhNmMzNTJhNzYwZDEzZjZiNmRjN2Q4NjI1ZWRjMTMwNjp7Il9hdXRoX3VzZXJfaGFzaCI6ImFjZTNjZmYwNzY0NDA2NzdjNDdkODhjMDBhNTU1MzJjYjZiN2IwYzkiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxIn0=	2017-10-09 13:32:26.982427+08
+asutr3kyzbtb46onpyxuuq7oijakyom3	Zjg4NTE3MzlhNmMzNTJhNzYwZDEzZjZiNmRjN2Q4NjI1ZWRjMTMwNjp7Il9hdXRoX3VzZXJfaGFzaCI6ImFjZTNjZmYwNzY0NDA2NzdjNDdkODhjMDBhNTU1MzJjYjZiN2IwYzkiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxIn0=	2017-10-26 21:42:42.567826+08
 \.
 
 
@@ -1590,6 +1660,14 @@ ALTER TABLE ONLY babycare_event
 
 ALTER TABLE ONLY babycare_feedback
     ADD CONSTRAINT babycare_feedback_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: babycare_iaer_pkey; Type: CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY babycare_iaer
+    ADD CONSTRAINT babycare_iaer_pkey PRIMARY KEY (id);
 
 
 --
@@ -1777,6 +1855,13 @@ CREATE INDEX babycare_feedback_d12af49a ON babycare_feedback USING btree (baby_i
 
 
 --
+-- Name: babycare_iaer_e8701ad4; Type: INDEX; Schema: public; Owner: ben
+--
+
+CREATE INDEX babycare_iaer_e8701ad4 ON babycare_iaer USING btree (user_id);
+
+
+--
 -- Name: babycare_like_4437cfac; Type: INDEX; Schema: public; Owner: ben
 --
 
@@ -1949,6 +2034,14 @@ ALTER TABLE ONLY babycare_event
 
 ALTER TABLE ONLY babycare_feedback
     ADD CONSTRAINT babycare_feedback_baby_id_fbbc63b9_fk_babycare_babyuser_id FOREIGN KEY (baby_id) REFERENCES babycare_babyuser(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: babycare_iaer_user_id_4bf3a62d_fk_babycare_babyuser_id; Type: FK CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY babycare_iaer
+    ADD CONSTRAINT babycare_iaer_user_id_4bf3a62d_fk_babycare_babyuser_id FOREIGN KEY (user_id) REFERENCES babycare_babyuser(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --

@@ -940,24 +940,27 @@ COPY auth_permission (id, name, content_type_id, codename) FROM stdin;
 28	Can add event	10	add_event
 29	Can change event	10	change_event
 30	Can delete event	10	delete_event
-31	Can add baby user	11	add_babyuser
-32	Can change baby user	11	change_babyuser
-33	Can delete baby user	11	delete_babyuser
-34	Can add login log	12	add_loginlog
-35	Can change login log	12	change_loginlog
-36	Can delete login log	12	delete_loginlog
-37	Can add verify	13	add_verify
-38	Can change verify	13	change_verify
-39	Can delete verify	13	delete_verify
-40	Can add feedback	14	add_feedback
-41	Can change feedback	14	change_feedback
-42	Can delete feedback	14	delete_feedback
-43	Can add comment	15	add_comment
-44	Can change comment	15	change_comment
-45	Can delete comment	15	delete_comment
-46	Can add red envelope	16	add_redenvelope
-47	Can change red envelope	16	change_redenvelope
-48	Can delete red envelope	16	delete_redenvelope
+31	Can add login log	11	add_loginlog
+32	Can change login log	11	change_loginlog
+33	Can delete login log	11	delete_loginlog
+34	Can add feedback	12	add_feedback
+35	Can change feedback	12	change_feedback
+36	Can delete feedback	12	delete_feedback
+37	Can add comment	13	add_comment
+38	Can change comment	13	change_comment
+39	Can delete comment	13	delete_comment
+40	Can add red envelope	14	add_redenvelope
+41	Can change red envelope	14	change_redenvelope
+42	Can delete red envelope	14	delete_redenvelope
+43	Can add verify	15	add_verify
+44	Can change verify	15	change_verify
+45	Can delete verify	15	delete_verify
+46	Can add baby user	16	add_babyuser
+47	Can change baby user	16	change_babyuser
+48	Can delete baby user	16	delete_babyuser
+52	Can add iaer	18	add_iaer
+53	Can change iaer	18	change_iaer
+54	Can delete iaer	18	delete_iaer
 \.
 
 
@@ -965,7 +968,7 @@ COPY auth_permission (id, name, content_type_id, codename) FROM stdin;
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ben
 --
 
-SELECT pg_catalog.setval('auth_permission_id_seq', 51, true);
+SELECT pg_catalog.setval('auth_permission_id_seq', 54, true);
 
 
 --
@@ -978,7 +981,7 @@ COPY auth_user (id, password, last_login, is_superuser, username, first_name, la
 2	pbkdf2_sha256$30000$nzAqq8taQAaE$y9K4AWOxm2sEaWHmdfOjPjldhpx90H6oNNflUo3NGPk=	\N	f	babycare			babycare.ben@gmail.com	t	t	2017-05-26 16:29:52.490171+08
 5	pbkdf2_sha256$30000$eDvdYVfHriZq$RY0V8QCr7dfy2CFl68I4xmDc0Hzt3j4piRNB++6C9oM=	\N	f	lisq			455677560@qq.com	t	t	2017-08-04 15:56:20.326447+08
 6	pbkdf2_sha256$30000$o6JA9ukdtn12$s/rk74lLIwvGSaPa2aNKrvwp6gX7071UTfBFxTkcfUI=	\N	f	装修			zx1988@gmail.com	t	t	2017-09-05 17:41:09.109895+08
-1	pbkdf2_sha256$30000$2j8nisBGCA4o$HKfUAjblumCQYZ+li0fVoy3/MDRteQjG+oDojkVAHto=	2017-09-25 13:32:26.979247+08	t	ben			benying1988@gmail.com	t	t	2017-05-26 16:28:41.571397+08
+1	pbkdf2_sha256$30000$2j8nisBGCA4o$HKfUAjblumCQYZ+li0fVoy3/MDRteQjG+oDojkVAHto=	2017-10-13 15:18:21.579694+08	t	ben			benying1988@gmail.com	t	t	2017-05-26 16:28:41.571397+08
 \.
 
 
@@ -1373,12 +1376,13 @@ COPY django_content_type (id, app_label, model) FROM stdin;
 8	babycare	appinfo
 9	babycare	like
 10	babycare	event
-11	babycare	babyuser
-12	babycare	loginlog
-13	babycare	verify
-14	babycare	feedback
-15	babycare	comment
-16	babycare	redenvelope
+11	babycare	loginlog
+12	babycare	feedback
+13	babycare	comment
+14	babycare	redenvelope
+15	babycare	verify
+16	babycare	babyuser
+18	babycare	iaer
 \.
 
 
@@ -1386,7 +1390,7 @@ COPY django_content_type (id, app_label, model) FROM stdin;
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ben
 --
 
-SELECT pg_catalog.setval('django_content_type_id_seq', 17, true);
+SELECT pg_catalog.setval('django_content_type_id_seq', 18, true);
 
 
 --
@@ -1394,23 +1398,22 @@ SELECT pg_catalog.setval('django_content_type_id_seq', 17, true);
 --
 
 COPY django_migrations (id, app, name, applied) FROM stdin;
-1	contenttypes	0001_initial	2017-05-26 16:28:33.264639+08
-2	auth	0001_initial	2017-05-26 16:28:33.372451+08
-3	admin	0001_initial	2017-05-26 16:28:33.440142+08
-4	admin	0002_logentry_remove_auto_add	2017-05-26 16:28:33.466668+08
-5	contenttypes	0002_remove_content_type_name	2017-05-26 16:28:33.511678+08
-6	auth	0002_alter_permission_name_max_length	2017-05-26 16:28:33.529278+08
-7	auth	0003_alter_user_email_max_length	2017-05-26 16:28:33.547924+08
-8	auth	0004_alter_user_username_opts	2017-05-26 16:28:33.561652+08
-9	auth	0005_alter_user_last_login_null	2017-05-26 16:28:33.577062+08
-10	auth	0006_require_contenttypes_0002	2017-05-26 16:28:33.579685+08
-11	auth	0007_alter_validators_add_error_messages	2017-05-26 16:28:33.593712+08
-12	auth	0008_alter_user_username_max_length	2017-05-26 16:28:33.624266+08
-13	authtoken	0001_initial	2017-05-26 16:28:33.658024+08
-14	authtoken	0002_auto_20160226_1747	2017-05-26 16:28:33.733906+08
-15	sessions	0001_initial	2017-05-26 16:28:33.75598+08
-16	babycare	0001_initial	2017-05-26 16:28:36.003975+08
-17	babycare	0002_redenvelope	2017-06-18 19:53:55.098877+08
+1	contenttypes	0001_initial	2017-10-13 15:13:49.984814+08
+2	auth	0001_initial	2017-10-13 15:13:50.095385+08
+3	admin	0001_initial	2017-10-13 15:13:50.133292+08
+4	admin	0002_logentry_remove_auto_add	2017-10-13 15:13:50.153621+08
+5	contenttypes	0002_remove_content_type_name	2017-10-13 15:13:50.19346+08
+6	auth	0002_alter_permission_name_max_length	2017-10-13 15:13:50.212338+08
+7	auth	0003_alter_user_email_max_length	2017-10-13 15:13:50.231168+08
+8	auth	0004_alter_user_username_opts	2017-10-13 15:13:50.251386+08
+9	auth	0005_alter_user_last_login_null	2017-10-13 15:13:50.274138+08
+10	auth	0006_require_contenttypes_0002	2017-10-13 15:13:50.279808+08
+11	auth	0007_alter_validators_add_error_messages	2017-10-13 15:13:50.29638+08
+12	auth	0008_alter_user_username_max_length	2017-10-13 15:13:50.321319+08
+13	authtoken	0001_initial	2017-10-13 15:13:50.35535+08
+14	authtoken	0002_auto_20160226_1747	2017-10-13 15:13:50.431344+08
+15	sessions	0001_initial	2017-10-13 15:13:50.458188+08
+16	babycare	0001_initial	2017-10-13 15:13:53.057208+08
 \.
 
 
@@ -1437,6 +1440,7 @@ v1t6buldu4a1ef0nopp5fxn4bbl3aiho	Zjg4NTE3MzlhNmMzNTJhNzYwZDEzZjZiNmRjN2Q4NjI1ZWR
 z8qc1p2dj5pdsy7e9hx8xpebesoi20lk	Zjg4NTE3MzlhNmMzNTJhNzYwZDEzZjZiNmRjN2Q4NjI1ZWRjMTMwNjp7Il9hdXRoX3VzZXJfaGFzaCI6ImFjZTNjZmYwNzY0NDA2NzdjNDdkODhjMDBhNTU1MzJjYjZiN2IwYzkiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxIn0=	2017-10-02 09:57:10.098971+08
 uaeafsod2n7upli016z6vcwbxhxemzq2	Zjg4NTE3MzlhNmMzNTJhNzYwZDEzZjZiNmRjN2Q4NjI1ZWRjMTMwNjp7Il9hdXRoX3VzZXJfaGFzaCI6ImFjZTNjZmYwNzY0NDA2NzdjNDdkODhjMDBhNTU1MzJjYjZiN2IwYzkiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxIn0=	2017-10-09 11:41:17.277341+08
 cogq40tq5k45mtzsrmm84qruab6li2jh	Zjg4NTE3MzlhNmMzNTJhNzYwZDEzZjZiNmRjN2Q4NjI1ZWRjMTMwNjp7Il9hdXRoX3VzZXJfaGFzaCI6ImFjZTNjZmYwNzY0NDA2NzdjNDdkODhjMDBhNTU1MzJjYjZiN2IwYzkiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxIn0=	2017-10-09 13:32:26.982427+08
+gfj0t78kf6cpwhdts8k7iz7tv775ridb	Zjg4NTE3MzlhNmMzNTJhNzYwZDEzZjZiNmRjN2Q4NjI1ZWRjMTMwNjp7Il9hdXRoX3VzZXJfaGFzaCI6ImFjZTNjZmYwNzY0NDA2NzdjNDdkODhjMDBhNTU1MzJjYjZiN2IwYzkiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxIn0=	2017-10-27 15:18:21.58268+08
 \.
 
 
