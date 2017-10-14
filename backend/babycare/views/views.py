@@ -14,7 +14,7 @@ from babycare.constants import CODE_SUCCESS, FEEDBACK_FOOTER_IMAGE, DIR_FEEDBACK
     MSG_GET_RED_ENVELOPES_SUCCESS, MSG_DELETE_RED_ENVELOPE_SUCCESS, CODE_NO_CONTENT, \
     MSG_204, MSG_ADD_RED_ENVELOPE_SUCCESS, MSG_ADD_IAER_SUCCESS, MSG_DELETE_IAER_SUCCESS, MSG_GET_IAERS_SUCCESS
 from babycare.constants import MSG_SEND_FEEDBACK_SUCCESS
-from babycare.models import Feedback, BabyUser, RedEnvelope, Iaers
+from babycare.models import Feedback, BabyUser, RedEnvelope, Iaer
 from babycare.serializers.iaer import IaerSerializer
 from babycare.serializers.red_envelope import RedEnvelopeSerializer
 from babycare.utils import invalid_token_response, get_user_by_token, save_error_log, upload_file_to_oss, \
@@ -146,7 +146,7 @@ class RedEnvelopeViewSet(CustomModelViewSet):
 
 
 class IaerViewSet(CustomModelViewSet):
-    queryset = Iaers.objects.all()
+    queryset = Iaer.objects.all()
     serializer_class = IaerSerializer
     pagination_class = LargeResultsSetPagination
 
@@ -180,7 +180,7 @@ class IaerViewSet(CustomModelViewSet):
             user = get_user_by_token(token)
 
             if user:
-                iaer = Iaers()
+                iaer = Iaer()
                 iaer.user = BabyUser.objects.get(user=user)
                 iaer.money = money
                 iaer.money_from = category

@@ -158,7 +158,7 @@ class RedEnvelope(models.Model):
     created = models.DateTimeField(editable=False, blank=True, null=True)
 
 
-class Iaers(models.Model):
+class Iaer(models.Model):
     CATEGORY_CHOICES = (
         (u'生活用品', u'生活用品'),
         (u'服饰', u'服饰'),
