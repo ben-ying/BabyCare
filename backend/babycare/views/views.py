@@ -169,7 +169,7 @@ class IaerViewSet(CustomModelViewSet):
         if int(user_id) < 0:
             return super(IaerViewSet, self).get_queryset().order_by("-id")
         else:
-            return super(IaerViewSet, self).get_queryset().filter(baby_id=user_id).order_by("-id")
+            return super(IaerViewSet, self).get_queryset().filter(user_id=user_id).order_by("-id")
 
     def create(self, request, *args, **kwargs):
         try:
@@ -183,7 +183,7 @@ class IaerViewSet(CustomModelViewSet):
                 iaer = Iaer()
                 iaer.user = BabyUser.objects.get(user=user)
                 iaer.money = money
-                iaer.money_from = category
+                iaer.category = category
                 iaer.remark = remark
                 iaer.created = timezone.now()
                 iaer.save()
@@ -207,8 +207,8 @@ class IaerViewSet(CustomModelViewSet):
                         if response.status_code != status.HTTP_204_NO_CONTENT:
                             iaer.id = -1
                     except Exception as e:
-                        iaer.id = -1
-                        save_error_log(request, e)
+                       iaer.id = -1
+                       save_error_log(request, e)
                     event_json = RedEnvelopeSerializer(iaer).data
                     return json_response(event_json, CODE_SUCCESS, MSG_DELETE_IAER_SUCCESS)
                 else:
