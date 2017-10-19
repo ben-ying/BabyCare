@@ -114,7 +114,7 @@ class UserViewSet(CustomModelViewSet):
                 user.is_active = True
                 user.is_staff = True
                 user.set_password(password)
-                user.username = username
+                user.username = username.lower()
                 user.first_name = first_name
                 user.last_name = last_name
                 self.request.user = user
@@ -212,7 +212,7 @@ class UserViewSet(CustomModelViewSet):
 
 @api_view(['POST'])
 def login_view(request):
-    username = request.data.get('username')
+    username = request.data.get('username').lower()
     password = request.data.get('password')
 
     try:
