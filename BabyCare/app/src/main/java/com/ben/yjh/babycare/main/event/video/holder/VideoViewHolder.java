@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.ben.yjh.babycare.R;
-import com.ben.yjh.babycare.glide.GlideApp;
+//import com.ben.yjh.babycare.glide.GlideApp;
 import com.ben.yjh.babycare.glide.GlideUtils;
 import com.ben.yjh.babycare.main.event.EventAdapter;
 import com.ben.yjh.babycare.main.event.video.VideoLoadMvpView;
@@ -50,7 +50,7 @@ public class VideoViewHolder extends TextViewHolder implements
         this.mCoverImageView = (ImageView) itemView.findViewById(R.id.iv_cover);
         this.mProgressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
         this.mProgressBar.setVisibility(View.VISIBLE);
-        this.mVideoView.setAlpha(0);
+//        this.mVideoView.setAlpha(0);
         this.mVideoTarget = new VideoLoadTarget(this);
         this.mProgressTarget = new VideoProgressTarget(mVideoTarget, mProgressBar);
     }
@@ -64,11 +64,11 @@ public class VideoViewHolder extends TextViewHolder implements
         GlideUtils.displayImage(mContext, mCoverImageView,
                 event.getVideoThumbnail(), new ColorDrawable(0xffdcdcdc));
 
-        GlideApp.with(context)
-                .asFile()
-                .load(new GlideUrl(event.getVideoUrl()))
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                .into(mProgressTarget);
+//        GlideApp.with(context)
+//                .asFile()
+//                .load(new GlideUrl(event.getVideoUrl()))
+//                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+//                .into(mProgressTarget);
     }
 
     @Override
@@ -108,7 +108,7 @@ public class VideoViewHolder extends TextViewHolder implements
 
     @Override
     public void videoBeginning() {
-        mVideoView.setAlpha(1.f);
+//        mVideoView.setAlpha(1.f);
         cancelAlphaAnimate(mCoverImageView);
         startAlphaAnimate(mCoverImageView);
     }
@@ -116,8 +116,8 @@ public class VideoViewHolder extends TextViewHolder implements
     @Override
     public void videoStopped() {
         cancelAlphaAnimate(mCoverImageView);
-        mVideoView.setAlpha(0);
-        mCoverImageView.setAlpha(1.f);
+//        mVideoView.setAlpha(0);
+//        mCoverImageView.setAlpha(1.f);
         mCoverImageView.setVisibility(View.VISIBLE);
     }
 

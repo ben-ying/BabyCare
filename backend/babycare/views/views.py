@@ -122,8 +122,7 @@ class RedEnvelopeViewSet(CustomModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         try:
-            obj = json.loads(request.body)
-            token = obj.get('token')
+            token = request.data.get('token')
             user = get_user_by_token(token)
             if user:
                 red_envelope = self.get_object()
@@ -196,8 +195,7 @@ class IaerViewSet(CustomModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         try:
-            obj = json.loads(request.body)
-            token = obj.get('token')
+            token = request.data.get('token')
             user = get_user_by_token(token)
             if user:
                 iaer = self.get_object()

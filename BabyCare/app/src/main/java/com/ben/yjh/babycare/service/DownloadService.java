@@ -22,6 +22,7 @@ import java.net.URLConnection;
 public class DownloadService extends IntentService {
 
     public static final String OSS_DOMAIN = "http://bensbabycare.oss-cn-hangzhou.aliyuncs.com/APKs/";
+    public static final String OSS_DOMAIN = "http://bensbabycare.oss-cn-hangzhou.aliyuncs.com/APKs/";
 
     public static boolean sRunning;
 
