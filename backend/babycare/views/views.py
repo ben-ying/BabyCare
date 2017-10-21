@@ -91,11 +91,14 @@ class RedEnvelopeViewSet(CustomModelViewSet):
             return save_error_log(request, e)
 
     def get_queryset(self):
+        token = self.request.query_params.get('token')
+        user = get_user_by_token(token)
         user_id = self.request.query_params.get('user_id', -1)
         if int(user_id) < 0:
             return super(RedEnvelopeViewSet, self).get_queryset().order_by("-id")
         else:
-            return super(RedEnvelopeViewSet, self).get_queryset().filter(baby_id=user_id).order_by("-id")
+            user_id = BabyUser.objects.get(user=user).id
+            return super(RedEnvelopeViewSet, self).get_queryset().filter(user_id=user_id).order_by("-id")
 
     def create(self, request, *args, **kwargs):
         try:
@@ -164,10 +167,13 @@ class IaerViewSet(CustomModelViewSet):
             return save_error_log(request, e)
 
     def get_queryset(self):
+        token = self.request.query_params.get('token')
+        user = get_user_by_token(token)
         user_id = self.request.query_params.get('user_id', -1)
         if int(user_id) < 0:
             return super(IaerViewSet, self).get_queryset().order_by("-id")
         else:
+            user_id = BabyUser.objects.get(user=user).id
             return super(IaerViewSet, self).get_queryset().filter(user_id=user_id).order_by("-id")
 
     def create(self, request, *args, **kwargs):
