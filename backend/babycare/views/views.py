@@ -213,7 +213,7 @@ class IaerViewSet(CustomModelViewSet):
                     except Exception as e:
                        iaer.id = -1
                        save_error_log(request, e)
-                    event_json = RedEnvelopeSerializer(iaer).data
+                    event_json = IaerSerializer(iaer).data
                     return json_response(event_json, CODE_SUCCESS, MSG_DELETE_IAER_SUCCESS)
                 else:
                     return simple_json_response(CODE_NO_CONTENT, MSG_204)
