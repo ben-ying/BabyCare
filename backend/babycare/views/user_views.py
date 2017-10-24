@@ -213,15 +213,19 @@ class UserViewSet(CustomModelViewSet):
 
 @api_view(['POST'])
 def login_view(request):
-    username = request.data.get('username').lower()
+    username = request.data.get('username', '').lower()
     password = request.data.get('password')
+    token = request.data.get('token')
 
     try:
-        user = authenticate(username=username, password=password)
-        if not user and validate_email(username):
-            user = get_user(email=username)
-            if not user:
-                user = authenticate(username=user.username, password=password)
+        if token:
+            user = Token.objects.get(key=token).user
+        else:
+            user = authenticate(username=username, password=password)
+            if not user and validate_email(username):
+                user = get_user(email=username)
+                if not user:
+                    user = authenticate(username=user.username, password=password)
         if user:
             baby = BabyUser.objects.get(user=user)
             if baby:
@@ -241,7 +245,6 @@ def login_view(request):
             return simple_json_response(CODE_INCORRECT_USER_NAME_OR_PASSWORD, MSG_INCORRECT_USER_NAME_OR_PASSWORD)
     except Exception as e:
         return save_error_log(request, e)
-
 
 @api_view(['POST'])
 def send_verify_code_view(request):
