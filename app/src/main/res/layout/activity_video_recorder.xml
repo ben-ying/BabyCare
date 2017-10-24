@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/video_recorder_bg_color">
+
+    <include layout="@layout/app_bar_voide_layout" />
+
+    <com.ben.yjh.babycare.widget.VideoProgressView
+        android:id="@+id/recordProgress"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/video_progress_size"
+        android:layout_below="@+id/app_bar_layout" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/recordProgress">
+
+        <SurfaceView
+            android:id="@+id/recordPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/recordProgress"
+        android:layout_marginTop="260dp"
+        android:background="@color/video_recorder_bg_color" >
+
+        <CheckedTextView
+            android:id="@+id/tv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="30dp"
+            android:background="@drawable/record_delete_selector"
+            android:button="@null"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/btn_controller"
+            android:layout_width="108dp"
+            android:layout_height="108dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/video_shoot"
+            android:gravity="center"
+            android:text="@string/hold_to_record"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

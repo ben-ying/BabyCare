@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ben.yjh.babycare.main.event.AddEventActivity">
+
+    <ImageView
+        android:id="@+id/image"
+        android:background="@color/default_text_color"
+        android:scaleType="centerCrop"
+        android:layout_width="@dimen/profile_size"
+        android:layout_height="@dimen/profile_size" />
+</RelativeLayout>

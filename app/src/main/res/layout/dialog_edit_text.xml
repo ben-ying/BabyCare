@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <android.support.design.widget.TextInputLayout
+        style="@style/default_input_layout">
+
+        <AutoCompleteTextView
+            android:id="@+id/et_value"
+            style="@style/default_edit_text"
+            android:maxLines="1"
+            android:gravity="bottom"
+            android:completionThreshold="1"
+            android:imeOptions="actionDone" />
+    </android.support.design.widget.TextInputLayout>
+</LinearLayout>

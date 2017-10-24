@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/gradientDrawble">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+            android:shape="oval">
+            <stroke
+                android:width="@dimen/stroke_small_size"
+                android:color="@color/unchecked_icon_color" />
+            <size
+                android:width="@dimen/backspace_size"
+                android:height="@dimen/backspace_size" />
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@mipmap/ic_backspace_white_24dp" />
+    </item>
+</layer-list>
